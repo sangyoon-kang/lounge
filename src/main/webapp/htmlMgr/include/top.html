@@ -1,0 +1,30 @@
+	<div id="wrap_header">
+		<ul class="gnb" id="gnb_link">
+			<li link="/config/config01.html">환경설정</li>
+			<li link="/basic/basic01.html">기본설정</li>
+			<li link="/bbs/bbs01.html">게시판관리</li>
+			<li link="/member/member01.html">회원관리</li>
+			<li link="/poll/poll01.html">설문관리</li>
+			<li link="/schedule/sch01.html">일정관리</li>
+			<li link="/product/pro01.html">상품관리</li>
+			<li link="/banner/banner01.html">배너관리</li>
+			<li link="/connect/connect01.html">접속통계</li>
+		</ul>
+		<script type="text/javascript" language="Javascript">
+		<!--
+
+			$(document).ready(function(){
+				
+				$('#gnb_link li').on("click", function(){
+
+					var link_info = $(this).attr("link");
+					//alert(link_info+'로 이동합니다.');
+					location.href=link_info;
+
+				});
+
+			});
+		-->
+		</script>
+		<p id="LogoutBtn">로그아웃</p>
+	</div>

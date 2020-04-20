@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+		xmlns:p="http://www.springframework.org/schema/p" xmlns:context="http://www.springframework.org/schema/context"
+		xmlns:aop="http://www.springframework.org/schema/aop"
+		xmlns:task="http://www.springframework.org/schema/task"
+		xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+				http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
+				http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop.xsd
+				http://www.springframework.org/schema/task http://www.springframework.org/schema/task/spring-task.xsd">
+ 	<!-- Activates @Scheduled and @Async annotations for scheduling --> 
+ 	<!-- <task:annotation-driven /> -->
+ 	 	
+ 	 <!-- 초 분 시 일 월 요일  주기 */10 -->
+ 	 <!-- 	
+    <task:scheduler id="ScheduleService" /> 
+    <task:scheduled-tasks scheduler="ScheduleService">
+	    <task:scheduled ref="scheduleService" method="smsSchedule" cron="0 0 12 * * *"/>    
+    </task:scheduled-tasks>
+     -->
+     
+    <!-- 시스템 로그 요약  
+    <bean id="sysLogging"
+       class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+        <property name="targetObject" ref="egovSysLogScheduling" />
+        <property name="targetMethod" value="sysLogSummary" />
+        <property name="concurrent" value="false" />
+    </bean>
+    <bean id="sysLogTrigger" class="org.springframework.scheduling.quartz.SimpleTriggerBean">
+        <property name="jobDetail" ref="sysLogging" />
+        <property name="startDelay" value="30000" />
+        <property name="repeatInterval" value="864000000" />
+    </bean>
+    <bean id="sysLogScheduler"
+       class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
+        <property name="triggers">
+            <list><ref bean="sysLogTrigger" /></list>
+        </property>
+    </bean>
+    -->
+     
+</beans>

@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+</head>
+<div class="container" style="width: 900px; margin: 0 auto;">
+	<div class="contract">
+	     <div class="contract-header" style="text-align: center; flex-direction: column; padding-top: 1rem; padding-bottom: 1rem; background-color: #303030; color: white !important; border-color: #171717;">
+	          <small style="text-transform:uppercase; font-weight: bold; letter-spacing: 12px;"><span style="color:red;">fx</span>final</small>
+	          <h4 style="color:red; font-weight:300">손익 분배 계약서 
+	          	#if ($bstype == "B")
+				 	<small style="display: inline-block; font-weight: 300; font-size: 14px; padding-left: 0.6rem; padding-right: 0.6rem; border: 1px solid #B8C2CC; border-radius: 5rem; text-shadow: none; border-color: #E3342F;background-color: #E3342F; color: white !important;">
+				 		매수
+				 	</small>
+				 #else 
+					 <small style="display: inline-block; font-weight: 300; font-size: 14px; padding-left: 0.6rem; padding-right: 0.6rem; border: 1px solid #B8C2CC; border-radius: 5rem; text-shadow: none; border-color: #0066d9; background-color: #0066d9; color: white !important; ">
+					 	매도
+					 </small>
+				 #end
+			  </h4>
+	          <div style="text-align: center;">
+	               <span></span>
+	               #if ($bstype == "B")
+				      <small style="text-transform:uppercase">buying offer</small>
+				    #elseif ($bstype == "S")
+				      <small style="text-transform:uppercase">selling offer</small>
+				    #end
+	               <span></span>
+	          </div>
+	     </div>
+	     <div style="background-color: #EBECF0; color: #222222 !important; border-color: #ced0da; ">
+		     <table style="width:100%; padding: 20px 10px">
+					<colgroup>
+						<col width="1%">
+						<col width="47%" style="background-color: white; ">
+						<col width="4%">
+						<col width="47%" style="background-color: white; border-top: 3px solid red">
+						<col width="1%">
+					</colgroup>
+					<tbody>
+						<tr>
+							<td colspan="1"></td>
+							<td style="border-top: 4px solid #E3342F; padding: 1rem; margin: 1rem; text-align:center;">
+								<ul style="width:100%; list-style:none; font-weight:bold; margin:20px 0;">
+									 #if($bstype == "B" && $buyLot1 != 0 && $buyLot1 > 0)
+								 		<li style="width:40%; float:left; padding-bottom:10px; margin-left:0"> ₩ 5,000 * $buyLot1</li>
+									#end
+									#if($bstype == "B" && $buyLot2 != 0 && $buyLot2 > 0)
+									   <li style="width:40%; float:left; padding-bottom:10px; margin-left:0"> ₩ 10,000 * $buyLot2</li>
+									#end
+									#if($bstype == "B" && $buyLot10 != 0 && $buyLot10 > 0)
+									   <li style="width:40%; float:left; padding-bottom:10px; margin-left:0"> ₩ 50,000 * $buyLot10</li>
+									#end
+									#if($bstype == "B" && $buyLot20 != 0 && $buyLot20 > 0)
+									   <li style="width:40%; float:left; padding-bottom:10px; margin-left:0"> ₩ 100,000 * $buyLot20</li>
+									#end
+									#if($bstype == "B" && $buyLot40 != 0 && $buyLot40 > 0)
+									   <li style="width:40%; float:left; padding-bottom:10px; margin-left:0"> ₩ 200,000 * $buyLot40</li>
+									#end
+									#if($bstype == "S" && $sellLot1 != 0 && $sellLot1 > 0)
+									   <li style="width:40%; float:left; padding-bottom:10px; margin-left:0"> ₩ 5,000 * $sellLot1</li>
+									#end
+									#if($bstype == "S" && $sellLot2 != 0 && $sellLot2 > 0)
+									   <li style="width:40%; float:left; padding-bottom:10px; margin-left:0"> ₩ 10,000 * $sellLot2</li>
+									#end
+									#if($bstype == "S" && $sellLot10 != 0 && $sellLot10 > 0)
+									   <li style="width:40%; float:left; padding-bottom:10px; margin-left:0"> ₩ 50,000 * $sellLot10</li>
+									#end
+									#if($bstype == "S" && $sellLot20 != 0 && $sellLot20 > 0)
+									   <li style="width:40%; float:left; padding-bottom:10px; margin-left:0"> ₩ 100,000 * $sellLot20</li>
+									#end
+									#if($bstype == "S" && $sellLot40 != 0 && $sellLot40 > 0)
+									   <li style="width:40%; float:left; padding-bottom:10px; margin-left:0"> ₩ 200,000 * $sellLot40</li>
+									#end
+		                    	</ul>
+							</td>
+							<td colspan="1"></td>
+							<td style="border-top: 4px solid #E3342F; padding: 1rem; margin: 1rem; text-align:center;">
+								<h5 style="font-weight:300;">렌트시작</h5>
+		                         #set ($index = $goodsTime.indexOf(':'))
+								 #set ($hour= $goodsTime.substring(0, $index))
+								 #set ($index = $index + 1)
+								 #set ($minute = $goodsTime.substring($index))
+								 
+								 #set ($month = $goodsDate.substring(5, 7))
+								 #set ($day = $goodsDate.substring(8, 10))
+		                         <p style="font-weight:bold;">$month 월   $day 일 $hour 시 $minute 분</p>
+		                         <h5 style="font-weight:300;">렌트보증금</h5>
+		                         <p style="font-weight:bold;">
+		                         	#if($bstype == "B")
+		                         		 $buySum 원
+		                         		
+		                         	#elseif ($bstype == "S")
+		                         		$sellSum 원
+		                         	#end
+		                         	
+		                         </p>
+							</td>
+							<td colspan="1"></td>
+						</tr>
+					</tbody>
+				</table>
+	     </div>
+	     <div style="text-align:center; color:#000; padding-top:1.5rem; padding-bottom:1.5rem;">
+	          <ul style="list-style:none;">
+	               <li style="font-size:80%; margin-bottom: 0.5rem;">FX마진거래 손익분배 계약 보증금은 차손발생 시 귀속되는 계약입니다.</li>
+	               <li style="font-size:80%; margin-bottom: 0.5rem;">FX마진거래 렌트 계약을 취득하기 전에 www.fxrace.co.kr에서</li>
+	               <li style="font-size:80%; margin-bottom: 0.5rem;">반드시 이용약관 및 설명서를 읽어보시고 계약하시기 바랍니다.</li>
+	          </ul>
+	          <ul style="list-style:none; color:#000;">
+	          		<li><h1 style="font-weigth:bold; margin-right:1rem; margin: 0;"><span style="color:red;">fx</span>final <span style="border-left: 1px solid #000; margin-left:10px;padding: 5px 0px 5px 10px; font-size: 18px;">문의전화 1811-9851</span></h1></li>
+	          </ul>
+	     </div>
+	     <div class="container" style="width: 900px; margin: 0 auto;">
+	           <h4 style="margin: 20px auto; background: #f2f2f2; padding: 14px;text-align: center; font-weight: 300; font-size: 0.85em;"><img src="$host/images/fx_assets/exclamation-circle-solid.svg" height="12px" width="12px;">본 상품은 고객님께서 <b>계약하신 상품의 금액</b>만해당됩니다.</h4>
+	          <table style="width:100%;margin-bottom:1rem;color:#212529;text-align:left;font-size:14px">
+		            <thead>
+		                <tr>
+		                    <td style="border-top: 2px solid #666; border-bottom: 1px solid #666; padding: 5px; text-align:center;">상품구분</td>
+		                    <td style="border-top: 2px solid #666; border-bottom: 1px solid #666; padding: 5px; text-align:left;">당사보유(MOU) 금융투자(FX 마진거래 GBP/AUD)</td>
+		                </tr>
+		            </thead>
+		            <tbody>
+					            
+		                <tr style=" background-color:#f2f2f2;">
+		                    <td style="padding: 10px; text-align: center;"><b style="color:#ee3f5c;display: block;">0.1랏의 10%(#if ($bstype== "B") 매수  #else 매도  #end)</b>포지션 상품에서 발생될 <br>±손익에 대하여</td>
+		                    <td>렌트보증금 <b>$5(5,000)</b>으로 렌트시작 시각<br>
+						                         단위 <b>#if ($bstype== "B") ↓  #else ↑  #end 30</b> 실격 <b style="color:#ee3f5c;">₩5,000(차손)</b> 소멸종료<br>
+						                         단위 <b>#if ($bstype== "B") ↑ #else ↓  #end 30</b> 실현 <b style="color:#26A69A;">₩4,300(차익)</b> 지급종료 <b>(손익분배비율:14%)</b>
+		                    </td>
+		                </tr>
+		                <tr>
+		                    <td style="padding: 10px; text-align: center;"><b style="color:#ee3f5c;display: block;">0.2랏의 10%(#if ($bstype== "B") 매수  #else 매도  #end)</b>포지션 상품에서 발생될 <br> ±손익에 대하여</td>
+		                    <td>렌트보증금 <b>$10(10,000)</b>으로 렌트시작 시각<br>
+						                         단위 <b>#if ($bstype== "B") ↓  #else ↑  #end 30</b> 실격 <b style="color:#ee3f5c;">₩10,000(차손)</b> 소멸종료<br>
+						                         단위 <b>#if ($bstype== "B") ↑ #else ↓  #end 30</b> 실현 <b style="color:#26A69A;">₩8,600(차익)</b> 지급종료 <b>(손익분배비율:14%)</b>
+		                    </td>
+		                </tr>
+		                <tr  style=" background-color:#f2f2f2;">
+		                    <td style="padding: 10px; text-align: center;"><b style="color:#ee3f5c;display: block;">1랏의 10%(#if ($bstype== "B") 매수  #else 매도  #end)</b>포지션 상품에서 발생될  <br>±손익에 대하여</td>
+		                    <td>렌트보증금 <b>$50(50,000)</b>으로 렌트시작 시각<br>
+						                         단위 <b>#if ($bstype== "B") ↓  #else ↑  #end 30</b> 실격 <b style="color:#ee3f5c;">₩50,000(차손)</b> 소멸종료<br>
+						                         단위 <b>#if ($bstype== "B") ↑ #else ↓  #end 30</b> 실현 <b style="color:#26A69A;">₩43,000(차익)</b> 지급종료 <b>(손익분배비율:14%)</b>
+		                    </td>
+		                </tr>
+		                <tr>
+		                    <td style="padding: 10px; text-align: center;"><b style="color:#ee3f5c;display: block;">2랏의 10%(#if ($bstype== "B") 매수  #else 매도  #end)</b>포지션 상품에서 발생될  <br>±손익에 대하여</td>
+		                    <td>렌트보증금 <b>$100(100,000)</b>으로 렌트시작 시각<br>
+						                         단위 <b>#if ($bstype== "B") ↓  #else ↑  #end 30</b> 실격 <b style="color:#ee3f5c;">₩100,000(차손)</b> 소멸종료<br>
+						                         단위 <b>#if ($bstype== "B") ↑ #else ↓  #end 30</b> 실현 <b style="color:#26A69A;">₩86,000(차익)</b> 지급종료 <b>(손익분배비율:14%)</b>
+		                    </td>
+		                </tr>
+				<tr>
+		                    <td style="padding: 10px; text-align: center;"><b style="color:#ee3f5c;display: block;">4랏의 10%(#if ($bstype== "B") 매수  #else 매도  #end)</b>포지션 상품에서 발생될  <br>±손익에 대하여</td>
+		                    <td>렌트보증금 <b>$200(200,000)</b>으로 렌트시작 시각<br>
+						                         단위 <b>#if ($bstype== "B") ↓  #else ↑  #end 30</b> 실격 <b style="color:#ee3f5c;">₩200,000(차손)</b> 소멸종료<br>
+						                         단위 <b>#if ($bstype== "B") ↑ #else ↓  #end 30</b> 실현 <b style="color:#26A69A;">₩172,000(차익)</b> 지급종료 <b>(손익분배비율:14%)</b>
+		                    </td>
+		                </tr>
+		            </tbody>
+		        </table>
+	     </div>  
+	</div>
+</div>
+</html>

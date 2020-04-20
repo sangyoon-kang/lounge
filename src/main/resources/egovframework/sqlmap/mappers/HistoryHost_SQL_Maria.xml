@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="historyHost">
+
+	<resultMap id="BaseResultMap" type="com.tagosolution.service.model.HistoryHostVO">
+		<id column="IDX" jdbcType="INTEGER" property="historyHostIdx" />
+		<result column="HIT_DATE" jdbcType="VARCHAR" property="hitDate" />
+		<result column="HIT_TIME" jdbcType="VARCHAR" property="hitTime" />	
+		<result column="HIT_HOST" jdbcType="VARCHAR" property="hitHost" />	
+			
+		<result column="HIT_CNT" jdbcType="INTEGER" property="hitCnt" />		
+	</resultMap>
+	
+	<sql id="select">
+		IDX, HIT_DATE, HIT_TIME, HIT_HOST,  HIT_CNT
+	</sql>
+	
+	<select id="selectList" parameterType="search" resultMap="BaseResultMap">
+		SELECT
+		<include refid="select" />
+		FROM TS_HISTORY_HOST	
+		
+	</select>
+	
+	
+	
+	<select id="selectLastTen" parameterType="search" resultMap="BaseResultMap">
+		SELECT
+		<include refid="select" />
+		FROM TS_HISTORY_HOST
+		ORDER BY 	HIT_DATE, HIT_TIME ASC
+		LIMIT 100		
+	</select>
+	
+	
+	
+	<select id="totalCount" parameterType="com.tagosolution.service.model.HistoryHostVO" resultType="int">
+		SELECT COUNT(IDX)
+		FROM TS_HISTORY_HOST		
+	</select>
+
+	<select id="selectByKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+		select
+		<include refid="select" />
+		FROM TS_HISTORY_HOST
+		where IDX = #{historyHostIdx, jdbcType=INTEGER}
+	</select>
+
+
+	<select id="selectLastDay" resultMap="BaseResultMap">
+		SELECT 
+		<include refid="select" />
+		FROM TS_HISTORY_HOST	
+		ORDER BY HIT_DATE DESC
+		LIMIT 1
+		
+	</select>
+
+
+	<insert id="insert" useGeneratedKeys="true" keyProperty="historyHostIdx"  parameterType="com.tagosolution.service.model.HistoryHostVO">
+		INSERT INTO TS_HISTORY_HOST
+			(IDX, HIT_DATE, HIT_TIME, HIT_HOST,  HIT_CNT)
+		VALUES
+			(#{historyHostIdx,jdbcType=INTEGER}, #{hitDate,jdbcType=VARCHAR}
+			, #{hitTime,jdbcType=VARCHAR}, #{hitHost,jdbcType=VARCHAR}, #{hitCnt,jdbcType=INTEGER})	
+		
+		ON DUPLICATE KEY UPDATE
+		
+		<trim suffix=" " suffixOverrides=",">
+			<if test="hitDate != null">
+				HIT_DATE = #{hitDate,jdbcType=VARCHAR},
+			</if>
+			<if test="hitTime != null">
+				HIT_TIME = #{hitTime,jdbcType=VARCHAR},
+			</if>
+			<if test="hitHost != null">
+				HIT_HOST = #{hitHost,jdbcType=VARCHAR},
+			</if>
+			
+			<if test="hitCnt != null">
+				HIT_CNT = #{hitCnt,jdbcType=INTEGER},
+			</if>	
+		</trim>	
+	</insert>
+</mapper>

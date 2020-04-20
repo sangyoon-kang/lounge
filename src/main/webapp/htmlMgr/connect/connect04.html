@@ -1,0 +1,150 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link href="/css/master.css" rel="stylesheet" type="text/css" />
+<link href="/js/jquery-ui.css" rel="stylesheet" type="text/css" />
+<link href="/css/SimpleLightBox.css" rel="stylesheet" type="text/css" />
+<link href="/css/tree.css" rel="stylesheet" type="text/css" />
+<script type="text/javascript" language="Javascript" src="/js/external/jquery/jquery.js"></script>
+<script type="text/javascript" language="Javascript" src="/js/jquery-ui.js"></script>
+<script type="text/javascript" language="Javascript" src="/js/jquery.form.min.js"></script>
+<script type="text/javascript" language="Javascript" src="/js/jquery.ui.datepicker-ko.js"></script>
+<script type="text/javascript" language="Javascript" src="/js/LightBox/SimpleLightBox.js"></script>
+<script type="text/javascript" language="Javascript" src="/js/tree.js"></script>
+<script type="text/javascript" language="Javascript" src="/js/Common.js"></script>
+<script type="text/javascript" language="Javascript" src="/js/page_function.js"></script>
+<script type="text/javascript" language="Javascript" src="/js/jquery.scrollbox.js"></script>
+<script type="text/javascript" language="Javascript" src="/js/jquery.flexisel.js"></script>
+<script type="text/javascript" language="Javascript" src="/js/jquery.easing.1.3.js"></script>
+<title>관리시스템</title>
+</head>
+
+<body>
+<div id="wrap">
+	<!--header S-->
+	<div id="wrap_header">
+		<ul class="gnb" id="gnb_link">
+			<li link="/config/config01.html">환경설정</li>
+			<li link="/basic/basic01.html">기본설정</li>
+			<li link="/bbs/bbs01.html">게시판관리</li>
+			<li link="/member/member01.html">회원관리</li>
+			<li link="/poll/poll01.html">설문관리</li>
+			<li link="/schedule/sch01.html">일정관리</li>
+			<li link="/product/pro01.html">상품관리</li>
+			<li link="/banner/banner01.html">배너관리</li>
+			<li link="/connect/connect01.html">통계관리</li>
+		</ul>
+		<script type="text/javascript" language="Javascript">
+		<!--
+
+			$(document).ready(function(){
+				
+				$('#gnb_link li').on("click", function(){
+
+					var link_info = $(this).attr("link");
+					//alert(link_info+'로 이동합니다.');
+					location.href=link_info;
+
+				});
+
+			});
+		-->
+		</script>
+		<p id="LogoutBtn">로그아웃</p>
+	</div>
+	<!--header E-->
+
+	<!--lnb S-->
+	<div id="wrap_lnb">
+		<h2 class="mg_logo">사이트관리자<br/><a href="" class="bt_gohome">내홈페이지바로가기→</a></h2>
+		<h2 class="lnb_title"><span class="title1">통계 관리</span></h2>
+		<ul class="lnb">
+			<li class="lnb_depth1"><a href="/connect/connect01.html" class="depth1_on">접속통계</a></li>
+			<li class="lnb_depth2"><a href="/connect/connect01.html">- 접속자 분석</a></li>
+			<li class="lnb_depth2"><a href="/connect/connect02.html">- 접속경로 분석</a></li>
+			<li class="lnb_depth2"><a href="/connect/connect03.html">- 검색 키워드 분석</a></li>
+			<li class="lnb_depth2"><a href="/connect/connect04.html" class="depth2_on">- OS/브라우저</a></li>
+			<li class="lnb_depth2"><a href="/connect/connect05.html">- 상세 브라우저</a></li>
+			<li class="lnb_depth1"><a href="/connect/connect06.html">회원 통계</a></li>
+			<li class="lnb_depth1"><a href="/connect/connect07.html">배너 클릭 통계</a></li>
+		</ul>
+		<div id="copyright">
+			<p>2016 LCDNS<br/>All rights reserved.</p>
+		</div>
+	</div>
+	<!--lnb E-->
+
+	<!--wrap_scon S-->
+	<div id="wrap_scon">
+		<div class="scon_title">
+			<h2>OS/브라우저</h2>
+			<p>홈 > 통계 관리 > OS/브라우저</p>
+		</div>
+		<div class="scon">
+			
+			<h3>브라우저</h3>
+			<p class="table_aside02"><a href="/banner/banner02_write.html" class="bt_copy">접속자분석 초기화</a></p>
+			<table class="table_style1">
+				<caption></caption>
+				<colgroup>
+					<col width="" />
+					<col width="" />
+					<col width="" />
+					<col width="" />
+				</colgroup>
+				<thead>
+					<tr>
+						<th>브라우저</th>
+						<th>접속자수</th>
+						<th>비율</th>
+						<th>그래프</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr>
+						<td class="">파이어폭스</td>
+						<td class="">10</td>
+						<td class="">10%</td>
+						<td class="left connect_conbar"><div class="poll_bar"><span style="width:10%" class="poll_cobar"></span></div></td>
+					</tr>
+					
+				</tbody>
+			</table>
+			
+			<p class="tit_blank"></p>
+
+			<h3>OS</h3>
+			<table class="table_style1">
+				<caption></caption>
+				<colgroup>
+					<col width="" />
+					<col width="" />
+					<col width="" />
+					<col width="" />
+				</colgroup>
+				<thead>
+					<tr>
+						<th>브라우저</th>
+						<th>접속자수</th>
+						<th>비율</th>
+						<th>그래프</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr>
+						<td class="">파이어폭스</td>
+						<td class="">50</td>
+						<td class="">50%</td>
+						<td class="left connect_conbar"><div class="poll_bar"><span style="width:50%" class="poll_cobar"></span></div></td>
+					</tr>
+					
+				</tbody>
+			</table>
+			
+		</div>
+	</div>
+	<!--wrap_scon E-->
+</div>
+</body>
+</html>

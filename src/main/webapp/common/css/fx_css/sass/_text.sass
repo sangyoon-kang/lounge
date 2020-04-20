@@ -1,0 +1,104 @@
+@font-face
+     font-family: 'Noto Sans KR'
+     font-style: normal
+     font-weight: 300
+     src: url('../../font/fx_font/noto-sans-kr-v11-korean-300.eot')
+     src: local('Noto Sans KR Light'),local('NotoSansKR-Light'),url('../../font/fx_font/noto-sans-kr-v11-korean-300.eot?#iefix') format('embedded-opentype'),  url('../../font/fx_font/noto-sans-kr-v11-korean-300.woff2') format('woff2'), url('../../font/fx_font/noto-sans-kr-v11-korean-300.woff') format('woff'),  url('../../font/fx_font/noto-sans-kr-v11-korean-300.ttf') format('truetype'), url('../../font/fx_font/noto-sans-kr-v11-korean-300.svg#NotoSansKR') format('svg')
+
+/* noto-sans-kr-regular - korean */
+@font-face
+     font-family: 'Noto Sans KR'
+     font-style: normal
+     font-weight: 400
+     src: url('../../font/fx_font/noto-sans-kr-v11-korean-regular.eot')
+     src: local('Noto Sans KR Regular'), local('NotoSansKR-Regular'),url('../../font/fx_font/noto-sans-kr-v11-korean-regular.eot?#iefix') format('embedded-opentype'), url('../../font/fx_font/noto-sans-kr-v11-korean-regular.woff2') format('woff2'), url('../../font/fx_font/noto-sans-kr-v11-korean-regular.woff') format('woff'), url('../../font/fx_font/noto-sans-kr-v11-korean-regular.ttf') format('truetype'),url('../../font/fx_font/noto-sans-kr-v11-korean-regular.svg#NotoSansKR') format('svg')
+
+/* noto-sans-kr-500 - korean */
+@font-face
+     font-family: 'Noto Sans KR'
+     font-style: normal
+     font-weight: 500
+     src: url('../../font/fx_font/noto-sans-kr-v11-korean-500.eot')
+     src: local('Noto Sans KR Medium'), local('NotoSansKR-Medium'),url('../../font/fx_font/noto-sans-kr-v11-korean-500.eot?#iefix') format('embedded-opentype'), url('../../font/fx_font/noto-sans-kr-v11-korean-500.woff2') format('woff2'), url('../../font/fx_font/noto-sans-kr-v11-korean-500.woff') format('woff'), url('../../font/fx_font/noto-sans-kr-v11-korean-500.ttf') format('truetype'),url('../../font/fx_font/noto-sans-kr-v11-korean-500.svg#NotoSansKR') format('svg')
+
+/* noto-sans-kr-100 - korean */
+@font-face
+     font-family: 'Noto Sans KR'
+     font-style: normal
+     font-weight: 100
+     src: url('../../font/fx_font/noto-sans-kr-v11-korean-100.eot')
+     src: local('Noto Sans KR Thin'), local('NotoSansKR-Thin'),url('../../font/fx_font/noto-sans-kr-v11-korean-100.eot?#iefix') format('embedded-opentype'), url('../../font/fx_font/noto-sans-kr-v11-korean-100.woff2') format('woff2'), url('../../font/fx_font/noto-sans-kr-v11-korean-100.woff') format('woff'), url('../../font/fx_font/noto-sans-kr-v11-korean-100.ttf') format('truetype'),url('../../font/fx_font/noto-sans-kr-v11-korean-100.svg#NotoSansKR') format('svg')
+
+/* noto-sans-kr-300 - korean */
+
+/* noto-sans-kr-700 - korean */
+@font-face
+     font-family: 'Noto Sans KR'
+     font-style: normal
+     font-weight: 700
+     src: url('../../font/fx_font/noto-sans-kr-v11-korean-700.eot')
+     src: local('Noto Sans KR Bold'), local('NotoSansKR-Bold'),url('../../font/fx_font/noto-sans-kr-v11-korean-700.eot?#iefix') format('embedded-opentype'), url('../../font/fx_font/noto-sans-kr-v11-korean-700.woff2') format('woff2'), url('../../font/fx_font/noto-sans-kr-v11-korean-700.woff') format('woff'), url('../../font/fx_font/noto-sans-kr-v11-korean-700.ttf') format('truetype'),url('../../font/fx_font/noto-sans-kr-v11-korean-700.svg#NotoSansKR') format('svg')
+@font-face
+     font-family: 'Oxygen'
+     font-style: normal
+     font-weight: 300
+     src: url('../../font/fx_font/Oxygen-Light.ttf')
+@font-face
+     font-family: 'Oxygen'
+     font-style: normal
+     font-weight: 400
+     src: url('../../font/fx_font/Oxygen-Regular.ttf')
+@font-face
+     font-family: 'Oxygen'
+     font-style: normal
+     font-weight: 700
+     src: url('../../font/fx_font/Oxygen-Bold.ttf')
+
+h1, h2, h3, h4, h5
+     margin: 0
+
+p
+     font-weight: 400
+.bold
+     font-weight: bold
+.upper
+     text-transform: uppercase
+.small
+     font-size: 80%
+.letter-space
+     letter-spacing: 12px
+.text-light
+     font-weight: 100
+// .text-100
+//      font-weight: 100
+.text-300
+     font-weight: 300
+// .text-500
+//      font-weight: 500
+// .text-700
+//      font-weight: 700
+// .text-normal
+//      font-weight: 400
+.text-center
+     text-align: center
+.text-right
+     text-align: right
+.text-left
+     text-align: left
+.text-muted
+     color: #909090
+.no-line-height
+     line-height: 0
+.line-height-refresh
+     line-height: 1.45
+@for $i from 1 to 11
+     .opacity-#{$i*10}
+          opacity: $i*0.1
+.margin_trading
+     p
+          line-height: 2
+          +respond-to(small)
+          
+               font-size: 20px
+               
+     

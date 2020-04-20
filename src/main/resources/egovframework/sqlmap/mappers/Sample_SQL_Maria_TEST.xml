@@ -1,0 +1,173 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="sample" >
+	
+	<resultMap id="resultMap" type="gm" >
+		<!--
+		<id column="BOARD_SEQ" property="boardSeq" jdbcType="NUMERIC" />
+		<result column="SUBJECT" property="subject" jdbcType="VARCHAR" />
+		<result column="PWD_YN" property="pwdYn" jdbcType="VARCHAR" />
+		<result column="PWD" property="pwd" jdbcType="VARCHAR" />
+		<result column="READ_COUNT" property="readCount" jdbcType="NUMERIC" />
+		<result column="IP" property="ip" jdbcType="VARCHAR" />
+		<result column="NOTICE_YN" property="noticeYn" jdbcType="VARCHAR" />
+		<result column="DISPLAY_YN" property="displayYn" jdbcType="VARCHAR" />
+		<result column="REG_ID" property="regId" jdbcType="VARCHAR" />
+		<result column="REG_NM" property="regNm" jdbcType="VARCHAR" />
+		<result column="REG_DT" property="regDt" jdbcType="TIMESTAMP" />
+		<result column="MOD_ID" property="modId" jdbcType="VARCHAR" />
+		<result column="MOD_NM" property="modNm" jdbcType="VARCHAR" />
+		<result column="MOD_DT" property="modDt" jdbcType="TIMESTAMP" />
+		<result column="BODY" property="body" jdbcType="CLOB" javaType="java.lang.String" />
+		 
+		<association property="boardBasicCode" javaType="com.tagoplus.service.model.erp.TbBasiccodedVO">
+			<result column="BOARD_TYPE_CD" property="basiccode" jdbcType="VARCHAR"/>
+			<result column="BOARD_TYPE_NM" property="longdesc" jdbcType="VARCHAR"/>
+		</association>
+		<association property="faqBasicCode" javaType="com.tagoplus.service.model.erp.TbBasiccodedVO">
+			<result column="FAQ_TYPE_CD" property="basiccode" jdbcType="VARCHAR"/>
+			<result column="FAQ_TYPE_NM" property="longdesc" jdbcType="VARCHAR"/>
+		</association>
+		<association property="noticeBasicCode" javaType="com.tagoplus.service.model.erp.TbBasiccodedVO">
+			<result column="NOTICE_TYPE_CD" property="basiccode" jdbcType="VARCHAR"/>
+			<result column="NOTICE_TYPE_NM" property="longdesc" jdbcType="VARCHAR"/>
+		</association>
+		<association property="accessBasicCode" javaType="com.tagoplus.service.model.erp.TbBasiccodedVO">
+			<result column="ACCESS_TYPE_CD" property="basiccode" jdbcType="VARCHAR"/>
+			<result column="ACCESS_TYPE_NM" property="longdesc" jdbcType="VARCHAR"/>
+		</association>
+		 -->
+		 
+		<!-- DB 연계 쿼리 : SC10	: 'SC10' as board_type_groupcode -->
+		<!-- 
+		<association property="boardBasicCode" column="{groupcode=BOARD_TYPE_GROUPCODE, basiccode=BOARD_TYPE_CD}" select="TbBasiccoded.selectAssociation2" />
+		 -->
+	</resultMap>
+	
+	<!-- 
+	<resultMap id="resultMap" type="com.tagoplus.service.model.BoardVO" extends="baseResultMap" >
+	</resultMap>
+	 -->
+
+	<!--	 
+		<![CDATA[ ]]>	
+	 -->	
+	 
+	<sql id="select">
+			board_seq
+			, board_type_cd
+			, getcodenamel_fn('SC10', board_type_cd) as board_type_nm
+			, faq_type_cd
+			, getcodenamel_fn('SC11', faq_type_cd) as faq_type_nm
+			, notice_type_cd
+			, getcodenamel_fn('SC12', notice_type_cd) as notice_type_nm
+			, access_type_cd
+			, getcodenamel_fn('SC07', access_type_cd) as access_type_nm
+			, subject
+			, pwd_yn
+			, pwd
+			, read_count
+			, ip
+			, notice_yn
+			, display_yn
+			, reg_id
+			, '등록자 이름' as reg_nm
+			, reg_dt
+			, mod_id
+			, '수정자 이름' as mod_nm
+			, mod_dt
+			, body		
+	</sql>
+	
+	<sql id="whereClause" >
+		<trim prefix="where" prefixOverrides="and">
+			<if test="boardTypeCd != ''">
+				and board_type_cd = #{boardTypeCd }
+			</if>
+			<if test="searchWord != '' ">
+				<choose>
+					<when test="type1 == 'subject'">
+						and subject like '%' || #{searchWord } || '%'
+					</when>
+					<when test="type1 == 'body'">
+					</when>
+					<otherwise>
+						and (subject like '%' || #{searchWord } || '%' or body like '%' || #{searchWord } || '%')
+					</otherwise>					
+				</choose> 			
+			</if>
+		</trim>
+	</sql>
+ 
+	<select id="selectList" parameterType="search" resultMap="resultMap">
+ 	select
+ 	<include refid="select" />
+ 	from ajs_board
+ 	<include refid="whereClause" />
+ 	<choose>
+		<when test="orderBy != ''">
+			order by ${orderBy }
+		</when>
+		<otherwise>
+			order by board_seq desc
+		</otherwise>					
+	</choose>
+ 	<include refid="paging.limit"/> 	
+	</select> 
+	
+ 
+	<select id="totalCount" parameterType="search" resultType="java.lang.Integer">
+ 	select count(*)
+ 	from ajs_board
+ 	<include refid="whereClause" />
+	</select>
+ 
+ 
+	<insert id="insert" parameterType="gm" >
+ 	<selectKey keyProperty="boardSeq" resultType="long" order="BEFORE"> 
+		select seq_ajs_board.nextval from dual
+	</selectKey>
+		insert into ajs_board (
+			board_seq, board_type_cd, faq_type_cd, notice_type_cd, access_type_cd
+			, subject, pwd_yn, pwd, ip
+			, notice_yn, reg_id, body)
+		values (
+			#{boardSeq }, #{boardTypeCd }, #{faqTypeCd, jdbcType=VARCHAR}, #{noticeTypeCd, jdbcType=VARCHAR}, #{accessTypeCd, jdbcType=VARCHAR}
+			, #{subject}, #{pwdYn, jdbcType=VARCHAR}, #{pwd, jdbcType=VARCHAR}, #{ip, jdbcType=VARCHAR}
+			, #{noticeYn, jdbcType=VARCHAR},	 #{regId}, #{body, jdbcType=CLOB})
+	</insert>
+ 
+ 
+	<update id="updateByKey" parameterType="gm" >
+		update ajs_board
+		set mod_dt = sysdate
+			, mod_id = #{modId}
+			, ip = #{ip}
+			, subject = #{subject}
+				, body = #{body,jdbcType=CLOB}
+		<if test="faqTypeCd != null and faqTypeCd != ''">
+			, faq_type_cd = #{faqTypeCd}
+		</if>
+		<if test="pwdYn != null and pwdYn != ''">
+			, pwd_yn = #{pwdYn}
+		</if>
+		<if test="pwd != null and pwd != ''">
+			, pwd = #{pwd}
+		</if>
+		<if test="noticeTypeCd != null and noticeTypeCd != ''">
+			, notice_type_cd = #{noticeTypeCd}
+		</if>
+		<if test="displayYn != null and displayYn != ''">
+			, display_yn = #{displayYn}
+	 	</if>
+		where board_seq = #{boardSeq}
+	</update>
+	
+	
+	<delete id="deleteByKey" parameterType="gm">
+			delete from ajs_board
+			where board_seq = #{boardSeq}
+	</delete>
+	
+ 
+</mapper>

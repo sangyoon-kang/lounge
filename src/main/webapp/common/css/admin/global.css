@@ -1,0 +1,61 @@
+/* default */
+
+body {font-family: 'Nanum Gothic', 'Noto Sans KR', 'Malgun Gothic', dotum, sans-serif; font-size:14px; color:#333; letter-spacing:-0.025em; overflow-y:scroll;}
+
+ul, dl {list-style:none; list-style-type: none;}
+body,div,dl,dt,dd,ul,ol,li,h1,h2,h3,h4,form,fieldset,p,button {margin:0;padding:0;}
+a {text-decoration:none; font-size:14px; color:#333; }
+a:hover {text-decoration:underline; font-size:14px; color:#110484; cursor:pointer; }
+img {border:0;margin:0;padding:0;}
+
+input, select, textarea, button {outline-style:none; border-radius:3px; font-family: 'Nanum Gothic', 'Noto Sans KR', 'Malgun Gothic', dotum, sans-serif;}
+
+input[type="radio"], input[type="checkbox"] {vertical-align: middle; margin: 0; }
+input[type=file] {height:26px; background:#fff; border:none;  border:none;}
+input {text-indent:5px; height: 28px; line-height:26px; background:#fff; border:1px solid #C8C8C8;}
+select {border:1px solid #C8C8C8; height:30px; padding:0 25px 0 3px;  -webkit-appearance: none; -moz-appearance: none; background:#fff url(/images/select_arr.png) no-repeat right 50%;}
+select::-ms-expand {
+    display: none;
+}
+a {color:inherit; 
+	 transition:0.3s all;
+	-webkit-transition:0.3s all;
+	-moz-transition:0.3s all;
+	-o-transition:0.3s all;
+	-ms-transition:0.3s all;}
+
+button { color:inherit; 
+	 transition:0.3s all;
+	-webkit-transition:0.3s all;
+	-moz-transition:0.3s all;
+	-o-transition:0.3s all;
+	-ms-transition:0.3s all;}
+
+input[type="button"],input[type="submit"] {
+	 transition:0.3s all;
+	-webkit-transition:0.3s all;
+	-moz-transition:0.3s all;
+	-o-transition:0.3s all;
+	-ms-transition:0.3s all;}
+}
+
+
+
+hr {display:none;}
+
+table caption {
+	/*visibility:hidden;*/
+	display: none;
+	font-size:0;
+}
+
+table {border-spacing: 0}
+
+table th, table td {padding: 0}
+
+
+/*html5 ie 에 적용*/
+header, footer, section, article, aside, nav, hgroup, details, menu, figure, figcaption
+{ 
+    display: block 
+}

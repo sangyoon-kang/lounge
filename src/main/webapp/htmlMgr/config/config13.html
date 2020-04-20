@@ -1,0 +1,153 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link href="/css/master.css" rel="stylesheet" type="text/css" />
+<link href="/js/jquery-ui.css" rel="stylesheet" type="text/css" />
+<link href="/css/SimpleLightBox.css" rel="stylesheet" type="text/css" />
+<link href="/css/tree.css" rel="stylesheet" type="text/css" />
+<script type="text/javascript" language="Javascript" src="/js/external/jquery/jquery.js"></script>
+<script type="text/javascript" language="Javascript" src="/js/jquery-ui.js"></script>
+<script type="text/javascript" language="Javascript" src="/js/jquery.form.min.js"></script>
+<script type="text/javascript" language="Javascript" src="/js/jquery.ui.datepicker-ko.js"></script>
+<script type="text/javascript" language="Javascript" src="/js/LightBox/SimpleLightBox.js"></script>
+<script type="text/javascript" language="Javascript" src="/js/tree.js"></script>
+<script type="text/javascript" language="Javascript" src="/js/Common.js"></script>
+<script type="text/javascript" language="Javascript" src="/js/page_function.js"></script>
+<script type="text/javascript" language="Javascript" src="/js/jquery.scrollbox.js"></script>
+<script type="text/javascript" language="Javascript" src="/js/jquery.flexisel.js"></script>
+<script type="text/javascript" language="Javascript" src="/js/jquery.easing.1.3.js"></script>
+<title>관리시스템</title>
+</head>
+
+<body>
+<div id="wrap">
+	<!--header S-->
+	<div id="wrap_header">
+		<ul class="gnb" id="gnb_link">
+			<li link="/config/config01.html">환경설정</li>
+			<li link="/basic/basic01.html">기본설정</li>
+			<li link="/bbs/bbs01.html">게시판관리</li>
+			<li link="/member/member01.html">회원관리</li>
+			<li link="/poll/poll01.html">설문관리</li>
+			<li link="/schedule/sch01.html">일정관리</li>
+			<li link="/product/pro01.html">상품관리</li>
+			<li link="/banner/banner01.html">배너관리</li>
+			<li link="/connect/connect01.html">접속통계</li>
+		</ul>
+		<script type="text/javascript" language="Javascript">
+		<!--
+
+			$(document).ready(function(){
+				
+				$('#gnb_link li').on("click", function(){
+
+					var link_info = $(this).attr("link");
+					//alert(link_info+'로 이동합니다.');
+					location.href=link_info;
+
+				});
+
+			});
+		-->
+		</script>
+		<p id="LogoutBtn">로그아웃</p>
+	</div>
+	<!--header E-->
+
+	<!--lnb S-->
+	<div id="wrap_lnb">
+		<h2 class="mg_logo">사이트관리자<br/><a href="" class="bt_gohome">내홈페이지바로가기→</a></h2>
+		<h2 class="lnb_title"><span class="title1">환경설정</span></h2>
+		<ul class="lnb">
+			<li class="lnb_depth1"><a href="/config/config01.html">기본설정</a></li>
+			<li class="lnb_depth1"><a href="/config/config02.html">로그분석 설정</a></li>
+			<li class="lnb_depth1"><a href="/config/config03.html">게시판</a></li>
+			<li class="lnb_depth1"><a href="/config/config04.html">메인게시물</a></li>
+			<li class="lnb_depth1"><a href="/config/config05.html">회원 관리</a></li>
+			<li class="lnb_depth1"><a href="/config/config06.html">폼메일</a></li>
+			<li class="lnb_depth1"><a href="/config/config07.html">상품 관리</a></li>
+			<li class="lnb_depth1"><a href="/config/config08.html">메인상품</a></li>
+			<li class="lnb_depth1"><a href="/config/config09.html">설문조사</a></li>
+			<li class="lnb_depth1"><a href="/config/config10.html">메인 설문</a></li>
+			<li class="lnb_depth1"><a href="/config/config11.html">일정 관리</a></li>
+			<li class="lnb_depth1"><a href="/config/config12.html">배너관리</a></li>
+			<li class="lnb_depth1"><a href="/config/config13.html" class="depth1_on">페이지 관리</a></li>
+			<li class="lnb_depth1"><a href="/config/config14.html">페이지 접근 권한</a></li>
+			<li class="lnb_depth1"><a href="/config/config15.html">전체 검색</a></li>
+			<li class="lnb_depth1"><a href="/config/config16.html">카운터</a></li>
+		</ul>
+		<div id="copyright">
+			<p>2016 LCDNS<br/>All rights reserved.</p>
+		</div>
+	</div>
+	<!--lnb E-->
+
+	<!--wrap_scon S-->
+	<div id="wrap_scon">
+		<div class="scon_title">
+			<h2>페이지관리</h2>
+			<p>홈 > 환경설정 > 페이지관리</p>
+		</div>
+		<div class="scon">
+			<h3>페이지관리 생성코드</h3>
+			<div class="scon_logtxt_box01">
+				<p>&lt;? $code="page01"; include "$_SERVER[DOCUMENT_ROOT]/admin/module/page.php"; // 페이지 ?&gt; <a href="" class="bt_copy">생성코드복사</a></p>
+			</div>
+
+			<p class="tit_blank"></p>
+			<div class="check_conbox">
+				<h4 class="check_tit">체크사항 <span class="txt_red">(홈페이지내용을 관리자에서 수정할 수 있는 기능을 제공합니다.)</span></h4>
+				<ul>
+					<li>- 제작완료 후에 관리자에서 직접 페이지 수정을 원할경우 페이지관리 기능을 이용합니다.</li>
+					<li>- 페이지 관리 메뉴에서 페이지를 추가/수정/삭제가 가능합니다.</li>
+				</ul>
+			</div>
+			
+			
+
+			<p class="tit_blank"></p>
+			<span class="table_aside">총 페이지수 : 00</span>
+			<table class="table_style1">
+				<caption>게시판리스트</caption>
+				<colgroup>
+					<col width="" />
+					<col width="" />
+					<col width="" />
+					<col width="" />
+					<col width="" />
+				</colgroup>
+				<thead>
+				<tr>
+					<th>번호</th>
+					<th>코드</th>
+					<th>페이지</th>
+					<th>주소</th>
+					<th>기능</th>
+				</tr>
+				</thead>
+				<tbody>
+
+					<tr>
+						<td class="first first_back">1</td>
+						<td>page01</td>
+						<td>1 > 회사소개</td>
+						<td><a href="">http://democom.anywiz.co.kr/sub01/sub01.php</a></td>
+						<td><a href="" class="bt_copy">생성코드복사</a></td>
+					</tr>
+					<tr>
+						<td class="first first_back">1</td>
+						<td>page01</td>
+						<td>1 > 회사소개</td>
+						<td><a href="">http://democom.anywiz.co.kr/sub01/sub01.php</a></td>
+						<td><a href="" class="bt_copy">생성코드복사</a></td>
+					</tr>
+					
+				</tbody>
+			</table>
+		</div>
+	</div>
+	<!--wrap_scon E-->
+</div>
+</body>
+</html>

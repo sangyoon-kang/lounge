@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="historyLogin">
+
+	<resultMap id="BaseResultMap" type="com.tagosolution.service.model.HistoryLoginVO">
+		<id column="IDX" jdbcType="INTEGER" property="historyLoginIdx" />
+		<result column="USER_TYPE" jdbcType="VARCHAR" property="userType" />
+		<result column="USER_ID" jdbcType="VARCHAR" property="userId" />
+		<result column="USER_IP" jdbcType="VARCHAR" property="userIp" />
+		<result column="SESSON_INFO" jdbcType="VARCHAR" property="sessonInfo" />
+		<result column="ALL_INFO" jdbcType="VARCHAR" property="allInfo" />
+		<result column="REG_DATE" jdbcType="TIMESTAMP" property="regDate" />		
+				
+	</resultMap>
+	
+	<sql id="select">
+		IDX, USER_TYPE, USER_ID, USER_IP, SESSON_INFO, ALL_INFO, REG_DATE
+	</sql>
+	
+	<select id="selectList" parameterType="search" resultMap="BaseResultMap">
+		SELECT
+		<include refid="select" />
+		FROM TS_HISTORY_LOGIN
+		
+	</select>
+	
+	
+	
+	<select id="totalCount" parameterType="com.tagosolution.service.model.HistoryLoginVO" resultType="int">
+		SELECT COUNT(IDX)
+		FROM TS_HISTORY_LOGIN		
+	</select>
+	
+	<select id="totalLoginUserCount" parameterType="com.tagosolution.service.model.HistoryLoginVO" resultMap="BaseResultMap">
+		select 
+			<include refid="select" />, count(*) as count
+			from ts_history_login
+		where USER_TYPE = 'U'
+		group by user_id
+	</select>
+
+	<select id="selectByKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+		select
+		<include refid="select" />
+		FROM TS_HISTORY_LOGIN
+		where IDX = #{historyLoginIdx, jdbcType=INTEGER}
+	</select>
+
+
+	
+
+
+	<insert id="insert" useGeneratedKeys="true" keyProperty="historyLoginIdx"  parameterType="com.tagosolution.service.model.HistoryLoginVO">
+		INSERT INTO TS_HISTORY_LOGIN
+			(IDX, USER_TYPE, USER_ID, USER_IP, SESSON_INFO, ALL_INFO)
+		VALUES
+			(#{historyLoginIdx,jdbcType=INTEGER}, #{userType,jdbcType=VARCHAR}
+			, #{userId,jdbcType=VARCHAR}, #{userIp,jdbcType=VARCHAR}, #{sessonInfo,jdbcType=VARCHAR}
+			, #{allInfo,jdbcType=VARCHAR})
+		
+		ON DUPLICATE KEY UPDATE
+		
+		<trim suffix=" " suffixOverrides=",">
+			<if test="userType != null">
+				USER_TYPE = #{userType,jdbcType=VARCHAR},
+			</if>
+			<if test="userId != null">
+				USER_ID = #{userId,jdbcType=VARCHAR},
+			</if>
+			<if test="userIp != null">
+				USER_IP = #{userIp,jdbcType=VARCHAR},
+			</if>
+			<if test="sessonInfo != null">
+				SESSON_INFO = #{sessonInfo,jdbcType=VARCHAR},
+			</if>	
+			<if test="allInfo != null">
+				ALL_INFO = #{allInfo,jdbcType=VARCHAR},
+			</if>	
+		</trim>	
+	</insert>
+</mapper>

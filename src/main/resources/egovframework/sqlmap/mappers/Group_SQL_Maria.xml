@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="group">
+
+	<resultMap id="BaseResultMap" type="com.tagosolution.service.model.GroupVO">
+		<id column="GROUP_SEQ" jdbcType="INTEGER" property="groupSeq" />
+		<result column="GROUP_TYPE" jdbcType="VARCHAR" property="groupType" />
+		<result column="GROUP_NAME" jdbcType="VARCHAR" property="groupName" />
+	</resultMap>
+	
+	<sql id="select">
+		GROUP_SEQ, GROUP_TYPE, GROUP_NAME
+	</sql>
+	
+	<select id="selectByKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+		select
+		<include refid="select" />
+		FROM TS_GROUP
+		where GROUP_SEQ = #{groupSeq,jdbcType=INTEGER}
+	</select>
+	
+	<select id="selectList" parameterType="search" resultMap="BaseResultMap">
+		select 
+		<include refid="select" />
+		FROM TS_GROUP
+		where GROUP_TYPE = #{groupType,jdbcType=VARCHAR}
+		order by GROUP_SEQ
+	</select>
+	
+	<!-- 관리자 LNB 출력용 그룹 -->
+	<select id="selectListByGroup" parameterType="search" resultMap="BaseResultMap">
+		SELECT 
+			<include refid="select" />
+		FROM TS_GROUP
+		WHERE GROUP_TYPE = #{groupType}
+		AND GROUP_SEQ IN (
+			SELECT GROUP_SEQ
+			FROM TS_BOARD_MASTER
+			GROUP BY GROUP_SEQ
+		)
+		UNION
+		SELECT
+			<include refid="select" />
+		FROM TS_GROUP
+		WHERE GROUP_TYPE = #{groupType}
+		AND GROUP_SEQ IN (
+			SELECT PAGE_GROUP_SEQ
+			FROM TS_PAGE
+			GROUP BY PAGE_GROUP_SEQ
+		)
+		UNION
+		SELECT
+			GROUP_SEQ, 'B', '(그룹없음)'
+		FROM TS_BOARD_MASTER
+		WHERE GROUP_SEQ = 0
+		GROUP BY GROUP_SEQ
+		ORDER BY GROUP_SEQ
+	</select>
+	
+	<delete id="deleteByKey" parameterType="java.lang.Integer">
+		delete FROM TS_GROUP
+		where GROUP_SEQ = #{groupSeq,jdbcType=INTEGER}
+	</delete>
+	
+	
+	<insert id="merge" useGeneratedKeys="true" keyProperty="groupSeq" parameterType="com.tagosolution.service.model.GroupVO">
+		INSERT INTO TS_GROUP (
+			GROUP_SEQ, GROUP_TYPE, GROUP_NAME
+		)
+		VALUES (
+			#{groupSeq,jdbcType=INTEGER}, #{groupType,jdbcType=VARCHAR}, #{groupName,jdbcType=VARCHAR}
+		)
+		ON DUPLICATE KEY UPDATE
+		<trim suffix=" " suffixOverrides=",">
+			<if test="groupName != null">
+				GROUP_NAME = #{groupName,jdbcType=VARCHAR},
+			</if>
+		</trim>
+	</insert>
+		
+</mapper>

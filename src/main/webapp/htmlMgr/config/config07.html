@@ -1,0 +1,276 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link href="/css/master.css" rel="stylesheet" type="text/css" />
+<link href="/js/jquery-ui.css" rel="stylesheet" type="text/css" />
+<link href="/css/SimpleLightBox.css" rel="stylesheet" type="text/css" />
+<link href="/css/tree.css" rel="stylesheet" type="text/css" />
+<script type="text/javascript" language="Javascript" src="/js/external/jquery/jquery.js"></script>
+<script type="text/javascript" language="Javascript" src="/js/jquery-ui.js"></script>
+<script type="text/javascript" language="Javascript" src="/js/jquery.form.min.js"></script>
+<script type="text/javascript" language="Javascript" src="/js/jquery.ui.datepicker-ko.js"></script>
+<script type="text/javascript" language="Javascript" src="/js/LightBox/SimpleLightBox.js"></script>
+<script type="text/javascript" language="Javascript" src="/js/tree.js"></script>
+<script type="text/javascript" language="Javascript" src="/js/Common.js"></script>
+<script type="text/javascript" language="Javascript" src="/js/page_function.js"></script>
+<script type="text/javascript" language="Javascript" src="/js/jquery.scrollbox.js"></script>
+<script type="text/javascript" language="Javascript" src="/js/jquery.flexisel.js"></script>
+<script type="text/javascript" language="Javascript" src="/js/jquery.easing.1.3.js"></script>
+<title>관리시스템</title>
+</head>
+
+<body>
+<div id="wrap">
+	<!--header S-->
+	<div id="wrap_header">
+		<ul class="gnb" id="gnb_link">
+			<li link="/config/config01.html">환경설정</li>
+			<li link="/basic/basic01.html">기본설정</li>
+			<li link="/bbs/bbs01.html">게시판관리</li>
+			<li link="/member/member01.html">회원관리</li>
+			<li link="/poll/poll01.html">설문관리</li>
+			<li link="/schedule/sch01.html">일정관리</li>
+			<li link="/product/pro01.html">상품관리</li>
+			<li link="/banner/banner01.html">배너관리</li>
+			<li link="/connect/connect01.html">접속통계</li>
+		</ul>
+		<script type="text/javascript" language="Javascript">
+		<!--
+
+			$(document).ready(function(){
+				
+				$('#gnb_link li').on("click", function(){
+
+					var link_info = $(this).attr("link");
+					//alert(link_info+'로 이동합니다.');
+					location.href=link_info;
+
+				});
+
+			});
+		-->
+		</script>
+		<p id="LogoutBtn">로그아웃</p>
+	</div>
+	<!--header E-->
+
+	<!--lnb S-->
+	<div id="wrap_lnb">
+		<h2 class="mg_logo">사이트관리자<br/><a href="" class="bt_gohome">내홈페이지바로가기→</a></h2>
+		<h2 class="lnb_title"><span class="title1">환경설정</span></h2>
+		<ul class="lnb">
+			<li class="lnb_depth1"><a href="/config/config01.html">기본설정</a></li>
+			<li class="lnb_depth1"><a href="/config/config02.html">로그분석 설정</a></li>
+			<li class="lnb_depth1"><a href="/config/config03.html">게시판</a></li>
+			<li class="lnb_depth1"><a href="/config/config04.html">메인게시물</a></li>
+			<li class="lnb_depth1"><a href="/config/config05.html">회원 관리</a></li>
+			<li class="lnb_depth1"><a href="/config/config06.html">폼메일</a></li>
+			<li class="lnb_depth1"><a href="/config/config07.html" class="depth1_on">상품 관리</a></li>
+			<li class="lnb_depth1"><a href="/config/config08.html">메인상품</a></li>
+			<li class="lnb_depth1"><a href="/config/config09.html">설문조사</a></li>
+			<li class="lnb_depth1"><a href="/config/config10.html">메인 설문</a></li>
+			<li class="lnb_depth1"><a href="/config/config11.html">일정 관리</a></li>
+			<li class="lnb_depth1"><a href="/config/config12.html">배너관리</a></li>
+			<li class="lnb_depth1"><a href="/config/config13.html">페이지 관리</a></li>
+			<li class="lnb_depth1"><a href="/config/config14.html">페이지 접근 권한</a></li>
+			<li class="lnb_depth1"><a href="/config/config15.html">전체 검색</a></li>
+			<li class="lnb_depth1"><a href="/config/config16.html">카운터</a></li>
+		</ul>
+		<div id="copyright">
+			<p>2016 LCDNS<br/>All rights reserved.</p>
+		</div>
+	</div>
+	<!--lnb E-->
+
+	<!--wrap_scon S-->
+	<div id="wrap_scon">
+		<div class="scon_title">
+			<h2>상품관리</h2>
+			<p>홈 > 환경설정 > 상품관리</p>
+		</div>
+		<div class="scon">
+			<div class="check_conbox">
+				<h4 class="check_tit">체크사항 <span class="txt_red">(상품관리 및 쇼핑몰 기능을 제공합니다.)</span></h4>
+				<ul>
+					<li>- 스킨위치 : /admin/product/skin</li>
+					<li>- <strong>특정 상품분류 열기</strong><br/>&nbsp;&nbsp;&nbsp;ㆍ방법1 : 생성코드 삽입시 코드($catcode)를 포함합니다. 예)&lt;? $catcode="100000"; include "$_SERVER[DOCUMENT_ROOT]..."<br/>&nbsp;&nbsp;&nbsp;ㆍ방법2 : 페이지 링크시 분류코드(catcode=100000) 를 추가합니다. 예) /product.php?catcode=1000000<br/>&nbsp;&nbsp;&nbsp;ㆍ분류코드는 "상품관리 > 상품분류 > 해당 분류 클릭 > 분류코드" 에 나옵니다.</li>
+					<li>- <strong>특정 상품그룹 열기</strong><br/>&nbsp;&nbsp;&nbsp;ㆍ생성코드 삽입시 상품그룹($grp)를 포함합니다. 예)&lt;? $grp="best"; include "$_SERVER[DOCUMENT_ROOT]..."<br/>&nbsp;&nbsp;&nbsp;ㆍ상품그룹 -
+    신상품 : $grp="new"; 베스트 : $grp="best"; 인기 : $grp="popular"; 추천 : $grp="recom"; 세일 : $grp="sale"; </li>
+				</ul>
+			</div>
+			<p class="tit_blank"></p>
+			<h3>상품관리 생성코드</h3>
+			<div class="scon_logtxt_box01">
+				<p>&lt;? include "$_SERVER[DOCUMENT_ROOT]/admin/module/product.php"; // 상품관리 ?&gt; <a href="" class="bt_copy">생성코드복사</a></p>
+			</div>
+
+			<p class="tit_blank"></p>
+			<h3>카테고리/상품검색/오늘본상품</h3>
+			<table class="table_style1">
+				<caption></caption>
+				<colgroup>
+					<col width="20%" />
+					<col width="" />
+				</colgroup>
+				
+				<tbody>
+					<tr>
+						<th class="left"><strong>카테고리</strong></th>
+						<td class="left"><span class="txt_red">&lt;? include "$_SERVER[DOCUMENT_ROOT]/admin/module/category.php"; // 상품카테고리 ?&gt;</span> <a href="" class="bt_copy">생성코드복사</a></td>
+					</tr>
+					<tr>
+						<th class="left"><strong>상품검색</strong></th>
+						<td class="left"><span class="txt_red">&lt;? include "$_SERVER[DOCUMENT_ROOT]/admin/module/prd_search.php"; // 상품검색 ?&gt;</span> <a href="" class="bt_copy">생성코드복사</a></td>
+					</tr>
+					<tr>
+						<th class="left"><strong>오늘본상품</strong></th>
+						<td class="left"><span class="txt_red">&lt;? include "$_SERVER[DOCUMENT_ROOT]/admin/module/prd_view.php"; // 오늘본상품 ?&gt;</span> <a href="" class="bt_copy">생성코드복사</a></td>
+					</tr>
+				</tbody>
+			</table>
+
+
+
+			<p class="tit_blank"></p>
+			<h3>페이지</h3>
+			<table class="table_style1">
+				<caption></caption>
+				<colgroup>
+					<col width="20%" />
+					<col width="" />
+				</colgroup>
+				
+				<tbody>
+					<tr>
+						<th class="left"><strong>장바구니</strong></th>
+						<td class="left"><span class="txt_red">&lt;? include "$_SERVER[DOCUMENT_ROOT]/admin/module/basket.php"; // 장바구니 ?&gt;</span> <a href="" class="bt_copy">생성코드복사</a></td>
+					</tr>
+					<tr>
+						<th class="left"><strong>상품주문</strong></th>
+						<td class="left"><span class="txt_red">&lt;? include "$_SERVER[DOCUMENT_ROOT]/admin/module/order.php"; // 상품주문 ?&gt;</span> <a href="" class="bt_copy">생성코드복사</a></td>
+					</tr>
+					<tr>
+						<th class="left"><strong>주문배송조회</strong></th>
+						<td class="left"><span class="txt_red">&lt;? include "$_SERVER[DOCUMENT_ROOT]/admin/module/order_list.php"; // 주문배송조회 ?&gt;</span> <a href="" class="bt_copy">생성코드복사</a></td>
+					</tr>
+					<tr>
+						<th class="left"><strong>적립금내역</strong></th>
+						<td class="left"><span class="txt_red">&lt;? include "$_SERVER[DOCUMENT_ROOT]/admin/module/reserve.php"; // 적립금 ?&gt;</span> <a href="" class="bt_copy">생성코드복사</a></td>
+					</tr>
+					<tr>
+						<th class="left"><strong>상품보관함</strong></th>
+						<td class="left"><span class="txt_red">&lt;? include "$_SERVER[DOCUMENT_ROOT]/admin/module/wish_list.php"; // 상품보관함 ?&gt;</span> <a href="" class="bt_copy">생성코드복사</a></td>
+					</tr>
+					<tr>
+						<th class="left"><strong>쿠폰내역</strong></th>
+						<td class="left"><span class="txt_red">&lt;? include "$_SERVER[DOCUMENT_ROOT]/admin/module/coupon.php"; // 쿠폰내역 ?&gt;</span> <a href="" class="bt_copy">생성코드복사</a></td>
+					</tr>
+					<tr>
+						<th class="left"><strong>상품검색</strong></th>
+						<td class="left"><span class="txt_red">&lt;? include "$_SERVER[DOCUMENT_ROOT]/admin/module/prdsearch.php"; // 상품검색 페이지 ?&gt;</span> <a href="" class="bt_copy">생성코드복사</a></td>
+					</tr>
+				</tbody>
+			</table>
+
+
+
+			<p class="tit_blank"></p>
+			<h3>페이지URL</h3>
+			<table class="table_style1">
+				<caption>페이지URL</caption>
+				<colgroup>
+					<col width="20%" />
+					<col width="" />
+				</colgroup>
+				
+				<tbody>
+					<tr>
+						<th class="left"><strong>장바구니</strong></th>
+						<td class="left">http//democom.anywiz.co.kr/<input name="" class="table_input1" value="" maxlength="" type="text" style="width:400px;"/></td>
+					</tr>
+					<tr>
+						<th class="left"><strong>상품주문</strong></th>
+						<td class="left">http//democom.anywiz.co.kr/<input name="" class="table_input1" value="" maxlength="" type="text" style="width:400px;"/></td>
+					</tr>
+					<tr>
+						<th class="left"><strong>상품검색</strong></th>
+						<td class="left">http//democom.anywiz.co.kr/<input name="" class="table_input1" value="" maxlength="" type="text" style="width:400px;"/></td>
+					</tr>
+					<tr>
+						<th class="left"><strong>상품보관함</strong></th>
+						<td class="left">http//democom.anywiz.co.kr/<input name="" class="table_input1" value="" maxlength="" type="text" style="width:400px;"/></td>
+					</tr>
+					<tr>
+						<th class="left"><strong>주문배송조회</strong></th>
+						<td class="left">http//democom.anywiz.co.kr/<input name="" class="table_input1" value="" maxlength="" type="text" style="width:400px;"/></td>
+					</tr>
+					
+				</tbody>
+			</table>
+			
+			
+			<p class="tit_blank"></p>
+			<h3>오늘본상품</h3>
+			<table class="table_style1">
+				<caption>오늘본상품</caption>
+				<colgroup>
+					<col width="20%" />
+					<col width="" />
+					<col width="20%" />
+					<col width="" />
+				</colgroup>
+				
+				<tbody>
+					<tr>
+						<th class="left"><strong>따라다니기</strong></th>
+						<td class="left"><input type="radio" class="input_type_radio01"/> 사용함&nbsp;&nbsp;&nbsp;<input type="radio" class="input_type_radio01"/> 사용안함</td>
+						<th class="left"><strong>상품갯수</strong></th>
+						<td class="left"><input name="" class="table_input1" value="" maxlength="" type="text" style="width:100px;"/> 개</td>
+					</tr>
+					<tr>
+						<th class="left"><strong>쇼핑몰정렬</strong></th>
+						<td class="left" colspan="3"><input type="radio" class="input_type_radio01"/> 좌측정렬&nbsp;&nbsp;&nbsp;<input type="radio" class="input_type_radio01"/> 중앙정렬&nbsp;&nbsp;&nbsp;<input type="radio" class="input_type_radio01"/> 우측정렬</td>
+					</tr>
+					<tr>
+						<th class="left"><strong>가로좌표</strong></th>
+						<td class="left"><input name="" class="table_input1" value="" maxlength="" type="text" style="width:100px;"/> 픽셀 (사이트 가로크기를 입력하세요)</td>
+						<th class="left"><strong>세로좌표</strong></th>
+						<td class="left"><input name="" class="table_input1" value="" maxlength="" type="text" style="width:100px;"/> 픽셀</td>
+					</tr>
+				</tbody>
+			</table>
+			<p class="tit_blank"></p>
+			<h3>카테고리설정</h3>
+			<table class="table_style1">
+				<caption>카테고리설정</caption>
+				<colgroup>
+					<col width="20%" />
+					<col width="" />
+					<col width="20%" />
+					<col width="" />
+				</colgroup>
+				
+				<tbody>
+					<tr>
+						<th class="left"><strong>하위분류 출력여부</strong></th>
+						<td class="left"><input type="radio" class="input_type_radio01" /> 사용함&nbsp;&nbsp;&nbsp;<input type="radio" class="input_type_radio01"/> 사용안함</td>
+						<th class="left"><strong>카테고리 메뉴높이</strong></th>
+						<td class="left"><input name="" class="table_input1" value="" maxlength="" type="text" style="width:50px;"/> px</td>
+					</tr>
+					<tr>
+						<th class="left"><strong>카테고리 세로좌표</strong></th>
+						<td class="left"><input name="" class="table_input1" value="" maxlength="" type="text" style="width:50px;"/> px</td>
+						<th class="left"><strong>카테고리 가로좌표</strong></th>
+						<td class="left"><input name="" class="table_input1" value="" maxlength="" type="text" style="width:50px;"/> px</td>
+					</tr>
+				</tbody>
+			</table>
+
+			<div class="page_bbt"><input type="button" value="확인" class="bt_bsubmit" /> <input type="button" value="취소" class="bt_bcancle" /></div>
+		</div>
+	</div>
+	<!--wrap_scon E-->
+</div>
+</body>
+</html>

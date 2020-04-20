@@ -1,0 +1,78 @@
+=respond-to($breakpoint)
+     @if $breakpoint==x-small
+          @media(min-width:576px)
+               @content
+     @else if $breakpoint==small
+          @media(min-width:767px)
+               @content
+     @else if $breakpoint==medium
+          @media(min-width:1024px)
+               @content
+     @else if $breakpoint==large
+          @media(min-width:1140px)
+               @content
+     @else if $breakpoint==x-large
+          @media(min-width:1260px)
+               @content
+
+=respond-to-down($breakpoint)
+     @if $breakpoint==x-small
+          @media(max-width:576px)
+               @content
+     @else if $breakpoint==small
+          @media(max-width:767px)
+               @content
+     @else if $breakpoint==medium
+          @media(max-width:1024px)
+               @content
+     @else if $breakpoint==large
+          @media(max-width:1140px)
+               @content
+     @else if $breakpoint==x-large
+          @media(max-width:1260px)
+               @content
+=flexbox
+     display: -webkit-flex
+     display: -ms-flexbox
+     display: flex
+=flex-wrap
+     flex-wrap: wrap
+     -webkit-flex-wrap: wrap
+=flex($flex)
+     flex: 0 0 $flex
+=mx($mx)
+     margin-left: $mx
+     margin-right: $mx
+=my($my)
+     margin-top: $my
+     margin-bottom: $my
+=px($px)
+     padding-left: $px
+     padding-right: $px
+=py($py)
+     padding-top: $py
+     padding-bottom: $py
+=size($size)
+     width: $size
+     height: $size
+=container
+     width: 100%
+     max-width: calc(1170px + 60px)
+     margin: auto
+     +px(30px)
+     +respond-to-down(small)
+          +px(7.2464vw)
+          max-width: calc(1170px + 7.2464vw * 2)
+
+=after-line($width,$height,$color)
+     position: relative
+     &::after
+          content: ''
+          position: absolute
+          display: inline-block
+          width: $width
+          height: $height
+          background: $color
+          right: 0
+          top: 50% 
+          transform: translateY(-50%)

@@ -1,0 +1,22 @@
+.sub-banner-container
+     position: relative
+     +bg-center
+     &::after
+          content: ""
+          background-color: rgba(black,.5)
+          height: 100%
+          width: 100%
+          position: absolute
+          top: 0
+          z-index: 1
+     .container
+          height: 100%
+     .content
+          height: 100%
+          +flexbox
+          flex-direction: column
+          justify-content: center
+
+          color: white
+          position: relative
+          z-index: 2

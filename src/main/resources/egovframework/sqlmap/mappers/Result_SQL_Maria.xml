@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="resultfx">
+  <resultMap id="BaseResultMap" type="com.tagosolution.service.model.ResultVO">
+  <id column="MOD_TIME" jdbcType="TIMESTAMP" property="modTime" />
+  	<result column="S_VAL" jdbcType="DECIMAL" property="sVal" />
+  	<result column="H_VAL" jdbcType="DECIMAL" property="hVal" />
+  	<result column="L_VAL" jdbcType="DECIMAL" property="lVal" />
+  	<result column="E_VAL" jdbcType="DECIMAL" property="eVal" />
+  	<result column="GOODS_RESULT" jdbcType="VARCHAR" property="goodsResult" />
+  	<result column="RTIME" jdbcType="VARCHAR" property="rTime" />
+  	<result column="ROW_NUMBER" jdbcType="INTEGER" property="rowNumber" />
+  </resultMap>
+  
+  <select id="selectRuntimeOne" parameterType="search" resultType="com.tagosolution.service.model.ResultVO">
+	SELECT	@rownum := @rownum + 1 AS row_number
+				, FR.MOD_TIME,FR.S_VAL,FR.H_VAL,FR.L_VAL,FR.E_VAL
+				, case FG.GOODS_RESULT
+						when 'U' then '상승'
+						when 'D' then '하락'
+					end as GOODS_RESULT 
+				, CONCAT(#{type1}, '분 거래') as RTIME
+	FROM   fx_goods   FG
+		cross join 
+			(select @rownum := 0) r
+		INNER JOIN (
+	            SELECT   MOD_TIME
+	                     , SUBSTRING_INDEX(GROUP_CONCAT(S_VAL ORDER BY RT),',',1) AS S_VAL
+	                     , MAX(H_VAL) AS H_VAL
+	                     , MIN(L_VAL) AS L_VAL
+	                     , SUBSTRING_INDEX(GROUP_CONCAT(E_VAL ORDER BY RT DESC),',',1) AS E_VAL
+	            FROM   (
+	                     SELECT   RT, S_VAL, H_VAL, L_VAL, E_VAL
+	                     <if test="type1 == 1">
+	                              , RT AS MOD_TIME
+	                     </if>
+	                     <if test="type1 == 2">
+	                              , CASE WHEN DATE_FORMAT(RT, '%i') MOD 2 = 0 THEN RT
+	                                  WHEN DATE_FORMAT(RT, '%i') MOD 2 = 1 THEN DATE_ADD(RT, INTERVAL -1 MINUTE)
+	                              END AS MOD_TIME
+	                     </if>
+	                     <if test="type1 == 3">
+	                               , CASE WHEN DATE_FORMAT(RT, '%i') MOD 3 = 0 THEN RT
+	                                  WHEN DATE_FORMAT(RT, '%i') MOD 3 = 1 THEN DATE_ADD(RT, INTERVAL -1 MINUTE)
+	                                  WHEN DATE_FORMAT(RT, '%i') MOD 3 = 2 THEN DATE_ADD(RT, INTERVAL -2 MINUTE)
+	                              END MOD_TIME
+	                     </if>
+	                     <if test="type1 == 5">
+	                               , CASE WHEN DATE_FORMAT(RT, '%i') MOD 5 = 0 THEN RT
+	                                  WHEN DATE_FORMAT(RT, '%i') MOD 5 = 1 THEN DATE_ADD(RT, INTERVAL -1 MINUTE)
+	                                  WHEN DATE_FORMAT(RT, '%i') MOD 5 = 2 THEN DATE_ADD(RT, INTERVAL -2 MINUTE)
+	                                  WHEN DATE_FORMAT(RT, '%i') MOD 5 = 3 THEN DATE_ADD(RT, INTERVAL -3 MINUTE)
+	                                  WHEN DATE_FORMAT(RT, '%i') MOD 5 = 4 THEN DATE_ADD(RT, INTERVAL -4 MINUTE)
+	                              END MOD_TIME
+	                     </if>
+	                     FROM   fx_result
+	                     WHERE   DATE_FORMAT(RT, '%Y-%m-%d') = #{startDate}
+	                  ) FR
+	            GROUP BY MOD_TIME
+	         ) FR
+	      ON DATE_ADD(DATE_FORMAT(CONCAT(FG.GOODS_DATE, ' ', FG.GOODS_TIME), '%Y-%m-%d %H:%i'), INTERVAL #{type1} MINUTE) = FR.MOD_TIME
+	WHERE   FG.RUN_TIME = #{type1}
+		AND   DATE_FORMAT(DATE_ADD(CONCAT(FG.GOODS_DATE, ' ', FG.GOODS_TIME), INTERVAL #{type1} MINUTE), '%Y-%m-%d') = #{startDate}
+		AND   FG.GOODS_RESULT IS NOT NULL  
+	ORDER BY FG.GOODS_DATE DESC, FG.GOODS_TIME DESC
+<include refid="paging.limit"/>
+  </select>
+  
+  <select id="totalCount" parameterType="search" resultType="int">
+    SELECT 	COUNT(RUN_TIME)
+    FROM 	fx_goods FG
+    WHERE	DATE_FORMAT(DATE_ADD(CONCAT(FG.GOODS_DATE, ' ', FG.GOODS_TIME), INTERVAL #{type1} MINUTE), '%Y-%m-%d') = #{startDate}
+    	AND	RUN_TIME = #{type1}
+  </select>
+  
+  <select id="selectResultSecByTime" parameterType="search" resultType="com.tagosolution.service.model.ResultSecVO">
+    SELECT @rownum := @rownum + 1 AS row_number,FROM_UNIXTIME(TIMESTAMP / 1000), S_VAL, H_VAL, L_VAL,E_VAL FROM fx_result_sec
+    cross join (select @rownum := 0) r
+    WHERE result_date = CURDATE() and SUBSTRING(result_time,1, 2) = #{type1}
+  
+  </select>
+  
+  <select id="totalCountRsec" parameterType="search" resultType="int">
+  select count(*) from (SELECT @rownum := @rownum + 1 AS row_number,FROM_UNIXTIME(TIMESTAMP / 1000), S_VAL, H_VAL, L_VAL,E_VAL FROM fx_result_sec
+    cross join (select @rownum := 0) r
+    WHERE result_date = CURDATE() and SUBSTRING(result_time,1, 2) = #{type1}) as CNTR
+  </select>
+  
+  <select id="getRecentResult" parameterType="search" resultType="com.tagosolution.service.model.ResultVO">
+		SELECT   	DATE_ADD(STR_TO_DATE(CONCAT(FR.RT), '%Y-%m-%d %H:%i'), INTERVAL 1 MINUTE) MOD_TIME, FR.E_VAL E_VAL
+	         		, FG.GOODS_RESULT GOODS_RESULT
+	         		, CASE FG.GOODS_RESULT WHEN 'U' THEN '매수' WHEN 'D' THEN '매도' WHEN 'T' THEN '무효' ELSE '대기중' END RTIME
+		FROM   	fx_goods FG
+	   	LEFT OUTER JOIN fx_result FR
+	      		ON DATE_ADD(STR_TO_DATE(CONCAT(FG.GOODS_DATE, ' ', FG.GOODS_TIME), '%Y-%m-%d %H:%i'), INTERVAL #{runTime} - 1 MINUTE) = FR.RT
+		WHERE   	DATE_ADD(STR_TO_DATE(CONCAT(FG.GOODS_DATE, ' ', FG.GOODS_TIME), '%Y-%m-%d %H:%i'), INTERVAL #{runTime} MINUTE) &lt;= DATE_FORMAT(SYSDATE(), '%Y-%m-%d %H:%i:00')
+	   	AND   	FG.RUN_TIME = #{runTime}
+		ORDER BY CONCAT(FG.GOODS_DATE, ' ', FG.GOODS_TIME) DESC
+		LIMIT 0, 10;
+
+  	</select>
+</mapper>

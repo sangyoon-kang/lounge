@@ -1,0 +1,55 @@
+.breadcrumb
+     display: flex
+     border: 1px solid white
+     color: white
+     &>li
+          padding: 17px 22px
+          +respond-to-down(small)
+               padding: 12px 15px
+          &:first-child
+               background: #3672d8
+               border-right: 1px solid white
+     .select_menu
+          flex: 0 0 230px
+          max-width: 230px
+          position: relative
+          border-right: 1px solid white
+          cursor: pointer
+          +respond-to-down(small)
+               flex: 1
+               max-width: 100%
+          &::after
+               position: absolute
+               width: 10px
+               height: 10px
+               border-right: 1px solid white
+               border-bottom: 1px solid white
+               content: ''
+               top: 50%
+               right: 22px
+               transform: translateY(-50%) rotate(45deg)
+          &.open
+               &::after
+                    transform: translateY(-50%) rotate(-135deg)
+
+     .select_menu_wrapper
+          left: 0
+          position: absolute
+          bottom: 0
+          width: 100%
+          transform: translateY(100%)
+          background: #fff
+          color: #000
+          display: none
+          border: 1px solid black
+          z-index: 1
+          li
+               a
+                    padding: 17px 22px
+                    display: block
+                    +respond-to-down(small)
+                         padding: 12px 15px
+                    &:hover
+                         background-color: darken(#fff,10% )
+               &:not(:last-child)
+                    border-bottom: 1px solid black

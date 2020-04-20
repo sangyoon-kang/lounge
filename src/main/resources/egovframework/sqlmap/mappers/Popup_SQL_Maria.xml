@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="popup">
+
+	<resultMap id="BaseResultMap" type="com.tagosolution.service.model.PopupVO">
+		<id column="POPUP_SEQ" jdbcType="SMALLINT" property="popupSeq" />
+		<result column="SUBJECT" jdbcType="VARCHAR" property="subject" />
+		<result column="LINK_URL" jdbcType="VARCHAR" property="linkUrl" />
+		<result column="POSITION_X" jdbcType="SMALLINT" property="positionX" />
+		<result column="POSITION_Y" jdbcType="SMALLINT" property="positionY" />
+		<result column="HORIZONTAL_SIZE" jdbcType="SMALLINT" property="horizontalSize" />
+		<result column="VERTICAL_SIZE" jdbcType="SMALLINT" property="verticalSize" />
+		<result column="START_DT" jdbcType="VARCHAR" property="startDt" />
+		<result column="END_DT" jdbcType="VARCHAR" property="endDt" />
+		<result column="POPUP_TYPE" jdbcType="VARCHAR" property="popupType" />
+		<result column="REG_DATE" jdbcType="TIMESTAMP" property="regDate" />
+		<result column="MOD_DATE" jdbcType="TIMESTAMP" property="modDate" />
+		<result column="REG_USER" jdbcType="VARCHAR" property="regUser" />
+		<result column="MOD_USER" jdbcType="VARCHAR" property="modUser" />
+		<result column="USE_FLAG" jdbcType="VARCHAR" property="useYn" />
+		<result column="BODY" jdbcType="LONGVARCHAR" property="body" />
+		
+	</resultMap>
+
+	<sql id="select">
+		POPUP_SEQ, SUBJECT, LINK_URL, POSITION_X, POSITION_Y, HORIZONTAL_SIZE, VERTICAL_SIZE,
+		START_DT, END_DT, POPUP_TYPE, REG_DATE, MOD_DATE, REG_USER, MOD_USER, USE_FLAG, BODY
+	</sql>
+
+	<select id="selectByKey" parameterType="java.lang.Short" resultMap="BaseResultMap">
+		SELECT
+		<include refid="select" />
+		FROM TS_POPUP
+		WHERE POPUP_SEQ = #{popupSeq,jdbcType=SMALLINT}
+	</select>
+
+	<sql id="whereClause">
+		<trim prefix="where" prefixOverrides="and">
+		</trim>
+	</sql>
+
+	<!-- 메인 페이지 팝업 -->
+	<select id="selectForMain" parameterType="search" resultMap="BaseResultMap">
+		SELECT
+		<include refid="select" />
+		<![CDATA[
+		FROM TS_POPUP
+		WHERE USE_FLAG = 'Y'
+			AND (STR_TO_DATE(DATE_FORMAT(NOW(), '%Y-%m-%d'), '%Y-%m-%d') >= STR_TO_DATE(START_DT, '%Y-%m-%d') 
+			AND STR_TO_DATE(DATE_FORMAT(NOW(), '%Y-%m-%d'), '%Y-%m-%d') <= STR_TO_DATE(END_DT, '%Y-%m-%d') 
+		)
+		]]>
+		<!-- AND (STR_TO_DATE(DATE_FORMAT(NOW(), '%Y-%m-%d'), '%Y-%m-%d') >= STR_TO_DATE(START_DT, '%Y-%m-%d') 
+			AND DATE_ADD(STR_TO_DATE(DATE_FORMAT(NOW(), '%Y-%m-%d'), '%Y-%m-%d'), INTERVAL 1 DAY) < STR_TO_DATE(END_DT, '%Y-%m-%d') 
+		) -->
+	</select>
+
+	<select id="selectList" parameterType="search" resultMap="BaseResultMap">
+		SELECT
+		<include refid="select" />
+		FROM TS_POPUP
+		<!-- <include refid="whereClause" /> -->
+		<choose>
+			<when test="orderBy != ''">
+				ORDER BY ${orderBy }
+			</when>
+			<otherwise>
+				ORDER BY POPUP_SEQ
+			</otherwise>
+		</choose>
+		<include refid="paging.limit" />
+	</select>
+
+	<select id="totalCount" parameterType="search" resultType="int">
+		SELECT COUNT(*)
+		FROM TS_POPUP
+		<!-- <include refid="whereClause" /> -->
+	</select>
+
+	<insert id="merge" useGeneratedKeys="true" keyProperty="popupSeq" parameterType="com.tagosolution.service.model.PopupVO">
+		INSERT INTO TS_POPUP (
+		POPUP_SEQ, SUBJECT, LINK_URL,
+		POSITION_X, POSITION_Y, HORIZONTAL_SIZE,
+		VERTICAL_SIZE, START_DT, END_DT,
+		POPUP_TYPE, MOD_DATE, REG_USER,
+		USE_FLAG, BODY
+		)
+		VALUES (
+		#{popupSeq,jdbcType=SMALLINT}, #{subject,jdbcType=VARCHAR}, #{linkUrl,jdbcType=VARCHAR},
+		#{positionX,jdbcType=SMALLINT}, #{positionY,jdbcType=SMALLINT}, #{horizontalSize,jdbcType=SMALLINT},
+		#{verticalSize,jdbcType=SMALLINT}, #{startDt,jdbcType=VARCHAR}, #{endDt,jdbcType=VARCHAR},
+		#{popupType,jdbcType=VARCHAR}, #{modDate,jdbcType=TIMESTAMP}, #{regUser,jdbcType=VARCHAR},
+		#{useYn,jdbcType=VARCHAR}, #{body,jdbcType=LONGVARCHAR}
+		)
+		ON DUPLICATE KEY UPDATE
+		<trim suffix="" suffixOverrides=",">
+			MOD_DATE = now(),
+			<if test="subject != null">
+				SUBJECT = #{subject,jdbcType=VARCHAR},
+			</if>
+			<if test="linkUrl != null">
+				LINK_URL = #{linkUrl,jdbcType=VARCHAR},
+			</if>
+			<if test="positionX != null">
+				POSITION_X = #{positionX,jdbcType=SMALLINT},
+			</if>
+			<if test="positionY != null">
+				POSITION_Y = #{positionY,jdbcType=SMALLINT},
+			</if>
+			<if test="horizontalSize != null">
+				HORIZONTAL_SIZE = #{horizontalSize,jdbcType=SMALLINT},
+			</if>
+			<if test="verticalSize != null">
+				VERTICAL_SIZE = #{verticalSize,jdbcType=SMALLINT},
+			</if>
+			<if test="startDt != null">
+				START_DT = #{startDt,jdbcType=VARCHAR},
+			</if>
+			<if test="endDt != null">
+				END_DT = #{endDt,jdbcType=VARCHAR},
+			</if>
+			<if test="popupType != null">
+				POPUP_TYPE = #{popupType,jdbcType=VARCHAR},
+			</if>
+			<if test="modUser != null">
+				MOD_USER = #{modUser,jdbcType=VARCHAR},
+			</if>
+			<if test="useYn != null">
+				USE_FLAG = #{useYn,jdbcType=VARCHAR},
+			</if>
+			<if test="body != null">
+				BODY = #{body,jdbcType=LONGVARCHAR},
+			</if>
+		</trim>
+	</insert>
+
+	<delete id="deleteByKey" parameterType="java.lang.Short">
+		DELETE FROM TS_POPUP
+		WHERE POPUP_SEQ = #{_parameter,jdbcType=SMALLINT}
+	</delete>
+
+</mapper>

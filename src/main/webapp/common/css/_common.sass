@@ -1,0 +1,120 @@
+=respond-to($breakpoint)
+     @if $breakpoint==x-small
+          @media(min-width:576px)
+               @content
+     @else if $breakpoint==small
+          @media(min-width:767px)
+               @content
+     @else if $breakpoint==medium
+          @media(min-width:1024px)
+               @content
+     @else if $breakpoint==large
+          @media(min-width:1140px)
+               @content
+     @else if $breakpoint==x-large
+          @media(min-width:1260px)
+               @content
+
+=respond-to-down($breakpoint)
+     @if $breakpoint==x-small
+          @media(max-width:576px)
+               @content
+     @else if $breakpoint==small
+          @media(max-width:767px)
+               @content
+     @else if $breakpoint==medium
+          @media(max-width:1024px)
+               @content
+     @else if $breakpoint==large
+          @media(max-width:1140px)
+               @content
+     @else if $breakpoint==x-large
+          @media(max-width:1260px)
+               @content
+=flexbox
+     display: -webkit-flex
+     display: -ms-flexbox
+     display: flex
+=flex-wrap
+     flex-wrap: wrap
+     -webkit-flex-wrap: wrap
+=flex($flex)
+     flex: 0 0 $flex
+=mx($mx)
+     margin-left: $mx
+     margin-right: $mx
+=my($my)
+     margin-top: $my
+     margin-bottom: $my
+=px($px)
+     padding-left: $px
+     padding-right: $px
+=py($py)
+     padding-top: $py
+     padding-bottom: $py
+=size($size)
+     width: $size
+     height: $size
+$gap : 30px
+@for $i from 0 to 4
+     .order-#{$i}
+          order: $i
+     .order-xs-#{$i}
+          +respond-to(x-small)
+               order: $i
+     .order-sm-#{$i}
+          +respond-to(small)
+               order: $i
+.container
+     width: 100%
+     max-width: calc(1170px + 60px)
+     margin: auto
+     +px(30px)
+     +respond-to-down(small)
+          +px(7.2464vw)
+          max-width: calc(1170px + 7.2464vw * 2)
+.row
+     +flexbox
+     +flex-wrap
+     +mx(-30px)
+     +respond-to-down(small)
+          +mx(-7.2464vw)
+          
+[class^="col-"]
+     position: relative
+     width: 100%
+     +px(30px)
+     +respond-to-down(small)
+          +px(7.2464vw)
+          
+$text-color: ('red': #de2222, 'blue': #0f55bf)
+
+@each $color,$value in $text-color
+     .text-#{$color}
+          color: $value
+
+@for $i from 12 to 0
+     .col-#{$i}
+          +flex(100%/12 * $i)
+          max-width: 100%/12 * $i
+
+
+$col_size: 'xs' x-small,'sm' small,'md' medium,'lg' large
+@each $size,$breakpoint in $col_size
+     @for $i from 12 to 0
+          +respond-to($breakpoint)
+               .col-#{$size}-#{$i}
+                    +flex(100%/12 * $i)
+                    max-width: 100%/12 * $i
+*
+     box-sizing: border-box
+
+=afterArrow($size,$color)
+     position: absolute
+     content: ''
+     display: inline-block
+     border-bottom: 1px solid $color
+     border-right: 1px solid $color
+     +size($size)
+     top: 50%
+     transform: translateY(-50%) rotate(-45deg)

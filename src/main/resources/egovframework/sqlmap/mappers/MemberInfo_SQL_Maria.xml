@@ -1,0 +1,748 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="memberInfo">
+
+	<resultMap id="BaseResultMap" type="com.tagosolution.service.model.MemberInfoVO">
+		<id column="MEMBER_SEQ" jdbcType="INTEGER" property="memberSeq" />
+		<result column="USER_ID" jdbcType="VARCHAR" property="userId" />
+		<result column="GRADE_LEVEL" jdbcType="SMALLINT" property="gradeLevel" />
+		<result column="USER_PWD" jdbcType="VARCHAR" property="userPwd" />
+		<result column="USER_NAME" jdbcType="VARCHAR" property="userName" />
+		<result column="PHOTO" jdbcType="VARCHAR" property="photo" />
+		<result column="ICON" jdbcType="VARCHAR" property="icon" />
+		<result column="NICKNAME" jdbcType="VARCHAR" property="nickname" />
+		<result column="VIRTUAL_NUMBER" jdbcType="VARCHAR" property="virtualNumber" />
+		<result column="EMAIL" jdbcType="VARCHAR" property="email" />
+		<result column="PHONE" jdbcType="VARCHAR" property="phone" />
+		<result column="MOBILE" jdbcType="VARCHAR" property="mobile" />
+		<result column="COMP_PHONE" jdbcType="VARCHAR" property="compPhone" />
+		<result column="HOMEPAGE" jdbcType="VARCHAR" property="homepage" />
+		<result column="ZIPCODE" jdbcType="VARCHAR" property="zipcode" />
+		<result column="ADDR1" jdbcType="VARCHAR" property="addr1" />
+		<result column="ADDR2" jdbcType="VARCHAR" property="addr2" />
+		<result column="EMAIL_YN" jdbcType="VARCHAR" property="emailYn" />
+		<result column="SMS_YN" jdbcType="VARCHAR" property="smsYn" />
+		<result column="BIRTH_DT" jdbcType="VARCHAR" property="birthDt" />
+		<result column="IS_LUNAR" jdbcType="VARCHAR" property="isLunar" />
+		<result column="RECOMM_USER_ID" jdbcType="VARCHAR" property="recommUserId" />
+		<result column="BANK" jdbcType="VARCHAR" property="bank" />
+		<result column="BANK_ACCOUNT" jdbcType="VARCHAR" property="bankAccount" />
+		<result column="ACCOUNT_OWNER" jdbcType="VARCHAR" property="accountOwner" />
+		<result column="TRANS_EMAIL_YN" jdbcType="VARCHAR" property="transEmailYn" />
+		<result column="LOGIN_COUNT" jdbcType="INTEGER" property="loginCount" />
+		<result column="RECENT_LOGIN_DATE" jdbcType="TIMESTAMP" property="recentLoginDate" />
+		<result column="MEMO" jdbcType="VARCHAR" property="memo" />
+		<result column="MEMO_ADMIN" jdbcType="VARCHAR" property="memoAdmin" />
+		<result column="PWD_CHANGE_DATE" jdbcType="TIMESTAMP" property="pwdChangeDate" />
+		<result column="REG_DATE" jdbcType="TIMESTAMP" property="regDate" />
+		<result column="ADDITIONAL_ITEM1" jdbcType="VARCHAR" property="additionalItem1" />
+		<result column="ADDITIONAL_ITEM2" jdbcType="VARCHAR" property="additionalItem2" />
+		<result column="ADDITIONAL_ITEM3" jdbcType="VARCHAR" property="additionalItem3" />
+		<result column="ADDITIONAL_ITEM4" jdbcType="VARCHAR" property="additionalItem4" />
+		<result column="ADDITIONAL_ITEM5" jdbcType="VARCHAR" property="additionalItem5" />
+		<result column="JOB" jdbcType="VARCHAR" property="job" />
+		<result column="EDUCATION" jdbcType="VARCHAR" property="education" />
+		<result column="MONTH_INCOME" jdbcType="VARCHAR" property="monthIncome" />
+		<result column="HOBBY" jdbcType="VARCHAR" property="hobby" />
+		<result column="WITHDRAWAL_YN" jdbcType="VARCHAR" property="withdrawalYn" />
+		<result column="USE_FLAG" jdbcType="VARCHAR" property="useYn" />
+		<result column="USER_TYPE" jdbcType="VARCHAR" property="userType" />
+		<result column="WITHDRAWAL_REASON" jdbcType="VARCHAR" property="withdrawalReason" />
+		<result column="WITHDRAWAL_DT" jdbcType="TIMESTAMP" property="withdrawalDt" />
+		<result column="CASH" jdbcType="INTEGER" property="cash" />
+		<result column="IPIN_DI" jdbcType="VARCHAR" property="ipinDi" />
+		
+		
+		<collection property="cmomey" column="USER_ID" select="memberCmomey.selectByKey"></collection>
+	</resultMap>
+
+	<sql id="select">
+		MEMBER_SEQ, USER_ID, GRADE_LEVEL, USER_PWD, USER_NAME, PHOTO, ICON, NICKNAME, VIRTUAL_NUMBER,
+		EMAIL, PHONE, MOBILE, COMP_PHONE, HOMEPAGE, ZIPCODE, ADDR1, ADDR2, EMAIL_YN, SMS_YN,
+		BIRTH_DT, IS_LUNAR, RECOMM_USER_ID, BANK, BANK_ACCOUNT, ACCOUNT_OWNER, TRANS_EMAIL_YN, RECENT_LOGIN_DATE, MEMO, MEMO_ADMIN,
+		PWD_CHANGE_DATE, REG_DATE, WITHDRAWAL_YN, USE_FLAG, WITHDRAWAL_REASON, WITHDRAWAL_DT, CASH, 'user' as USER_TYPE
+		, ADDITIONAL_ITEM1, ADDITIONAL_ITEM2, ADDITIONAL_ITEM3, ADDITIONAL_ITEM4, ADDITIONAL_ITEM5, JOB, EDUCATION, MONTH_INCOME, HOBBY, IPIN_DI
+		,(SELECT GL.GRADE_NAME FROM TS_MEMBER_GRADE GL WHERE GL.GRADE_LEVEL = TS_MEMBER_INFO.GRADE_LEVEL) AS GRADE_NAME
+		,(SELECT UL.GRADE_LEVEL FROM TS_MEMBER_INFO UL WHERE UL.USER_ID = TS_MEMBER_INFO.RECOMM_USER_ID ) AS RECOMM_ULEVEL
+		,(SELECT GI.GRADE_NAME FROM TS_MEMBER_GRADE GI WHERE GI.GRADE_LEVEL = RECOMM_ULEVEL) AS RECOMM_UNAME
+		,(SELECT UI.USER_NAME FROM TS_MEMBER_INFO UI WHERE UI.USER_ID = TS_MEMBER_INFO.RECOMM_USER_ID ) AS RECOMM_USERNAME
+		,(SELECT UN.NICKNAME FROM TS_MEMBER_INFO UN WHERE UN.USER_ID = TS_MEMBER_INFO.RECOMM_USER_ID ) AS RECOMM_NICKNAME
+		,(SELECT COUNT(*) FROM TS_MEMBER_INFO C WHERE C.RECOMM_USER_ID =TS_MEMBER_INFO.USER_ID ) AS COUNT_BELONG
+		,(SELECT COUNT(*) FROM TS_HISTORY_LOGIN HL WHERE HL.USER_TYPE = 'U' AND HL.USER_ID = TS_MEMBER_INFO.USER_ID) AS LOGIN_COUNT
+	</sql>
+	
+	<select id="selectByKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+		SELECT
+		<include refid="select" />
+		FROM 	TS_MEMBER_INFO
+		WHERE 	MEMBER_SEQ = #{memberSeq,jdbcType=INTEGER}
+	</select>
+	
+	<select id="selectByCash" parameterType="String" resultType="java.lang.Integer">
+		SELECT	IFNULL(CASH, 0)
+		FROM 	TS_MEMBER_INFO
+		WHERE 	USER_ID = #{userId,jdbcType=VARCHAR}
+	</select>
+	
+	<select id="selectByLevel" parameterType="java.lang.Short" resultMap="BaseResultMap">
+		SELECT
+		<include refid="select" />
+		FROM 	TS_MEMBER_INFO
+		WHERE 	GRADE_LEVEL = #{gradeLevel,jdbcType=SMALLINT}
+		limit 1
+	</select>
+	
+	<select id="selectByIpin" parameterType="String" resultType="java.lang.Integer">
+		SELECT	COUNT(*)
+		FROM 	TS_MEMBER_INFO
+		WHERE 	IPIN_DI = #{ipinDi}
+			AND 	USE_FLAG = 'Y'
+			AND 	WITHDRAWAL_YN = 'N'
+	</select>
+	
+	<select id="selectById" parameterType="String" resultMap="BaseResultMap">
+		SELECT
+		<include refid="select" />
+		FROM 	TS_MEMBER_INFO
+		WHERE 	USER_ID = #{userId,jdbcType=VARCHAR}
+			AND 	USE_FLAG = 'Y'
+			AND 	WITHDRAWAL_YN = 'N'
+	</select>
+	
+	<select id="selectForEmail" parameterType="java.lang.Integer" resultType="java.lang.String">
+		SELECT 	EMAIL
+		FROM 	TS_MEMBER_INFO
+		WHERE 	MEMBER_SEQ = #{memberSeq,jdbcType=INTEGER}
+	</select>
+	
+	<select id="selectForCheckNickname" parameterType="Search" resultMap="BaseResultMap">
+		SELECT 
+		<include refid="select" />
+		FROM 	TS_MEMBER_INFO
+		WHERE 	NICKNAME = #{nickname,jdbcType=VARCHAR}
+	</select>
+	
+	<select id="selectDashBoardLast" parameterType="String" resultType="com.tagosolution.service.model.MemberInfoVO">
+		SELECT 	MEMBER_SEQ
+					, USER_ID
+					, USER_NAME
+					, REG_DATE
+		FROM 	TS_MEMBER_INFO
+		WHERE 	USE_FLAG = 'Y' 
+	</select>	
+	
+	
+	<select id="selectLeavetoday" parameterType="String" resultType="java.lang.Integer">
+		SELECT	COUNT(*) AS COUNT
+		FROM 	ts_member_info
+		WHERE 	WITHDRAWAL_YN='Y'
+			AND	DATE_FORMAT(WITHDRAWAL_DT, '%Y-%m-%d')=#{withdrawalDt,jdbcType=VARCHAR}
+	</select>	
+	
+	<select id="selectLeaveTotal" parameterType="String" resultType="java.lang.Integer">
+		SELECT		COUNT(*) AS COUNT
+		FROM 	ts_member_info
+		WHERE 	WITHDRAWAL_YN='Y' 
+	</select>	
+	
+	<select id="selectJointoday" parameterType="String" resultType="java.lang.Integer">
+		SELECT 	COUNT(*) AS COUNT
+		FROM 	ts_member_info
+		WHERE 	date_format( REG_DATE, '%Y-%m-%d' )=#{withdrawalDt,jdbcType=VARCHAR}
+		
+	</select>	
+	
+	
+	<select id="selectJoinTotal" parameterType="String" resultType="java.lang.Integer">
+		SELECT 		COUNT(*) AS COUNT
+		FROM 	ts_member_info
+		
+	</select>	
+	
+	
+	<!-- 게시판 관리 : 관리자 목록 ajax용 -->
+	<select id="selectListForAjax" parameterType="search" resultMap="BaseResultMap">
+		SELECT 	EMAIL AS USER_ID, CONCAT(EMAIL, ' (', USER_ID, ')') AS USER_NAME
+		FROM 	TS_MEMBER_INFO
+		WHERE 	USE_FLAG = 'Y' 
+			AND 	EMAIL IS NOT NULL
+			AND 	EMAIL > ''
+			AND 	WITHDRAWAL_YN='N' 
+			AND 	EMAIL_YN = 'Y';
+	</select>
+	
+	<sql id="whereClause">
+		<trim prefix="where" prefixOverrides="and">
+			AND 	USE_FLAG = 'Y'
+			<if test="glevel != null and glevel !=''">
+				AND GRADE_LEVEL = #{glevel}
+			</if>
+			<if test="wyn != null and wyn != ''">
+				AND WITHDRAWAL_YN = #{wyn}
+			</if>
+			<if test="type2 != null and type2 != ''">
+				<if test="searchWord != null and searchWord != ''">
+					<choose>
+						<when test="type2 == 'userName'">
+							AND USER_NAME LIKE CONCAT('%', #{searchWord}, '%')
+						</when>
+						<when test="type2 == 'recommUserId'">
+							AND RECOMM_USER_ID IN (SELECT USER_ID FROM ts_member_info WHERE NICKNAME = #{searchWord})
+						</when>
+						<when test="type2 == 'userId'">
+							AND USER_ID LIKE CONCAT('%', #{searchWord}, '%')
+						</when>
+						<when test="type2 == 'email'">
+							AND EMAIL LIKE CONCAT('%', #{searchWord}, '%')
+						</when>
+						<when test="type2 == 'phone'">
+							AND PHONE LIKE CONCAT('%', #{searchWord}, '%')
+						</when>
+						<when test="type2 == 'mobile'">
+							AND MOBILE LIKE CONCAT('%', #{searchWord}, '%')
+						</when>
+					</choose>
+				</if>
+			</if>
+			<if test="startDate != null and startDate != ''">
+				<![CDATA[ 
+					AND STR_TO_DATE(DATE_FORMAT(REG_DATE, '%Y-%m-%d'), '%Y-%m-%d') >= STR_TO_DATE(#{startDate}, '%Y-%m-%d') 
+				]]>
+			</if>
+			<if test="endDate != null and endDate != ''">
+				<![CDATA[ 
+					AND STR_TO_DATE(DATE_FORMAT(REG_DATE, '%Y-%m-%d'), '%Y-%m-%d') <= STR_TO_DATE(#{endDate}, '%Y-%m-%d')
+				]]>
+			</if>
+			<if test="startDate1 != null and startDate1 != ''">
+				<![CDATA[ 
+					AND STR_TO_DATE(DATE_FORMAT(WITHDRAWAL_DT, '%Y-%m-%d'), '%Y-%m-%d') >= STR_TO_DATE(#{startDate1}, '%Y-%m-%d') 
+				]]>
+			</if>
+			<if test="endDate1 != null and endDate1 != ''">
+				<![CDATA[ 
+					AND STR_TO_DATE(DATE_FORMAT(WITHDRAWAL_DT, '%Y-%m-%d'), '%Y-%m-%d') <= STR_TO_DATE(#{endDate1}, '%Y-%m-%d')
+				]]>
+			</if>			
+		</trim>
+	</sql>
+	
+	<select id="selectBySearch" parameterType="search" resultMap="BaseResultMap">
+		SELECT
+		<include refid="select" />
+		FROM TS_MEMBER_INFO
+		<include refid="whereClause" />
+		<choose>
+			<when test="orderBy != ''">
+				ORDER BY ${orderBy }
+			</when>
+			<otherwise>
+				ORDER BY REG_DATE DESC
+			</otherwise>					
+		</choose>
+		<include refid="paging.limit"/>
+	</select>
+	
+	
+	<select id="selectByForgotId" parameterType="search" resultMap="BaseResultMap">
+		SELECT	MEMBER_SEQ, USER_ID, USER_NAME, EMAIL
+		FROM 	TS_MEMBER_INFO
+		WHERE 	WITHDRAWAL_YN = 'N'
+			AND 	USE_FLAG = 'Y'
+			AND	USER_NAME = #{userName,jdbcType=VARCHAR}
+			AND	EMAIL = #{userEmail,jdbcType=VARCHAR}
+			<if test="aid != null">
+			AND USER_ID = #{aid,jdbcType=VARCHAR}
+			</if>
+		LIMIT 1
+	</select>
+	
+	<select id="selectBelongUsers" parameterType="search" resultType="int">
+		SELECT	COUNT(A.USER_ID)
+		FROM		ts_member_info TMI
+			INNER JOIN	ts_member_info A
+			INNER JOIN fx_line TML
+				ON TML.USER_ID = A.USER_ID
+		WHERE	TMI.GRADE_LEVEL IN (1, 2, 3, 4, 5, 6)
+			AND	TMI.USE_FLAG = 'Y' AND TMI.WITHDRAWAL_YN = 'N'
+			AND	(TML.LINE_ID1 = TMI.USER_ID OR TML.LINE_ID2 = TMI.USER_ID OR TML.LINE_ID3 = TMI.USER_ID OR TML.LINE_ID4 = TMI.USER_ID OR TML.LINE_ID5 = TMI.USER_ID) 
+			<if test="sellUserId != null and sellUserId != ''">
+			AND	 A.USER_ID = #{sellUserId}
+			</if>
+			AND TMI.USER_ID = #{userId}
+	</select>
+	
+	<select id="totalCount" parameterType="search" resultType="int">
+		SELECT 	COUNT(*)
+		FROM 	TS_MEMBER_INFO
+		<include refid="whereClause" />
+	</select>
+	
+	<select id="totalCountMember" parameterType="search" resultType="int">
+		SELECT 	COUNT(*)
+		FROM 	TS_MEMBER_INFO
+		WHERE 	WITHDRAWAL_YN = 'N'
+	</select>
+	
+	<update id="updateByKeyWithdrawal" parameterType="com.tagosolution.service.model.MemberInfoVO">
+		UPDATE TS_MEMBER_INFO		
+			SET 	WITHDRAWAL_YN = 'Y',			
+					WITHDRAWAL_DT = now(),
+					WITHDRAWAL_REASON = #{withdrawalReason,jdbcType=VARCHAR}
+		WHERE 	MEMBER_SEQ = #{memberSeq,jdbcType=INTEGER}
+	</update>
+	
+	<update id="updateWithdrawal" parameterType="java.lang.Integer">
+		UPDATE TS_MEMBER_INFO		
+		SET 
+		WITHDRAWAL_YN = 'Y',		
+		USE_FLAG = 'N',
+		USER_PWD = '',		
+		PHOTO = '',
+		ICON = '',
+		NICKNAME = '',
+		VIRTUAL_NUMBER = '',
+		EMAIL = '',
+		PHONE = '',
+		MOBILE ='',
+		COMP_PHONE = '',
+		HOMEPAGE = '',
+		ZIPCODE = '',
+		ADDR1 = '',
+		ADDR2 = '',			
+		WITHDRAWAL_DT = now(),	
+		WITHDRAWAL_REASON = 'ADMIN'	
+		WHERE MEMBER_SEQ = #{memberSeq,jdbcType=INTEGER}
+	</update>
+	
+	
+	<delete id="deleteByKey" parameterType="java.lang.Integer">
+		UPDATE TS_MEMBER_INFO
+		SET 
+		USE_FLAG = 'N',
+		USER_PWD = '',		
+		PHOTO = '',
+		ICON = '',
+		NICKNAME = '',
+		VIRTUAL_NUMBER = '',
+		EMAIL = '',
+		PHONE = '',
+		MOBILE ='',
+		COMP_PHONE = '',
+		HOMEPAGE = '',
+		ZIPCODE = '',
+		ADDR1 = '',
+		ADDR2 = ''
+		WHERE MEMBER_SEQ = #{memberSeq,jdbcType=INTEGER}
+	</delete>
+
+	<insert id="merge" useGeneratedKeys="true" keyProperty="memberSeq" parameterType="com.tagosolution.service.model.MemberInfoVO">
+		INSERT INTO TS_MEMBER_INFO (
+			MEMBER_SEQ, USER_ID, GRADE_LEVEL, 
+			USER_PWD, USER_NAME, EMAIL, 
+			PHONE, MOBILE, ZIPCODE, 
+			ADDR1, ADDR2, EMAIL_YN, 
+			SMS_YN, MEMO_ADMIN, PHOTO, ICON,
+			NICKNAME, VIRTUAL_NUMBER, COMP_PHONE, 
+			HOMEPAGE, BIRTH_DT, RECOMM_USER_ID, 
+			BANK, BANK_ACCOUNT, ACCOUNT_OWNER, TRANS_EMAIL_YN, MEMO
+			, ADDITIONAL_ITEM1, ADDITIONAL_ITEM2, ADDITIONAL_ITEM3, 
+			ADDITIONAL_ITEM4, ADDITIONAL_ITEM5, JOB, EDUCATION, MONTH_INCOME, HOBBY, IPIN_DI
+		)
+		VALUES (
+			#{memberSeq,jdbcType=INTEGER}, #{userId,jdbcType=VARCHAR}, #{gradeLevel,jdbcType=SMALLINT},
+			#{userPwd,jdbcType=VARCHAR}, #{userName,jdbcType=VARCHAR}, #{email,jdbcType=VARCHAR},
+			#{phone,jdbcType=VARCHAR}, #{mobile,jdbcType=VARCHAR}, #{zipcode,jdbcType=VARCHAR},
+			#{addr1,jdbcType=VARCHAR}, #{addr2,jdbcType=VARCHAR}, #{emailYn,jdbcType=VARCHAR},
+			#{smsYn,jdbcType=VARCHAR}, #{memoAdmin,jdbcType=VARCHAR}, #{photo,jdbcType=VARCHAR}, #{icon,jdbcType=VARCHAR}, 
+			#{nickname,jdbcType=VARCHAR}, #{virtualNumber,jdbcType=VARCHAR}, #{compPhone,jdbcType=VARCHAR}, 
+			#{homepage,jdbcType=VARCHAR}, #{birthDt,jdbcType=VARCHAR}, #{recommUserId,jdbcType=VARCHAR},
+			#{bank,jdbcType=VARCHAR}, #{bankAccount,jdbcType=VARCHAR},#{accountOwner,jdbcType=VARCHAR}, #{transEmailYn,jdbcType=VARCHAR}, #{memo,jdbcType=VARCHAR}
+			, #{additionalItem1,jdbcType=VARCHAR}, #{additionalItem2,jdbcType=VARCHAR}, #{additionalItem3,jdbcType=VARCHAR}, #{additionalItem4,jdbcType=VARCHAR}, #{additionalItem5,jdbcType=VARCHAR}
+			, #{job,jdbcType=VARCHAR}, #{education,jdbcType=VARCHAR}, #{monthIncome,jdbcType=VARCHAR}, #{hobby,jdbcType=VARCHAR}, #{ipinDi,jdbcType=VARCHAR} 
+		)
+		ON DUPLICATE KEY UPDATE
+		<trim suffix="" suffixOverrides=",">
+			<if test="gradeLevel != null">
+				GRADE_LEVEL = #{gradeLevel,jdbcType=SMALLINT},
+			</if>
+			<if test="userId != null">
+				USER_ID = #{userId,jdbcType=VARCHAR},
+			</if>
+			<if test="userPwd != null">
+				USER_PWD = #{userPwd,jdbcType=VARCHAR},
+				PWD_CHANGE_DATE = now(),
+			</if>
+			<if test="userName != null">
+				USER_NAME = #{userName,jdbcType=VARCHAR},
+			</if>
+			<if test="photo != null">
+				PHOTO = #{photo,jdbcType=VARCHAR},
+			</if>
+			<if test="icon != null">
+				ICON = #{icon,jdbcType=VARCHAR},
+			</if>
+			<if test="nickname != null">
+				NICKNAME = #{nickname,jdbcType=VARCHAR},
+			</if>
+			<if test="virtualNumber != null">
+				VIRTUAL_NUMBER = #{virtualNumber,jdbcType=VARCHAR},
+			</if>
+			<if test="email != null">
+				EMAIL = #{email,jdbcType=VARCHAR},
+			</if>
+			<if test="phone != null">
+				PHONE = #{phone,jdbcType=VARCHAR},
+			</if>
+			<if test="mobile != null">
+				MOBILE = #{mobile,jdbcType=VARCHAR},
+			</if>
+			<if test="compPhone != null">
+				COMP_PHONE = #{compPhone,jdbcType=VARCHAR},
+			</if>
+			<if test="homepage != null">
+				HOMEPAGE = #{homepage,jdbcType=VARCHAR},
+			</if>
+			<if test="zipcode != null">
+				ZIPCODE = #{zipcode,jdbcType=VARCHAR},
+			</if>
+			<if test="addr1 != null">
+				ADDR1 = #{addr1,jdbcType=VARCHAR},
+			</if>
+			<if test="addr2 != null">
+				ADDR2 = #{addr2,jdbcType=VARCHAR},
+			</if>
+			<if test="emailYn != null">
+				EMAIL_YN = #{emailYn,jdbcType=VARCHAR},
+			</if>
+			<if test="smsYn != null">
+				SMS_YN = #{smsYn,jdbcType=VARCHAR},
+			</if>
+			<if test="birthDt != null">
+				BIRTH_DT = #{birthDt,jdbcType=VARCHAR},
+			</if>
+			<if test="isLunar != null">
+				IS_LUNAR = #{isLunar,jdbcType=VARCHAR},
+			</if>
+			<if test="recommUserId != null">
+				RECOMM_USER_ID = #{recommUserId,jdbcType=VARCHAR},
+			</if>
+			<if test="bank != null">
+				BANK = #{bank,jdbcType=VARCHAR},
+			</if>
+			<if test="bankAccount != null">
+				BANK_ACCOUNT = #{bankAccount,jdbcType=VARCHAR},
+			</if>
+			<if test="accountOwner != null">
+				ACCOUNT_OWNER = #{accountOwner,jdbcType=VARCHAR},
+			</if>
+			<if test="transEmailYn != null">
+				TRANS_EMAIL_YN = #{transEmailYn,jdbcType=VARCHAR},
+			</if>
+			<if test="loginCount != null">
+				LOGIN_COUNT = #{loginCount,jdbcType=INTEGER},
+			</if>
+			<if test="recentLoginDate != null">
+				RECENT_LOGIN_DATE = #{recentLoginDate,jdbcType=TIMESTAMP},
+			</if>
+			<if test="memo != null">
+				MEMO = #{memo,jdbcType=VARCHAR},
+			</if>
+			<if test="memoAdmin != null">
+				MEMO_ADMIN = #{memoAdmin,jdbcType=VARCHAR},
+			</if>
+			<if test="withdrawalYn != null">
+				WITHDRAWAL_YN = #{withdrawalYn,jdbcType=VARCHAR},
+			</if>
+			<if test="useYn != null">
+				USE_FLAG = #{useYn,jdbcType=VARCHAR},
+			</if>
+			<if test="withdrawalReason != null">
+				WITHDRAWAL_REASON = #{withdrawalReason,jdbcType=VARCHAR},
+			</if>
+			<if test="withdrawalDt != null">
+				WITHDRAWAL_DT = #{withdrawalDt,jdbcType=TIMESTAMP},
+			</if>
+			<if test="additionalItem1 != null">
+				ADDITIONAL_ITEM1 = #{additionalItem1,jdbcType=VARCHAR},
+			</if>
+			<if test="additionalItem2 != null">
+				ADDITIONAL_ITEM2 = #{additionalItem2,jdbcType=VARCHAR},
+			</if>
+			<if test="additionalItem3 != null">
+				ADDITIONAL_ITEM3 = #{additionalItem3,jdbcType=VARCHAR},
+			</if>
+			<if test="additionalItem4 != null">
+				ADDITIONAL_ITEM4 = #{additionalItem4,jdbcType=VARCHAR},
+			</if>
+			<if test="additionalItem5 != null">
+				ADDITIONAL_ITEM5 = #{additionalItem5,jdbcType=VARCHAR},
+			</if>
+			<if test="job != null">
+				JOB = #{job,jdbcType=VARCHAR},
+			</if>
+			<if test="education != null">
+				EDUCATION = #{education,jdbcType=VARCHAR},
+			</if>
+			<if test="monthIncome != null">
+				MONTH_INCOME = #{monthIncome,jdbcType=VARCHAR},
+			</if>
+			<if test="hobby != null">
+				HOBBY = #{hobby,jdbcType=VARCHAR},
+			</if>
+			<if test="ipinDi != null">
+				IPIN_DI = #{ipinDi,jdbcType=VARCHAR},
+			</if>
+			
+		</trim>
+		
+	</insert>
+	
+	<update id="updateByKeySelective" parameterType="com.tagosolution.service.model.MemberInfoVO">
+		UPDATE TS_MEMBER_INFO
+		<set>
+			<if test="gradeLevel != null">
+				GRADE_LEVEL = #{gradeLevel,jdbcType=SMALLINT},
+			</if>
+			<if test="userId != null">
+				USER_ID = #{userId,jdbcType=VARCHAR},
+			</if>
+			<if test="userPwd != null  and userPwd !=''">
+				USER_PWD = #{userPwd,jdbcType=VARCHAR},
+				PWD_CHANGE_DATE = now(),
+			</if>
+			<if test="userName != null">
+				USER_NAME = #{userName,jdbcType=VARCHAR},
+			</if>
+			<if test="photo != null">
+				PHOTO = #{photo,jdbcType=VARCHAR},
+			</if>
+			<if test="icon != null">
+				ICON = #{icon,jdbcType=VARCHAR},
+			</if>
+			<if test="nickname != null">
+				NICKNAME = #{nickname,jdbcType=VARCHAR},
+			</if>
+			<if test="virtualNumber != null">
+				VIRTUAL_NUMBER = #{virtualNumber,jdbcType=VARCHAR},
+			</if>
+			<if test="email != null">
+				EMAIL = #{email,jdbcType=VARCHAR},
+			</if>
+			<if test="phone != null">
+				PHONE = #{phone,jdbcType=VARCHAR},
+			</if>
+			<if test="mobile != null">
+				MOBILE = #{mobile,jdbcType=VARCHAR},
+			</if>
+			<if test="compPhone != null">
+				COMP_PHONE = #{compPhone,jdbcType=VARCHAR},
+			</if>
+			<if test="homepage != null">
+				HOMEPAGE = #{homepage,jdbcType=VARCHAR},
+			</if>
+			<if test="zipcode != null">
+				ZIPCODE = #{zipcode,jdbcType=VARCHAR},
+			</if>
+			<if test="addr1 != null">
+				ADDR1 = #{addr1,jdbcType=VARCHAR},
+			</if>
+			<if test="addr2 != null">
+				ADDR2 = #{addr2,jdbcType=VARCHAR},
+			</if>
+			<if test="emailYn != null">
+				EMAIL_YN = #{emailYn,jdbcType=VARCHAR},
+			</if>
+			<if test="smsYn != null">
+				SMS_YN = #{smsYn,jdbcType=VARCHAR},
+			</if>
+			<if test="birthDt != null">
+				BIRTH_DT = #{birthDt,jdbcType=VARCHAR},
+			</if>
+			<if test="isLunar != null">
+				IS_LUNAR = #{isLunar,jdbcType=VARCHAR},
+			</if>
+			<if test="recommUserId != null">
+				RECOMM_USER_ID = #{recommUserId,jdbcType=VARCHAR},
+			</if>
+			<if test="bank != null">
+				BANK = #{bank,jdbcType=VARCHAR},
+			</if>
+			<if test="bankAccount != null">
+				BANK_ACCOUNT = #{bankAccount,jdbcType=VARCHAR},
+			</if>
+			<if test="accountOwner != null">
+				ACCOUNT_OWNER = #{accountOwner,jdbcType=VARCHAR},
+			</if>
+			<if test="transEmailYn != null">
+				TRANS_EMAIL_YN = #{transEmailYn,jdbcType=VARCHAR},
+			</if>
+			<if test="loginCount != null">
+				LOGIN_COUNT = #{loginCount,jdbcType=INTEGER},
+			</if>
+			<if test="recentLoginDate != null">
+				RECENT_LOGIN_DATE = #{recentLoginDate,jdbcType=TIMESTAMP},
+			</if>
+			<if test="memo != null">
+				MEMO = #{memo,jdbcType=VARCHAR},
+			</if>
+			<if test="memoAdmin != null">
+				MEMO_ADMIN = #{memoAdmin,jdbcType=VARCHAR},
+			</if>		
+			<if test="withdrawalYn != null">
+				WITHDRAWAL_YN = #{withdrawalYn,jdbcType=VARCHAR},
+			</if>
+			<if test="useYn != null">
+				USE_FLAG = #{useYn,jdbcType=VARCHAR},
+			</if>
+			<if test="withdrawalReason != null">
+				WITHDRAWAL_REASON = #{withdrawalReason,jdbcType=VARCHAR},
+			</if>
+			<if test="withdrawalYn = 'Y'">
+				WITHDRAWAL_DT = now(),
+			</if>
+			<if test="additionalItem1 != null">
+				ADDITIONAL_ITEM1 = #{additionalItem1,jdbcType=VARCHAR},
+			</if>
+			<if test="additionalItem2 != null">
+				ADDITIONAL_ITEM2 = #{additionalItem2,jdbcType=VARCHAR},
+			</if>
+			<if test="additionalItem3 != null">
+				ADDITIONAL_ITEM3 = #{additionalItem3,jdbcType=VARCHAR},
+			</if>
+			<if test="additionalItem4 != null">
+				ADDITIONAL_ITEM4 = #{additionalItem4,jdbcType=VARCHAR},
+			</if>
+			<if test="additionalItem5 != null">
+				ADDITIONAL_ITEM5 = #{additionalItem5,jdbcType=VARCHAR},
+			</if>
+			<if test="job != null">
+				JOB = #{job,jdbcType=VARCHAR},
+			</if>
+			<if test="education != null">
+				EDUCATION = #{education,jdbcType=VARCHAR},
+			</if>
+			<if test="monthIncome != null">
+				MONTH_INCOME = #{monthIncome,jdbcType=VARCHAR},
+			</if>
+			<if test="hobby != null">
+				HOBBY = #{hobby,jdbcType=VARCHAR},
+			</if>
+		</set>
+		where MEMBER_SEQ = #{memberSeq,jdbcType=INTEGER}
+	</update>
+
+	<update id="updateByKey" parameterType="com.tagosolution.service.model.MemberInfoVO">
+		UPDATE TS_MEMBER_INFO
+			set USER_ID = #{userId,jdbcType=VARCHAR},
+				GRADE_LEVEL = #{gradeLevel,jdbcType=SMALLINT},
+				USER_PWD = #{userPwd,jdbcType=VARCHAR},
+				USER_NAME = #{userName,jdbcType=VARCHAR},
+				PHOTO = #{photo,jdbcType=VARCHAR},
+				ICON = #{icon,jdbcType=VARCHAR},
+				NICKNAME = #{nickname,jdbcType=VARCHAR},
+				VIRTUAL_NUMBER = #{virtualNumber,jdbcType=VARCHAR},
+				EMAIL = #{email,jdbcType=VARCHAR},
+				PHONE = #{phone,jdbcType=VARCHAR},
+				MOBILE =
+				#{mobile,jdbcType=VARCHAR},
+				COMP_PHONE = #{compPhone,jdbcType=VARCHAR},
+				HOMEPAGE = #{homepage,jdbcType=VARCHAR},
+				ZIPCODE = #{zipcode,jdbcType=VARCHAR},
+				ADDR1 = #{addr1,jdbcType=VARCHAR},
+				ADDR2 = #{addr2,jdbcType=VARCHAR},
+				EMAIL_YN = #{emailYn,jdbcType=VARCHAR},
+				SMS_YN = #{smsYn,jdbcType=VARCHAR},
+				BIRTH_DT = #{birthDt,jdbcType=VARCHAR},
+				IS_LUNAR = #{isLunar,jdbcType=VARCHAR},
+				RECOMM_USER_ID = #{recommUserId,jdbcType=VARCHAR},
+				BANK = #{bank,jdbcType=VARCHAR}, 
+				BANK_ACCOUNT = #{bankAccount,jdbcType=VARCHAR}, 
+				TRANS_EMAIL_YN = #{transEmailYn,jdbcType=VARCHAR},
+				LOGIN_COUNT = #{loginCount,jdbcType=INTEGER},
+				RECENT_LOGIN_DATE =
+				#{recentLoginDate,jdbcType=TIMESTAMP},
+				MEMO = #{memo,jdbcType=VARCHAR},
+				MEMO_ADMIN = #{memoAdmin,jdbcType=VARCHAR},
+				PWD_CHANGE_DATE = #{pwdChangeDate,jdbcType=TIMESTAMP},
+				REG_DATE = #{regDate,jdbcType=TIMESTAMP},
+				WITHDRAWAL_YN = #{withdrawalYn,jdbcType=VARCHAR},
+				USE_FLAG = #{useYn,jdbcType=VARCHAR}
+		where MEMBER_SEQ = #{memberSeq,jdbcType=INTEGER}
+	</update>
+	
+	<update id="updateByDeposit" parameterType="java.lang.Integer">
+		UPDATE 	ts_member_info
+			SET 	CASH = CASH + (SELECT (CASE WHEN IO_TYPE = 'I' THEN CASH ELSE 0 END) FROM fx_money WHERE MONEY_SEQ = #{money_seq})
+		WHERE	USER_ID = (SELECT USER_ID FROM fx_money WHERE MONEY_SEQ = #{moneySeq})
+	</update>
+	
+	<update id="updateByWithdraw" parameterType="java.lang.Integer">
+		UPDATE 	ts_member_info
+			SET	CASH = CASH + (SELECT (CASE WHEN IO_TYPE = 'O' THEN -1 * CASH ELSE 0 END) FROM fx_money WHERE MONEY_SEQ = #{money_seq})
+		WHERE	USER_ID = (SELECT USER_ID FROM fx_money WHERE MONEY_SEQ = #{moneySeq})
+	</update>
+	
+	<update id="updateByDepositCancel" parameterType="java.lang.Integer">
+		UPDATE 	ts_member_info
+			SET	CASH = CASH + (SELECT (CASE WHEN IO_TYPE = 'O' THEN CASH ELSE 0 END) FROM fx_money WHERE MONEY_SEQ = #{money_seq})
+		WHERE	USER_ID = (SELECT USER_ID FROM fx_money WHERE MONEY_SEQ = #{moneySeq})
+	</update>
+	
+	<update id="updateFront" parameterType="com.tagosolution.service.model.MemberInfoVO">
+		UPDATE	ts_member_info
+			SET	CASH = CASH - (#{totalLot} * 50000)
+		WHERE	USER_ID = #{userId,jdbcType=VARCHAR}
+	</update>
+	
+	<update id="updateAdminUD" parameterType="search">
+		UPDATE	ts_member_info
+			INNER JOIN	fx_order FO
+				ON 	ts_member_info.USER_ID = FO.USER_ID
+					AND FO.BS_TYPE = #{profitType,jdbcType=VARCHAR}
+			SET	CASH = CASH + (FO.LOT * 50000 * (SELECT 1 + ((100 - FLR.LINE_RATET) / 100) FROM fx_line_rate FLR WHERE FLR.RUN_TIME = #{runTime,jdbcType=INTEGER} AND FLR.LR_VER = 0))
+		WHERE	RESULT_TIME = CONCAT(#{goodsDate,jdbcType=VARCHAR}, ' ', #{goodsTime,jdbcType=VARCHAR})
+			AND	RUN_TIME = #{runTime,jdbcType=INTEGER};
+	</update>
+	
+	<update id="updateAdminT" parameterType="search">
+		UPDATE	ts_member_info
+			INNER JOIN	fx_order
+				ON ts_member_info.USER_ID = fx_order.USER_ID
+			SET	CASH = CASH + (fx_order.LOT * 50000)
+		WHERE RESULT_TIME = CONCAT(#{goodsDate,jdbcType=VARCHAR}, ' ', #{goodsTime,jdbcType=VARCHAR})
+			AND	RUN_TIME = #{runTime,jdbcType=INTEGER};
+	</update>
+	
+	<update id="updateCancleUD" parameterType="search">
+		UPDATE	ts_member_info
+			INNER JOIN (
+							SELECT	USER_ID AS T_USER_ID, SUM(CASH) AS T_CASH
+							FROM	ts_cash
+							WHERE	CASH_TYPE = 'W'
+								AND	MAIN_SEQ IN (
+											SELECT ORDER_SEQ
+											FROM fx_order
+											WHERE	RESULT_TIME = CONCAT(#{goodsDate,jdbcType=VARCHAR}, ' ', #{goodsTime,jdbcType=VARCHAR})
+												AND	RUN_TIME = #{runTime,jdbcType=INTEGER}
+								)
+							GROUP BY 	USER_ID) TC
+			SET	CASH = CASH - T_CASH
+		WHERE	USER_ID = T_USER_ID;
+	</update>
+	
+	<update id="updateCancleT" parameterType="search">
+		UPDATE	ts_member_info
+			INNER JOIN fx_order
+				ON ts_member_info.USER_ID = fx_order.USER_ID
+			SET CASH = CASH - (fx_order.LOT * 50000)
+		WHERE	RESULT_TIME = CONCAT(#{goodsDate,jdbcType=VARCHAR}, ' ', #{goodsTime,jdbcType=VARCHAR})
+			AND	RUN_TIME = #{runTime,jdbcType=INTEGER};
+	</update>	
+	
+	<update id="updateCashByUserId" parameterType="search">
+		UPDATE ts_member_info
+		set ts_member_info.cash = ts_member_info.cash + #{cash}
+		WHERE USER_ID = #{userId}
+	</update>
+</mapper>

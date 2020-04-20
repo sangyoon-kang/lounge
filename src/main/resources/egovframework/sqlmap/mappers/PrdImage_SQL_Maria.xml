@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="prdImage">
+
+	<resultMap id="BaseResultMap" type="com.tagosolution.service.model.PrdImageVO">
+		<id column="PRD_IMAGE_SEQ" jdbcType="INTEGER" property="prdImageSeq" />
+		<result column="PRD_SEQ" jdbcType="INTEGER" property="prdSeq" />
+		<result column="ORIGINAL_FILENAME" jdbcType="VARCHAR" property="originalFilename" />
+		<result column="SAVE_FILENAME" jdbcType="VARCHAR" property="saveFilename" />
+		<result column="LIST_FILENAME" jdbcType="VARCHAR" property="listFilename" />
+		<result column="SMALL_FILENAME" jdbcType="VARCHAR" property="smallFilename" />
+		<result column="DETAIL_FILENAME" jdbcType="VARCHAR" property="detailFilename" />
+		<result column="LARGE_FILENAME" jdbcType="VARCHAR" property="largeFilename" />
+	</resultMap>
+	
+	<sql id="select">
+		PRD_IMAGE_SEQ, PRD_SEQ, ORIGINAL_FILENAME, SAVE_FILENAME, LIST_FILENAME, SMALL_FILENAME, DETAIL_FILENAME, LARGE_FILENAME
+	</sql>
+	
+	<select id="selectByKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+		select
+		<include refid="select" />
+		from TS_PRD_IMAGE
+		where PRD_IMAGE_SEQ = #{prdImageSeq,jdbcType=INTEGER}
+	</select>
+	
+	<select id="selectByPrdSeq" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+		select
+		<include refid="select" />
+		from TS_PRD_IMAGE
+		where PRD_SEQ = #{prdSeq,jdbcType=INTEGER}
+		order by PRD_IMAGE_SEQ
+	</select>
+	
+	<delete id="deleteByKey" parameterType="java.lang.Integer">
+		delete from TS_PRD_IMAGE
+		where PRD_IMAGE_SEQ = #{prdImageSeq,jdbcType=INTEGER}
+	</delete>
+	
+	<insert id="merge" parameterType="com.tagosolution.service.model.PrdImageVO">
+		insert into TS_PRD_IMAGE (
+			<trim suffix=" " suffixOverrides=",">
+				PRD_IMAGE_SEQ, 
+				PRD_SEQ, 
+				<if test="originalFilename != null and originalFilename != '' ">
+					ORIGINAL_FILENAME,
+				</if>
+				<if test="saveFilename != null and saveFilename != '' ">
+					SAVE_FILENAME,
+				</if>
+				<if test="listFilename != null and listFilename != '' ">
+					LIST_FILENAME,
+				</if>
+				<if test="smallFilename != null and smallFilename != '' ">
+					SMALL_FILENAME,
+				</if>
+				<if test="detailFilename != null and detailFilename != '' ">
+					DETAIL_FILENAME,
+				</if>
+				<if test="largeFilename != null and largeFilename != '' ">
+					LARGE_FILENAME,
+				</if>
+			</trim>
+			
+		)
+		values (			
+			<trim suffix=" " suffixOverrides=",">
+				#{prdImageSeq,jdbcType=INTEGER}, 
+				#{prdSeq,jdbcType=INTEGER},
+				<if test="originalFilename != null and originalFilename != '' ">
+					#{originalFilename,jdbcType=VARCHAR},
+				</if>
+				<if test="saveFilename != null and saveFilename != '' ">
+					#{saveFilename,jdbcType=VARCHAR},
+				</if>
+				<if test="listFilename != null and listFilename != '' ">
+					#{listFilename,jdbcType=VARCHAR},
+				</if>
+				<if test="smallFilename != null and smallFilename != '' ">
+					#{smallFilename,jdbcType=VARCHAR},
+				</if>
+				<if test="detailFilename != null and detailFilename != '' ">
+					#{detailFilename,jdbcType=VARCHAR},
+				</if>
+				<if test="largeFilename != null and largeFilename != '' ">
+					#{largeFilename,jdbcType=VARCHAR},
+				</if>
+			</trim>
+		)
+		ON DUPLICATE KEY UPDATE
+		<trim suffix=" " suffixOverrides=",">
+			<if test="originalFilename != null and originalFilename != '' ">
+				ORIGINAL_FILENAME = #{originalFilename,jdbcType=VARCHAR},
+			</if>
+			<if test="saveFilename != null and saveFilename != '' ">
+				SAVE_FILENAME = #{saveFilename,jdbcType=VARCHAR},
+			</if>
+			<if test="listFilename != null and listFilename != '' ">
+				LIST_FILENAME = #{listFilename,jdbcType=VARCHAR},
+			</if>
+			<if test="smallFilename != null and smallFilename != '' ">
+				SMALL_FILENAME = #{smallFilename,jdbcType=VARCHAR},
+			</if>
+			<if test="detailFilename != null and detailFilename != '' ">
+				DETAIL_FILENAME = #{detailFilename,jdbcType=VARCHAR},
+			</if>
+			<if test="largeFilename != null and largeFilename != '' ">
+				LARGE_FILENAME = #{largeFilename,jdbcType=VARCHAR},
+			</if>
+		</trim>
+	</insert>
+	
+	
+</mapper>

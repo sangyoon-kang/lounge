@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="menuAutho">
+
+	<resultMap id="BaseResultMap" type="com.tagosolution.service.model.MenuAuthoSettingVO">
+		<id column="MENU_AUTHO_GROUP_IDX" jdbcType="INTEGER" property="menuAuthoGroupIdx" />
+		<result column="GROUP_ID" jdbcType="INTEGER" property="groupId" />
+		<result column="MENU_ID" jdbcType="VARCHAR" property="menuId" />
+		<result column="AUTHO_LIST" jdbcType="CHAR" property="authoList" />
+		<result column="AUTHO_VIEW" jdbcType="CHAR" property="authoView" />
+		<result column="AUTHO_WRITE" jdbcType="CHAR" property="authoWrite" />
+		<result column="AUTHO_MODIFY" jdbcType="CHAR" property="authoModify" />
+		<result column="AUTHO_DELETE" jdbcType="CHAR" property="authoDelete" />
+		
+		<result column="FOLDER_PATH" jdbcType="VARCHAR" property="folderPath" />
+		<result column="PREFIX_PATH" jdbcType="VARCHAR" property="prefixPath" />
+	</resultMap>
+	
+	<sql id="select">
+		MENU_AUTHO_GROUP_IDX, GROUP_ID, MENU_ID, AUTHO_LIST, AUTHO_VIEW,  AUTHO_WRITE, AUTHO_MODIFY, AUTHO_DELETE
+	</sql>
+	
+	<sql id="whereClause">
+		<trim prefix="where" prefixOverrides="and">
+			
+		</trim>
+	</sql>
+	<select id="selectList" parameterType="search" resultMap="BaseResultMap">
+		SELECT
+		<include refid="select" />
+		FROM TS_MENU_AUTHO
+		<include refid="whereClause" />
+		<choose>
+			<when test="orderBy != ''">
+				order by ${orderBy }
+			</when>
+			<otherwise>
+			
+			</otherwise>					
+		</choose>
+		<include refid="paging.limit"/>
+	</select>
+
+	<select id="totalCount" parameterType="search" resultType="int">
+		SELECT COUNT(*)
+		FROM TS_MENU_AUTHO
+		<include refid="whereClause" />
+	</select>
+	
+	<select id="selectByGroup" parameterType="Integer" resultMap="BaseResultMap">
+		SELECT
+			A.*, M.FOLDER_PATH, M.PREFIX_PATH
+		FROM TS_MENU_AUTHO A
+		INNER JOIN TS_MENU M ON M.MENU_ID = A.MENU_ID
+		WHERE A.GROUP_ID = #{_parameter}
+	</select>
+	
+	<select id="selectForAdminPermission" parameterType="search" resultMap="BaseResultMap">
+		SELECT auth.*, menu.FOLDER_PATH, menu.PREFIX_PATH
+		FROM 
+			TS_MENU_AUTHO auth
+		LEFT JOIN 
+			TS_MENU_AUTH_GROUP grp ON auth.GROUP_ID = grp.IDX 
+		INNER JOIN 
+			TS_ADMIN adm ON grp.IDX = adm.AUTH_GROUP_IDX
+		LEFT JOIN 
+			TS_MENU menu ON auth.MENU_ID = menu.MENU_ID
+		WHERE 
+			adm.ADMIN_ID = #{adminId, jdbcType=VARCHAR} AND
+			grp.USE_FLAG = 'U' AND 
+			menu.USE_FLAG = 'U' AND 
+			menu.MENU_LEVEL IN
+			<foreach item="item" index="index" collection="menuLevels"
+             open="(" separator="," close=")">
+		        #{item}
+		    </foreach>
+	</select>
+	
+	
+	<insert id="merge" useGeneratedKeys="true" keyProperty="menuIdx" parameterType="com.tagosolution.service.model.MenuAuthoSettingVO">
+		INSERT INTO TS_MENU_AUTHO (
+			MENU_AUTHO_GROUP_IDX,  GROUP_ID, MENU_ID, AUTHO_LIST, AUTHO_VIEW, AUTHO_WRITE, AUTHO_MODIFY, AUTHO_DELETE
+		)
+		VALUES (
+		#{menuAuthoGroupIdx,jdbcType=INTEGER},
+		#{groupId,jdbcType=INTEGER},
+		#{menuId,jdbcType=VARCHAR},
+		#{authoList,jdbcType=CHAR},
+		#{authoView,jdbcType=CHAR},
+		#{authoWrite,jdbcType=CHAR},
+		#{authoModify,jdbcType=CHAR},
+		#{authoDelete,jdbcType=CHAR}
+		)
+		ON DUPLICATE KEY UPDATE
+		<trim suffix="" suffixOverrides=",">
+			<if test="groupId != null">
+				GROUP_ID = #{groupId,jdbcType=INTEGER},
+			</if>
+			<if test="menuId != null">
+				MENU_ID = #{menuId,jdbcType=VARCHAR},
+			</if>
+			<if test="authoList != null">
+				AUTHO_LIST = #{authoList,jdbcType=CHAR},
+			</if>
+			<if test="authoView != null">
+				AUTHO_VIEW = #{authoView,jdbcType=CHAR},
+			</if>
+			<if test="authoWrite != null">
+				AUTHO_WRITE = #{authoWrite,jdbcType=CHAR},
+			</if>
+			<if test="authoModify != null">
+				AUTHO_MODIFY = #{authoModify,jdbcType=CHAR},
+			</if>
+			<if test="authoDelete != null">
+				AUTHO_DELETE = #{authoDelete,jdbcType=CHAR},
+			</if>
+		</trim>
+	</insert>
+</mapper>

@@ -1,0 +1,192 @@
+.card
+     border: 1px solid #bbb
+     +respond_to_down(medium)
+          margin-bottom: 20px
+.img-wrapper
+     line-height: 0
+     img
+          width: 100%
+          max-width: 100%
+.card-content
+     text-align: center
+     margin-top: auto
+     +py(30px)
+     +px(36px)
+     min-height: 180px
+     display: flex
+     flex-direction: column
+     justify-content: space-between
+     +respond-to-down(small)
+          +py(20px)
+          +px(24px)
+          min-height: 120px
+     p
+          font-size: 16px
+          font-weight: 200
+          line-height: 1.6
+          margin-top: 8px
+          +respond-to-down(medium)
+               font-size: 14px
+     h2
+          font-size: 32px
+          font-weight: 500
+          margin-top: 12px
+          +respond-to-down(medium)
+               font-size: 24px
+     h4
+          font-size: 24px
+          font-weight: 500
+          letter-spacing: -.05em
+          +respond-to-down(medium)
+               font-size: 20px
+.bottom-card
+     display: flex
+     align-items: center
+     .img-wrapper
+          border-radius: 100%
+          width: 120px
+          height: 120px
+          background: #3672d8
+          display: flex
+          align-items: center
+          justify-content: center
+          margin-right: 10px
+          +respond-to-down(medium)
+               width: 80px
+               height: 80px
+               img
+                    width: 60%
+          img
+               width: auto
+               max-width: 60%
+     h4
+          font-size: 20px
+          letter-spacing: -.05em
+          margin-bottom: 6px
+.card_dark
+     text-align: center
+     height: 100%
+     background: #303030
+     color: #fff
+     font-size: 16px
+     font-weight: 500
+     +respond_to_down(small)
+          font-size: 14px
+     img
+          +my(2rem)
+          width: 120px
+     ul
+          padding-bottom: 2rem
+          li
+               line-height: 2
+               span
+                    color: #01c0f9
+                    margin-right: 16px
+                    
+// .board-list
+//      li
+//           border-bottom: 1px solid $border-color
+//      a:hover
+//           color: $primary
+// // card-type-1
+// .card
+//      background-color: white
+//      border: 1px solid $border-color
+//      margin-bottom: $gap
+//      position: relative
+//      &>a
+//           width: 100%
+//      .img-wrapper
+//           position: relative
+//           padding-top: 9/16*100%
+//           overflow: hidden
+//           img
+//                +easeoutcirc
+//                width: 100%
+//                +img-center
+//           &.default
+//                padding-top: 3/4*100%
+//           &.tall
+//                padding-top: 4/3*100%
+//      .card-content
+//           +easeoutcirc
+//           border-top: 1px solid $border-color
+//
+//      &.hover-image-color
+//           img
+//                filter: grayscale(1)
+//           &:hover
+//                img
+//                     filter: grayscale(0)
+//      &.hover-border:hover
+//           border-color: $primary
+//           .card-content
+//                border-color: $primary
+//
+//      &.hover-zoom
+//           a::before
+//                content: ""
+//                position: absolute
+//                +size(100%)
+//                top: 0
+//                left: 0
+//                background-position: center center
+//                background-repeat: no-repeat
+//                +easeoutcirc
+//           &:hover
+//                a::before
+//                     background-color: rgba($primary,0.5)
+//                     z-index: 1
+//                     background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='48' height='48' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='2' stroke-linecap='round' stroke-linejoin='round' class='feather feather-search'%3E%3Ccircle cx='11' cy='11' r='8'/%3E%3Cline x1='21' y1='21' x2='16.65' y2='16.65'/%3E%3C/svg%3E")
+// .hover-image-zoom:hover
+//      img
+//           +transform(scale,1.05)
+//
+// // card with background image
+// .card-bg-image
+//      +radius(.25rem)
+//      +shadow-sm
+//      position: relative
+//      overflow: hidden
+//      +easeoutcirc
+//      margin-bottom: $gap
+//      &.with-bg
+//           img
+//                transform-origin: center
+//                z-index: -1
+//                +img-center
+//                +easeoutcirc
+//           .card-content
+//                background-color: rgba(black,0.4)
+//                color: white
+//      .card-content
+//           +radius(.25rem)
+//           display: block
+//           color: inherit
+//           +py(7rem)
+//           +px(3rem)
+//           position: relative
+// .card-masonry
+//      overflow: hidden
+//      +radius(4px)
+//      background-color: white
+//      margin-bottom: $gap
+//      .img-wrapper
+//           width: 100%
+//           overflow: hidden
+//           img
+//                +easeoutcirc
+//                display: block
+//                width: 100%
+//      &:hover
+//           h5
+//                color: $primary
+//           img
+//                +transform(scale,1.1)
+// .card-content
+//      +px($gap)
+//      padding-bottom: $gap/2
+//      padding-top: $gap/2 + 4px
+//      p
+//           +my(1rem)
+//           opacity: .68

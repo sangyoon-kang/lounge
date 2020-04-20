@@ -1,0 +1,171 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="quickCon">
+
+ 	<resultMap id="BaseResultMap" type="com.tagosolution.service.model.QuickConsultVO">
+		<id column="IDX" jdbcType="INTEGER" property="Idx" />
+		<result column="USER_NAME" jdbcType="VARCHAR" property="userName" />
+		<result column="EMAIL" jdbcType="VARCHAR" property="email" />
+		<result column="CONTACT" jdbcType="VARCHAR" property="contact" />
+		<result column="CONTENT" jdbcType="VARCHAR" property="content" />
+		<result column="USE_FLAG" jdbcType="VARCHAR" property="useFlag" />
+		<result column="REG_DATE" jdbcType="DATE" property="regDate" />
+		<result column="REG_USER" jdbcType="VARCHAR" property="regUser" />
+		<result column="MOD_DATE" jdbcType="DATE" property="modDate" />
+		<result column="MOD_USER" jdbcType="VARCHAR" property="modUser" />
+		<result column="ANSWER" jdbcType="VARCHAR" property="answer" />
+		
+		
+	</resultMap>
+
+	<sql id="select">
+		IDX, USER_NAME, EMAIL, CONTACT, CONTENT,ANSWER,USE_FLAG, REG_DATE, REG_USER, MOD_DATE, MOD_USER
+	</sql>
+	<sql id="whereClause">
+		<trim prefix="where" prefixOverrides="and">
+			
+			
+				 USE_FLAG != "D"
+		</trim>
+	</sql>
+	
+	<select id="selectByKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+		SELECT
+		<include refid="select" />
+		FROM TS_QUICK_CONSULTATION
+		
+		<include refid="whereClause" />
+		AND IDX = #{Idx,jdbcType=INTEGER}
+	</select>
+	<update id="updateByKey" parameterType="com.tagosolution.service.model.QuickConsultVO">
+		update TS_QUICK_CONSULTATION
+		<set>
+			
+			<if test="answer != null">
+				ANSWER = #{answer,jdbcType=VARCHAR},
+			</if>
+				
+			<if test="modUser != null">
+				MOD_USER = #{modUser,jdbcType=VARCHAR},
+			</if>
+		</set>
+		where IDX = #{Idx,jdbcType=INTEGER}
+	</update>
+	<update id="deleteByKey" parameterType="com.tagosolution.service.model.QuickConsultVO">
+		update TS_QUICK_CONSULTATION
+		<set>
+			USE_FLAG ="D"
+		</set>
+		where IDX = #{Idx,jdbcType=INTEGER}
+	</update>
+	<select id="selectList" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+		SELECT
+		<include refid="select" />
+		FROM TS_QUICK_CONSULTATION
+		<include refid="whereClause" />
+			<if test="'userName' == type1">
+				AND USER_NAME  like CONCAT('%', #{searchWord}, '%')
+			</if>
+			<if test="'email' == type1">
+				AND EMAIL  like CONCAT('%', #{searchWord}, '%')
+			</if>
+			<if test="'contact' == type1">
+				AND CONTACT  like CONCAT('%', #{searchWord}, '%')
+			</if>
+			<if test="'content' == type1">
+				AND CONTENT like CONCAT('%', #{searchWord}, '%')
+			</if>
+			<if test=" 'all' == type1">
+				AND (USER_NAME  like CONCAT('%', #{searchWord}, '%')
+					OR EMAIL like CONCAT('%', #{searchWord}, '%')
+					OR CONTACT  like CONCAT('%', #{searchWord}, '%')
+					OR CONTENT like CONCAT('%', #{searchWord}, '%'))
+			</if>
+		
+		<include refid="paging.limit"/>
+	</select>
+	<select id="totalCount" parameterType="search" resultType="int">
+		SELECT
+		COUNT(*)
+		FROM TS_QUICK_CONSULTATION
+		<include refid="whereClause" />
+		
+	</select>
+	<insert id="merge" useGeneratedKeys="true" keyProperty="Idx" parameterType="com.tagosolution.service.model.QuickConsultVO">
+		INSERT TS_QUICK_CONSULTATION (
+			IDX, USER_NAME, EMAIL, CONTACT, CONTENT,ANSWER,USE_FLAG, REG_USER, MOD_USER
+		)
+		VALUES (
+			#{Idx,jdbcType=INTEGER}, #{userName,jdbcType=VARCHAR}, #{email,jdbcType=VARCHAR}, #{contact,jdbcType=VARCHAR}, #{content,jdbcType=VARCHAR},
+			 #{answer,jdbcType=VARCHAR}, #{useFlag,jdbcType=VARCHAR}, #{regUser,jdbcType=VARCHAR}, #{modUser,jdbcType=VARCHAR})
+		ON DUPLICATE KEY UPDATE
+		<trim suffix="" suffixOverrides=",">
+			<if test="Idx != null">
+				IDX = #{Idx,jdbcType=INTEGER},
+			</if>
+			<if test="userName != null">
+				USER_NAME = #{userName,jdbcType=VARCHAR},
+			</if>
+			<if test="email != null">
+				EMAIL = #{email,jdbcType=VARCHAR},
+			</if>
+			<if test="contact != null">
+				CONTACT = #{contact,jdbcType=VARCHAR},
+			</if>
+			<if test="content != null">
+				CONTENT = #{content,jdbcType=VARCHAR},
+			</if>
+			<if test="answer != null">
+				ANSWER = #{answer,jdbcType=VARCHAR},
+			</if>
+			<if test="useFlag != null">
+				USE_FLAG = #{useFlag,jdbcType=VARCHAR},
+			</if>			
+			<if test="regUser != null">
+				REG_USER = #{regUser,jdbcType=VARCHAR},
+			</if>
+			<if test="modUser != null">
+				MOD_USER = #{modUser,jdbcType=VARCHAR},
+			</if>
+			
+					
+		</trim>
+		
+	</insert>
+	
+
+	
+	<update id="updateByKeySelective" parameterType="com.tagosolution.service.model.QuickConsultVO">
+		update TS_QUICK_CONSULTATION
+		<set>
+			
+			<if test="userName != null">
+				USER_NAME = #{userName,jdbcType=VARCHAR},
+			</if>
+			<if test="email != null">
+				EMAIL = #{email,jdbcType=VARCHAR},
+			</if>
+			<if test="contact != null">
+				CONTACT = #{contact,jdbcType=VARCHAR},
+			</if>
+			<if test="content != null">
+				CONTENT = #{content,jdbcType=VARCHAR},
+			</if>
+			<if test="answer != null">
+				ANSWER = #{answer,jdbcType=VARCHAR},
+			</if>
+			<if test="useFlag != null">
+				USE_FLAG = #{useFlag,jdbcType=VARCHAR},
+			</if>	
+			<if test="regUser != null">
+				REG_USER = #{regUser,jdbcType=VARCHAR},
+			</if>
+			
+			<if test="modUser != null">
+				MOD_USER = #{modUser,jdbcType=VARCHAR},
+			</if>
+		</set>
+		where IDX = #{Idx,jdbcType=INTEGER}
+	</update>
+
+</mapper>

@@ -1,0 +1,40 @@
+.contract-header
+     margin-top: 62px
+     background-image: url(../images/back.svg)
+     background-size: 20px
+     position: relative
+     text-shadow: 0px 5px 10px black
+     overflow: hidden
+     -webkit-print-color-adjust: exact !important
+     @media print
+          text-shadow: none
+          margin-top: 0
+     &::after,&::before
+          position: absolute
+          content: ''
+          width: 40px
+          height: 10px
+          bottom: 0
+          +gradient(lighten($yellow,30%),$yellow)
+          border-top-left-radius: 30px
+     &::after
+          right: 0
+          transform: scaleX(3)
+     &::before
+          left: 0
+          transform: scaleX(-3)
+.offer
+     small
+          letter-spacing: 3px
+     span
+          display: block
+          width: 30px
+          height: 1px
+          background-color: white
+          +mx(6px)
+          margin-top: 8px
+.contract-action
+     width: 100%
+     position: fixed
+     top: 0
+     z-index: 10

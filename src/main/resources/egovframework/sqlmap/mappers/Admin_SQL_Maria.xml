@@ -1,0 +1,209 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="admin">
+
+	<resultMap id="BaseResultMap" type="com.tagosolution.service.model.AdminVO">
+		<id column="ADMIN_ID" jdbcType="VARCHAR" property="adminId" />
+		<result column="ADMIN_PWD" jdbcType="VARCHAR" property="adminPwd" />
+		<result column="ADMIN_NAME" jdbcType="VARCHAR" property="adminName" />
+		<result column="NICKNAME" jdbcType="VARCHAR" property="nickname" />
+		<result column="ICON" jdbcType="VARCHAR" property="icon" />
+		<result column="EMAIL" jdbcType="VARCHAR" property="email" />
+		<result column="PHONE" jdbcType="VARCHAR" property="phone" />
+		<result column="MOBILE" jdbcType="VARCHAR" property="mobile" />
+		<result column="MEMO" jdbcType="VARCHAR" property="memo" />
+		<result column="REG_DATE" jdbcType="TIMESTAMP" property="regDate" />
+		<result column="MOD_DATE" jdbcType="TIMESTAMP" property="modDate" />
+		<result column="USE_FLAG" jdbcType="VARCHAR" property="useYn" />
+		<result column="AUTH_GROUP_IDX" jdbcType="INTEGER" property="authGroupIdx" />
+		
+		<result column="USER_TYPE" jdbcType="VARCHAR" property="userType" />
+		<result column="AUTHS" jdbcType="LONGVARCHAR" property="auths" />
+	</resultMap>
+	
+	
+	<sql id="select">
+		ADMIN_ID, ADMIN_PWD, ADMIN_NAME, ICON, EMAIL, PHONE, MOBILE, MEMO, REG_DATE, MOD_DATE, 
+		USE_FLAG, AUTHS, NICKNAME, AUTH_GROUP_IDX
+		, 'admin' as USER_TYPE
+	</sql>
+	
+	<sql id="whereClause">
+		<trim prefix="where" prefixOverrides="and">
+			<!-- <if test="adminId != null">
+				AND ADMIN_ID = #{adminId }
+			</if>
+			<if test="adminName != null">
+				AND ADMIN_NAME = #{adminName}
+			</if> -->
+			<if test="glevel != null and glevel !=''">
+				AND AUTH_GROUP_IDX = #{glevel}
+			</if>
+			AND USE_FLAG = 'Y'
+		</trim>
+	</sql>
+	
+	<select id="selectList" parameterType="search" resultMap="BaseResultMap">
+		SELECT 
+		<include refid="select" />
+		FROM TS_ADMIN
+		<include refid="whereClause" />
+		<choose>
+			<when test="orderBy != ''">
+				order by ${orderBy}
+			</when>
+			<otherwise>
+				order by ADMIN_ID
+			</otherwise>
+		</choose>
+		<include refid="paging.limit" />
+	</select>
+	
+	<select id="totalCount" parameterType="search" resultType="int">
+		SELECT COUNT(*)
+		FROM TS_ADMIN
+		<include refid="whereClause" />
+	</select>
+
+	<!--  아이디 중복 검사 -->
+	<select id="selectForCheckId" parameterType="search" resultMap="BaseResultMap">
+		SELECT AA.*
+		FROM (
+			SELECT USER_ID AS ADMIN_ID
+				, USER_NAME AS ADMIN_NAME
+				, LCASE('user') AS USER_TYPE
+			FROM TS_MEMBER_INFO	
+			UNION ALL
+			SELECT ADMIN_ID
+				, ADMIN_NAME
+				, LCASE('admin')
+			FROM TS_ADMIN
+			UNION ALL
+			SELECT SU_ID
+				, '슈퍼유저' 
+				, LCASE('superuser')
+			FROM TS_SITE
+			WHERE SITE_SEQ = #{siteSeq}
+			UNION ALL
+			SELECT DS_ID
+				, '디자이너'
+				, LCASE('designer') AS USER_NAME
+			FROM TS_SITE
+			WHERE SITE_SEQ = #{siteSeq}
+		) AA
+		WHERE AA.ADMIN_ID = #{id}
+	</select>
+	
+	<!-- 게시판 관리 : 관리자 목록 ajax용 -->
+	<select id="selectListForAjax" parameterType="search" resultMap="BaseResultMap">
+		SELECT ADMIN_ID
+			, CONCAT(ADMIN_NAME, ' (', ADMIN_ID, ')') AS ADMIN_NAME
+		FROM TS_ADMIN
+		WHERE USE_FLAG = 'Y'
+	</select>
+	
+	<select id="selectByKey" parameterType="java.lang.String" resultType="com.tagosolution.service.model.AdminVO">
+		SELECT 
+		<include refid="select" />
+		FROM TS_ADMIN
+		WHERE ADMIN_ID = #{adminId,jdbcType=VARCHAR}
+	</select>
+	
+	
+	<update id="deleteByKey" parameterType="java.lang.String">
+		UPDATE TS_ADMIN
+			SET	USE_FLAG = 'N'
+		WHERE
+			ADMIN_ID = #{adminId,jdbcType=VARCHAR}
+	</update>
+	
+	<insert id="merge" parameterType="com.tagosolution.service.model.AdminVO">
+		INSERT INTO TS_ADMIN
+			(ADMIN_ID, ADMIN_PWD, ADMIN_NAME, ICON, EMAIL
+			, PHONE, MOBILE, MEMO, USE_FLAG, AUTHS
+			, REG_DATE, AUTH_GROUP_IDX)
+		VALUES
+			(#{adminId,jdbcType=VARCHAR}, #{adminPwd,jdbcType=VARCHAR}, #{adminName,jdbcType=VARCHAR}, #{icon,jdbcType=VARCHAR}, #{email,jdbcType=VARCHAR}
+			, #{phone,jdbcType=VARCHAR}, #{mobile,jdbcType=VARCHAR}, #{memo,jdbcType=VARCHAR}, #{useYn,jdbcType=VARCHAR}, #{auths,jdbcType=LONGVARCHAR}
+			, now(), #{authGroupIdx,jdbcType=INTEGER})
+		ON DUPLICATE KEY UPDATE
+			MOD_DATE = now()
+			<if test="adminPwd != null and adminPwd != ''">
+			, ADMIN_PWD = #{adminPwd,jdbcType=VARCHAR}
+			</if>
+			<if test="adminName != null and adminName != ''">
+			, ADMIN_NAME = #{adminName,jdbcType=VARCHAR}
+			</if>
+			<if test="icon != null">
+			, ICON = #{icon,jdbcType=VARCHAR}
+			</if>
+			<if test="email != null">
+			, EMAIL = #{email,jdbcType=VARCHAR}
+			</if>
+			<if test="phone != null">
+			, PHONE = #{phone,jdbcType=VARCHAR}
+			</if>
+			<if test="mobile != null">
+			, MOBILE = #{mobile,jdbcType=VARCHAR}
+			</if>
+			<if test="memo != null">
+			, MEMO = #{memo,jdbcType=VARCHAR}
+			</if>
+			<if test="useYn != null and useYn != ''">
+			, USE_FLAG = #{useYn,jdbcType=VARCHAR}
+			</if>
+			<if test="auths != null">
+			, AUTHS = #{auths,jdbcType=LONGVARCHAR}
+			</if>
+			<if test="authGroupIdx != null">
+			, AUTH_GROUP_IDX = #{authGroupIdx,jdbcType=INTEGER}
+			</if>
+	</insert>
+	
+	
+	
+	<!-- 
+	<update id="updateByKeySelective" parameterType="com.tagosolution.service.model.AdminVO">
+		UPDATE TS_ADMIN
+		<set>
+			<if test="adminPwd != null">
+				ADMIN_PWD = #{adminPwd,jdbcType=VARCHAR},
+			</if>
+			<if test="adminName != null">
+				ADMIN_NAME = #{adminName,jdbcType=VARCHAR},
+			</if>
+			<if test="icon != null">
+				ICON = #{icon,jdbcType=VARCHAR},
+			</if>
+			<if test="email != null">
+				EMAIL = #{email,jdbcType=VARCHAR},
+			</if>
+			<if test="phone != null">
+				PHONE = #{phone,jdbcType=VARCHAR},
+			</if>
+			<if test="mobile != null">
+				MOBILE = #{mobile,jdbcType=VARCHAR},
+			</if>
+			<if test="memo != null">
+				MEMO = #{memo,jdbcType=VARCHAR},
+			</if>
+			<if test="regDate != null">
+				REG_DATE = #{regDate,jdbcType=TIMESTAMP},
+			</if>
+			<if test="modDate != null">
+				MOD_DATE = #{modDate,jdbcType=TIMESTAMP},
+			</if>
+			<if test="useYn != null">
+				USE_FLAG = #{useYn,jdbcType=VARCHAR},
+			</if>
+			<if test="auths != null">
+				AUTHS = #{auths,jdbcType=LONGVARCHAR},
+			</if>
+		</set>
+		where ADMIN_ID = #{adminId,jdbcType=VARCHAR}
+	</update> 
+	-->
+	
+	
+	
+</mapper>

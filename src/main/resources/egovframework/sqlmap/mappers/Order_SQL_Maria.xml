@@ -1,0 +1,372 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="order">
+  <resultMap id="BaseResultMap" type="com.tagosolution.service.model.OrderVO">
+    <id column="ORDER_SEQ" jdbcType="BIGINT" property="orderSeq" />
+    <result column="USER_ID" jdbcType="VARCHAR" property="userId" />
+    <result column="RUN_TIME" jdbcType="INTEGER" property="runTime" />
+    <result column="STOP_LIMIT" jdbcType="INTEGER" property="stopLimit" />
+    <result column="GOODS_DATE" jdbcType="DATE" property="goodsDate" />
+    <result column="GOODS_TIME" jdbcType="VARCHAR" property="goodsTime" />
+    <result column="RESULT_TIME" jdbcType="TIMESTAMP" property="resultTime" />
+    <result column="BS_TYPE" jdbcType="VARCHAR" property="bsType" />
+    <result column="ORDER_RESULT" jdbcType="VARCHAR" property="orderResult" />
+    <result column="LOT" jdbcType="DECIMAL" property="lot" />
+    <result column="PROFIT" jdbcType="INTEGER" property="profit" />
+    <result column="LOSS" jdbcType="INTEGER" property="loss" />
+    
+    <result column="GRADE_NAME" jdbcType="VARCHAR" property="gradeName" />
+    <result column="USER_NAME" jdbcType="VARCHAR" property="userName" />
+    <result column="LOT_PRICE" jdbcType="INTEGER" property="lotPrice" />
+    <result column="PROFIT_PRICE" jdbcType="INTEGER" property="profitPrice" />
+    
+    <result column="WIN_LOT" jdbcType="DECIMAL" property="winLot" />
+    <result column="PROFIT_S" jdbcType="INTEGER" property="profitS" />
+    <result column="LOSS_LOT" jdbcType="DECIMAL" property="lossLot" />
+    <result column="LOSS" jdbcType="INTEGER" property="loss" />
+    <result column="PROFIT_LOSS" jdbcType="INTEGER" property="profitLoss" />
+    <result column="FX_COMM" jdbcType="INTEGER" property="fxComm" />
+    <result column="DEALER_COMM_FEE" jdbcType="INTEGER" property="dealerCommFee" />
+    <result column="DEALER_COMM" jdbcType="INTEGER" property="dealerComm" />
+    
+    <result column="YEARS" jdbcType="VARCHAR" property="years" />
+    <result column="YEARS_TEXT" jdbcType="VARCHAR" property="yearsText" />
+    
+  </resultMap>
+  
+  <sql id="Base_Column_List">
+    ORDER_SEQ, USER_ID, RUN_TIME, GOODS_DATE, GOODS_TIME
+    , RESULT_TIME, BS_TYPE, ORDER_RESULT, LOT, PROFIT, LOSS
+  </sql>
+  
+  <sql id="whereClause">
+  	<trim prefix="where" prefixOverrides="and">
+  		<if test="runTime != null">
+        	RUN_TIME = #{runTime, jdbcType=INTEGER}
+      	</if>
+  		<if test="goodsDate != null and goodsDate != ''">
+  			AND GOODS_DATE = #{goodsDate,jdbcType=VARCHAR}
+  		</if>
+  		<if test="goodsTime != null and goodsTime != ''">
+  			AND GOODS_TIME = #{goodsTime,jdbcType=VARCHAR}
+  		</if>
+  		<if test="userId != null and userId != ''">
+  			AND USER_ID = #{userId,jdbcType=VARCHAR}
+  		</if>
+  	</trim>
+  </sql>
+  
+  <select id="selectList" parameterType="search" resultMap="BaseResultMap">
+	select 
+	<include refid="Base_Column_List" />
+	from fx_order 
+	<include refid="whereClause" />
+	<include refid="paging.limit"/>
+  </select>
+  
+  <select id="selectYears" resultMap="BaseResultMap">
+	SELECT 	YEAR(GOODS_DATE) AS YEARS, CONCAT(YEAR(GOODS_DATE), '년') AS YEARS_TEXT
+	FROM 	fx_order
+	GROUP BY	YEAR(GOODS_DATE)
+	ORDER BY	YEARS DESC;
+  </select>
+  
+  <select id="selectDayStatList" parameterType="search" resultMap="BaseResultMap">
+	SELECT	TEMP.GOODS_DATE
+			, IFNULL(TEMP.WIN_LOT, 0) AS WIN_LOT
+			, IFNULL(TEMP.PROFIT_S, 0) AS PROFIT_S
+			, IFNULL(TEMP.LOSS_LOT, 0) AS LOSS_LOT
+			, IFNULL(TEMP.LOSS_S, 0) AS LOSS_S
+			, IFNULL(TEMP.LOSS_S, 0) - IFNULL(TEMP.PROFIT_S, 0) AS PROFIT_LOSS
+			, IFNULL(TEMP2.FX_COMM, 0) AS FX_COMM
+			, CONVERT(IFNULL(TEMP2.DEALER_COMM, 0) * 1000 / 967, INT) AS DEALER_COMM_FEE
+			, IFNULL(TEMP2.DEALER_COMM, 0) AS DEALER_COMM
+	FROM	(
+			SELECT	FO.GOODS_DATE
+						, SUM(CASE WHEN FO.ORDER_RESULT = 'W' THEN FO.LOT ELSE 0 END) WIN_LOT
+						, SUM(CASE WHEN FO.ORDER_RESULT = 'W' THEN FO.PROFIT ELSE 0 END) PROFIT_S
+						, SUM(CASE WHEN FO.ORDER_RESULT = 'L' THEN FO.LOT ELSE 0 END) LOSS_LOT
+						, SUM(CASE WHEN FO.ORDER_RESULT = 'L' THEN FO.LOSS ELSE 0 END) LOSS_S
+			FROM	fx_order FO
+			WHERE	LEFT(FO.GOODS_DATE, 7) = CONCAT(#{sYear}, '-', #{sMonth})
+			GROUP BY FO.GOODS_DATE
+		) TEMP
+		LEFT OUTER JOIN (
+			SELECT	FO.GOODS_DATE
+						, SUM(CASE WHEN TC.USER_ID = (SELECT USER_ID FROM ts_member_info WHERE GRADE_LEVEL = 1 LIMIT 0, 1) THEN CASH ELSE 0 END) FX_COMM
+						, SUM(CASE WHEN <![CDATA[TC.USER_ID <> (SELECT USER_ID FROM ts_member_info WHERE GRADE_LEVEL = 1 LIMIT 0, 1)]]>THEN CASH ELSE 0 END) DEALER_COMM
+			FROM	fx_order FO
+				INNER JOIN ts_cash TC
+					ON TC.MAIN_SEQ = FO.ORDER_SEQ
+						AND TC.CASH_TYPE = 'C'
+			WHERE	LEFT(FO.GOODS_DATE, 7) = CONCAT(#{sYear}, '-', #{sMonth})
+			GROUP BY FO.GOODS_DATE
+		) TEMP2
+		ON	TEMP2.GOODS_DATE = TEMP.GOODS_DATE
+	ORDER BY TEMP.GOODS_DATE;
+  </select>
+  
+  <select id="checkMemberOrder" parameterType="search" resultType="int">
+  	SELECT 	COUNT(*)
+  	FROM 	fx_order
+  	<include refid="whereClause" />
+  </select>
+  
+  <select id="totalCount" parameterType="search" resultType="int">
+	SELECT	COUNT(*)
+	FROM 	fx_order
+	<include refid="whereClause" />
+  </select>
+  
+   <select id="totalUserOrder" parameterType="search" resultType="int">
+	SELECT COUNT(*)  
+	FROM   fx_order FO
+	   INNER JOIN ts_member_info TMI
+	      ON TMI.USER_ID = FO.USER_ID
+	   INNER JOIN ts_member_grade TMG
+	      ON TMG.GRADE_LEVEL = TMI.GRADE_LEVEL
+	WHERE  TMI.USER_ID = #{userId, jdbcType=VARCHAR}
+		AND (FO.ORDER_RESULT IN ('W', 'L', 'T')
+		OR FO.ORDER_RESULT IS NULL)
+		<if test="startDate != '' and startDate != null">
+			AND FO.GOODS_DATE = #{startDate}
+		</if>
+		<if test="type1 != '' and type1 != null">
+			AND FO.ORDER_RESULT = #{type1}
+		</if>;
+  </select>
+  
+  <select id="selectByKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    SELECT 
+    <include refid="Base_Column_List" />
+    FROM	fx_order
+    WHERE	ORDER_SEQ = #{orderSeq,jdbcType=BIGINT};
+  </select>
+  
+   <select id="selectUserOrder" parameterType="search" resultMap="BaseResultMap">
+       SELECT   TMG.GRADE_NAME, TMI.USER_NAME, FO.USER_ID, FO.ORDER_SEQ, FO.LOT,FO.RUN_TIME,TMS.STOP_LIMIT, (FO.LOT * 50000)*1 as DEPOSIT
+           , FO.PROFIT, ((FO.LOT * 50000) - FO.PROFIT)*1, FO.LOSS, FO.BS_TYPE, FO.ORDER_RESULT
+           , TIME_FORMAT(DATE_ADD(STR_TO_DATE(CONCAT(FO.GOODS_DATE, ' ', FO.GOODS_TIME), '%Y-%m-%d %H:%i'), INTERVAL FO.RUN_TIME MINUTE), '%H:%i') AS GOODS_TIME
+           , DATE_FORMAT(DATE_ADD(STR_TO_DATE(CONCAT(FO.GOODS_DATE, ' ', FO.GOODS_TIME), '%Y-%m-%d %H:%i'), INTERVAL FO.RUN_TIME MINUTE), '%Y-%m-%d') AS GOODS_DATE
+       FROM   fx_order FO
+           INNER JOIN ts_member_info TMI
+                ON TMI.USER_ID = FO.USER_ID
+           INNER JOIN ts_member_grade TMG
+                ON TMG.GRADE_LEVEL = TMI.GRADE_LEVEL
+           LEFT JOIN fx_time_set TMS
+                ON TMS.RUN_TIME = FO.RUN_TIME
+       WHERE  TMI.USER_ID = #{userId, jdbcType=VARCHAR}
+               AND (FO.ORDER_RESULT IN ('W', 'L', 'T')
+               OR FO.ORDER_RESULT IS NULL)
+               <if test="startDate != '' and startDate != null">
+			AND FO.GOODS_DATE = #{startDate}
+		</if>
+		<if test="type1 != '' and type1 != null">
+			AND FO.ORDER_RESULT = #{type1}
+		</if>
+       ORDER BY FO.ORDER_SEQ DESC
+	    <include refid="paging.limit"/>
+  </select>
+  
+  <select id="selectUserOrderDetail" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    SELECT	ORDER_SEQ, RUN_TIME, USER_ID, RESULT_TIME, BS_TYPE, ORDER_RESULT, LOT, PROFIT, LOSS
+    			, TIME_FORMAT(DATE_ADD(STR_TO_DATE(CONCAT(GOODS_DATE, ' ', GOODS_TIME), '%Y-%m-%d %H:%i'), INTERVAL RUN_TIME MINUTE), '%H:%i') AS GOODS_TIME
+	   			, DATE_FORMAT(DATE_ADD(STR_TO_DATE(CONCAT(GOODS_DATE, ' ', GOODS_TIME), '%Y-%m-%d %H:%i'), INTERVAL RUN_TIME MINUTE), '%Y-%m-%d') AS GOODS_DATE
+    FROM		fx_order
+    WHERE	ORDER_SEQ = #{orderSeq,jdbcType=BIGINT};
+  </select>
+  
+  <select id="selectDetailMng" parameterType="search" resultMap="BaseResultMap">
+    SELECT	TMG.GRADE_NAME, TMI.USER_NAME, FO.USER_ID, FO.LOT, CONVERT(FO.LOT * 50000, INT) AS LOT_PRICE
+				, FO.PROFIT, CONVERT((FO.LOT * 50000) - FO.PROFIT, INT) AS PROFIT_PRICE, FO.LOSS
+	FROM		fx_order FO
+		INNER JOIN ts_member_info TMI
+			ON TMI.USER_ID = FO.USER_ID
+		INNER JOIN ts_member_grade TMG
+			ON TMG.GRADE_LEVEL = TMI.GRADE_LEVEL
+	WHERE	FO.RUN_TIME = #{runTime,jdbcType=INTEGER}
+		AND	FO.GOODS_DATE = #{goodsDate,jdbcType=VARCHAR}
+		AND	FO.GOODS_TIME = #{goodsTime,jdbcType=VARCHAR}
+		<if test="bsType != '' and bsType != null">
+			AND FO.BS_TYPE = #{bsType}
+		</if>
+  </select>
+  
+  <delete id="deleteByKey" parameterType="java.lang.Long">
+    DELETE	from fx_order
+    WHERE	ORDER_SEQ = #{orderSeq,jdbcType=BIGINT};
+  </delete>
+  
+  <insert id="merge" useGeneratedKeys="true" keyProperty="orderSeq" parameterType="com.tagosolution.service.model.OrderVO">
+    insert into fx_order (ORDER_SEQ, USER_ID, RUN_TIME, GOODS_DATE, GOODS_TIME, 
+						      RESULT_TIME, BS_TYPE, ORDER_RESULT, 
+						      LOT, PROFIT, LOSS)
+    VALUES (#{orderSeq,jdbcType=BIGINT}, #{userId,jdbcType=VARCHAR}, #{runTime,jdbcType=INTEGER}, #{goodsDate,jdbcType=DATE}, #{goodsTime,jdbcType=VARCHAR}, 
+				      #{resultTime,jdbcType=TIMESTAMP}, #{bsType,jdbcType=VARCHAR}, #{orderResult,jdbcType=VARCHAR}, 
+				      #{lot,jdbcType=DECIMAL}, #{profit,jdbcType=INTEGER}, #{loss,jdbcType=INTEGER});
+  </insert>
+  
+  <insert id="insertFront" useGeneratedKeys="true" keyProperty="orderSeq" parameterType="com.tagosolution.service.model.OrderVO">
+   	INSERT INTO fx_order (USER_ID, RUN_TIME, GOODS_DATE, GOODS_TIME, RESULT_TIME, BS_TYPE, LOT)
+	VALUES (#{userId,jdbcType=VARCHAR}
+		, #{runTime,jdbcType=INTEGER}
+		, DATE_FORMAT(SYSDATE(), '%Y-%m-%d')
+		, #{goodsTime,jdbcType=VARCHAR}
+		, CONCAT(DATE_FORMAT(SYSDATE(), '%Y-%m-%d'), ' ', #{goodsTime})
+		, #{bsType,jdbcType=VARCHAR}
+		, #{lot,jdbcType=DECIMAL});
+  </insert>
+  
+  <insert id="insertSelective" parameterType="com.tagosolution.service.model.OrderVO">
+    <selectKey keyProperty="orderSeq" order="AFTER" resultType="java.lang.Long">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into fx_order
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="userId != null">
+        USER_ID,
+      </if>
+      <if test="runTime != null">
+        RUN_TIME,
+      </if>
+      <if test="goodsDate != null">
+        GOODS_DATE,
+      </if>
+      <if test="goodsTime != null">
+        GOODS_TIME,
+      </if>
+      <if test="resultTime != null">
+        RESULT_TIME,
+      </if>
+      <if test="bsType != null">
+        BS_TYPE,
+      </if>
+      <if test="orderResult != null">
+        ORDER_RESULT,
+      </if>
+      <if test="lot != null">
+        LOT,
+      </if>
+      <if test="profit != null">
+        PROFIT,
+      </if>
+      <if test="loss != null">
+        LOSS,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="userId != null">
+        #{userId,jdbcType=VARCHAR},
+      </if>
+      <if test="runTime != null">
+        #{runTime,jdbcType=INTEGER}
+      </if>
+      <if test="goodsDate != null">
+        #{goodsDate,jdbcType=DATE},
+      </if>
+      <if test="goodsTime != null">
+        #{goodsTime,jdbcType=VARCHAR},
+      </if>
+      <if test="resultTime != null">
+        #{resultTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="bsType != null">
+        #{bsType,jdbcType=VARCHAR},
+      </if>
+      <if test="orderResult != null">
+        #{orderResult,jdbcType=VARCHAR},
+      </if>
+      <if test="lot != null">
+        #{lot,jdbcType=DECIMAL},
+      </if>
+      <if test="profit != null">
+        #{profit,jdbcType=INTEGER},
+      </if>
+      <if test="loss != null">
+        #{loss,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  
+  <update id="updateByPrimaryKeySelective" parameterType="com.tagosolution.service.model.OrderVO">
+    update fx_order
+    <set>
+      <if test="userId != null">
+        USER_ID = #{userId,jdbcType=VARCHAR},
+      </if>
+      <if test="runTime != null">
+        RUN_TIME = #{runTime,jdbcType=INTEGER}
+      </if>
+      <if test="goodsDate != null">
+        GOODS_DATE = #{goodsDate,jdbcType=DATE},
+      </if>
+      <if test="goodsTime != null">
+        GOODS_TIME = #{goodsTime,jdbcType=VARCHAR},
+      </if>
+      <if test="resultTime != null">
+        RESULT_TIME = #{resultTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="bsType != null">
+        BS_TYPE = #{bsType,jdbcType=VARCHAR},
+      </if>
+      <if test="orderResult != null">
+        ORDER_RESULT = #{orderResult,jdbcType=VARCHAR},
+      </if>
+      <if test="lot != null">
+        LOT = #{lot,jdbcType=DECIMAL},
+      </if>
+      <if test="profit != null">
+        PROFIT = #{profit,jdbcType=INTEGER},
+      </if>
+      <if test="loss != null">
+        LOSS = #{loss,jdbcType=INTEGER},
+      </if>
+    </set>
+    where ORDER_SEQ = #{orderSeq,jdbcType=BIGINT};
+  </update>
+  
+  <update id="updateStatusUD" parameterType="search">
+        UPDATE   fx_order FO, fx_goods FG
+         SET   FO.ORDER_RESULT = CASE WHEN (FG.GOODS_RESULT = 'U' AND FO.BS_TYPE = 'B') OR (FG.GOODS_RESULT = 'D' AND FO.BS_TYPE = 'S') THEN 'W' ELSE 'L' END
+               , FO.PROFIT = CASE WHEN (FG.GOODS_RESULT = 'U' AND FO.BS_TYPE = 'B') OR (FG.GOODS_RESULT = 'D' AND FO.BS_TYPE = 'S') THEN (FO.LOT * 50000 * (SELECT (100 - FLR.LINE_RATET) / 100 FROM fx_line_rate FLR  WHERE FLR.RUN_TIME = #{runTime,jdbcType=INTEGER} AND FLR.LR_VER = 0)) ELSE 0 END
+               , FO.LOSS = CASE WHEN (FG.GOODS_RESULT = 'U' AND FO.BS_TYPE = 'S') OR (FG.GOODS_RESULT = 'D' AND FO.BS_TYPE = 'B') THEN (FO.LOT * 50000) ELSE 0 END
+      WHERE   FO.RUN_TIME = FG.RUN_TIME
+         AND   FO.GOODS_DATE = FG.GOODS_DATE
+         AND   FO.GOODS_TIME = FG.GOODS_TIME
+         AND   FO.RESULT_TIME = CONCAT(#{goodsDate,jdbcType=VARCHAR}, ' ', #{goodsTime,jdbcType=VARCHAR});
+   </update>
+
+   
+   <update id="updateStatusT" parameterType="search">
+	    UPDATE	fx_order
+			SET	ORDER_RESULT = 'T'
+		WHERE	RESULT_TIME = CONCAT(#{goodsDate,jdbcType=VARCHAR}, ' ', #{goodsTime,jdbcType=VARCHAR})
+			AND	RUN_TIME = #{runTime,jdbcType=INTEGER};
+   </update>
+   
+   <update id="updateStatusN" parameterType="search">
+   		UPDATE	fx_order
+			SET	ORDER_RESULT = 'N'
+					, RESULT_TIME = DATE_ADD(CONCAT(#{goodsDate,jdbcType=VARCHAR}, ' ', #{goodsTime,jdbcType=VARCHAR}), INTERVAL RUN_TIME MINUTE)
+		WHERE	RESULT_TIME = CONCAT(#{goodsDate,jdbcType=VARCHAR}, ' ', #{goodsTime,jdbcType=VARCHAR})
+			AND	RUN_TIME = #{runTime,jdbcType=INTEGER};
+   </update>
+   
+   <update id="updateOrderCancle" parameterType="search">
+		UPDATE	fx_order
+			SET	ORDER_RESULT = null
+					, PROFIT = 0
+					, LOSS = 0
+		WHERE	RESULT_TIME = CONCAT(#{goodsDate,jdbcType=VARCHAR}, ' ', #{goodsTime,jdbcType=VARCHAR})
+			AND	RUN_TIME = #{runTime,jdbcType=INTEGER};
+   </update>
+
+   <update id="updateOrderCancleN" parameterType="search">
+		UPDATE	fx_order
+			SET	ORDER_RESULT = null
+					, RESULT_TIME = DATE_FORMAT(DATE_ADD(RESULT_TIME, INTERVAL -3 MINUTE), '%Y-%m-%d %H:%i')
+		WHERE	RESULT_TIME = DATE_FORMAT(DATE_ADD(CONCAT(#{goodsDate,jdbcType=VARCHAR}, ' ', #{goodsTime,jdbcType=VARCHAR}), INTERVAL RUN_TIME MINUTE), '%Y-%m-%d %H:%i')
+			AND	RUN_TIME = #{runTime,jdbcType=INTEGER};
+   </update>   
+
+</mapper>

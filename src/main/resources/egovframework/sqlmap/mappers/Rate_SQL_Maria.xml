@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="rate">
+  <resultMap id="BaseResultMap" type="com.tagosolution.service.model.RateVO">
+  	<result column="LR_IDX" jdbcType="INTEGER" property="lrIdx" />
+  	<result column="RUN_TIME" jdbcType="INTEGER" property="runTime" />
+    <result column="LINE_RATE1" jdbcType="INTEGER" property="lineRate1" />
+    <result column="LINE_RATE2" jdbcType="INTEGER" property="lineRate2" />
+    <result column="LINE_RATE3" jdbcType="INTEGER" property="lineRate3" />
+    <result column="LINE_RATE4" jdbcType="INTEGER" property="lineRate4" />
+	<result column="LINE_RATE5" jdbcType="INTEGER" property="lineRate5" />
+    <result column="LINE_RATET" jdbcType="INTEGER" property="lineRateT" />
+  </resultMap>
+  
+  <sql id="select">
+	LR_IDX, RUN_TIME, LINE_RATE1, LINE_RATE2, LINE_RATE3, LINE_RATE4, LINE_RATE5, LINE_RATET
+  </sql>
+  
+  <select id="selectByKey" parameterType="search" resultMap="BaseResultMap">
+	SELECT
+		<include refid="select" />
+	FROM 	fx_line_rate
+	WHERE 	RUN_TIME = #{runTime, jdbcType=INTEGER}
+		AND	LR_VER = 0;
+  </select>
+    <select id="selectByVer" parameterType="java.lang.Byte" resultMap="BaseResultMap">
+        SELECT
+        <include refid="select" />
+        FROM 	fx_line_rate
+        WHERE LR_VER = 0
+        ORDER BY RUN_TIME;
+    </select>
+  
+  <insert id="merge" parameterType="com.tagosolution.service.model.RateVO">
+    insert into fx_line_rate (RUN_TIME, LR_VER, LINE_RATE1, LINE_RATE2, LINE_RATE3, LINE_RATE4, LINE_RATE5, LINE_RATET)
+    values (#{runTime, jdbcType=INTEGER}, 0, #{lineRate1,jdbcType=INTEGER}, #{lineRate2,jdbcType=INTEGER}, #{lineRate3,jdbcType=INTEGER},
+      #{lineRate4,jdbcType=INTEGER}, #{lineRate5,jdbcType=INTEGER}, #{lineRateT,jdbcType=INTEGER});
+  </insert>
+  
+  <update id="updateSelective" parameterType="com.tagosolution.service.model.RateVO">
+    update fx_line_rate
+    	SET LR_VER = (SELECT MAX(IFNULL(LR_VER, 0)) + 1 AS LR_VER FROM fx_line_rate)
+    WHERE	RUN_TIME = #{runTime, jdbcType=INTEGER}
+    	AND	LR_VER = 0;
+  </update>
+</mapper>

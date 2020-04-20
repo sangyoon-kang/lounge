@@ -1,0 +1,427 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="prd">
+
+	<resultMap id="BaseResultMap" type="com.tagosolution.service.model.PrdVO">
+		<id column="PRD_SEQ" jdbcType="INTEGER" property="prdSeq" />
+		<result column="CATEGORY1" jdbcType="VARCHAR" property="category1" />
+		<result column="PRD_NAME" jdbcType="VARCHAR" property="prdName" />
+		<result column="RECOMMEND_YN" jdbcType="VARCHAR" property="recommendYn" />
+		<result column="MAIN_YN" jdbcType="VARCHAR" property="mainYn" />
+		<result column="ORDERING" jdbcType="INTEGER" property="ordering" />
+		<result column="PRODUCT_CODE" jdbcType="VARCHAR" property="productCode" />
+		<result column="PRICE" jdbcType="INTEGER" property="price" />
+		<result column="SUMMARY" jdbcType="VARCHAR" property="summary" />
+		<result column="CSS_PREFIX" jdbcType="VARCHAR" property="cssPrefix" />
+		<result column="SIZE_LIST" jdbcType="INTEGER" property="sizeList" />
+		<result column="SIZE_SMALL" jdbcType="INTEGER" property="sizeSmall" />
+		<result column="SIZE_DETAIL" jdbcType="INTEGER" property="sizeDetail" />
+		<result column="SIZE_LARGE" jdbcType="INTEGER" property="sizeLarge" />
+		<result column="USER_URL" jdbcType="VARCHAR" property="userUrl" />
+		<result column="ADMIN_URL" jdbcType="VARCHAR" property="adminUrl" />
+		<result column="REG_USER" jdbcType="VARCHAR" property="regUser" />
+		<result column="REG_DATE" jdbcType="TIMESTAMP" property="regDate" />
+		<result column="MOD_USER" jdbcType="VARCHAR" property="modUser" />
+		<result column="MOD_DATE" jdbcType="TIMESTAMP" property="modDate" />
+		<result column="USE_FLAG" jdbcType="VARCHAR" property="useYn" />
+		<result column="BODY" jdbcType="LONGVARCHAR" property="body" />
+				
+		<result column="CATEGORY_NAME" jdbcType="VARCHAR" property="categoryName" />
+		<result column="REG_USER_NAME" jdbcType="VARCHAR" property="regUserName" />
+		<result column="MOD_USER_NAME" jdbcType="VARCHAR" property="modUserName" />
+	</resultMap>
+	
+	<resultMap id="prdResultMap" type="com.tagosolution.service.model.PrdVO" extends="BaseResultMap">		
+		<association property="prdCategoryVO" column="CATEGORY1" select="prdCategory.selectByLnb" />
+		
+		<collection property="prdSubVO" column="PRD_SEQ" select="prdSub.selectByPrdSeq" />
+		<collection property="prdImageVO" column="PRD_SEQ" select="prdImage.selectByPrdSeq" />
+	</resultMap>
+	
+	<sql id="whereClause">
+		<trim prefix="and" prefixOverrides="and">
+<!-- 			<if test="cateIdx != '' and catecode != null">
+				AND CATEGORY1 = #{cateIdx }
+			</if>			
+ -->			<if test="searchWord != '' and searchWord != null">
+				and PRD_NAME like CONCAT('%', #{searchWord}, '%')
+			</if>
+			<if test="mainyn != '' and mainyn != null">
+				and MAIN_YN = #{mainyn}
+			</if>
+			<if test="recommendyn != '' and recommendyn != null ">
+				and RECOMMEND_YN = #{recommendyn}
+			</if>
+		</trim>
+	</sql>
+	
+	<sql id="select">
+		PRD_SEQ, CATEGORY1, PRD_NAME, RECOMMEND_YN, MAIN_YN, ORDERING, PRODUCT_CODE, PRICE,
+		SUMMARY, CSS_PREFIX, SIZE_LIST, SIZE_SMALL, SIZE_DETAIL, SIZE_LARGE, USER_URL, ADMIN_URL,
+		REG_USER, REG_DATE, MOD_USER, MOD_DATE, USE_FLAG, BODY
+		, (SELECT PC.CATE_NAME FROM TS_PRD_CATEGORY PC WHERE PC.CATE_ID = TS_PRD.CATEGORY1 ) AS CATEGORY_NAME
+		, GET_USER_NAME(REG_USER) AS REG_USER_NAME
+		, GET_USER_NAME(MOD_USER) AS MOD_USER_NAME
+	</sql>
+	<select id="checkRemainingLots" >
+  	 SELECT (BUY_LOT1_TOTAL - BUY_LOT1) AS BUY_LOT1_REMAIN
+	, (BUY_LOT2_TOTAL - BUY_LOT2) AS BUY_LOT2_REMAIN
+	  	 , (BUY_LOT10_TOTAL - BUY_LOT10) AS BUY_LOT10_REMAIN  
+	  	 , (BUY_LOT20_TOTAL - BUY_LOT20) AS BUY_LOT20_REMAIN 
+	  	 , (BUY_LOT40_TOTAL - BUY_LOT40) AS BUY_LOT40_REMAIN
+	  	 , (SELL_LOT1_TOTAL - SELL_LOT1) AS SELL_LOT1_REMAIN
+	, (SELL_LOT2_TOTAL - SELL_LOT2) AS SELL_LOT2_REMAIN
+	  	 , (SELL_LOT10_TOTAL - SELL_LOT10) AS SELL_LOT10_REMAIN 
+	  	 , (SELL_LOT20_TOTAL - SELL_LOT20) AS SELL_LOT20_REMAIN 
+	  	 , (SELL_LOT40_TOTAL - SELL_LOT40) AS SELL_LOT40_REMAIN 
+	FROM (
+	SELECT 	BUY_LOT1_TOTAL, BUY_LOT2_TOTAL, BUY_LOT10_TOTAL, BUY_LOT20_TOTAL, BUY_LOT40_TOTAL
+	, BUY_LOT1, BUY_LOT2, BUY_LOT10, BUY_LOT20, BUY_LOT40
+	, SELL_LOT1_TOTAL, SELL_LOT2_TOTAL, SELL_LOT10_TOTAL, SELL_LOT20_TOTAL, SELL_LOT40_TOTAL
+	, SELL_LOT1, SELL_LOT2, SELL_LOT10, SELL_LOT20, SELL_LOT40
+	FROM 	fx_goods
+	WHERE 	GOODS_DATE = 	#{goodsDate}
+	AND 	 run_time = 	#{runTime}
+	AND 	 GOODS_TIME =	#{goodsTime} 	) AS remainders
+	  	</select>
+	
+	
+	
+	
+	<select id="selectList" parameterType="search" resultMap="BaseResultMap">
+		select
+		<include refid="select" />
+		from TS_PRD
+		WHERE USE_FLAG = 'Y'
+		<include refid="whereClause" />
+		<choose>
+			<when test="orderBy != null and orderBy != ''">
+				ORDER BY ${orderBy}
+			</when>
+			<otherwise>
+				ORDER BY ORDERING DESC	
+			</otherwise>
+		</choose>
+		<include refid="paging.limit"/>
+	</select>
+	
+	<select id="totalCount" parameterType="search" resultType="int">
+		SELECT COUNT(*)
+		FROM TS_PRD
+		WHERE USE_FLAG = 'Y'
+		<include refid="whereClause" />
+	</select>
+	
+	<select id="selectTotalCount" parameterType="search" resultType="java.lang.Integer">
+		select
+			COUNT(*)
+		from TS_PRD
+		WHERE USE_FLAG = 'Y'	
+	</select>
+	
+	<!-- 메인 노출 리스트 -->
+	<select id="selectMainList" resultMap="prdResultMap">
+		SELECT
+		<include refid="select" />
+		FROM TS_PRD	
+		WHERE MAIN_YN = 'Y'
+		AND USE_FLAG = 'Y'
+		ORDER BY ORDERING
+	</select>
+	
+	<select id="selectByKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+		select
+		<include refid="select" />
+		from TS_PRD
+		where PRD_SEQ = #{prdSeq,jdbcType=INTEGER}
+	</select>
+	
+	<select id="selectByCateCode" parameterType="String" resultMap="BaseResultMap">
+		select
+		<include refid="select" />
+		from TS_PRD
+		where CATEGORY1 = #{_parameter }
+		ORDER BY ORDERING
+	</select>
+	
+	<!-- 진열 순서 업데이트하기 위해 선택된 오더링보다 적거나 큰값을 가져옴 -->
+	<select id="selectOrderingForUpdate" parameterType="com.tagosolution.service.model.PrdVO" resultMap="BaseResultMap">
+		SELECT
+			PRD_SEQ,
+			ORDERING
+		FROM TS_PRD
+		WHERE ORDERING = (SELECT
+										<if test="type == 'up'">
+											MIN(A.ORDERING) AS ORDERING
+										</if>
+										<if test="type == 'down'">
+											MAX(A.ORDERING) AS ORDERING
+										</if>
+										FROM TS_PRD A
+										WHERE 
+										<if test="type == 'up'">
+											A.ORDERING > #{ordering}
+										</if>
+										<if test="type == 'down'">
+											A.ORDERING <![CDATA[<]]> #{ordering}
+										</if>
+										AND USE_FLAG = 'Y'
+										)
+	</select>
+	
+	<delete id="deleteByKey" parameterType="java.lang.Integer">
+		delete from TS_PRD
+		where PRD_SEQ = #{prdSeq,jdbcType=INTEGER}
+	</delete>
+	
+	<insert id="merge" parameterType="com.tagosolution.service.model.PrdVO">	
+		insert into TS_PRD (			
+		<trim suffix=" " suffixOverrides=",">
+			PRD_SEQ,
+			REG_USER,
+			ORDERING,
+			<if test="category1 != null">
+				CATEGORY1,
+			</if>
+			<if test="prdName != null">
+				PRD_NAME,
+			</if>
+			<if test="recommendYn != null">
+				RECOMMEND_YN,
+			</if>
+			<if test="mainYn != null">
+				MAIN_YN,
+			</if>
+			<!-- <if test="ordering != null">
+				ORDERING,
+			</if> -->
+			<if test="productCode != null">
+				PRODUCT_CODE,
+			</if>
+			<if test="price != null">
+				PRICE,
+			</if>
+			<if test="summary != null">
+				SUMMARY,
+			</if>
+			<if test="cssPrefix != null">
+				CSS_PREFIX,
+			</if>
+			<if test="sizeList != null">
+				SIZE_LIST,
+			</if>
+			<if test="sizeSmall != null">
+				SIZE_SMALL,
+			</if>
+			<if test="sizeDetail != null">
+				SIZE_DETAIL,
+			</if>
+			<if test="sizeLarge != null">
+				SIZE_LARGE,
+			</if>
+			<if test="userUrl != null">
+				USER_URL,
+			</if>
+			<if test="adminUrl != null">
+				ADMIN_URL,
+			</if>
+			<if test="useYn != null">
+				USE_FLAG,
+			</if>
+			<if test="body != null">
+				BODY,
+			</if>
+		</trim>	
+		)
+		values (			
+		<trim suffix=" " suffixOverrides=",">
+			#{prdSeq,jdbcType=INTEGER},
+			#{regUser,jdbcType=VARCHAR},
+			(SELECT IFNULL(MAX(a.ORDERING)+1, 0) from TS_PRD a), 
+			<if test="category1 != null">
+				#{category1,jdbcType=VARCHAR},
+			</if>
+			<if test="prdName != null">
+				#{prdName,jdbcType=VARCHAR},
+			</if>
+			<if test="recommendYn != null">
+				#{recommendYn,jdbcType=VARCHAR},
+			</if>
+			<if test="mainYn != null">
+				#{mainYn,jdbcType=VARCHAR},
+			</if>
+			<!-- <if test="ordering != null">
+				#{ordering,jdbcType=INTEGER},
+			</if> -->
+			<if test="productCode != null">
+				#{productCode,jdbcType=VARCHAR},
+			</if>
+			<if test="price != null">
+				#{price,jdbcType=INTEGER},
+			</if>
+			<if test="summary != null">
+				#{summary,jdbcType=VARCHAR},
+			</if>
+			<if test="cssPrefix != null">
+				#{cssPrefix,jdbcType=VARCHAR},
+			</if>
+			<if test="sizeList != null">
+				#{sizeList,jdbcType=INTEGER},
+			</if>
+			<if test="sizeSmall != null">
+				#{sizeSmall,jdbcType=INTEGER},
+			</if>
+			<if test="sizeDetail != null">
+				#{sizeDetail,jdbcType=INTEGER},
+			</if>
+			<if test="sizeLarge != null">
+				#{sizeLarge,jdbcType=INTEGER},
+			</if>
+			<if test="userUrl != null">
+				#{userUrl,jdbcType=VARCHAR},
+			</if>
+			<if test="adminUrl != null">
+				#{adminUrl,jdbcType=VARCHAR},
+			</if>
+			<if test="useYn != null">
+				#{useYn,jdbcType=VARCHAR},
+			</if>
+			<if test="body != null">
+				#{body,jdbcType=LONGVARCHAR},
+			</if>
+		</trim>
+		)
+		ON DUPLICATE KEY UPDATE
+		<trim suffix=" " suffixOverrides=",">
+			MOD_DATE = now(),
+			<if test="category1 != null">
+				CATEGORY1 = #{category1,jdbcType=VARCHAR},
+			</if>
+			<if test="prdName != null">
+				PRD_NAME = #{prdName,jdbcType=VARCHAR},
+			</if>
+			<if test="recommendYn != null">
+				RECOMMEND_YN = #{recommendYn,jdbcType=VARCHAR},
+			</if>
+			<if test="mainYn != null">
+				MAIN_YN = #{mainYn,jdbcType=VARCHAR},
+			</if>
+			<if test="ordering != null">
+				ORDERING = #{ordering,jdbcType=INTEGER},
+			</if>
+			<if test="productCode != null">
+				PRODUCT_CODE = #{productCode,jdbcType=VARCHAR},
+			</if>
+			<if test="price != null">
+				PRICE = #{price,jdbcType=INTEGER},
+			</if>
+			<if test="summary != null">
+				SUMMARY = #{summary,jdbcType=VARCHAR},
+			</if>
+			<if test="cssPrefix != null">
+				CSS_PREFIX = #{cssPrefix,jdbcType=VARCHAR},
+			</if>
+			<if test="sizeList != null">
+				SIZE_LIST = #{sizeList,jdbcType=INTEGER},
+			</if>
+			<if test="sizeSmall != null">
+				SIZE_SMALL = #{sizeSmall,jdbcType=INTEGER},
+			</if>
+			<if test="sizeDetail != null">
+				SIZE_DETAIL = #{sizeDetail,jdbcType=INTEGER},
+			</if>
+			<if test="sizeLarge != null">
+				SIZE_LARGE = #{sizeLarge,jdbcType=INTEGER},
+			</if>
+			<if test="userUrl != null">
+				USER_URL = #{userUrl,jdbcType=VARCHAR},
+			</if>
+			<if test="adminUrl != null">
+				ADMIN_URL = #{adminUrl,jdbcType=VARCHAR},
+			</if>
+			<if test="modUser != null">
+				MOD_USER = #{modUser,jdbcType=VARCHAR},
+			</if>
+			<if test="useYn != null">
+				USE_FLAG = #{useYn,jdbcType=VARCHAR},
+			</if>
+			<if test="body != null">
+				BODY = #{body,jdbcType=LONGVARCHAR},
+			</if>
+		</trim>
+		<selectKey resultType="int" keyProperty="prdSeq" order="AFTER">
+	        SELECT LAST_INSERT_ID()
+	    </selectKey>
+	</insert>
+	
+	<update id="updateByKeySelective" parameterType="com.tagosolution.service.model.PrdVO">
+		UPDATE TS_PRD 
+		SET 
+		<trim suffix=" " suffixOverrides=",">			
+			<if test="category1 != null">
+				CATEGORY1 = #{category1,jdbcType=VARCHAR},
+			</if>
+			<if test="prdName != null">
+				PRD_NAME = #{prdName,jdbcType=VARCHAR},
+			</if>
+			<if test="recommendYn != null">
+				RECOMMEND_YN = #{recommendYn,jdbcType=VARCHAR},
+			</if>
+			<if test="mainYn != null">
+				MAIN_YN = #{mainYn,jdbcType=VARCHAR},
+			</if>
+			<if test="ordering != null">
+				ORDERING = #{ordering,jdbcType=INTEGER},
+			</if>
+			<if test="productCode != null">
+				PRODUCT_CODE = #{productCode,jdbcType=VARCHAR},
+			</if>
+			<if test="price != null">
+				PRICE = #{price,jdbcType=INTEGER},
+			</if>
+			<if test="summary != null">
+				SUMMARY = #{summary,jdbcType=VARCHAR},
+			</if>			
+			<if test="body != null">
+				BODY = #{body,jdbcType=LONGVARCHAR},
+			</if>
+			<if test="cssPrefix != null">
+				CSS_PREFIX = #{cssPrefix,jdbcType=VARCHAR},
+			</if>
+			<if test="sizeList != null">
+				SIZE_LIST = #{sizeList,jdbcType=INTEGER},
+			</if>
+			<if test="sizeSmall != null">
+				SIZE_SMALL = #{sizeSmall,jdbcType=INTEGER},
+			</if>
+			<if test="sizeDetail != null">
+				SIZE_DETAIL = #{sizeDetail,jdbcType=INTEGER},
+			</if>
+			<if test="sizeLarge != null">
+				SIZE_LARGE = #{sizeLarge,jdbcType=INTEGER},
+			</if>
+			<if test="userUrl != null">
+				USER_URL = #{userUrl,jdbcType=VARCHAR},
+			</if>
+			<if test="adminUrl != null">
+				ADMIN_URL = #{adminUrl,jdbcType=VARCHAR},
+			</if>
+			<if test="modUser != null">
+				MOD_USER = #{modUser,jdbcType=VARCHAR},
+				MOD_DATE = now(),
+			</if>
+			<if test="useYn != null">
+				USE_FLAG = #{useYn,jdbcType=VARCHAR},
+			</if>
+		</trim>
+		WHERE PRD_SEQ = #{prdSeq,jdbcType=INTEGER}
+	</update>	
+	
+	<!-- 진열 순서 업데이트 -->
+	<update id="updateOrdering" parameterType="com.tagosolution.service.model.PrdVO">	
+		UPDATE TS_PRD
+		SET ORDERING = #{ordering,jdbcType=INTEGER}
+		WHERE PRD_SEQ = #{prdSeq,jdbcType=INTEGER}
+	</update>
+	
+</mapper>

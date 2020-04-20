@@ -1,0 +1,114 @@
+.tabs
+     +flexbox
+     border-bottom: 1px solid #333
+     a
+          +px(1.6rem)
+          display: block
+          +py(.5rem)
+          margin-bottom: -1px
+          margin-right: 2px
+          border-width: 3px 1px 1px 1px
+          border-color: #333
+          border-bottom-color: white !important
+          border-style: solid
+          border-radius: 4px 4px 0 0
+          background-color: white
+          &:not(.on)
+               background-color: rgb(169, 169, 169)
+               color: white
+               border-color: rgb(169, 169, 169)
+               border-bottom-color: rgb(169, 169, 169) !important
+               margin-bottom: 0px
+.icon
+     display: inline-block
+     width: 40px
+     height: 40px
+     background: $primary
+     font-size: 22px
+     line-height: 40px
+     color: white
+     text-align: center
+     border-radius: 40px
+     +mx(1rem)
+.accordion
+     +py(.6rem)
+     display: block
+     font-weight: 500
+     border-bottom: 1px solid $grey
+.inner
+     display: none
+     +py(.6rem)
+     font-weight: 500
+     .icon
+          background-color: lighten($primary,20%)
+     &.show
+          
+          align-items: center
+          background-color: $light-grey
+.tab-big
+     border-bottom: 1px solid #333
+     display: flex
+     a
+          flex: 1
+          display: block
+          background: $light-grey
+          border-width: 1px 1px 0 1px
+          border-style: solid
+          border-color: $grey
+          text-align: center
+          +py(1.2rem)
+          font-weight: 300
+          &.active
+               background: #333
+               color: white
+               border-color: #333
+
+
+.table_switch
+     display: flex
+     a
+          flex: 1
+          font-size: 24px
+          font-weight: 500
+          display : flex
+          align-items: center
+          text-align: center
+          border: 1px solid #888
+          justify-content: center
+          padding: 18px
+          +respond-to-down(small)
+               font-size: 18px
+          &:not(.inactive)
+               $theme : 'red' $red,'blue' $blue
+               @each $color,$value in $theme
+                    &.#{$color}
+                         background: $value
+                         border-color: $value
+                         color: #fff
+                         .shape
+                              &::before,&::after
+                                   background: #fff
+               
+          small
+               font-size: 24px
+               font-weight: 300
+               +respond-to-down(small)
+                    font-size: 18px
+     .shape
+          display: flex
+          margin-right: 10px
+          &::before,&::after
+               content: ''
+               width: 10px
+               height: 13px
+               background: $blue
+               display: inline-block
+          &::before
+               transform: skewY(40deg)
+          &::after
+               transform: skewY(-40deg)
+          &.reverse
+               &::after
+                    transform: skewY(40deg)
+               &::before
+                    transform: skewY(-40deg)

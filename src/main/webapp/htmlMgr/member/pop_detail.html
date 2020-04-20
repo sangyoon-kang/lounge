@@ -1,0 +1,78 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link href="/css/master.css" rel="stylesheet" type="text/css" />
+<link href="/js/jquery-ui.css" rel="stylesheet" type="text/css" />
+<link href="/css/SimpleLightBox.css" rel="stylesheet" type="text/css" />
+<link href="/css/tree.css" rel="stylesheet" type="text/css" />
+<script type="text/javascript" language="Javascript" src="/js/external/jquery/jquery.js"></script>
+<script type="text/javascript" language="Javascript" src="/js/jquery-ui.js"></script>
+<script type="text/javascript" language="Javascript" src="/js/jquery.form.min.js"></script>
+<script type="text/javascript" language="Javascript" src="/js/jquery.ui.datepicker-ko.js"></script>
+<script type="text/javascript" language="Javascript" src="/js/LightBox/SimpleLightBox.js"></script>
+<script type="text/javascript" language="Javascript" src="/js/tree.js"></script>
+<script type="text/javascript" language="Javascript" src="/js/Common.js"></script>
+<script type="text/javascript" language="Javascript" src="/js/page_function.js"></script>
+<script type="text/javascript" language="Javascript" src="/js/jquery.scrollbox.js"></script>
+<script type="text/javascript" language="Javascript" src="/js/jquery.flexisel.js"></script>
+<script type="text/javascript" language="Javascript" src="/js/jquery.easing.1.3.js"></script>
+<title>팝업</title>
+</head>
+
+<body class="admin_pop">
+<div id="wrap_pop">
+		
+	<div class="pop_scon">
+		
+		<h3>() 님의 적립금내역</h3>
+		<p class="tit_blank"></p>
+		<div class="check_conbox">
+			<h4 class="check_tit">체크사항</h4>
+			<ul>
+				<li>- 상품구입 적립금은 주문관리에서 "배송완료" 처리후에 적립됩니다.</li>
+			</ul>
+		</div>
+		<p class="tit_blank"></p>
+		<div class="scon_search">
+				<div class="search">
+					<select name="" id="">
+						<option value="">+</option>
+						<option value="">-</option>
+					</select>
+					<input name="sWord" id="sWord" value="" class="input_type1" onkeypress="" type="text" />
+					<a class="bt_pink">확인</a>
+				</div>
+			</div>
+		<table class="table_style1">
+			<caption></caption>
+			<colgroup>
+				<col width="" />
+				<col width="" />
+			</colgroup>
+			<thead>
+				<tr>
+					<th>적립일자</th>
+					<th>적립내역</th>
+					<th>금액</th>
+					<th>상세보기</th>
+				</tr>
+			</thead>
+			
+			<tbody>
+				<tr style="display:none;">
+					<td></td>
+					<td></td>
+					<td></td>
+					<td></td>
+				</tr>
+				<tr>
+					<td colspan="4">적립내역이 없습니다.</td>
+				</tr>
+			</tbody>
+		</table>
+		<p class="pop_detail_total">총 적립금 : <strong>0</strong>원</p>
+	</div>
+</div>
+</body>
+</html>

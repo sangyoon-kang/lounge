@@ -1,0 +1,6 @@
+@for $i from 0 to 2
+     .order-#{$i}
+          order: $i
+     .order-sm-#{$i}
+          +respond-to(small)
+               order: $i

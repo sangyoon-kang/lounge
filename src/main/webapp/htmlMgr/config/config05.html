@@ -1,0 +1,476 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link href="/css/master.css" rel="stylesheet" type="text/css" />
+<link href="/js/jquery-ui.css" rel="stylesheet" type="text/css" />
+<link href="/css/SimpleLightBox.css" rel="stylesheet" type="text/css" />
+<link href="/css/tree.css" rel="stylesheet" type="text/css" />
+<script type="text/javascript" language="Javascript" src="/js/external/jquery/jquery.js"></script>
+<script type="text/javascript" language="Javascript" src="/js/jquery-ui.js"></script>
+<script type="text/javascript" language="Javascript" src="/js/jquery.form.min.js"></script>
+<script type="text/javascript" language="Javascript" src="/js/jquery.ui.datepicker-ko.js"></script>
+<script type="text/javascript" language="Javascript" src="/js/LightBox/SimpleLightBox.js"></script>
+<script type="text/javascript" language="Javascript" src="/js/tree.js"></script>
+<script type="text/javascript" language="Javascript" src="/js/Common.js"></script>
+<script type="text/javascript" language="Javascript" src="/js/page_function.js"></script>
+<script type="text/javascript" language="Javascript" src="/js/jquery.scrollbox.js"></script>
+<script type="text/javascript" language="Javascript" src="/js/jquery.flexisel.js"></script>
+<script type="text/javascript" language="Javascript" src="/js/jquery.easing.1.3.js"></script>
+<title>관리시스템</title>
+</head>
+
+<body>
+<div id="wrap">
+	<!--header S-->
+	<div id="wrap_header">
+		<ul class="gnb" id="gnb_link">
+			<li link="/config/config01.html">환경설정</li>
+			<li link="/basic/basic01.html">기본설정</li>
+			<li link="/bbs/bbs01.html">게시판관리</li>
+			<li link="/member/member01.html">회원관리</li>
+			<li link="/poll/poll01.html">설문관리</li>
+			<li link="/schedule/sch01.html">일정관리</li>
+			<li link="/product/pro01.html">상품관리</li>
+			<li link="/banner/banner01.html">배너관리</li>
+			<li link="/connect/connect01.html">접속통계</li>
+		</ul>
+		<script type="text/javascript" language="Javascript">
+		<!--
+
+			$(document).ready(function(){
+				
+				$('#gnb_link li').on("click", function(){
+
+					var link_info = $(this).attr("link");
+					//alert(link_info+'로 이동합니다.');
+					location.href=link_info;
+
+				});
+
+			});
+		-->
+		</script>
+		<p id="LogoutBtn">로그아웃</p>
+	</div>
+	<!--header E-->
+
+	<!--lnb S-->
+	<div id="wrap_lnb">
+		<h2 class="mg_logo">사이트관리자<br/><a href="" class="bt_gohome">내홈페이지바로가기→</a></h2>
+		<h2 class="lnb_title"><span class="title1">환경설정</span></h2>
+		<ul class="lnb">
+			<li class="lnb_depth1"><a href="/config/config01.html">기본설정</a></li>
+			<li class="lnb_depth1"><a href="/config/config02.html">로그분석 설정</a></li>
+			<li class="lnb_depth1"><a href="/config/config03.html">게시판</a></li>
+			<li class="lnb_depth1"><a href="/config/config04.html">메인게시물</a></li>
+			<li class="lnb_depth1"><a href="/config/config05.html" class="depth1_on">회원 관리</a></li>
+			<li class="lnb_depth1"><a href="/config/config06.html">폼메일</a></li>
+			<li class="lnb_depth1"><a href="/config/config07.html">상품 관리</a></li>
+			<li class="lnb_depth1"><a href="/config/config08.html">메인상품</a></li>
+			<li class="lnb_depth1"><a href="/config/config09.html">설문조사</a></li>
+			<li class="lnb_depth1"><a href="/config/config10.html">메인 설문</a></li>
+			<li class="lnb_depth1"><a href="/config/config11.html">일정 관리</a></li>
+			<li class="lnb_depth1"><a href="/config/config12.html">배너관리</a></li>
+			<li class="lnb_depth1"><a href="/config/config13.html">페이지 관리</a></li>
+			<li class="lnb_depth1"><a href="/config/config14.html">페이지 접근 권한</a></li>
+			<li class="lnb_depth1"><a href="/config/config15.html">전체 검색</a></li>
+			<li class="lnb_depth1"><a href="/config/config16.html">카운터</a></li>
+		</ul>
+		<div id="copyright">
+			<p>2016 LCDNS<br/>All rights reserved.</p>
+		</div>
+	</div>
+	<!--lnb E-->
+
+	<!--wrap_scon S-->
+	<div id="wrap_scon">
+		<div class="scon_title">
+			<h2>회원관리</h2>
+			<p>홈 > 환경설정 > 회원관리</p>
+		</div>
+		<div class="scon">
+			<div class="check_conbox">
+				<h4 class="check_tit">체크사항 <span class="txt_red">(생성코드 삽입만으로 회원관련 모든 페이지를 완성할 수 있습니다. )</span></h4>
+				<ul>
+					<li>- 스킨위치 : /admin/member/skin</li>
+					<li>- 회원가입항목은 기본항목선택, 임의추가도 가능합니다.</li>
+					<li>- 아이디/비번찾기 : 아이디, 비밀번호 찾기가 한페이지에 보여집니다.</li>
+					<li>- 아이디찾기 : 아이디찾기만 페이지에 보여집니다. / 비밀번호찾기 : 비밀번호찾기만 페이지에 보여집니다.  </li>
+				</ul>
+			</div>
+			<p class="tit_blank"></p>
+			<h3>페이지</h3>
+			<table class="table_style1">
+				<caption>페이지</caption>
+				<colgroup>
+					<col width="20%" />
+					<col width="" />
+				</colgroup>
+				
+				<tbody>
+					<tr>
+						<th class="left"><strong>회원가입</strong></th>
+						<td class="left"><span class="txt_red">&lt;? include "$_SERVER[DOCUMENT_ROOT]/admin/module/join.php"; // 회원가입 ?&gt;</span> <a href="" class="bt_copy">생성코드복사</a></td>
+					</tr>
+					<tr>
+						<th class="left"><strong>로그인페이지</strong></th>
+						<td class="left"><span class="txt_red">&lt;? include "$_SERVER[DOCUMENT_ROOT]/admin/module/login.php"; // 로그인페이지 ?&gt;</span> <a href="" class="bt_copy">생성코드복사</a></td>
+					</tr>
+					<tr>
+						<th class="left"><strong>아이디/비번 찾기</strong></th>
+						<td class="left"><span class="txt_red">&lt;? include "$_SERVER[DOCUMENT_ROOT]/admin/module/idpw.php"; // 아이디/비번찾기 ?&gt;</span> <a href="" class="bt_copy">생성코드복사</a></td>
+					</tr>
+					<tr>
+						<th class="left"><strong>아이디찾기</strong></th>
+						<td class="left"><span class="txt_red">&lt;? $stype="pw"; include "$_SERVER[DOCUMENT_ROOT]/admin/module/idpw.php"; // 비밀번호찾기 ?&gt;</span> <a href="" class="bt_copy">생성코드복사</a></td>
+					</tr>
+					<tr>
+						<th class="left"><strong>비밀번호찾기</strong></th>
+						<td class="left"><span class="txt_red">&lt;? include "$_SERVER[DOCUMENT_ROOT]/admin/module/join.php"; // 회원가입 ?&gt;</span> <a href="" class="bt_copy">생성코드복사</a></td>
+					</tr>
+					<tr>
+						<th class="left"><strong>회원정보수정</strong></th>
+						<td class="left"><span class="txt_red">&lt;? include "$_SERVER[DOCUMENT_ROOT]/admin/module/myinfo.php"; // 회원정보수정 ?&gt;</span> <a href="" class="bt_copy">생성코드복사</a></td>
+					</tr>
+					<tr>
+						<th class="left"><strong>회원탈퇴</strong></th>
+						<td class="left"><span class="txt_red">&lt;? include "$_SERVER[DOCUMENT_ROOT]/admin/module/myout.php"; // 회원탈퇴 ?&gt;</span> <a href="" class="bt_copy">생성코드복사</a></td>
+					</tr>
+					<tr>
+						<th class="left"><strong>로그인박스</strong></th>
+						<td class="left"><span class="txt_red">&lt;? include "$_SERVER[DOCUMENT_ROOT]/admin/module/loginbox.php"; // 로그인박스 ?&gt;</span> <a href="" class="bt_copy">생성코드복사</a></td>
+					</tr>
+				</tbody>
+			</table>
+			<p class="tit_blank"></p>
+			<h4 class="scon_stit">- 페이지URL</h4>
+			<table class="table_style1">
+				<caption>페이지</caption>
+				<colgroup>
+					<col width="20%" />
+					<col width="" />
+				</colgroup>
+				
+				<tbody>
+					<tr>
+						<th class="left"><strong>회원가입 페이지</strong></th>
+						<td class="left">http//democom.anywiz.co.kr/<input name="" class="table_input1" value="" maxlength="" type="text" style="width:400px;"/> </td>
+					</tr>
+					<tr>
+						<th class="left"><strong>회원정보 페이지</strong></th>
+						<td class="left">http//democom.anywiz.co.kr/<input name="" class="table_input1" value="" maxlength="" type="text" style="width:400px;"/> </td>
+					</tr>
+					<tr>
+						<th class="left"><strong>로그인 페이지</strong></th>
+						<td class="left">http//democom.anywiz.co.kr/<input name="" class="table_input1" value="" maxlength="" type="text" style="width:400px;"/> </td>
+					</tr>
+					<tr>
+						<th class="left"><strong>아이디/비번 페이지</strong></th>
+						<td class="left">http//democom.anywiz.co.kr/<input name="" class="table_input1" value="" maxlength="" type="text" style="width:400px;"/> </td>
+					</tr>
+					<tr>
+						<th class="left"><strong>로그아웃 후 이동페이지</strong></th>
+						<td class="left">http//democom.anywiz.co.kr/<input name="" class="table_input1" value="" maxlength="" type="text" style="width:400px;"/><br/><span class="table_stxt txt_red">인트로페이지를 사용하는 경우 로그아웃하면 다시 인트로로 가는것을 막기위해 이동페이지 주소를 설정합니다.</span></td>
+					</tr>
+					
+				</tbody>
+			</table>
+			
+			
+			<p class="tit_blank"></p>
+			<h3>탑메뉴</h3>
+			<table class="table_style1">
+				<caption>탑메뉴</caption>
+				<colgroup>
+					<col width="20%" />
+					<col width="" />
+				</colgroup>
+				
+				<tbody>
+					<tr>
+						<th class="left"><strong>로그인/로그아웃</strong></th>
+						<td class="left"><span class="txt_red">&lt;? include "$_SERVER[DOCUMENT_ROOT]/admin/module/toplogin.php"; // 로그인,로그아웃 ?&gt;</span> <a href="" class="bt_copy">생성코드복사</a></td>
+					</tr>
+					<tr>
+						<th class="left"><strong>회원가입/마이페이지</strong></th>
+						<td class="left"><span class="txt_red">&lt;? include "$_SERVER[DOCUMENT_ROOT]/admin/module/topjoin.php"; // 회원가입,정보수정 ?&gt;</span> <a href="" class="bt_copy">생성코드복사</a></td>
+					</tr>
+				</tbody>
+			</table>
+			<p class="tit_blank"></p>
+			<h4 class="scon_stit">- 이미지설정 (이미지를 설정하지 않으면 텍스트로 보여집니다.)</h4>
+			<table class="table_style1">
+				<caption>이미지설정 </caption>
+				<colgroup>
+					<col width="20%" />
+					<col width="" />
+				</colgroup>
+				
+				<tbody>
+					<tr>
+						<th class="left"><strong>로그인 이미지</strong></th>
+						<td class="left">http//democom.anywiz.co.kr/<input name="" class="table_input1" value="" maxlength="" type="text" style="width:400px;"/> </td>
+					</tr>
+					<tr>
+						<th class="left"><strong>로그아웃 이미지</strong></th>
+						<td class="left">http//democom.anywiz.co.kr/<input name="" class="table_input1" value="" maxlength="" type="text" style="width:400px;"/> </td>
+					</tr>
+					<tr>
+						<th class="left"><strong>회원가입 이미지</strong></th>
+						<td class="left">http//democom.anywiz.co.kr/<input name="" class="table_input1" value="" maxlength="" type="text" style="width:400px;"/> </td>
+					</tr>
+					<tr>
+						<th class="left"><strong>마이페이지 이미지</strong></th>
+						<td class="left">http//democom.anywiz.co.kr/<input name="" class="table_input1" value="" maxlength="" type="text" style="width:400px;"/> </td>
+					</tr>
+					
+				</tbody>
+			</table>
+
+
+
+			<p class="tit_blank"></p>
+			<h3>아이디/패스워드 찾기</h3>
+			<table class="table_style1">
+				<caption>아이디/패스워드 찾기</caption>
+				<colgroup>
+					<col width="20%" />
+					<col width="" />
+				</colgroup>
+				
+				<tbody>
+					<tr>
+						<th class="left"><strong>확인방법</strong></th>
+						<td class="left"><input type="radio" class="input_type_radio01"/> 이메일 발송</td>
+					</tr>
+					<tr>
+						<th class="left"><strong>스킨</strong></th>
+						<td class="left"><select><option>memberBasic</option></select> 스킨위치 : /admin/member/skin </td>
+					</tr>
+				</tbody>
+			</table>
+			<p class="tit_blank"></p>
+			<h4 class="scon_stit">- 입력정보 선택</h4>
+			<table class="table_style1">
+				<caption></caption>
+				<colgroup>
+					<col width="20%" />
+					<col width="" />
+					<col width="20%" />
+					<col width="" />
+				</colgroup>
+				
+				<tbody>
+					<tr>
+						<th class="left"><strong>아이디</strong></th>
+						<td class="left">사용함</td>
+						<th class="left"><strong>비밀번호</strong></th>
+						<td class="left">사용함</td>
+					</tr>
+					<tr>
+						<th class="left"><strong>이름</strong></th>
+						<td class="left">사용함</td>
+						<th class="left"><strong>이메일</strong></th>
+						<td class="left">사용함</td>
+					</tr>
+					<tr>
+						<th class="left"><strong>주민번호</strong></th>
+						<td class="left"><input type="checkbox" class="input_type_check"/> 사용함&nbsp;&nbsp;&nbsp;&nbsp;<input type="checkbox" /> 필수항목</td>
+						<th class="left"><strong>주소</strong></th>
+						<td class="left"><input type="checkbox" /> 사용함&nbsp;&nbsp;&nbsp;&nbsp;<input type="checkbox" /> 필수항목</td>
+					</tr>
+					<tr>
+						<th class="left"><strong>전화번호</strong></th>
+						<td class="left"><input type="checkbox" /> 사용함&nbsp;&nbsp;&nbsp;&nbsp;<input type="checkbox" /> 필수항목</td>
+						<th class="left"><strong>휴대폰</strong></th>
+						<td class="left"><input type="checkbox" /> 사용함&nbsp;&nbsp;&nbsp;&nbsp;<input type="checkbox" /> 필수항목</td>
+					</tr>
+
+					<tr>
+						<th class="left"><strong>회사전화</strong></th>
+						<td class="left"><input type="checkbox" class="input_type_check"/> 사용함&nbsp;&nbsp;&nbsp;&nbsp;<input type="checkbox" /> 필수항목</td>
+						<th class="left"><strong>추천인</strong></th>
+						<td class="left"><input type="checkbox" /> 사용함&nbsp;&nbsp;&nbsp;&nbsp;<input type="checkbox" /> 필수항목</td>
+					</tr>
+					<tr>
+						<th class="left"><strong>메일수신여부</strong></th>
+						<td class="left"><input type="checkbox" /> 사용함&nbsp;&nbsp;&nbsp;&nbsp;<input type="checkbox" /> 필수항목</td>
+						<th class="left"><strong>SMS 수신여부</strong></th>
+						<td class="left"><input type="checkbox" /> 사용함&nbsp;&nbsp;&nbsp;&nbsp;<input type="checkbox" /> 필수항목</td>
+					</tr>
+
+					<tr>
+						<th class="left"><strong>닉네임</strong></th>
+						<td class="left"><input type="checkbox" class="input_type_check"/> 사용함&nbsp;&nbsp;&nbsp;&nbsp;<input type="checkbox" /> 필수항목</td>
+						<th class="left"><strong>회원아이콘</strong></th>
+						<td class="left"><input type="checkbox" /> 사용함&nbsp;&nbsp;&nbsp;&nbsp;<input type="checkbox" /> 필수항목</td>
+					</tr>
+					<tr>
+						<th class="left"><strong>스팸글체크</strong></th>
+						<td class="left"><input type="checkbox" /> 사용함&nbsp;&nbsp;&nbsp;&nbsp;<input type="checkbox" /> 필수항목</td>
+						<th class="left"><strong>회원사진</strong></th>
+						<td class="left"><input type="checkbox" /> 사용함&nbsp;&nbsp;&nbsp;&nbsp;<input type="checkbox" /> 필수항목</td>
+					</tr>
+
+					<tr>
+						<th class="left"><strong>홈페이지</strong></th>
+						<td class="left"><input type="checkbox" class="input_type_check"/> 사용함&nbsp;&nbsp;&nbsp;&nbsp;<input type="checkbox" /> 필수항목</td>
+						<th class="left"><strong>생년월일</strong></th>
+						<td class="left"><input type="checkbox" /> 사용함&nbsp;&nbsp;&nbsp;&nbsp;<input type="checkbox" /> 필수항목</td>
+					</tr>
+					<tr>
+						<th class="left"><strong>직업</strong></th>
+						<td class="left"><input type="checkbox" /> 사용함&nbsp;&nbsp;&nbsp;&nbsp;<input type="checkbox" /> 필수항목</td>
+						<th class="left"><strong>관심분야</strong></th>
+						<td class="left"><input type="checkbox" /> 사용함&nbsp;&nbsp;&nbsp;&nbsp;<input type="checkbox" /> 필수항목</td>
+					</tr>
+
+					<tr>
+						<th class="left"><strong>취미</strong></th>
+						<td class="left"><input type="checkbox" class="input_type_check"/> 사용함&nbsp;&nbsp;&nbsp;&nbsp;<input type="checkbox" /> 필수항목</td>
+						<th class="left"><strong>학력</strong></th>
+						<td class="left"><input type="checkbox" /> 사용함&nbsp;&nbsp;&nbsp;&nbsp;<input type="checkbox" /> 필수항목</td>
+					</tr>
+					<tr>
+						<th class="left"><strong>자기소개</strong></th>
+						<td class="left"><input type="checkbox" /> 사용함&nbsp;&nbsp;&nbsp;&nbsp;<input type="checkbox" /> 필수항목</td>
+						<th class="left"><strong>결혼여부</strong></th>
+						<td class="left"><input type="checkbox" /> 사용함&nbsp;&nbsp;&nbsp;&nbsp;<input type="checkbox" /> 필수항목</td>
+					</tr>
+
+					<tr>
+						<th class="left"><strong>결혼기념일</strong></th>
+						<td class="left"><input type="checkbox" class="input_type_check"/> 사용함&nbsp;&nbsp;&nbsp;&nbsp;<input type="checkbox" /> 필수항목</td>
+						<th class="left"><strong>월평균소득</strong></th>
+						<td class="left"><input type="checkbox" /> 사용함&nbsp;&nbsp;&nbsp;&nbsp;<input type="checkbox" /> 필수항목</td>
+					</tr>
+					<tr>
+						<th class="left"><strong>자동차소유</strong></th>
+						<td class="left"><input type="checkbox" /> 사용함&nbsp;&nbsp;&nbsp;&nbsp;<input type="checkbox" /> 필수항목</td>
+						<th class="left"><strong>추가항목01</strong></th>
+						<td class="left"><input type="checkbox" /> 사용함&nbsp;&nbsp;&nbsp;&nbsp;<input type="checkbox" /> 필수항목</td>
+					</tr>
+
+					<tr>
+						<th class="left"><strong>추가항목02</strong></th>
+						<td class="left"><input type="checkbox" /> 사용함&nbsp;&nbsp;&nbsp;&nbsp;<input type="checkbox" /> 필수항목</td>
+						<th class="left"><strong>추가항목03</strong></th>
+						<td class="left"><input type="checkbox" /> 사용함&nbsp;&nbsp;&nbsp;&nbsp;<input type="checkbox" /> 필수항목</td>
+					</tr>
+
+					<tr>
+						<th class="left"><strong>추가항목04</strong></th>
+						<td class="left"><input type="checkbox" class="input_type_check"/> 사용함&nbsp;&nbsp;&nbsp;&nbsp;<input type="checkbox" /> 필수항목</td>
+						<th class="left"><strong>추가항목05</strong></th>
+						<td class="left"><input type="checkbox" /> 사용함&nbsp;&nbsp;&nbsp;&nbsp;<input type="checkbox" /> 필수항목</td>
+					</tr>
+				</tbody>
+			</table>
+			
+			
+			<p class="tit_blank"></p>
+			<h4 class="scon_stit">- 추가항목명</h4>
+			<table class="table_style1">
+				<caption>게시판리스트</caption>
+				<colgroup>
+					<col width="" />
+					<col width="" />
+					<col width="" />
+					<col width="" />
+					<col width="" />
+					<col width="" />
+				</colgroup>
+				<thead>
+				<tr>
+					<th>&nbsp;</th>
+					<th>항목명</th>
+					<th>항목속성</th>
+					<th>항목사이즈</th>
+					<th>세부항목개수</th>
+					<th>세부항목</th>
+				</tr>
+				</thead>
+				<tbody>
+
+					<tr>
+						<td class="first first_back">추가항목01</td>
+						<td><input name="" class="table_input1" value="" maxlength="" type="text" style="width:200px;"/></td>
+						<td><select><option>text</option></select></td>
+						<td><input name="" class="table_input1" value="" maxlength="" type="text" style="width:200px;"/></td>
+						<td><select><option>1</option></select></td>
+						<td>1 <input name="" class="table_input1" value="" maxlength="" type="text" style="width:200px;"/></td>
+					</tr>
+					<tr>
+						<td class="first first_back">추가항목02</td>
+						<td><input name="" class="table_input1" value="" maxlength="" type="text" style="width:200px;"/></td>
+						<td><select><option>text</option></select></td>
+						<td><input name="" class="table_input1" value="" maxlength="" type="text" style="width:200px;"/></td>
+						<td><select><option>1</option></select></td>
+						<td>1 <input name="" class="table_input1" value="" maxlength="" type="text" style="width:200px;"/></td>
+					</tr>
+					<tr>
+						<td class="first first_back">추가항목03</td>
+						<td><input name="" class="table_input1" value="" maxlength="" type="text" style="width:200px;"/></td>
+						<td><select><option>text</option></select></td>
+						<td><input name="" class="table_input1" value="" maxlength="" type="text" style="width:200px;"/></td>
+						<td><select><option>1</option></select></td>
+						<td>1 <input name="" class="table_input1" value="" maxlength="" type="text" style="width:200px;"/></td>
+					</tr>
+					<tr>
+						<td class="first first_back">추가항목04</td>
+						<td><input name="" class="table_input1" value="" maxlength="" type="text" style="width:200px;"/></td>
+						<td><select><option>text</option></select></td>
+						<td><input name="" class="table_input1" value="" maxlength="" type="text" style="width:200px;"/></td>
+						<td><select><option>1</option></select></td>
+						<td>1 <input name="" class="table_input1" value="" maxlength="" type="text" style="width:200px;"/></td>
+					</tr>
+					<tr>
+						<td class="first first_back">추가항목05</td>
+						<td><input name="" class="table_input1" value="" maxlength="" type="text" style="width:200px;"/></td>
+						<td><select><option>text</option></select></td>
+						<td><input name="" class="table_input1" value="" maxlength="" type="text" style="width:200px;"/></td>
+						<td><select><option>1</option></select></td>
+						<td>1 <input name="" class="table_input1" value="" maxlength="" type="text" style="width:200px;"/></td>
+					</tr>
+		
+				</tbody>
+			</table>
+
+
+			<p class="tit_blank"></p>
+			<h4 class="scon_stit">- 기타</h4>
+			<table class="table_style1">
+				<caption>기타</caption>
+				<colgroup>
+					<col width="20%" />
+					<col width="" />
+				</colgroup>
+				
+				<tbody>
+					<tr>
+						<th class="left"><strong>직업</strong></th>
+						<td class="left"><textarea rows="" cols="" class="style_textarea">무직,학생,컴퓨터/인터넷,언론,공무원,군인,서비스업,교육,금융/증권/보험업,유통업,예술</textarea></td>
+					</tr>
+					<tr>
+						<th class="left"><strong>학력</strong></th>
+						<td class="left"><textarea rows="" cols="" class="style_textarea">없음,초등학교재학,초등학교졸업,중학교재학,중학교졸업,고등학교재학,고등학교졸업,대학교재학,대학교졸업</textarea></td>
+					</tr>
+					<tr>
+						<th class="left"><strong>월평균소득</strong></th>
+						<td class="left"><textarea rows="5" cols="" class="style_textarea">100만원이하,101-200만원,201-250만원,251-300만원,301-400만원,400만원 이상</textarea></td>
+					</tr>
+					<tr>
+						<th class="left"><strong>관심분야</strong></th>
+						<td class="left"><textarea rows="" cols="" class="style_textarea">건강,문화/예술,경제,연예/오락,뉴스,여행/레저,생활,스포츠,교육,컴퓨터,학문</textarea></td>
+					</tr>
+				</tbody>
+			</table>
+
+			<div class="page_bbt"><input type="button" value="확인" class="bt_bsubmit" /> <input type="button" value="취소" class="bt_bcancle" /></div>
+		</div>
+	</div>
+	<!--wrap_scon E-->
+</div>
+</body>
+</html>

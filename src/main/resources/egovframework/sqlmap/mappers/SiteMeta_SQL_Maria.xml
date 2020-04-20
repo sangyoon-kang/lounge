@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="siteMeta">
+
+	<resultMap id="BaseResultMap" type="com.tagosolution.service.model.SiteMetaVO">
+		<id column="IDX" jdbcType="INTEGER" property="seoIdx" />
+		<result column="GROUP_IDX" jdbcType="INTEGER" property="groupIdx" />
+		<result column="PAGE_NAME" jdbcType="VARCHAR" property="pageName" />
+		<result column="PAGE_LINK" jdbcType="VARCHAR" property="pageLink" />
+		<result column="META_TITLE" jdbcType="VARCHAR" property="metaTitle" />
+		<result column="META_KEYWORDS" jdbcType="VARCHAR" property="metaKeywords" />
+		<result column="META_SUBJECT" jdbcType="VARCHAR" property="metaSubject" />
+		<result column="META_DESCRIPTION" jdbcType="VARCHAR" property="metaDescription" />
+		<result column="USE_FLAG" jdbcType="VARCHAR" property="useFlag" />
+		<result column="REG_USER" jdbcType="VARCHAR" property="regUser" />
+		<result column="REG_DATE" jdbcType="TIMESTAMP" property="regDate" />
+		<result column="MOD_USER" jdbcType="VARCHAR" property="modUser" />
+		<result column="MOD_DATE" jdbcType="TIMESTAMP" property="modDate" />
+		
+		<!-- <association property="commGroupVO" javaType="com.tagosolution.service.model.CommGroupVO">
+			<result column="COMM_GROUP_IDX" jdbcType="INTEGER" property="commGroupIdx"/>
+			<result column="COMM_GROUP_TITLE" jdbcType="VARCHAR" property="title"/>
+		</association> -->
+	</resultMap>
+
+
+		
+		
+	<sql id="select">
+		IDX, GROUP_IDX, PAGE_NAME, PAGE_LINK, META_TITLE,
+		META_KEYWORDS, META_SUBJECT, META_DESCRIPTION, USE_FLAG, REG_USER,
+		REG_DATE, MOD_USER, MOD_DATE
+		
+	</sql>
+
+
+	<select id="selectList" parameterType="search" resultMap="BaseResultMap">
+		SELECT
+		<include refid="select" />
+		FROM TS_SITE_META
+		WHERE (USE_FLAG = 'U' OR USE_FLAG = 'S'	)	
+		ORDER BY	IDX
+		<include refid="paging.limit"/>
+	</select>
+
+	<select id="selectbysearch" parameterType="com.tagoplus.model.common.SearchVO"
+		resultMap="BaseResultMap">
+		SELECT
+		<include refid="select" />
+		FROM TS_SITE_META
+		WHERE (USE_FLAG = 'U' OR USE_FLAG = 'S'	) 
+			<if test="id != 0">
+			 AND
+			GROUP_IDX = #{id, jdbcType=INTEGER}	
+			</if>
+			<if test="searchWord != ''">
+			AND(		PAGE_NAME = #{searchWord, jdbcType=VARCHAR}
+			</if>
+			<if test="searchWord != ''">
+			OR		PAGE_LINK = #{searchWord, jdbcType=VARCHAR}
+			</if>
+			<if test="searchWord != ''">
+			OR		META_TITLE = #{searchWord, jdbcType=VARCHAR} )
+			</if>	
+			ORDER BY IDX DESC
+	</select>
+	<select id="totalCount" parameterType="com.tagosolution.service.model.SiteMetaVO"
+		resultType="int">
+		SELECT COUNT(*)
+		FROM TS_SITE_META
+		WHERE (USE_FLAG = 'U' OR USE_FLAG = 'S'	)
+	</select>
+
+	<select id="selectByKey" parameterType="java.lang.Integer"
+		resultMap="BaseResultMap">
+		select
+		<include refid="select" />
+		FROM TS_SITE_META
+		where IDX = #{_param,jdbcType=INTEGER}
+	</select>
+
+	<select id="selectOneByURI" parameterType="String" resultType="com.tagosolution.service.model.SiteMetaVO">
+		select
+		<include refid="select" />
+		from ts_site_meta
+		<![CDATA[
+		where instr(page_link, #{_param}) > 0
+		]]>
+		and use_flag = 'U'
+		order by idx desc
+		limit 0, 1
+	</select>
+
+	<insert id="insert" parameterType="com.tagosolution.service.model.SiteMetaVO" useGeneratedKeys="true" keyProperty="seoIdx">
+		INSERT INTO TS_SITE_META
+		(IDX, GROUP_IDX, PAGE_NAME, PAGE_LINK, META_TITLE, META_KEYWORDS, META_SUBJECT,
+		META_DESCRIPTION, USE_FLAG, REG_USER)
+		VALUES
+		(
+		#{seoIdx,jdbcType=INTEGER},
+		#{groupIdx,jdbcType=INTEGER}, #{pageName,jdbcType=VARCHAR},
+		#{pageLink,jdbcType=VARCHAR}, #{metaTitle,jdbcType=VARCHAR}, 
+		#{metaKeywords,jdbcType=VARCHAR}, #{metaSubject,jdbcType=VARCHAR},
+		#{metaDescription,jdbcType=VARCHAR}, #{useFlag,jdbcType=VARCHAR}, 
+		#{regUser,jdbcType=VARCHAR})
+
+
+		ON DUPLICATE KEY UPDATE
+
+		<trim suffix=" " suffixOverrides=",">
+			<if test="groupIdx != null">
+				GROUP_IDX = #{groupIdx, jdbcType=INTEGER},
+			</if>
+			<if test="pageName != null">
+				PAGE_NAME = #{pageName, jdbcType=VARCHAR},
+			</if>
+			<if test="pageLink != null">
+				PAGE_LINK = #{pageLink, jdbcType=VARCHAR},
+			</if>
+			<if test="metaTitle != null">
+				META_TITLE = #{metaTitle, jdbcType=VARCHAR},
+			</if>
+			<if test="metaKeywords != null">
+				META_KEYWORDS = #{metaKeywords,jdbcType=VARCHAR},
+			</if>
+			<if test="metaSubject != null">
+				META_SUBJECT = #{metaSubject, jdbcType=VARCHAR},
+			</if>
+			<if test="metaDescription != null">
+				META_DESCRIPTION = #{metaDescription, jdbcType=VARCHAR},
+			</if>
+			<if test="useFlag != null">
+				USE_FLAG = #{useFlag, jdbcType=VARCHAR},
+			</if>
+			<if test="modUser != null">
+				MOD_USER = #{modUser, jdbcType=VARCHAR}
+			</if>
+		</trim>
+	</insert>
+
+	<delete id="delete" parameterType="com.tagosolution.service.model.SiteMetaVO">
+		UPDATE 
+			TS_SITE_META
+		SET
+			MOD_USER = #{modUser, jdbcType=VARCHAR},
+			USE_FLAG = 'D'
+		WHERE 
+			IDX = #{seoIdx,jdbcType=INTEGER}
+	</delete>
+</mapper>

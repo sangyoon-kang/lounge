@@ -1,0 +1,196 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link href="/css/master.css" rel="stylesheet" type="text/css" />
+<link href="/js/jquery-ui.css" rel="stylesheet" type="text/css" />
+<link href="/css/SimpleLightBox.css" rel="stylesheet" type="text/css" />
+<link href="/css/tree.css" rel="stylesheet" type="text/css" />
+<script type="text/javascript" language="Javascript" src="/js/external/jquery/jquery.js"></script>
+<script type="text/javascript" language="Javascript" src="/js/jquery-ui.js"></script>
+<script type="text/javascript" language="Javascript" src="/js/jquery.form.min.js"></script>
+<script type="text/javascript" language="Javascript" src="/js/jquery.ui.datepicker-ko.js"></script>
+<script type="text/javascript" language="Javascript" src="/js/LightBox/SimpleLightBox.js"></script>
+<script type="text/javascript" language="Javascript" src="/js/tree.js"></script>
+<script type="text/javascript" language="Javascript" src="/js/Common.js"></script>
+<script type="text/javascript" language="Javascript" src="/js/page_function.js"></script>
+<script type="text/javascript" language="Javascript" src="/js/jquery.scrollbox.js"></script>
+<script type="text/javascript" language="Javascript" src="/js/jquery.flexisel.js"></script>
+<script type="text/javascript" language="Javascript" src="/js/jquery.easing.1.3.js"></script>
+<title>관리시스템</title>
+</head>
+
+<body>
+<div id="wrap">
+	<!--header S-->
+	<div id="wrap_header">
+		<ul class="gnb" id="gnb_link">
+			<li link="/config/config01.html">환경설정</li>
+			<li link="/basic/basic01.html">기본설정</li>
+			<li link="/bbs/bbs01.html">게시판관리</li>
+			<li link="/member/member01.html">회원관리</li>
+			<li link="/form/form01.html">폼메일관리</li>
+			<li link="/poll/poll01.html">설문관리</li>
+			<li link="/schedule/sch01.html">일정관리</li>
+			<li link="/page/page01.html">페이지관리</li>
+			<li link="/banner/banner01.html">배너관리</li>
+			<li link="/connect/connect01.html">접속통계</li>
+		</ul>
+		<script type="text/javascript" language="Javascript">
+		<!--
+
+			$(document).ready(function(){
+				
+				$('#gnb_link li').on("click", function(){
+
+					var link_info = $(this).attr("link");
+					//alert(link_info+'로 이동합니다.');
+					location.href=link_info;
+
+				});
+
+			});
+		-->
+		</script>
+		<p id="LogoutBtn">로그아웃</p>
+	</div>
+	<!--header E-->
+
+	<!--lnb S-->
+	<div id="wrap_lnb">
+		<h2 class="mg_logo">사이트관리자<br/><a href="" class="bt_gohome">내홈페이지바로가기→</a></h2>
+		<h2 class="lnb_title"><span class="title1">환경설정</span></h2>
+		<ul class="lnb">
+			<li class="lnb_depth1"><a href="/config/config01.html">기본설정</a></li>
+			<li class="lnb_depth1"><a href="/config/config02.html">로그분석 설정</a></li>
+			<li class="lnb_depth1"><a href="/config/config03.html">게시판</a></li>
+			<li class="lnb_depth1"><a href="/config/config04.html">메인게시물</a></li>
+			<li class="lnb_depth1"><a href="/config/config05.html">회원 관리</a></li>
+			<li class="lnb_depth1"><a href="/config/config06.html" class="depth1_on">폼메일</a></li>
+			<li class="lnb_depth1"><a href="/config/config07.html">상품 관리</a></li>
+			<li class="lnb_depth1"><a href="/config/config08.html">메인상품</a></li>
+			<li class="lnb_depth1"><a href="/config/config09.html">설문조사</a></li>
+			<li class="lnb_depth1"><a href="/config/config10.html">메인 설문</a></li>
+			<li class="lnb_depth1"><a href="/config/config11.html">일정 관리</a></li>
+			<li class="lnb_depth1"><a href="/config/config12.html">배너관리</a></li>
+			<li class="lnb_depth1"><a href="/config/config13.html">페이지 관리</a></li>
+			<li class="lnb_depth1"><a href="/config/config14.html">페이지 접근 권한</a></li>
+			<li class="lnb_depth1"><a href="/config/config15.html">전체 검색</a></li>
+			<li class="lnb_depth1"><a href="/config/config16.html">카운터</a></li>
+		</ul>
+		<div id="copyright">
+			<p>2016 LCDNS<br/>All rights reserved.</p>
+		</div>
+	</div>
+	<!--lnb E-->
+
+	<!--wrap_scon S-->
+	<div id="wrap_scon">
+		<div class="scon_title">
+			<h2>폼메일</h2>
+			<p>홈 > 게시판관리 > 폼메일</p>
+		</div>
+		<div class="scon">
+			
+			<div class="check_conbox">
+				<h4 class="check_tit">게시물스킨 입력시 체크사항</h4>
+				<ul>
+					<li>- 이메일, sms수신은 여러명이 동시에 수신할 수 있습니다. 수신할 이메일 sms를 콤마(,)로 구분하여 입력합니다.<br/>&nbsp;&nbsp;예) test@test.com,aaa@aaa.com / 011-1234-5678,010-321-6547</li>
+				</ul>
+			</div>
+			<table class="table_style1">
+				<caption></caption>
+				<colgroup>
+					<col width="20%" />
+					<col width="" />
+					<col width="20%" />
+					<col width="" />
+				</colgroup>
+				<tbody>
+					<tr>
+						<th class="left"><strong>폼메일코드(영문) <span class="txt_red">*</span></strong></th>
+						<td class="left"><input name="" class="table_input1" value="" maxlength="" type="text" style="width:100px;"/></td>
+						<th class="left"><strong> 폼메일명 <span class="txt_red">*</span></strong></th>
+						<td class="left"><input name="" class="table_input1" value="" maxlength="" type="text" style="width:100px;"/></td>
+					</tr>
+					<tr>
+						<th class="left"><strong>스킨</strong></th>
+						<td class="left"><select><option>formBasic</option></select></td>
+						<th class="left"><strong>스팸글체크</strong></th>
+						<td class="left">항목추가 시 항목속성을 "스팸글체크"를 선택하면<br/>사용할 수 있습니다. </td>
+					</tr>
+					<tr>
+						<th class="left"><strong>발신설정</strong></th>
+						<td class="left" colspan="3">홈페이지(test@test.com) <span class="txt_red table_stxt">기본설정 &gt; 사이트정보 &gt; "사이트명"과 "관리자 이메일"에 입력된 값으로 발송됩니다.</span> </td>
+					</tr>
+
+					
+					<tr>
+						<th class="left"><strong>약관설정</strong></th>
+						<td class="left" colspan="3"><input type="checkbox" class="input_type_radio01" /> 사용함<br/><textarea rows="" cols="" style="height:150px;"></textarea></td>
+					</tr>
+					<tr>
+						<th class="left" rowspan="3"><strong>수신설정</strong></th>
+						<td class="left" colspan="3"><input type="checkbox" class="input_type_radio01" /> 게시판 수신 <span class="txt_red">(게시판 수신은 필수입니다.)</span></td>
+					</tr>
+					<tr>
+						<td class="left" colspan="3"><input type="checkbox" class="input_type_radio01" /> email 수신 <input name="" class="table_input1" value="" maxlength="" type="text" style="width:100px;"/></td>
+					</tr>
+					<tr>
+						<td class="left" colspan="3"><input type="checkbox" class="input_type_radio01" /> SMS 수신 <input name="" class="table_input1" value="" maxlength="" type="text" style="width:100px;"/></td>
+					</tr>
+					
+				</tbody>
+			</table>
+
+			<div class="page_bbt"><input type="button" value="확인" class="bt_bsubmit"/> <input type="button" value="취소" class="bt_bcancle"/> <input type="button" value="리스트" class="bt_blist"/></div>
+
+
+			<p class="table_aside02"><a href="/config/config06_pop_upload.html" class="bt_boardmake">항목추가</a> <a href="" class="bt_boardmake">새로고침</a></p>
+			<table class="table_style1">
+				<caption></caption>
+				<colgroup>
+					<col width="20%" />
+					<col width="" />
+					<col width="10%" />
+					<col width="5%" />
+					<col width="15%" />
+				</colgroup>
+				<tbody>
+					<tr>
+						<th class="left"><strong>항목명</strong></th>
+						<th class="left"><strong>미리보기</strong></th>
+						<th class="left"><strong>필수여부</strong></th>
+						<th class="left"><strong>순서</strong></th>
+						<th class="left"><strong>기능</strong></th>
+					</tr>
+					<tr>
+						<th class="left"><strong>이름</strong></th>
+						<td class="left"><input name="" class="table_input1" value="" maxlength="" type="text" style="width:100px;"/></td>
+						<td>Y</td>
+						<td><a href="">▲</a><br/><a href="">▼</a></td>
+						<td><a href="" class="bt_modify">수정</a> <a href="" class="bt_delete">삭제</a></td>
+					</tr>
+					<tr>
+						<th class="left"><strong>이메일</strong></th>
+						<td class="left"><input name="" class="table_input1" value="" maxlength="" type="text" style="width:100px;"/> @ <input name="" class="table_input1" value="" maxlength="" type="text" style="width:100px;"/> <select><option>naver.com</option></select></td>
+						<td>Y</td>
+						<td><a href="">▲</a><br/><a href="">▼</a></td>
+						<td><a href="" class="bt_modify">수정</a> <a href="" class="bt_delete">삭제</a></td>
+					</tr>
+					<tr>
+						<th class="left"><strong>예약일시 </strong></th>
+						<td class="left"><select><option>2016</option></select>년&nbsp;&nbsp;&nbsp;<select><option>01</option></select>월&nbsp;&nbsp;&nbsp;<select><option>01</option></select>일&nbsp;&nbsp;&nbsp;<select><option>01</option></select>시</td>
+						<td>Y</td>
+						<td><a href="">▲</a><br/><a href="">▼</a></td>
+						<td><a href="" class="bt_modify">수정</a> <a href="" class="bt_delete">삭제</a></td>
+					</tr>
+					
+				</tbody>
+			</table>
+		</div>
+	</div>
+	<!--wrap_scon E-->
+</div>
+</body>
+</html>

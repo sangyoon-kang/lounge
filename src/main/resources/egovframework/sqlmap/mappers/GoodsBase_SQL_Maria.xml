@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="goodsBase">
+  <resultMap id="BaseResultMap" type="com.tagosolution.service.model.GoodsBaseVO">
+   	<result column="SITE_SEQ" jdbcType="TINYINT" property="siteSeq" />
+  	<result column="RUN_TIME" jdbcType="INTEGER" property="runTime" />
+    <result column="BUY_LOT1" jdbcType="INTEGER" property="buyLot1" />
+    <result column="BUY_LOT2" jdbcType="INTEGER" property="buyLot2" />
+    <result column="BUY_LOT10" jdbcType="INTEGER" property="buyLot10" />
+    <result column="BUY_LOT20" jdbcType="INTEGER" property="buyLot20" />
+	<result column="BUY_LOT40" jdbcType="INTEGER" property="buyLot40" />
+    <result column="SELL_LOT1" jdbcType="INTEGER" property="sellLot1" />
+    <result column="SELL_LOT2" jdbcType="INTEGER" property="sellLot2" />
+    <result column="SELL_LOT10" jdbcType="INTEGER" property="sellLot10" />
+    <result column="SELL_LOT20" jdbcType="INTEGER" property="sellLot20" />
+	<result column="SELL_LOT40" jdbcType="INTEGER" property="sellLot40" />
+	<result column="AUTO_CLOSE1" jdbcType="INTEGER" property="autoClose1" />
+	<result column="AUTO_CLOSE2" jdbcType="INTEGER" property="autoClose2" />
+	<result column="AUTO_CLOSE3" jdbcType="INTEGER" property="autoClose10" />
+	<result column="AUTO_CLOSE4" jdbcType="INTEGER" property="autoClose20" />
+	<result column="AUTO_CLOSE5" jdbcType="INTEGER" property="autoClose40" />
+  </resultMap>
+  
+  <sql id="select">
+	SITE_SEQ, BUY_LOT1, BUY_LOT2, BUY_LOT10, BUY_LOT20, BUY_LOT40, SELL_LOT1, SELL_LOT2, SELL_LOT10, SELL_LOT20, SELL_LOT40
+  </sql>
+
+    <select id="selectByKey" parameterType="com.tagosolution.service.model.GoodsBaseVO" resultMap="BaseResultMap">
+        SELECT
+        RUN_TIME,
+        <include refid="select" />
+        FROM fx_goods_base
+        WHERE	SITE_SEQ = #{siteSeq}
+        AND	RUN_TIME = #{runTime};
+    </select>
+
+
+  <select id="selectByRunTime" parameterType="com.tagosolution.service.model.GoodsBaseVO" resultMap="BaseResultMap">
+	SELECT
+	g.RUN_TIME,
+	<include refid="select" /> ,
+	 t.AUTO_CLOSE1, t.AUTO_CLOSE2, t.AUTO_CLOSE3, t.AUTO_CLOSE4, t.AUTO_CLOSE5
+	FROM fx_goods_base as g
+    LEFT JOIN fx_time_set as t on t.RUN_TIME = g.RUN_TIME
+	WHERE	SITE_SEQ = #{siteSeq}
+		AND	g.RUN_TIME = #{runTime};
+  </select>
+
+  <insert id="merge" parameterType="com.tagosolution.service.model.GoodsBaseVO">
+    insert into	fx_goods_base (SITE_SEQ, RUN_TIME, BUY_LOT1, BUY_LOT2, BUY_LOT10, 
+      		BUY_LOT20, BUY_LOT40, SELL_LOT1, SELL_LOT2, 
+      		SELL_LOT10, SELL_LOT20, SELL_LOT40)
+    values (#{siteSeq,jdbcType=TINYINT}, #{runTime,jdbcType=INTEGER}, #{buyLot1,jdbcType=INTEGER}, #{buyLot2,jdbcType=INTEGER}, #{buyLot10,jdbcType=INTEGER}, 
+      		#{buyLot20,jdbcType=INTEGER}, #{buyLot40,jdbcType=INTEGER}, #{sellLot1,jdbcType=INTEGER}, #{sellLot2,jdbcType=INTEGER}, 
+      		#{sellLot10,jdbcType=INTEGER}, #{sellLot20,jdbcType=INTEGER}, #{sellLot40,jdbcType=INTEGER})
+    ON DUPLICATE KEY UPDATE
+	<trim suffix=" " suffixOverrides=",">
+	  <if test="siteSeq != null">
+        SITE_SEQ = #{siteSeq, jdbcType=INTEGER},
+      </if>
+      <if test="runTime != null">
+        RUN_TIME = #{runTime, jdbcType=INTEGER},
+      </if>
+	  <if test="buyLot1 != null">
+        BUY_LOT1 = #{buyLot1, jdbcType=INTEGER},
+      </if>
+      <if test="buyLot2 != null">
+        BUY_LOT2 = #{buyLot2, jdbcType=INTEGER},
+      </if>
+      <if test="buyLot10 != null">
+        BUY_LOT10 = #{buyLot10, jdbcType=INTEGER},
+      </if>
+      <if test="buyLot20 != null">
+        BUY_LOT20 = #{buyLot20, jdbcType=INTEGER},
+      </if>
+	  <if test="buyLot40 != null">
+        BUY_LOT40 = #{buyLot40, jdbcType=INTEGER},
+      </if>
+      <if test="sellLot1 != null">
+        SELL_LOT1 = #{sellLot1, jdbcType=INTEGER},
+      </if>
+      <if test="sellLot2 != null">
+        SELL_LOT2 = #{sellLot2, jdbcType=INTEGER},
+      </if>
+      <if test="sellLot10 != null">
+        SELL_LOT10 = #{sellLot10, jdbcType=INTEGER},
+      </if>
+      <if test="sellLot20 != null">
+        SELL_LOT20 = #{sellLot20, jdbcType=INTEGER},
+      </if>
+	  <if test="sellLot40 != null">
+        SELL_LOT40 = #{sellLot40, jdbcType=INTEGER}
+      </if>
+    </trim>
+  </insert>
+  
+  <update id="updateSelective" parameterType="com.tagosolution.service.model.GoodsBaseVO">
+    update	fx_goods_base
+    <set>
+	  <if test="buyLot1 != null">
+        BUY_LOT1 = #{buyLot1, jdbcType=INTEGER},
+      </if>
+      <if test="buyLot2 != null">
+        BUY_LOT2 = #{buyLot2, jdbcType=INTEGER},
+      </if>
+      <if test="buyLot10 != null">
+        BUY_LOT10 = #{buyLot10, jdbcType=INTEGER},
+      </if>
+      <if test="buyLot20 != null">
+        BUY_LOT20 = #{buyLot20, jdbcType=INTEGER},
+      </if>
+	  <if test="buyLot40 != null">
+        BUY_LOT40 = #{buyLot40, jdbcType=INTEGER},
+      </if>
+      <if test="sellLot1 != null">
+        SELL_LOT1 = #{sellLot1, jdbcType=INTEGER},
+      </if>
+      <if test="sellLot2 != null">
+        SELL_LOT2 = #{sellLot2, jdbcType=INTEGER},
+      </if>
+      <if test="sellLot10 != null">
+        SELL_LOT10 = #{sellLot10, jdbcType=INTEGER},
+      </if>
+      <if test="sellLot20 != null">
+        SELL_LOT20 = #{sellLot20, jdbcType=INTEGER},
+      </if>
+	  <if test="sellLot40 != null">
+        SELL_LOT40 = #{sellLot40, jdbcType=INTEGER}
+      </if>
+    </set>
+    where 	SITE_SEQ = #{siteSeq,jdbcType=TINYINT}
+    	AND	RUN_TIME = #{runTime,jdbcType=INTEGER};
+  </update>
+</mapper>

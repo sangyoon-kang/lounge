@@ -1,0 +1,192 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link href="/css/master.css" rel="stylesheet" type="text/css" />
+<link href="/js/jquery-ui.css" rel="stylesheet" type="text/css" />
+<link href="/css/SimpleLightBox.css" rel="stylesheet" type="text/css" />
+<link href="/css/tree.css" rel="stylesheet" type="text/css" />
+<script type="text/javascript" language="Javascript" src="/js/external/jquery/jquery.js"></script>
+<script type="text/javascript" language="Javascript" src="/js/jquery-ui.js"></script>
+<script type="text/javascript" language="Javascript" src="/js/jquery.form.min.js"></script>
+<script type="text/javascript" language="Javascript" src="/js/jquery.ui.datepicker-ko.js"></script>
+<script type="text/javascript" language="Javascript" src="/js/LightBox/SimpleLightBox.js"></script>
+<script type="text/javascript" language="Javascript" src="/js/tree.js"></script>
+<script type="text/javascript" language="Javascript" src="/js/Common.js"></script>
+<script type="text/javascript" language="Javascript" src="/js/page_function.js"></script>
+<script type="text/javascript" language="Javascript" src="/js/jquery.scrollbox.js"></script>
+<script type="text/javascript" language="Javascript" src="/js/jquery.flexisel.js"></script>
+<script type="text/javascript" language="Javascript" src="/js/jquery.easing.1.3.js"></script>
+<title>관리시스템</title>
+</head>
+
+<body>
+<div id="wrap">
+	<!--header S-->
+	<div id="wrap_header">
+		<ul class="gnb" id="gnb_link">
+			<li link="/config/config01.html">환경설정</li>
+			<li link="/basic/basic01.html">기본설정</li>
+			<li link="/bbs/bbs01.html">게시판관리</li>
+			<li link="/member/member01.html">회원관리</li>
+			<li link="/form/form01.html">폼메일관리</li>
+			<li link="/poll/poll01.html">설문관리</li>
+			<li link="/schedule/sch01.html">일정관리</li>
+			<li link="/page/page01.html">페이지관리</li>
+			<li link="/banner/banner01.html">배너관리</li>
+			<li link="/connect/connect01.html">접속통계</li>
+		</ul>
+		<script type="text/javascript" language="Javascript">
+		<!--
+
+			$(document).ready(function(){
+				
+				$('#gnb_link li').on("click", function(){
+
+					var link_info = $(this).attr("link");
+					//alert(link_info+'로 이동합니다.');
+					location.href=link_info;
+
+				});
+
+			});
+		-->
+		</script>
+		<p id="LogoutBtn">로그아웃</p>
+	</div>
+	<!--header E-->
+
+	<!--lnb S-->
+	<div id="wrap_lnb">
+		<h2 class="mg_logo">사이트관리자<br/><a href="" class="bt_gohome">내홈페이지바로가기→</a></h2>
+		<h2 class="lnb_title"><span class="title1">게시판관리</span></h2>
+		<ul class="lnb">
+			<li class="lnb_depth1"><a href="/bbs/bbs01.html">게시판관리</a></li>
+			<li class="lnb_depth1"><a href="/bbs/bbs02_01.html" class="depth1_on">게시판 목록</a></li>
+			
+			<li class="lnb_depth2"><a href="/bbs/bbs02_01.html" class="depth2_on">- 공지사항</a></li>
+			<li class="lnb_depth2"><a href="/bbs/bbs02_01.html">- 질문답변</a></li>
+			<li class="lnb_depth2"><a href="/bbs/bbs02_02.html">- 구매후기</a></li>
+			<li class="lnb_depth2"><a href="/bbs/bbs02_03.html">- 자유게시판</a></li>
+			<li class="lnb_depth2"><a href="/bbs/bbs02_04.html">- 매장안내</a></li>
+			<li class="lnb_depth2"><a href="/bbs/bbs02_05.html">- 자료실</a></li>
+			<li class="lnb_depth2"><a href="/bbs/bbs02_06.html">- 포토갤러리</a></li>
+			<li class="lnb_depth2"><a href="/bbs/bbs02_07.html">- 방명록</a></li>
+			<li class="lnb_depth2" ><a href="/bbs/bbs02_08.html">- 썸네일</a></li>
+			<li class="lnb_depth2" ><a href="/bbs/bbs02_09.html">- 예약게시판</a></li>
+			<li class="lnb_depth2" ><a href="/bbs/bbs02_10.html">- 자주하는질문</a></li>
+			<li class="lnb_depth2" style=";"><a href="/bbs/bbs02_11.html">- 포토갤러리2</a></li>
+			<li class="lnb_depth2" style=";"><a href="/bbs/bbs02_12.html">- 포토갤러리3</a></li>
+			<li class="lnb_depth2" style=";"><a href="/bbs/bbs02_13.html">- 인테리어</a></li>
+			<li class="lnb_depth2" style=";"><a href="/bbs/bbs02_14.html">- 동영상</a></li>
+			<li class="lnb_depth2" style=";"><a href="/bbs/bbs02_15.html">- 썸네일2</a></li>
+			<li class="lnb_depth2" style=";"><a href="/bbs/bbs02_16.html">- 썸네일3</a></li>
+			<li class="lnb_depth2" style=";"><a href="/bbs/bbs02_17.html">- 병원상담</a></li>
+			<li class="lnb_depth2" style=";"><a href="/bbs/bbs02_18.html">- 응답게시판</a></li>
+			
+		</ul>
+		<div id="copyright">
+			<p>2016 LCDNS<br/>All rights reserved.</p>
+		</div>
+	</div>
+	<!--lnb E-->
+
+	<!--wrap_scon S-->
+	<div id="wrap_scon">
+		<div class="scon_title">
+			<h2>공지사항</h2>
+			<p>홈 > 게시판관리 > 공지사항</p>
+		</div>
+		<div class="scon">
+			
+			<h3>공지사항</h3>
+			<p class="tit_blank"></p>
+			<div class="scon_search">
+				<div class="search">
+					<select name="sKey" id="sKey">
+						<option value="TITLE">제목</option>
+						<option value="CONTENT01">내용</option>
+						<option value="REG_NAME">작성자</option>
+					</select>
+					<input  class="input_type1" type="text" />
+					<a class="bt_pink">검색</a>
+				</div>
+				<p><a class="bt_green" id="delBtn">선택삭제</a> <a class="bt_green">선택복사</a> <a class="bt_green">선택이동</a> <a class="bt_green">순서변경</a> <a href="/bbs/bbs02_01_write.html" class="bt_blue">글쓰기</a></p>
+			</div>
+			<table class="table_style1">
+				<caption>공지사항</caption>
+				<colgroup>
+					<col width="" />
+					<col width="" />
+					<col width="" />
+					<col width="" />
+					<col width="" />
+					<col width="" />
+				</colgroup>
+				
+				<thead>
+				<tr>
+					<th><input type="checkbox" /></th>
+					<th>번호</th>
+					<th>제목</th>
+					<th>작성자</th>
+					<th>작성일</th>
+					<th>조회</th>
+				</tr>
+				</thead>
+				<tbody>
+
+					<tr>
+						<td class="first"><input type="checkbox" /></td>
+						<td><span class="txt_caution01">공지</span></td>
+						<td><a href="/bbs/bbs02_01_view.html">공지사항테스트입니다.</a></td>
+						<td>관리자</td>
+						<td>2008-01-01</td>
+						<td>111</td>
+					</tr>
+
+					
+					<tr>
+						<td class="first"><input type="checkbox" /></td>
+						<td><span class="txt_caution01">공지</span></td>
+						<td><a href="/bbs/bbs02_01_view.html">공지사항테스트입니다.</a></td>
+						<td>관리자</td>
+						<td>2008-01-01</td>
+						<td>111</td>
+					</tr>
+					<tr>
+						<td class="first"><input type="checkbox" /></td>
+						<td>1</td>
+						<td><a href="/bbs/bbs02_01_view.html">공지사항테스트입니다.</a></td>
+						<td>관리자</td>
+						<td>2008-01-01</td>
+						<td>111</td>
+					</tr>
+					<tr>
+						<td class="first"><input type="checkbox" /></td>
+						<td>2</td>
+						<td><a href="/bbs/bbs02_01_view.html">└ 공지사항리플입니다.</a></td>
+						<td>관리자</td>
+						<td>2008-01-01</td>
+						<td>111</td>
+					</tr>
+					<tr>
+						<td class="first"><input type="checkbox" /></td>
+						<td>3</td>
+						<td><a href="/bbs/bbs02_01_view.html">공지사항테스트입니다.</a></td>
+						<td>관리자</td>
+						<td>2008-01-01</td>
+						<td>111</td>
+					</tr>
+					
+		
+				</tbody>
+			</table>
+
+			<div class="page_navi_set"><a href="">&lt;&lt;</a> <a href="">&lt;</a>&nbsp;&nbsp;&nbsp;<a href="" class="on">1</a> / <a href="">2</a> / <a href="">3</a> / <a href="">4</a> / <a href="">5</a> / <a href="">6</a> / <a href="">7</a> / <a href="">8</a> / <a href="">9</a> / <a href="">10</a>&nbsp;&nbsp;&nbsp;<a href="">&gt;</a> <a href="">&gt;&gt;</a></div>
+		</div>
+	</div>
+	<!--wrap_scon E-->
+</div>
+</body>
+</html>

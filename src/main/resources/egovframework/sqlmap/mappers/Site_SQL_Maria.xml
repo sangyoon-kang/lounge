@@ -1,0 +1,323 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="site">
+
+	<resultMap id="BaseResultMap" type="com.tagosolution.service.model.SiteVO">
+		<id column="SITE_SEQ" jdbcType="TINYINT" property="siteSeq" />
+		<result column="SITE_NAME" jdbcType="VARCHAR" property="siteName" />
+		<result column="SITE_DOMAIN" jdbcType="VARCHAR" property="siteDomain" />
+		<result column="EMAIL" jdbcType="VARCHAR" property="email" />
+		<result column="KEY_NUMBER" jdbcType="VARCHAR" property="keyNumber" />
+		<result column="ADMIN_PHONE" jdbcType="VARCHAR" property="adminPhone" />
+		<result column="SITE_CERT_KEY" jdbcType="VARCHAR" property="siteCertKey" />
+		<result column="ADMIN_MOBILE" jdbcType="VARCHAR" property="adminMobile" />
+		<result column="INSTALL_DATE" jdbcType="TIMESTAMP" property="installDate" />
+		<result column="FTP_ADDR" jdbcType="VARCHAR" property="ftpAddr" />
+		<result column="FTP_ID" jdbcType="VARCHAR" property="ftpId" />
+		<result column="FTP_PWD" jdbcType="VARCHAR" property="ftpPwd" />
+		<result column="ADMIN_TITLE_URL" jdbcType="VARCHAR" property="adminTitleUrl" />
+		<result column="ADMIN_COPYRIGHT" jdbcType="VARCHAR" property="adminCopyright" />
+		<result column="ADD_BOARD_YN" jdbcType="VARCHAR" property="addBoardYn" />
+		<result column="SSL_YN" jdbcType="VARCHAR" property="sslYn" />
+		<result column="SSL_PORT" jdbcType="VARCHAR" property="sslPort" />
+		<result column="SMS_YN" jdbcType="VARCHAR" property="smsYn" />
+		<result column="SMS_KIND" jdbcType="VARCHAR" property="smsKind" />
+		<result column="SMS_ID" jdbcType="VARCHAR" property="smsId" />
+		<result column="SMS_PWD" jdbcType="VARCHAR" property="smsPwd" />
+		<result column="REAL_CERT_YN" jdbcType="VARCHAR" property="realCertYn" />
+		<result column="REAL_CERT_ID" jdbcType="VARCHAR" property="realCertId" />
+		<result column="REAL_CERT_PWD" jdbcType="VARCHAR" property="realCertPwd" />
+		<result column="POINT_YN" jdbcType="VARCHAR" property="pointYn" />
+		<result column="POINT_LOGIN" jdbcType="INTEGER" property="pointLogin" />
+		<result column="POINT_VIEW" jdbcType="INTEGER" property="pointView" />
+		<result column="POINT_WRITE" jdbcType="INTEGER" property="pointWrite" />
+		<result column="POINT_COMMENT" jdbcType="INTEGER" property="pointComment" />
+		<result column="POINT_RECOMM" jdbcType="INTEGER" property="pointRecomm" />
+		<result column="POINT_NO_MSG" jdbcType="VARCHAR" property="pointNoMsg" />
+		<result column="POINT_DOWNLOAD" jdbcType="INTEGER" property="pointDownload" />
+		<result column="POINT_JOIN" jdbcType="INTEGER" property="pointJoin" />
+		<result column="SU_ID" jdbcType="VARCHAR" property="suId" />
+		<result column="SU_PWD" jdbcType="VARCHAR" property="suPwd" />
+		<result column="DS_ID" jdbcType="VARCHAR" property="dsId" />
+		<result column="DS_PWD" jdbcType="VARCHAR" property="dsPwd" />
+		<result column="ADMIN_START_PAGE" jdbcType="VARCHAR" property="adminStartPage" />
+		<result column="USE_MENU" jdbcType="VARCHAR" property="useMenu" />
+		<result column="FOOT_BUSINESS_NUMBER" jdbcType="VARCHAR" property="footBusinessNumber" />
+		<result column="FOOT_BUSINESS_NAME" jdbcType="VARCHAR" property="footBusinessName" />
+		<result column="FOOT_REP_NAME" jdbcType="VARCHAR" property="footRepName" />
+		<result column="FOOT_INFO_NAME" jdbcType="VARCHAR" property="footInfoName" />
+		<result column="FOOT_ZIPCODE" jdbcType="VARCHAR" property="footZipcode" />
+		<result column="FOOT_ADDR1" jdbcType="VARCHAR" property="footAddr1" />
+		<result column="FOOT_CONDITION" jdbcType="VARCHAR" property="footCondition" />
+		<result column="FOOT_ITEM" jdbcType="VARCHAR" property="footItem" />
+		<result column="FOOT_PHONE" jdbcType="VARCHAR" property="footPhone" />
+		<result column="FOOT_FAX" jdbcType="VARCHAR" property="footFax" />
+		<result column="FOOT_ADDR2" jdbcType="VARCHAR" property="footAddr2" />
+		<result column="USE_MSG" jdbcType="VARCHAR" property="useMsg" />
+		<result column="MOD_DATE" jdbcType="TIMESTAMP" property="modDate" />	
+		<result column="CUSTOMER_CENTER" jdbcType="VARCHAR" property="customerCenter" />
+		<result column="DEPOSIT_WITHDRAWAL_TELEPHONE" jdbcType="VARCHAR" property="depositWithdrawalTelephone" />
+		<result column="BUSINESS_HOURS" jdbcType="VARCHAR" property="businessHours" />
+		<result column="DEPOSIT_TIME" jdbcType="VARCHAR" property="depositTime" />
+		<result column="WITHDRAWAL_TIME" jdbcType="VARCHAR" property="withdrawalTime" />
+		<result column="PERSONAL_INFORMATION_OFFICER" jdbcType="VARCHAR" property="personalInformationOfficer" />
+		<result column="ORDER_MAIL" jdbcType="VARCHAR" property="orderMail" />
+	</resultMap>
+	<!-- 
+		<collection property="useMenusVO" column="USE_MENU" select="fixedCode.selectByArray" />
+		column="{prop1=COLUMN1, prop2=COLUMN2}" 
+	-->
+
+	<sql id="select">
+		SITE_SEQ, SITE_NAME, SITE_DOMAIN, EMAIL, KEY_NUMBER, ADMIN_PHONE, SITE_CERT_KEY,
+		ADMIN_MOBILE, INSTALL_DATE, FTP_ADDR, FTP_ID, FTP_PWD, ADMIN_TITLE_URL, ADMIN_COPYRIGHT,
+		ADD_BOARD_YN, SSL_YN, SSL_PORT, SMS_YN, SMS_KIND, SMS_ID, SMS_PWD, REAL_CERT_YN,
+		REAL_CERT_ID, REAL_CERT_PWD, POINT_YN, POINT_LOGIN, POINT_VIEW, POINT_WRITE, POINT_COMMENT,
+		POINT_RECOMM, POINT_NO_MSG, POINT_DOWNLOAD, POINT_JOIN, SU_ID, SU_PWD, DS_ID, DS_PWD, ADMIN_START_PAGE,
+		USE_MENU, FOOT_BUSINESS_NUMBER, FOOT_BUSINESS_NAME, FOOT_REP_NAME, FOOT_INFO_NAME,
+		FOOT_ZIPCODE, FOOT_ADDR1, FOOT_CONDITION, FOOT_ITEM, FOOT_PHONE, FOOT_FAX, FOOT_ADDR2, USE_MSG, MOD_DATE,
+		CUSTOMER_CENTER, DEPOSIT_WITHDRAWAL_TELEPHONE, BUSINESS_HOURS, DEPOSIT_TIME, WITHDRAWAL_TIME, PERSONAL_INFORMATION_OFFICER, ORDER_MAIL
+
+	</sql>
+
+	<sql id="whereClause">
+		<trim prefix="where" prefixOverrides="and">
+			<if test="siteSeq != null">
+				AND SITE_SEQ = #{siteSeq }
+			</if>
+			<if test="siteDomain != null">
+				AND SITE_DOMAIN = #{siteDomain}
+			</if>
+		</trim>
+	</sql>
+
+
+	<select id="selectByVO" parameterType="gm" resultType="com.tagosolution.service.model.SiteVO">
+		SELECT
+		<include refid="select" />
+		FROM TS_SITE
+		<include refid="whereClause" />
+	</select>
+
+	<select id="selectByKey" parameterType="java.lang.Byte" resultType="com.tagosolution.service.model.SiteVO">
+		SELECT
+		<include refid="select" />
+		FROM TS_SITE
+		WHERE SITE_SEQ = #{siteSeq, jdbcType=TINYINT}
+	</select>
+
+	<select id="selectForLogin" parameterType="gm" resultType="com.tagosolution.service.model.SiteVO">
+		SELECT
+		<include refid="select" />
+		FROM TS_SITE
+		WHERE SU_ID = #{suId}
+		AND SITE_SEQ = #{siteSeq}
+	</select>
+	
+	<select id="selectByServerName" parameterType="String" resultType="com.tagosolution.service.model.SiteVO">
+		SELECT 
+		<include refid="select" />
+		FROM TS_SITE
+		WHERE SITE_DOMAIN = #{_parameter}
+	</select>
+
+	<update id="updateByKeySelective" parameterType="com.tagosolution.service.model.SiteVO">
+		update TS_SITE
+		<set>
+			<if test="siteName != null and siteName != ''">
+				SITE_NAME = #{siteName,jdbcType=VARCHAR},
+			</if>
+			<!-- 
+			<if test="siteDomain != null and siteDomain != ''">
+				SITE_DOMAIN = #{siteDomain,jdbcType=VARCHAR},
+			</if> 
+			-->
+			<if test="email != null and email != ''">
+				EMAIL = #{email,jdbcType=VARCHAR},
+			</if>
+			<if test="keyNumber != null and keyNumber != ''">
+				KEY_NUMBER = #{keyNumber,jdbcType=VARCHAR},
+			</if>
+			<if test="adminPhone != null and adminPhone != ''">
+				ADMIN_PHONE = #{adminPhone,jdbcType=VARCHAR},
+			</if>
+			<if test="siteCertKey != null and siteCertKey != ''">
+				SITE_CERT_KEY = #{siteCertKey,jdbcType=VARCHAR},
+			</if>
+			<if test="adminMobile != null and adminMobile != ''">
+				ADMIN_MOBILE = #{adminMobile,jdbcType=VARCHAR},
+			</if>
+			<if test="installDate != null">
+				INSTALL_DATE = #{installDate,jdbcType=TIMESTAMP},
+			</if>
+			<if test="ftpAddr != null and ftpAddr != ''">
+				FTP_ADDR = #{ftpAddr,jdbcType=VARCHAR},
+			</if>
+			<if test="ftpId != null and ftpId != ''">
+				FTP_ID = #{ftpId,jdbcType=VARCHAR},
+			</if>
+			<if test="ftpPwd != null and ftpPwd != ''">
+				FTP_PWD = #{ftpPwd,jdbcType=VARCHAR},
+			</if>
+			<if test="adminTitleUrl != null and adminTitleUrl != ''">
+				ADMIN_TITLE_URL = #{adminTitleUrl,jdbcType=VARCHAR},
+			</if>
+			<if test="adminCopyright != null and adminCopyright != ''">
+				ADMIN_COPYRIGHT = #{adminCopyright,jdbcType=VARCHAR},
+			</if>
+			<if test="addBoardYn != null and addBoardYn != ''">
+				ADD_BOARD_YN = #{addBoardYn,jdbcType=VARCHAR},
+			</if>
+			<if test="sslYn != null and sslYn != ''">
+				SSL_YN = #{sslYn,jdbcType=VARCHAR},
+			</if>
+			<if test="sslPort != null and sslPort != ''">
+				SSL_PORT = #{sslPort,jdbcType=VARCHAR},
+			</if>
+			<if test="smsYn != null and smsYn != ''">
+				SMS_YN = #{smsYn,jdbcType=VARCHAR},
+			</if>
+			<if test="smsKind != null and smsKind != ''">
+				SMS_KIND = #{smsKind,jdbcType=VARCHAR},
+			</if>
+			<if test="smsId != null and smsId != ''">
+				SMS_ID = #{smsId,jdbcType=VARCHAR},
+			</if>
+			<if test="smsPwd != null and smsPwd != ''">
+				SMS_PWD = #{smsPwd,jdbcType=VARCHAR},
+			</if>
+			<if test="realCertYn != null and realCertYn != ''">
+				REAL_CERT_YN = #{realCertYn,jdbcType=VARCHAR},
+			</if>
+			<if test="realCertId != null and realCertId != ''">
+				REAL_CERT_ID = #{realCertId,jdbcType=VARCHAR},
+			</if>
+			<if test="realCertPwd != null and realCertPwd != ''">
+				REAL_CERT_PWD = #{realCertPwd,jdbcType=VARCHAR},
+			</if>
+			<if test="pointYn != null and pointYn != ''">
+				POINT_YN = #{pointYn,jdbcType=VARCHAR},
+			</if>
+			<if test="pointLogin != null">
+				POINT_LOGIN = #{pointLogin,jdbcType=INTEGER},
+			</if>
+			<if test="pointView != null">
+				POINT_VIEW = #{pointView,jdbcType=INTEGER},
+			</if>
+			<if test="pointWrite != null">
+				POINT_WRITE = #{pointWrite,jdbcType=INTEGER},
+			</if>
+			<if test="pointComment != null">
+				POINT_COMMENT = #{pointComment,jdbcType=INTEGER},
+			</if>
+			<if test="pointRecomm != null">
+				POINT_RECOMM = #{pointRecomm,jdbcType=INTEGER},
+			</if>
+			<if test="pointNoMsg != null and pointNoMsg != ''">
+				POINT_NO_MSG = #{pointNoMsg,jdbcType=VARCHAR},
+			</if>
+			<if test="pointDownload != null">
+				POINT_DOWNLOAD = #{pointDownload,jdbcType=INTEGER},
+			</if>
+			<if test="pointJoin != null">
+				POINT_JOIN = #{pointJoin,jdbcType=INTEGER},
+			</if>
+			<if test="suId != null and suId != ''">
+				SU_ID = #{suId,jdbcType=VARCHAR},
+			</if>
+			<if test="suPwd != null and suPwd != ''">
+				SU_PWD = #{suPwd,jdbcType=VARCHAR},
+			</if>
+			<if test="dsId != null and dsId != ''">
+				DS_ID = #{dsId,jdbcType=VARCHAR},
+			</if>
+			<if test="dsPwd != null and dsPwd != ''">
+				DS_PWD = #{dsPwd,jdbcType=VARCHAR},
+			</if>
+			<if test="adminStartPage != null and adminStartPage != ''">
+				ADMIN_START_PAGE = #{adminStartPage,jdbcType=VARCHAR},
+			</if>
+			<if test="useMenu != null and useMenu != ''">
+				USE_MENU = #{useMenu,jdbcType=VARCHAR},
+			</if>
+			<if test="footBusinessNumber != null and footBusinessNumber != ''">
+				FOOT_BUSINESS_NUMBER = #{footBusinessNumber,jdbcType=VARCHAR},
+			</if>
+			<if test="footBusinessName != null and footBusinessName != ''">
+				FOOT_BUSINESS_NAME = #{footBusinessName,jdbcType=VARCHAR},
+			</if>
+			<if test="footRepName != null and footRepName != ''">
+				FOOT_REP_NAME = #{footRepName,jdbcType=VARCHAR},
+			</if>
+			<if test="footInfoName != null and footInfoName != ''">
+				FOOT_INFO_NAME = #{footInfoName,jdbcType=VARCHAR},
+			</if>
+			<if test="footZipcode != null and footZipcode != ''">
+				FOOT_ZIPCODE = #{footZipcode,jdbcType=VARCHAR},
+			</if>
+			<if test="footAddr1 != null and footAddr1 != ''">
+				FOOT_ADDR1 = #{footAddr1,jdbcType=VARCHAR},
+			</if>
+			<if test="footCondition != null and footCondition != ''">
+				FOOT_CONDITION = #{footCondition,jdbcType=VARCHAR},
+			</if>
+			<if test="footItem != null and footItem != ''">
+				FOOT_ITEM = #{footItem,jdbcType=VARCHAR},
+			</if>
+			<if test="footPhone != null and footPhone != ''">
+				FOOT_PHONE = #{footPhone,jdbcType=VARCHAR},
+			</if>
+			<if test="footFax != null and footFax != ''">
+				FOOT_FAX = #{footFax,jdbcType=VARCHAR},
+			</if>
+			<if test="footAddr2 != null and footAddr2 != ''">
+				FOOT_ADDR2 = #{footAddr2,jdbcType=VARCHAR},
+			</if>
+			<if test="useMsg != null and useMsg != ''">
+				USE_MSG = #{useMsg,jdbcType=VARCHAR},
+			</if>
+			<if test="modDate != null">
+				MOD_DATE = #{modDate,jdbcType=TIMESTAMP},
+			</if>
+			<if test="customerCenter != null">
+				CUSTOMER_CENTER = #{customerCenter,jdbcType=VARCHAR},
+			</if>
+			<if test="depositWithdrawalTelephone != null">
+				DEPOSIT_WITHDRAWAL_TELEPHONE = #{depositWithdrawalTelephone,jdbcType=VARCHAR},
+			</if>
+			<if test="businessHours != null">
+				BUSINESS_HOURS = #{businessHours,jdbcType=VARCHAR},
+			</if>
+			<if test="depositTime != null">
+				DEPOSIT_TIME = #{depositTime,jdbcType=VARCHAR},
+			</if>
+			<if test="withdrawalTime != null">
+				WITHDRAWAL_TIME = #{withdrawalTime,jdbcType=VARCHAR},
+			</if>
+			<if test="personalInformationOfficer != null">
+				PERSONAL_INFORMATION_OFFICER = #{personalInformationOfficer,jdbcType=VARCHAR},
+			</if>
+			<if test="orderMail != null">
+				ORDER_MAIL = #{orderMail,jdbcType=VARCHAR},
+			</if>
+		</set>
+		where SITE_SEQ = #{siteSeq,jdbcType=TINYINT}
+	</update>
+
+	<!-- 사이트 정보 자동 등록 -->
+	<insert id="insertDefault" useGeneratedKeys="true" keyProperty="siteSeq" keyColumn="SITE_SEQ" parameterType="com.tagosolution.service.model.SiteVO">
+		INSERT INTO TS_SITE (
+			SITE_NAME, SITE_DOMAIN, SITE_CERT_KEY
+			, SU_ID, SU_PWD, INSTALL_DATE
+			, POINT_NO_MSG, DS_ID, DS_PWD
+			, ADMIN_TITLE_URL, ADMIN_COPYRIGHT
+		)	
+		VALUES (
+			#{siteName,jdbcType=VARCHAR}, #{siteDomain,jdbcType=VARCHAR}, #{siteCertKey,jdbcType=VARCHAR}
+			, #{suId,jdbcType=VARCHAR}, #{suPwd,jdbcType=VARCHAR}, now()
+			, '포인트가 없습니다.', '', ''
+			, '타고플러스 솔루션', 'Copyright © tagoplus. All rights reserved.'
+		)
+	</insert>
+
+</mapper>

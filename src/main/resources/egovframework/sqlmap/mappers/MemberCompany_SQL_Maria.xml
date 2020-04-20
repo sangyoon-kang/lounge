@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="memberCompany">
+
+	<resultMap id="BaseResultMap" type="com.tagosolution.service.model.MemberCompanyVO">
+		<result column="USER_ID" jdbcType="VARCHAR" property="userId" />
+		<result column="OFFICE_NAME" jdbcType="VARCHAR" property="officeName" />
+		<result column="OFFICE_NUM" jdbcType="VARCHAR" property="officeNum" />
+		<result column="OB_NUM" jdbcType="VARCHAR" property="obNum" />
+		<result column="B_TYPE" jdbcType="VARCHAR" property="bType" />
+		<result column="BC_TYPE" jdbcType="VARCHAR" property="bcType" />		
+		<result column="TAX_EMAIL" jdbcType="VARCHAR" property="taxEmail" />
+		<result column="ZIP_CODE" jdbcType="VARCHAR" property="czipCode" />
+		<result column="ADDR1" jdbcType="VARCHAR" property="caddr1" />
+		<result column="ADDR2" jdbcType="VARCHAR" property="caddr2" />		
+		<result column="OWNER_NAME" jdbcType="VARCHAR" property="ownerName" />
+		<result column="OWNER_TEL" jdbcType="VARCHAR" property="ownerTel" />
+		<result column="STAFF_NAME" jdbcType="VARCHAR" property="staffName" />
+		<result column="STAFF_TEL" jdbcType="VARCHAR" property="staffTel" />
+	</resultMap>
+
+	<sql id="select">
+			USER_ID
+			,OFFICE_NAME
+			,OFFICE_NUM
+			,OB_NUM
+			,B_TYPE
+			,BC_TYPE
+			,TAX_EMAIL
+			,ZIP_CODE
+			,ADDR1
+			,ADDR2
+			,OWNER_NAME
+			,OWNER_TEL
+			,STAFF_NAME
+			,STAFF_TEL		
+	</sql>
+	
+	<select id="selectByKey" parameterType="String" resultMap="BaseResultMap">
+		SELECT
+		<include refid="select" />
+		FROM TS_MEMBER_COMPANY
+		WHERE USER_ID = #{userId,jdbcType=VARCHAR}
+	</select>
+	
+	<select id="selectById" parameterType="String" resultMap="BaseResultMap">
+		SELECT
+		<include refid="select" />
+		FROM TS_MEMBER_COMPANY
+		WHERE USER_ID = #{userId,jdbcType=VARCHAR}		
+	</select>	
+	<update id="updateByKey" parameterType="java.lang.String">
+		UPDATE TS_MEMBER_COMPANY		
+		SET OFFICE_NAME = ''
+			,OFFICE_NUM = ''
+			,OB_NUM = ''
+			,B_TYPE = ''
+			,BC_TYPE = ''
+			,TAX_EMAIL = ''
+			,ZIP_CODE = ''
+			,ADDR1 = ''
+			,ADDR2 = ''
+			,OWNER_NAME = ''
+			,OWNER_TEL = ''
+			,STAFF_NAME = ''
+			,STAFF_TEL	 = ''	
+		WHERE USER_ID = #{userId,jdbcType=VARCHAR}
+	</update>
+	
+	<select id="totalCount" parameterType="search" resultType="int">
+		SELECT COUNT(*)
+		FROM TS_MEMBER_COMPANY		
+	</select>
+	<insert id="merge" useGeneratedKeys="true" keyProperty="memberSeq" parameterType="com.tagosolution.service.model.MemberCompanyVO">
+		INSERT INTO TS_MEMBER_COMPANY (
+			USER_ID
+			,OFFICE_NAME
+			,OFFICE_NUM
+			,OB_NUM
+			,B_TYPE
+			,BC_TYPE
+			,TAX_EMAIL
+			,ZIP_CODE
+			,ADDR1
+			,ADDR2
+			,OWNER_NAME
+			,OWNER_TEL
+			,STAFF_NAME
+			,STAFF_TEL	
+		)
+		VALUES (
+			#{userId,jdbcType=VARCHAR}, #{officeName,jdbcType=VARCHAR},
+			#{officeNum,jdbcType=VARCHAR}, #{obNum,jdbcType=VARCHAR}, #{bType,jdbcType=VARCHAR},
+			#{bcType,jdbcType=VARCHAR}, #{taxEmail,jdbcType=VARCHAR}, #{czipCode,jdbcType=VARCHAR},
+			#{caddr1,jdbcType=VARCHAR}, #{caddr2,jdbcType=VARCHAR}, #{ownerName,jdbcType=VARCHAR},
+			#{ownerTel,jdbcType=VARCHAR}, #{staffName,jdbcType=VARCHAR}, #{staffTel,jdbcType=VARCHAR}
+		)
+		ON DUPLICATE KEY UPDATE
+		<trim suffix="" suffixOverrides=",">
+			<if test="userId != null">
+				USER_ID = #{userId,jdbcType=VARCHAR},				
+			</if>
+			<if test="officeName != null">
+				OFFICE_NAME = #{officeName,jdbcType=VARCHAR},
+			</if>
+			<if test="officeNum != null">
+				OFFICE_NUM = #{officeNum,jdbcType=VARCHAR},
+			</if>
+			<if test="obNum != null">
+				OB_NUM = #{obNum,jdbcType=VARCHAR},
+			</if>
+			<if test="bType != null">
+				B_TYPE = #{bType,jdbcType=VARCHAR},
+			</if>
+			<if test="bcType != null">
+				BC_TYPE = #{bcType,jdbcType=VARCHAR},
+			</if>
+			<if test="taxEmail != null">
+				TAX_EMAIL = #{taxEmail,jdbcType=VARCHAR},
+			</if>
+			<if test="czipCode != null">
+				ZIP_CODE = #{czipCode,jdbcType=VARCHAR},
+			</if>
+			<if test="caddr1 != null">
+				ADDR1 = #{caddr1,jdbcType=VARCHAR},
+			</if>
+			<if test="caddr2 != null">
+				ADDR2 = #{caddr2,jdbcType=VARCHAR},
+			</if>
+			<if test="ownerName != null">
+				OWNER_NAME = #{ownerName,jdbcType=VARCHAR},
+			</if>
+			<if test="ownerTel != null">
+				OWNER_TEL = #{ownerTel,jdbcType=VARCHAR},
+			</if>
+			<if test="staffName != null">
+				STAFF_NAME = #{staffName,jdbcType=VARCHAR},
+			</if>
+			<if test="staffTel != null">
+				STAFF_TEL = #{staffTel,jdbcType=VARCHAR},
+			</if>
+			
+		</trim>		
+	</insert>
+	
+
+</mapper>

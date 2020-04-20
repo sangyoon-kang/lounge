@@ -1,0 +1,159 @@
+=respond-to($breakpoint)
+     @if $breakpoint==x-small
+          @media(min-width:576px)
+               @content
+     @else if $breakpoint==small
+          @media(min-width:767px)
+               @content
+     @else if $breakpoint==medium
+          @media(min-width:992px)
+               @content
+     @else if $breakpoint==large
+          @media(min-width:1200px)
+               @content
+     @else if $breakpoint==x-large
+          @media(min-width:1600px)
+               @content
+
+=respond-to-down($breakpoint)
+     @if $breakpoint==x-small
+          @media(max-width:576px)
+               @content
+     @else if $breakpoint==small
+          @media(max-width:767px)
+               @content
+     @else if $breakpoint==medium
+          @media(max-width:992px)
+               @content
+     @else if $breakpoint==large
+          @media(max-width:1200px)
+               @content
+     @else if $breakpoint==x-large
+          @media(max-width:1600px)
+               @content
+
+=shadow-inset($value)
+     -moz-box-shadow: inset 0 0 10px rgba($black,$value)
+     -webkit-box-shadow: inset 0 0 10px rgba($black,$value)
+     box-shadow: inset 0 0 10px rgba($black,$value)
+=flexbox
+     display: -webkit-flex
+     display: -ms-flexbox
+     display: flex
+=flex-wrap
+     flex-wrap: wrap
+     -webkit-flex-wrap: wrap
+=flex($flex)
+     flex: 0 0 $flex
+=no-margin-padding
+     margin: 0
+     padding: 0
+
+=size($size)
+     width: $size
+     height: $size
+=mx($mx)
+     margin-left: $mx
+     margin-right: $mx
+=my($my)
+     margin-top: $my
+     margin-bottom: $my
+=p($p)
+     padding: $p
+=px($px)
+     padding-left: $px
+     padding-right: $px
+=py($py)
+     padding-top: $py
+     padding-bottom: $py
+=width($width)
+     width: $width
+=noborder
+     border: none
+
+=ease-in-out($time)
+     -webkit-transition: $time ease-in-out
+     -moz-transition: $time ease-in-out
+     -o-transition: $time ease-in-out
+     transition: $time ease-in-out
+=top-radius($value)
+     border-top-left-radius: $value
+     border-top-right-radius: $value
+=bottom-radius($value)
+     border-bottom-left-radius: $value
+     border-bottom-right-radius: $value
+=left-radius($value)
+     border-bottom-left-radius: $value
+     border-top-left-radius: $value
+=right-radius($value)
+     border-top-right-radius: $value
+     border-bottom-right-radius: $value
+=radius($radius)
+     border-radius: $radius
+=translatey($transform)
+     -webkit-transform: translateY($transform)
+     transform: translateY($transform)
+=shadow-sm
+     box-shadow: 0px 1px 3px rgba(0,0,0,.08)
+=shadow
+     box-shadow: 0 2px 4px 0 rgba(0,0,0,.1)
+=shadow-md
+     box-shadow: 0 4px 8px 0 rgba(0,0,0,0.12), 0 2px 4px 0 rgba(0,0,0,0.08)
+=shadow-lg
+     box-shadow: 0 15px 30px 0 rgba(0,0,0,0.11), 0 5px 15px 0 rgba(0,0,0,0.08)
+=easeoutcirc
+     -webkit-transition: all 600ms cubic-bezier(0.075, 0.82, 0.165, 1)
+     transition: all 600ms cubic-bezier(0.075, 0.82, 0.165, 1)
+=easeInOutQuint
+     -webkit-transition: all 600ms cubic-bezier(0.86, 0, 0.07, 1)
+     transition: all 600ms cubic-bezier(0.86, 0, 0.07, 1)
+=easeInOutSine
+     -webkit-transition: all 600s cubic-bezier(0.445, 0.05, 0.55, 0.95)
+     transition: all 600ms cubic-bezier(0.445, 0.05, 0.55, 0.95)
+
+=transition($duration, $property)
+     -webkit-transition: $duration $property
+     transition: $duration $property
+=no-select
+     -webkit-user-select: none
+     -moz-user-select: none
+     -ms-user-select: none
+     user-select: none
+=transform($value,$amount)
+     -webkit-transform: $value+unquote("(")#{$amount}unquote(")")
+     transform: $value+unquote("(")#{$amount}unquote(")")
+=transform-origin ($origin)
+     moz-transform-origin: $origin
+     -o-transform-origin: $origin
+     -ms-transform-origin: $origin
+     -webkit-transform-origin: $origin
+     transform-origin: $origin
+=appearance-none
+     -webkit-appearance: none
+     -moz-appearance: none
+     appearance: none
+=img-center
+     position: absolute
+     top: -50%
+     bottom: -50%
+     left: -50%
+     right: -50%
+     margin: auto
+=bg-center
+     background-position: center center
+     background-size: cover
+     background-repeat: no-repeat
+=bg-contain
+     background-position: center center
+     background-size: contain
+     background-repeat: no-repeat
+=text-ellipsis
+     white-space: nowrap
+     overflow: hidden
+     text-overflow: ellipsis
+=gradient($color1,$color2)
+     background: $color1
+     background: -moz-linear-gradient(-45deg, $color1 0%, $color2 100%)
+     background: -webkit-linear-gradient(-45deg, $color1 0%,$color2 100%)
+     background: linear-gradient(135deg, $color1 0%,$color2 100%)
+     filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#{$color1}', endColorstr='#{$color2}',GradientType=1 )

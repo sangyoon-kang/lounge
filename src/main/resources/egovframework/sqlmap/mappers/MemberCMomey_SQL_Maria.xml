@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="memberCmomey">
+	<resultMap id="BaseResultMap" type="com.tagosolution.service.model.MemberCMomeyVO">
+		<id column="IDX" jdbcType="INTEGER" property="iDx" />
+		<result column="USER_ID" jdbcType="VARCHAR" property="userId" />
+		<result column="C_MONEY" jdbcType="INTEGER" property="cMoney" />
+		<result column="SUMMARY" jdbcType="VARCHAR" property="summary" />
+		<result column="ORDER_UID" jdbcType="INTEGER" property="orderUid" />
+		<result column="EDITOR_NAME" jdbcType="VARCHAR" property="editorName" />
+		<result column="REASON" jdbcType="VARCHAR" property="reason" />
+		<result column="REG_DATE" jdbcType="DATE" property="regDate" />
+		<result column="USE_FLAG" jdbcType="CHAR" property="useFlag" />
+	</resultMap>
+	
+	<sql id="select">
+		IDX, USER_ID, C_MONEY, SUMMARY, ORDER_UID, EDITOR_NAME, REASON, REG_DATE, USE_FLAG
+	</sql>
+	
+	<sql id="whereClause">
+		<trim prefix="where" prefixOverrides="and">
+			
+		</trim>
+	</sql>
+	
+	<select id="selectByKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+		SELECT
+		<include refid="select" />
+		FROM TS_MEMBER_CMOMEY
+		WHERE USER_ID = #{userId,jdbcType=VARCHAR} AND USE_FLAG = 'Y'
+	</select>
+	
+	
+	<delete id="deleteByKey" parameterType="java.lang.Integer">
+		UPDATE TS_MEMBER_CMOMEY
+		SET USE_FLAG = 'N'
+		WHERE IDX = #{iDx,jdbcType=INTEGER}
+	</delete>
+	
+	
+	<select id="selectList" parameterType="search" resultMap="BaseResultMap">
+		select 
+		<include refid="select" />
+		FROM TS_MEMBER_CMOMEY
+		WHERE USE_FLAG = 'Y'
+		order by ORDER_UID
+	</select>
+	
+	<select id="totalCount" parameterType="search" resultType="int">
+		SELECT COUNT(*)
+		FROM TS_MEMBER_CMOMEY
+		<include refid="whereClause" />
+	</select>
+	
+	<insert id="merge" keyProperty="iDx" useGeneratedKeys="true" parameterType="com.tagosolution.service.model.MemberCMomeyVO">
+		INSERT INTO TS_MEMBER_CMOMEY (
+			IDX, USER_ID, C_MONEY, SUMMARY, ORDER_UID, EDITOR_NAME, REASON
+		)
+		VALUES (
+			#{iDx,jdbcType=INTEGER}, #{userId,jdbcType=VARCHAR}, 
+			#{cMoney,jdbcType=INTEGER}, #{summary,jdbcType=VARCHAR}, #{orderUid,jdbcType=INTEGER}, #{editorName,jdbcType=VARCHAR}, #{reason,jdbcType=VARCHAR}
+		)
+		ON DUPLICATE KEY UPDATE
+		<trim suffix=" " suffixOverrides=",">
+			<if test="userId != null and userId != ''">
+				USER_ID = #{userId,jdbcType=VARCHAR},
+			</if>
+			<if test="cMoney != null and cMoney != ''">
+				C_MONEY = #{cMoney,jdbcType=INTEGER},
+			</if>
+			<if test="summary != null and summary != ''">
+				SUMMARY = #{summary,jdbcType=VARCHAR},
+			</if>
+			<if test="orderUid != null and orderUid != ''">
+				ORDER_UID = #{orderUid,jdbcType=INTEGER},
+			</if>
+			<if test="editorName != null and editorName != ''">
+				EDITOR_NAME = #{editorName,jdbcType=VARCHAR},
+			</if>
+			<if test="reason != null and reason != ''">
+				REASON = #{reason,jdbcType=VARCHAR},
+			</if>
+		</trim>
+	</insert>
+		
+</mapper>

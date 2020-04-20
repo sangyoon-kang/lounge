@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="memberGrade">
+	<resultMap id="BaseResultMap" type="com.tagosolution.service.model.MemberGradeVO">
+		<id column="GRADE_LEVEL" jdbcType="SMALLINT" property="gradeLevel" />
+		<result column="ICON" jdbcType="VARCHAR" property="icon" />
+		<result column="GRADE_NAME" jdbcType="VARCHAR" property="gradeName" />
+		<result column="GRADE_MEMO" jdbcType="VARCHAR" property="gradeMemo" />
+	</resultMap>
+	
+	<sql id="select">
+		GRADE_LEVEL, ICON, GRADE_NAME, GRADE_MEMO
+	</sql>
+	
+	<select id="selectByKey" parameterType="search" resultMap="BaseResultMap">
+		select
+		<include refid="select" />
+		FROM TS_MEMBER_GRADE
+		where GRADE_LEVEL = #{gradeLevel}
+	</select>
+	
+	<select id="selectByLevel" parameterType="java.lang.Short" resultMap="BaseResultMap">
+		select
+		<include refid="select" />
+		FROM TS_MEMBER_GRADE
+		where GRADE_LEVEL = #{gradeLevel,jdbcType=SMALLINT}
+	</select>
+	
+	<!-- 회원가입시 최저 등급 부여 -->
+	<select id="selectMaxLevel"	parameterType="search" resultType="java.lang.Short">
+		SELECT
+			IFNULL(MAX(GRADE_LEVEL), 0)
+		FROM TS_MEMBER_GRADE
+	</select>	
+	
+	<select id="selectMinLevel"	parameterType="search" resultType="java.lang.Short">
+		SELECT
+			IFNULL(MIN(GRADE_LEVEL), 0)
+		FROM TS_MEMBER_GRADE
+	</select>	
+	
+	<select id="sameGrade" parameterType="search" resultType="com.tagosolution.service.model.MemberGradeVO">
+		SELECT GRADE_LEVEL,GRADE_NAME, TS_MEMBER_GRADE.GRADE_MEMO
+		FROM TS_MEMBER_GRADE
+		INNER JOIN(
+		SELECT GRADE_MEMO
+		FROM TS_MEMBER_GRADE
+		GROUP BY GRADE_MEMO
+		HAVING COUNT(GRADE_LEVEL) <![CDATA[>]]>1
+		)temp ON TS_MEMBER_GRADE.GRADE_MEMO= temp.GRADE_MEMO;
+	</select>
+	
+	<delete id="deleteByKey" parameterType="java.lang.Short">
+		delete FROM TS_MEMBER_GRADE
+		where GRADE_LEVEL = #{gradeLevel,jdbcType=SMALLINT}
+	</delete>
+	
+	<select id="selectListGrade" parameterType="search" resultMap="BaseResultMap">
+		select 
+		<include refid="select" />
+		FROM TS_MEMBER_GRADE
+		where 
+		    case 
+		        when ((select count(*) from ts_member_info where grade_level = 1) >= 1 )
+		         then GRADE_LEVEL != 1
+		         else GRADE_LEVEL
+		    end
+		order by GRADE_LEVEL desc
+	</select>
+	
+	<select id="selectList" parameterType="search" resultMap="BaseResultMap">
+		select 
+		<include refid="select" />
+		FROM TS_MEMBER_GRADE
+		order by GRADE_LEVEL
+	</select>
+	
+	<select id="gradeCount" parameterType="search" resultType="int">
+		select count(*)
+		FROM TS_MEMBER_GRADE
+		where GRADE_LEVEL = #{glevel}		
+	</select>
+	
+	<insert id="merge" keyProperty="gradeLevel" parameterType="com.tagosolution.service.model.MemberGradeVO">
+		INSERT INTO TS_MEMBER_GRADE (
+			GRADE_LEVEL, ICON, GRADE_NAME, GRADE_MEMO
+		)
+		VALUES (
+			#{gradeLevel,jdbcType=SMALLINT}, #{icon,jdbcType=VARCHAR}, #{gradeName,jdbcType=VARCHAR}, #{gradeMemo,jdbcType=VARCHAR}
+		)
+		ON DUPLICATE KEY UPDATE
+		<trim suffix=" " suffixOverrides=",">
+			<if test="icon != null and icon != ''">
+				ICON = #{icon,jdbcType=VARCHAR},
+			</if>
+			<if test="gradeName != null and gradeName != ''">
+				GRADE_NAME = #{gradeName,jdbcType=VARCHAR},
+			</if>
+			<if test="gradeMemo != null">
+				GRADE_MEMO = #{gradeMemo,jdbcType=VARCHAR},
+			</if>
+		</trim>
+	</insert>
+		
+</mapper>

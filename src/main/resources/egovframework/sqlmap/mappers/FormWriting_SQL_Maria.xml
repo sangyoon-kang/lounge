@@ -1,0 +1,262 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="formWriting">
+
+	<resultMap id="BaseResultMap" type="com.tagosolution.service.model.FormWritingVO">
+		<id column="FORM_WRITING_SEQ" jdbcType="INTEGER" property="formWritingSeq" />
+		<result column="FORM_SEQ" jdbcType="INTEGER" property="formSeq" />
+		<result column="SUBJECT" jdbcType="VARCHAR" property="subject" />
+		<result column="PHONE" jdbcType="VARCHAR" property="phone" />
+		<result column="EMAIL" jdbcType="VARCHAR" property="email" />
+		<result column="NAME" jdbcType="VARCHAR" property="name" />
+		<result column="PROCESS" jdbcType="VARCHAR" property="process" />
+		<result column="REG_DATE" jdbcType="TIMESTAMP" property="regDate" />
+		<result column="REG_USER" jdbcType="VARCHAR" property="regUser" />
+		<result column="BODY" jdbcType="LONGVARCHAR" property="body" />
+		
+		<result column="FORM_NAME" jdbcType="VARCHAR" property="formName" />
+		
+		<collection property="infoVO" column="FORM_SEQ" select="formInfo.selectByForm"></collection>
+		<collection property="valueVO" column="FORM_WRITING_SEQ" select="formValue.selectForValue"></collection>
+		
+	</resultMap>
+
+	<sql id="select">
+		FORM_WRITING_SEQ, FORM_SEQ, SUBJECT, PHONE, EMAIL, NAME, PROCESS, REG_DATE, REG_USER, BODY,
+		(SELECT FORM_NAME FROM TS_FORM WHERE FORM_SEQ = TS_FORM_WRITING.FORM_SEQ) AS FORM_NAME
+	</sql>
+	
+	<sql id="whereClause">
+		<trim prefix="where" prefixOverrides="and">
+			<if test="type1 != null and type1 != ''">
+				AND PROCESS = #{type1}
+			</if>
+			<if test="fseq != null and fseq != 0">
+				AND FORM_SEQ = #{fseq}
+			</if>
+			
+			<if test="'value' == type2">
+				and B.FORM_INFO_VALUE like CONCAT('%', #{searchWord}, '%')
+			</if>
+			
+			<if test="'regUser' == type2">
+				AND REG_USER  like CONCAT('%', #{searchWord}, '%')
+			</if>
+			<if test="'subject' == type2">
+				AND SUBJECT  like CONCAT('%', #{searchWord}, '%')
+			</if>
+			
+			
+		</trim>
+	</sql>
+	
+	<select id="selectList" parameterType="search" resultMap="BaseResultMap">
+		SELECT
+		A.FORM_WRITING_SEQ, FORM_SEQ, SUBJECT, PHONE, EMAIL, NAME, PROCESS, REG_DATE, REG_USER, BODY,
+		(SELECT FORM_NAME FROM TS_FORM WHERE FORM_SEQ = A.FORM_SEQ) AS FORM_NAME, B.FORM_INFO_VALUE
+		FROM TS_FORM_WRITING A JOIN TS_FORM_VALUE B
+		ON A.FORM_WRITING_SEQ = B.FORM_WRITING_SEQ
+		<include refid="whereClause" />
+		GROUP BY A.FORM_WRITING_SEQ
+		<choose>
+			<when test="orderBy != ''">
+				ORDER BY ${orderBy }
+			</when>
+			<otherwise>
+				ORDER BY FORM_WRITING_SEQ
+			</otherwise>					
+		</choose>
+		<include refid="paging.limit"/>
+	</select>
+	
+	<select id="selectForListLNB" parameterType="search" resultMap="BaseResultMap">
+		SELECT
+		<include refid="select" />
+		FROM TS_FORM_WRITING
+		ORDER BY FORM_WRITING_SEQ
+	</select>
+	
+	<select id="totalCount" parameterType="search" resultType="int">
+		SELECT COUNT(*)
+		FROM TS_FORM_WRITING
+		<include refid="whereClause" />
+	</select>
+	
+	<select id="selectByKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+		SELECT
+		<include refid="select" />
+		FROM TS_FORM_WRITING
+		WHERE FORM_WRITING_SEQ = #{formWritingSeq,jdbcType=INTEGER}
+	</select>
+
+	<insert id="merge" useGeneratedKeys="true" keyProperty="formWritingSeq" parameterType="com.tagosolution.service.model.FormWritingVO">
+		INSERT INTO TS_FORM_WRITING (
+			FORM_WRITING_SEQ, FORM_SEQ, REG_USER, SUBJECT
+		)
+		VALUES (
+			#{formWritingSeq,jdbcType=INTEGER}, #{formSeq,jdbcType=INTEGER}, #{regUser,jdbcType=VARCHAR}, #{subject,jdbcType=VARCHAR}
+		)
+		ON DUPLICATE KEY UPDATE
+		<trim suffix="" suffixOverrides=",">
+			<if test="formSeq != null">
+				FORM_SEQ = #{formSeq,jdbcType=INTEGER},
+			</if>
+			<if test="subject != null">
+				SUBJECT = #{subject,jdbcType=VARCHAR},
+			</if>
+			<if test="phone != null">
+				PHONE = #{phone,jdbcType=VARCHAR},
+			</if>
+			<if test="email != null">
+				EMAIL = #{email,jdbcType=VARCHAR},
+			</if>
+			<if test="name != null">
+				NAME = #{name,jdbcType=VARCHAR},
+			</if>
+			<if test="process != null">
+				PROCESS = #{process,jdbcType=VARCHAR},
+			</if>
+			<if test="body != null">
+				BODY = #{body,jdbcType=LONGVARCHAR},
+			</if>
+		</trim>
+	</insert>
+	
+	
+	<update id="updateBySelective" parameterType="com.tagosolution.service.model.FormWritingVO">
+		UPDATE TS_FORM_WRITING
+		<set>
+			<if test="formSeq != null">
+				FORM_SEQ = #{formSeq,jdbcType=INTEGER},
+			</if>
+			<if test="subject != null">
+				SUBJECT = #{subject,jdbcType=VARCHAR},
+			</if>
+			<if test="phone != null">
+				PHONE = #{phone,jdbcType=VARCHAR},
+			</if>
+			<if test="email != null">
+				EMAIL = #{email,jdbcType=VARCHAR},
+			</if>
+			<if test="name != null">
+				NAME = #{name,jdbcType=VARCHAR},
+			</if>
+			<if test="process != null">
+				PROCESS = #{process,jdbcType=VARCHAR},
+			</if>
+			<if test="body != null">
+				BODY = #{body,jdbcType=LONGVARCHAR},
+			</if>
+		</set>
+		where FORM_WRITING_SEQ = #{formWritingSeq,jdbcType=INTEGER}
+	</update>
+
+
+	<delete id="deleteByKey" parameterType="java.lang.Integer">
+		DELETE FROM TS_FORM_WRITING
+		WHERE FORM_WRITING_SEQ = #{formWritingSeq,jdbcType=INTEGER}
+	</delete>
+	<insert id="insert" parameterType="com.tagosolution.service.model.FormWritingVO">
+		insert INTO TS_FORM_WRITING (FORM_WRITING_SEQ, FORM_SEQ, SUBJECT,
+		PHONE, EMAIL, NAME,
+		PROCESS, REG_DATE, REG_USER,
+		BODY)
+		values (#{formWritingSeq,jdbcType=INTEGER}, #{formSeq,jdbcType=INTEGER}, #{subject,jdbcType=VARCHAR},
+		#{phone,jdbcType=VARCHAR}, #{email,jdbcType=VARCHAR}, #{name,jdbcType=VARCHAR},
+		#{process,jdbcType=VARCHAR}, #{regDate,jdbcType=TIMESTAMP}, #{regUser,jdbcType=VARCHAR},
+		#{body,jdbcType=LONGVARCHAR})
+	</insert>
+	<insert id="insertSelective" parameterType="com.tagosolution.service.model.FormWritingVO">
+		insert INTO TS_FORM_WRITING
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="formWritingSeq != null">
+				FORM_WRITING_SEQ,
+			</if>
+			<if test="formSeq != null">
+				FORM_SEQ,
+			</if>
+			<if test="subject != null">
+				SUBJECT,
+			</if>
+			<if test="phone != null">
+				PHONE,
+			</if>
+			<if test="email != null">
+				EMAIL,
+			</if>
+			<if test="name != null">
+				NAME,
+			</if>
+			<if test="process != null">
+				PROCESS,
+			</if>
+			<if test="regDate != null">
+				REG_DATE,
+			</if>
+			<if test="regUser != null">
+				REG_USER,
+			</if>
+			<if test="body != null">
+				BODY,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="formWritingSeq != null">
+				#{formWritingSeq,jdbcType=INTEGER},
+			</if>
+			<if test="formSeq != null">
+				#{formSeq,jdbcType=INTEGER},
+			</if>
+			<if test="subject != null">
+				#{subject,jdbcType=VARCHAR},
+			</if>
+			<if test="phone != null">
+				#{phone,jdbcType=VARCHAR},
+			</if>
+			<if test="email != null">
+				#{email,jdbcType=VARCHAR},
+			</if>
+			<if test="name != null">
+				#{name,jdbcType=VARCHAR},
+			</if>
+			<if test="process != null">
+				#{process,jdbcType=VARCHAR},
+			</if>
+			<if test="regDate != null">
+				#{regDate,jdbcType=TIMESTAMP},
+			</if>
+			<if test="regUser != null">
+				#{regUser,jdbcType=VARCHAR},
+			</if>
+			<if test="body != null">
+				#{body,jdbcType=LONGVARCHAR},
+			</if>
+		</trim>
+	</insert>
+	
+	<update id="updateByPrimaryKeyWithBLOBs" parameterType="com.tagosolution.service.model.FormWritingVO">
+		UPDATE TS_FORM_WRITING
+		set FORM_SEQ = #{formSeq,jdbcType=INTEGER},
+		SUBJECT = #{subject,jdbcType=VARCHAR},
+		PHONE = #{phone,jdbcType=VARCHAR},
+		EMAIL = #{email,jdbcType=VARCHAR},
+		NAME = #{name,jdbcType=VARCHAR},
+		PROCESS = #{process,jdbcType=VARCHAR},
+		REG_DATE = #{regDate,jdbcType=TIMESTAMP},
+		REG_USER = #{regUser,jdbcType=VARCHAR},
+		BODY = #{body,jdbcType=LONGVARCHAR}
+		where FORM_WRITING_SEQ = #{formWritingSeq,jdbcType=INTEGER}
+	</update>
+	<update id="updateByPrimaryKey" parameterType="com.tagosolution.service.model.FormWritingVO">
+		UPDATE TS_FORM_WRITING
+		set FORM_SEQ = #{formSeq,jdbcType=INTEGER},
+		SUBJECT = #{subject,jdbcType=VARCHAR},
+		PHONE = #{phone,jdbcType=VARCHAR},
+		EMAIL = #{email,jdbcType=VARCHAR},
+		NAME = #{name,jdbcType=VARCHAR},
+		PROCESS = #{process,jdbcType=VARCHAR},
+		REG_DATE = #{regDate,jdbcType=TIMESTAMP},
+		REG_USER = #{regUser,jdbcType=VARCHAR}
+		where FORM_WRITING_SEQ = #{formWritingSeq,jdbcType=INTEGER}
+	</update>
+</mapper>

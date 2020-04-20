@@ -1,0 +1,202 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link href="/css/master.css" rel="stylesheet" type="text/css" />
+<link href="/js/jquery-ui.css" rel="stylesheet" type="text/css" />
+<link href="/css/SimpleLightBox.css" rel="stylesheet" type="text/css" />
+<link href="/css/tree.css" rel="stylesheet" type="text/css" />
+<script type="text/javascript" language="Javascript" src="/js/external/jquery/jquery.js"></script>
+<script type="text/javascript" language="Javascript" src="/js/jquery-ui.js"></script>
+<script type="text/javascript" language="Javascript" src="/js/jquery.form.min.js"></script>
+<script type="text/javascript" language="Javascript" src="/js/jquery.ui.datepicker-ko.js"></script>
+<script type="text/javascript" language="Javascript" src="/js/LightBox/SimpleLightBox.js"></script>
+<script type="text/javascript" language="Javascript" src="/js/tree.js"></script>
+<script type="text/javascript" language="Javascript" src="/js/Common.js"></script>
+<script type="text/javascript" language="Javascript" src="/js/page_function.js"></script>
+<script type="text/javascript" language="Javascript" src="/js/jquery.scrollbox.js"></script>
+<script type="text/javascript" language="Javascript" src="/js/jquery.flexisel.js"></script>
+<script type="text/javascript" language="Javascript" src="/js/jquery.easing.1.3.js"></script>
+<title>관리시스템</title>
+</head>
+
+<body>
+<div id="wrap">
+	<!--header S-->
+	<div id="wrap_header">
+		<ul class="gnb" id="gnb_link">
+			<li link="/config/config01.html">환경설정</li>
+			<li link="/basic/basic01.html">기본설정</li>
+			<li link="/bbs/bbs01.html">게시판관리</li>
+			<li link="/member/member01.html">회원관리</li>
+			<li link="/poll/poll01.html">설문관리</li>
+			<li link="/schedule/sch01.html">일정관리</li>
+			<li link="/product/pro01.html">상품관리</li>
+			<li link="/banner/banner01.html">배너관리</li>
+			<li link="/connect/connect01.html">통계관리</li>
+		</ul>
+		<script type="text/javascript"  language="Javascript">
+		<!--
+
+			$(document).ready(function(){
+				
+				$('#gnb_link li').on("click", function(){
+
+					var link_info = $(this).attr("link");
+					//alert(link_info+'로 이동합니다.');
+					location.href=link_info;
+
+				});
+
+			});
+		-->
+		</script>
+		<p id="LogoutBtn">로그아웃</p>
+	</div>
+	<!--header E-->
+
+	<!--lnb S-->
+	<div id="wrap_lnb">
+		<h2 class="mg_logo">사이트관리자<br/><a href="" class="bt_gohome">내홈페이지바로가기→</a></h2>
+		<h2 class="lnb_title"><span class="title1">일정관리</span></h2>
+		<ul class="lnb">
+			<li class="lnb_depth1"><a href="/schedule/sch01.html" class="depth1_on">일정관리</a></li>
+			<li class="lnb_depth1"><a href="/schedule/sch02.html">일정목록</a></li>
+			<li class="lnb_depth2" style="display:none;"><a href="/schedule/sch02.html">일정 1</a></li>	
+			<li class="lnb_depth2" style="display:none;"><a href="/schedule/sch02.html">일정 2</a></li>	
+		</ul>
+		<div id="copyright">
+			<p>2016 LCDNS<br/>All rights reserved.</p>
+		</div>
+	</div>
+	<!--lnb E-->
+
+	<!--wrap_scon S-->
+	<div id="wrap_scon">
+		<div class="scon_title">
+			<h2>일정관리</h2>
+			<p>홈 > 설문관리 > 일정관리</p>
+		</div>
+		<div class="scon">
+			<div class="check_conbox">
+				<h4 class="check_tit">체크사항</h4>
+				<ul>
+					<li>- 영문명은 반드시 영문으로 작성하고 변경이 불가합니다.</li>
+					<li>- 권한설정은 각 상황별 회원분류에따라 접근권한을 설정합니다.</li>
+					<li>- 욕설,비방글 설정을 통하여 글 작성시 욕설 비방글을 방지할 수 있습니다.</li>
+				</ul>
+			</div>
+			<p class="tit_blank"></p>
+			
+			<h3>일정관리</h3>
+			
+			<table class="table_style1">
+				<caption></caption>
+				<colgroup>
+					<col width="20%" />
+					<col width="" />
+					<col width="20%" />
+					<col width="" />
+				</colgroup>
+				<tbody>
+					<tr>
+						<th class="left"><strong>영문명(db명) <span class="txt_red">*</span></strong></th>
+						<td class="left"><input name="" class="table_input1" value="" maxlength="" type="text" style="width:90%;"/></td>
+						<th class="left"><strong>한글명 <span class="txt_red">*</span></strong></th>
+						<td class="left"><input name="" class="table_input1" value="" maxlength="" type="text" style="width:90%;"/></td>
+					</tr>
+					<tr>
+						<th class="left"><strong>일정관리자</strong></th>
+						<td class="left" colspan="3"><span class="txt_red table_stxt">아이디를 쉼표로 분리 예)admin,admin1,admin3</span><br/><input name="" class="table_input1" value="" maxlength="" type="text" style="width:90%;"/></td>
+					</tr>
+					<tr>
+						<th class="left"><strong>자동 비밀글</strong></th>
+						<td class="left"><input class="input_type_radio01" type="checkbox"/> 작성자와 운영자만 연람가능</td>
+						<th class="left"><strong>일정스킨</strong></th>
+						<td class="left"><select><option>scheduleBasic</option></select></td>
+					</tr>
+					<tr>
+						<th class="left"><strong>권한</strong></th>
+						<td class="left td_inside" colspan="3">
+							<table class="table_style1_inside">
+								<colgroup>
+									<col width="" />
+									<col width="" />
+									<col width="" />
+									<col width="" />
+								</colgroup>
+								
+								<thead>
+									<tr>
+										<th>목록보기</th>
+										<th>내용보기</th>
+										<th>글쓰기</th>
+										<th>코멘트 쓰기</th>
+									</tr>
+								</thead>
+								<tbody>
+									<tr>
+										<td><select><option>전체</option><option>우수회원</option></select></td>
+										<td><select><option>전체</option><option>우수회원</option></select></td>
+										<td><select><option>전체</option><option>우수회원</option></select></td>
+										<td><select><option>전체</option><option>우수회원</option></select></td>
+									</tr>
+									
+								</tbody>
+							</table>
+						</td>
+					</tr>
+					<tr>
+						<th class="left" rowspan="2"><strong>권한이 없을경우</strong></th>
+						<td class="left" colspan="3">경고메세지 : <input name="" class="table_input1" value="" maxlength="" type="text" style="width:200px;"/> / 경고후 이동페이지 : <input name="" class="table_input1" value="" maxlength="" type="text" style="width:200px;"/></td>
+					</tr>
+					<tr>
+						<td class="left" colspan="3"><input class="input_type_radio01" type="radio"/> 글쓰기 버튼이 보이지 않음&nbsp;&nbsp;&nbsp;<input class="input_type_radio01" type="radio"/> 글쓰기 버튼이 보이고 클릭 시 경고창</td>
+					</tr>
+					<tr>
+						<th class=""><strong>이미지파일</strong></th>
+						<td class="left" colspan="3"><input class="input_type_radio01" type="checkbox"/> 첨부파일이 이미지인 경우 보기 페이지에서 이미지 감추기 </td>
+					</tr>
+					<tr>
+						<th class=""><strong>이미지 첨부파일 정렬</strong></th>
+						<td class="left"><input class="input_type_radio01" type="radio"/> 좌측정렬&nbsp;&nbsp;&nbsp;<input class="input_type_radio01" type="radio"/> 중앙정렬&nbsp;&nbsp;&nbsp;<input class="input_type_radio01" type="radio"/> 우측정렬</td>
+						<th class=""><strong>날짜형식(보기페이지)</strong></th>
+						<td class="left"><select><option>2016-04-25 11:30 AM</option></select></td>
+					</tr>
+					
+					<tr>
+						<th class=""><strong>웹에디터</strong></th>
+						<td class="left"><input class="input_type_radio01" type="radio"/> 사용함&nbsp;&nbsp;&nbsp;<input class="input_type_radio01" type="radio"/> 사용안함</td>
+						<th class=""><strong>코멘트 허용</strong></th>
+						<td class="left"><input class="input_type_radio01" type="radio"/> 허용함&nbsp;&nbsp;&nbsp;<input class="input_type_radio01" type="radio"/> 허용안함</td>
+					</tr>
+					<tr>
+						<th class="left"><strong>파일업로드</strong></th>
+						<td class="left"><select><option>사용안함</option></select></td>
+						<th class="left"><strong>동영상</strong></th>
+						<td class="left"><select><option>사용안함</option></select></td>
+					</tr>
+					<tr>
+						<th class=""><strong>스팸글체크기능</strong></th>
+						<td class="left"><input class="input_type_radio01" type="radio"/> 사용함&nbsp;&nbsp;&nbsp;<input class="input_type_radio01" type="radio"/> 사용안함</td>
+						<th class=""><strong>추천기능</strong></th>
+						<td class="left"><input class="input_type_radio01" type="radio"/> 사용함&nbsp;&nbsp;&nbsp;<input class="input_type_radio01" type="radio"/> 사용안함</td>
+					</tr>
+					
+					<tr>
+						<th class="left"><strong>욕설,비방글 필터링</strong></th>
+						<td class="left" colspan="3">
+							<input type="checkbox" class="input_type_radio01" /> 사용함 <span class="txt_red table_stxt">(공백없이 단어를 입력하시고, 단어와 단어사이에는 콤마(,)로 구분하세요.)</span>
+							<textarea rows="" cols="" style="height:50px;"></textarea>
+						</td>
+					</tr>
+				</tbody>
+			</table>
+			
+			<div class="page_bbt"><input type="button" value="확인" class="bt_bsubmit"/> <input type="button" value="취소" class="bt_bcancle"/></div>
+		</div>
+	</div>
+	<!--wrap_scon E-->
+</div>
+</body>
+</html>

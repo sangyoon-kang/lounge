@@ -1,0 +1,426 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="boardMaster">
+
+	<resultMap id="BaseResultMap" type="com.tagosolution.service.model.BoardMasterVO">
+		<id column="BOARD_CODE" jdbcType="VARCHAR" property="boardCode" />
+		<!-- <result column="BOARD_TYPE_FIXED_CODE" jdbcType="VARCHAR" property="boardTypeFixedCode" /> -->
+		<result column="BOARD_NAME" jdbcType="VARCHAR" property="boardName" />
+		<result column="GROUP_SEQ" jdbcType="INTEGER" property="groupSeq" />
+		<result column="PRIORITY" jdbcType="INTEGER" property="priority" />
+		<result column="BOARD_ADMIN" jdbcType="VARCHAR" property="boardAdmin" />
+		<!-- <result column="AUTH_LIST" jdbcType="SMALLINT" property="authList" />
+		<result column="AUTH_VIEW" jdbcType="SMALLINT" property="authView" />
+		<result column="AUTH_WRITE" jdbcType="SMALLINT" property="authWrite" />
+		<result column="AUTH_REPLY" jdbcType="SMALLINT" property="authReply" />
+		<result column="AUTH_COMMENT" jdbcType="SMALLINT" property="authComment" /> -->
+		<result column="DATE_FORMAT_LIST" jdbcType="VARCHAR" property="dateFormatList" />
+		<result column="DATE_FORMAT_VIEW" jdbcType="VARCHAR" property="dateFormatView" />
+		<result column="CSS_PREFIX" jdbcType="VARCHAR" property="cssPrefix" />
+		<result column="CSS_PREFIX_MOBILE" jdbcType="VARCHAR" property="cssPrefixMobile" />
+		<result column="NO_AUTH_MSG" jdbcType="VARCHAR" property="noAuthMsg" />
+		<result column="NO_AUTH_REDIRECT" jdbcType="VARCHAR" property="noAuthRedirect" />
+		<result column="EDITOR_YN" jdbcType="VARCHAR" property="editorYn" />
+		<result column="USE_FLAG" jdbcType="VARCHAR" property="useYn" />
+		<result column="AUTO_SECRET_YN" jdbcType="VARCHAR" property="autoSecretYn" />
+		<result column="COMMENT_YN" jdbcType="VARCHAR" property="commentYn" />
+		<result column="COMMENT_LEVEL" jdbcType="INTEGER" property="commentLevel" />
+		<result column="SHOW_LIST_YN" jdbcType="VARCHAR" property="showListYn" />
+		<result column="SHOW_PREV_NEXT_YN" jdbcType="VARCHAR" property="showPrevNextYn" />
+		<result column="PREVIEW_IMAGE_YN" jdbcType="VARCHAR" property="previewImageYn" />
+		<result column="PREVIEW_IMAGE_ALIGN" jdbcType="VARCHAR" property="previewImageAlign" />
+		<result column="RECOMM_YN" jdbcType="VARCHAR" property="recommYn" />
+		<result column="EMAIL_YN" jdbcType="VARCHAR" property="emailYn" />
+		<result column="PHONE_YN" jdbcType="VARCHAR" property="phoneYn" />
+		<result column="CHECK_SPAM_YN" jdbcType="VARCHAR" property="checkSpamYn" />
+		<result column="WRITE_BUTTON_YN" jdbcType="VARCHAR" property="writeButtonYn" />
+		<result column="FILTERING_YN" jdbcType="VARCHAR" property="filteringYn" />
+		<result column="SMS_YN" jdbcType="VARCHAR" property="smsYn" />
+		<result column="FILE_UPLOAD_COUNT" jdbcType="SMALLINT" property="fileUploadCount" />
+		<result column="MOVIE_UPLOAD_COUNT" jdbcType="SMALLINT" property="movieUploadCount" />
+		<result column="IMAGE_SIZE_LIST" jdbcType="SMALLINT" property="imageSizeList" />
+		<result column="IMAGE_SIZE_VIEW" jdbcType="SMALLINT" property="imageSizeView" />
+		<result column="PAGER_ROW_COUNT" jdbcType="SMALLINT" property="pagerRowCount" />
+		<result column="PAGER_BLOCK_COUNT" jdbcType="SMALLINT" property="pagerBlockCount" />
+		<result column="NEW_PERIOD" jdbcType="SMALLINT" property="newPeriod" />
+		<result column="HOT_COUNT" jdbcType="INTEGER" property="hotCount" />
+		<result column="LF_COUNT" jdbcType="SMALLINT" property="lfCount" />
+		<result column="SUBJECT_CHAR_COUNT" jdbcType="SMALLINT" property="subjectCharCount" />
+		<result column="POINT_VIEW" jdbcType="INTEGER" property="pointView" />
+		<result column="POINT_WRITE" jdbcType="INTEGER" property="pointWrite" />
+		<result column="POINT_REPLY" jdbcType="INTEGER" property="pointReply" />
+		<result column="POINT_RECOMM" jdbcType="INTEGER" property="pointRecomm" />
+		<result column="POINT_DOWNLOAD" jdbcType="INTEGER" property="pointDownload" />
+		<result column="POINT_COMMENT" jdbcType="INTEGER" property="pointComment" />
+		<result column="POINT_NO_MSG" jdbcType="VARCHAR" property="pointNoMsg" />
+		<!-- <result column="WRITER_FORMAT_FIXED_CODE" jdbcType="VARCHAR" property="writerFormatFixedCode" /> -->
+		<result column="REG_USER" jdbcType="VARCHAR" property="regUser" />
+		<result column="REG_DATE" jdbcType="TIMESTAMP" property="regDate" />
+		<result column="MOD_USER" jdbcType="VARCHAR" property="modUser" />
+		<result column="MOD_DATE" jdbcType="TIMESTAMP" property="modDate" />
+		<result column="FILTER" jdbcType="LONGVARCHAR" property="filter" />
+		
+		<result column="REG_USER_NAME" jdbcType="VARCHAR" property="regUserName" />
+		<result column="MOD_USER_NAME" jdbcType="VARCHAR" property="modUserName" />
+		
+		<association property="boardTypeFixedCodeVO" javaType="com.tagosolution.service.model.FixedCodeVO">
+			<result column="BOARD_TYPE_FIXED_CODE" jdbcType="VARCHAR" property="codeCode"/>
+			<result column="BOARD_TYPE_FIXED_CODE_NAME" jdbcType="VARCHAR" property="codeName"/>
+		</association>
+		<association property="writerFormatFixedCodeVO" javaType="com.tagosolution.service.model.FixedCodeVO">
+			<result column="WRITER_FORMAT_FIXED_CODE" jdbcType="VARCHAR" property="codeCode"/>
+			<result column="WRITER_FORMAT_FIXED_CODE_NAME" jdbcType="VARCHAR" property="codeName"/>
+		</association>
+		<association property="groupVO" javaType="com.tagosolution.service.model.GroupVO">
+			<result column="GROUP_SEQ" jdbcType="INTEGER" property="groupSeq"/>
+			<result column="GROUP_NAME" jdbcType="VARCHAR" property="groupName"/>
+		</association>
+		
+		<association property="authListMemberGradeVO" javaType="com.tagosolution.service.model.MemberGradeVO">
+			<result column="AUTH_LIST" jdbcType="INTEGER" property="gradeLevel"/>
+			<result column="AUTH_LIST_NAME" jdbcType="VARCHAR" property="gradeName"/>
+		</association>
+		
+		<association property="authViewMemberGradeVO" javaType="com.tagosolution.service.model.MemberGradeVO">
+			<result column="AUTH_VIEW" jdbcType="INTEGER" property="gradeLevel"/>
+			<result column="AUTH_VIEW_NAME" jdbcType="VARCHAR" property="gradeName"/>
+		</association>
+		
+		<association property="authWriteMemberGradeVO" javaType="com.tagosolution.service.model.MemberGradeVO">
+			<result column="AUTH_WRITE" jdbcType="INTEGER" property="gradeLevel"/>
+			<result column="AUTH_WRITE_NAME" jdbcType="VARCHAR" property="gradeName"/>
+		</association>
+		
+		<association property="authReplyMemberGradeVO" javaType="com.tagosolution.service.model.MemberGradeVO">
+			<result column="AUTH_REPLY" jdbcType="INTEGER" property="gradeLevel"/>
+			<result column="AUTH_REPLY_NAME" jdbcType="VARCHAR" property="gradeName"/>
+		</association>
+		
+		<association property="authCommentMemberGradeVO" javaType="com.tagosolution.service.model.MemberGradeVO">
+			<result column="AUTH_COMMENT" jdbcType="INTEGER" property="gradeLevel"/>
+			<result column="AUTH_COMMENT_NAME" jdbcType="VARCHAR" property="gradeName"/>
+		</association>
+		
+		<collection property="boardCategoryVO" column="BOARD_CODE" select="boardCategory.selectListByBoardCode"></collection>
+	</resultMap>
+	
+	<sql id="select">
+		BOARD_CODE, BOARD_TYPE_FIXED_CODE, BOARD_NAME, GROUP_SEQ, PRIORITY, BOARD_ADMIN,
+		AUTH_LIST, AUTH_VIEW, AUTH_WRITE, AUTH_REPLY, AUTH_COMMENT, DATE_FORMAT_LIST, DATE_FORMAT_VIEW,
+		CSS_PREFIX, CSS_PREFIX_MOBILE, NO_AUTH_MSG, NO_AUTH_REDIRECT, EDITOR_YN, USE_FLAG,
+		AUTO_SECRET_YN, COMMENT_YN, COMMENT_LEVEL, SHOW_LIST_YN, SHOW_PREV_NEXT_YN, PREVIEW_IMAGE_YN, PREVIEW_IMAGE_ALIGN, RECOMM_YN, EMAIL_YN, PHONE_YN,
+		CHECK_SPAM_YN, WRITE_BUTTON_YN, FILTERING_YN, SMS_YN, FILE_UPLOAD_COUNT, MOVIE_UPLOAD_COUNT,
+		IMAGE_SIZE_LIST, IMAGE_SIZE_VIEW, PAGER_ROW_COUNT, PAGER_BLOCK_COUNT, NEW_PERIOD,
+		HOT_COUNT, LF_COUNT, SUBJECT_CHAR_COUNT, POINT_VIEW, POINT_WRITE, POINT_REPLY, POINT_RECOMM,
+		POINT_DOWNLOAD, POINT_COMMENT, POINT_NO_MSG, WRITER_FORMAT_FIXED_CODE, REG_USER,
+		REG_DATE, MOD_USER, MOD_DATE
+		, FILTER
+		, GET_CODE_NAME(BOARD_TYPE_FIXED_CODE) AS BOARD_TYPE_FIXED_CODE_NAME
+		, GET_CODE_NAME(WRITER_FORMAT_FIXED_CODE) AS WRITER_FORMAT_FIXED_CODE_NAME
+		, (SELECT E.GROUP_NAME FROM TS_GROUP E WHERE E.GROUP_SEQ = TS_BOARD_MASTER.GROUP_SEQ) AS GROUP_NAME
+		, IFNULL((SELECT E.GRADE_NAME FROM TS_MEMBER_GRADE E WHERE E.GRADE_LEVEL = TS_BOARD_MASTER.AUTH_LIST), '전체') AS AUTH_LIST_NAME
+		, IFNULL((SELECT E.GRADE_NAME FROM TS_MEMBER_GRADE E WHERE E.GRADE_LEVEL = TS_BOARD_MASTER.AUTH_VIEW), '전체') AS AUTH_VIEW_NAME
+		, IFNULL((SELECT E.GRADE_NAME FROM TS_MEMBER_GRADE E WHERE E.GRADE_LEVEL = TS_BOARD_MASTER.AUTH_WRITE), '전체') AS AUTH_WRITE_NAME
+		, IFNULL((SELECT E.GRADE_NAME FROM TS_MEMBER_GRADE E WHERE E.GRADE_LEVEL = TS_BOARD_MASTER.AUTH_REPLY), '전체') AS AUTH_REPLY_NAME
+		, IFNULL((SELECT E.GRADE_NAME FROM TS_MEMBER_GRADE E WHERE E.GRADE_LEVEL = TS_BOARD_MASTER.AUTH_COMMENT), '전체') AS AUTH_COMMENT_NAME
+		, GET_USER_NAME(REG_USER) AS REG_USER_NAME
+		, GET_USER_NAME(MOD_USER) AS MOD_USER_NAME
+	</sql>
+	
+	
+	<sql id="whereClause">
+		<trim prefix="where" prefixOverrides="and">
+			<!-- 그룹 -->
+			<if test="type1 != ''">
+				and GROUP_SEQ = #{type1 }
+			</if>
+			<if test="searchWord != '' ">
+				and BOARD_NAME like CONCAT('%', #{searchWord}, '%')
+			</if>
+			<!-- 게시판코드 중복 검사 -->
+			<if test="id != null and id != ''">
+				and BOARD_CODE = #{id}
+			</if>
+		</trim>
+	</sql>
+	
+	<select id="selectByKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+		select
+		<include refid="select" />
+		FROM TS_BOARD_MASTER
+		where BOARD_CODE = #{boardCode,jdbcType=VARCHAR}
+	</select>
+	
+	
+	<delete id="deleteByKey" parameterType="java.lang.String">
+		delete FROM TS_BOARD_MASTER
+		where BOARD_CODE = #{boardCode,jdbcType=VARCHAR}
+	</delete>
+	
+	<!-- 게시판 마스터 목록 : 페이징 제거 -->
+	<select id="selectList" parameterType="search" resultMap="BaseResultMap">
+		select 
+		<include refid="select" />
+		FROM TS_BOARD_MASTER
+		<include refid="whereClause" />
+		<choose>
+			<when test="orderBy != ''">
+				order by ${orderBy }
+			</when>
+			<otherwise>
+				order by GROUP_SEQ, PRIORITY, BOARD_CODE
+			</otherwise>					
+		</choose>
+		<!-- <include refid="paging.limit"/> -->
+	</select>
+	
+	<!-- 게시판 마스터 목록 : 페이징 제거, 검색 조건 X -->
+	<select id="selectTotalList" resultMap="BaseResultMap">
+		SELECT
+		<include refid="select" />
+		FROM TS_BOARD_MASTER
+		WHERE USE_FLAG = 'Y'
+		<choose>
+			<otherwise>
+				order by GROUP_SEQ, PRIORITY, BOARD_CODE
+			</otherwise>					
+		</choose>
+	</select>
+	
+	<select id="totalCount" parameterType="search" resultType="int">
+		select count(*)
+		FROM TS_BOARD_MASTER
+		<include refid="whereClause" />
+	</select>
+	
+	<!-- LNB용 게시판 목록 -->
+	<select id="selectListForLNB" parameterType="search" resultMap="BaseResultMap">
+		SELECT BOARD_CODE
+			, BOARD_NAME
+			, CSS_PREFIX
+			, BOARD_TYPE_FIXED_CODE
+			, GROUP_SEQ
+			, (SELECT E.GROUP_NAME FROM TS_GROUP E WHERE E.GROUP_SEQ = TS_BOARD_MASTER.GROUP_SEQ) AS GROUP_NAME
+		FROM TS_BOARD_MASTER
+		WHERE USE_FLAG = 'Y'
+		<choose>
+			<when test="orderBy != null and orderBy != ''">
+				order by ${orderBy }
+			</when>
+			<otherwise>
+				ORDER BY GROUP_SEQ, PRIORITY, BOARD_CODE
+			</otherwise>					
+		</choose>
+	</select>
+	
+	<insert id="merge" parameterType="com.tagosolution.service.model.BoardMasterVO">
+		
+		INSERT INTO TS_BOARD_MASTER (
+			BOARD_CODE, BOARD_TYPE_FIXED_CODE, BOARD_NAME,
+			GROUP_SEQ, PRIORITY, BOARD_ADMIN,
+			AUTH_LIST, AUTH_VIEW, AUTH_WRITE,
+			AUTH_REPLY, AUTH_COMMENT, DATE_FORMAT_LIST,
+			DATE_FORMAT_VIEW, CSS_PREFIX, CSS_PREFIX_MOBILE,
+			NO_AUTH_MSG, NO_AUTH_REDIRECT, EDITOR_YN,
+			USE_FLAG, AUTO_SECRET_YN, COMMENT_YN, COMMENT_LEVEL,
+			SHOW_LIST_YN, SHOW_PREV_NEXT_YN, PREVIEW_IMAGE_YN,
+			RECOMM_YN, EMAIL_YN, PHONE_YN, CHECK_SPAM_YN, WRITE_BUTTON_YN,
+			FILTERING_YN, SMS_YN, FILE_UPLOAD_COUNT,
+			MOVIE_UPLOAD_COUNT, IMAGE_SIZE_LIST, IMAGE_SIZE_VIEW,
+			PAGER_ROW_COUNT, PAGER_BLOCK_COUNT, NEW_PERIOD,
+			HOT_COUNT, LF_COUNT, SUBJECT_CHAR_COUNT,
+			POINT_VIEW, POINT_WRITE, POINT_REPLY,
+			POINT_RECOMM, POINT_DOWNLOAD, POINT_COMMENT,
+			POINT_NO_MSG, WRITER_FORMAT_FIXED_CODE, REG_USER,
+			FILTER, PREVIEW_IMAGE_ALIGN
+		)
+		VALUES (
+			#{boardCode,jdbcType=VARCHAR}, #{boardTypeFixedCode,jdbcType=VARCHAR}, #{boardName,jdbcType=VARCHAR},
+			#{groupSeq,jdbcType=INTEGER}, #{priority,jdbcType=INTEGER}, #{boardAdmin,jdbcType=VARCHAR},
+			#{authList,jdbcType=SMALLINT}, #{authView,jdbcType=SMALLINT}, #{authWrite,jdbcType=SMALLINT},
+			#{authReply,jdbcType=SMALLINT}, #{authComment,jdbcType=SMALLINT}, #{dateFormatList,jdbcType=VARCHAR},
+			#{dateFormatView,jdbcType=VARCHAR}, #{cssPrefix,jdbcType=VARCHAR}, #{cssPrefixMobile,jdbcType=VARCHAR},
+			#{noAuthMsg,jdbcType=VARCHAR}, #{noAuthRedirect,jdbcType=VARCHAR}, #{editorYn,jdbcType=VARCHAR},
+			#{useYn,jdbcType=VARCHAR}, #{autoSecretYn,jdbcType=VARCHAR}, #{commentYn,jdbcType=VARCHAR}, #{commentLevel,jdbcType=INTEGER},
+			#{showListYn,jdbcType=VARCHAR}, #{showPrevNextYn,jdbcType=VARCHAR}, #{previewImageYn,jdbcType=VARCHAR},
+			#{recommYn,jdbcType=VARCHAR}, #{emailYn,jdbcType=VARCHAR}, #{phoneYn,jdbcType=VARCHAR}, #{checkSpamYn,jdbcType=VARCHAR}, #{writeButtonYn,jdbcType=VARCHAR},
+			#{filteringYn,jdbcType=VARCHAR}, #{smsYn,jdbcType=VARCHAR}, #{fileUploadCount,jdbcType=SMALLINT},
+			#{movieUploadCount,jdbcType=SMALLINT}, #{imageSizeList,jdbcType=SMALLINT}, #{imageSizeView,jdbcType=SMALLINT},
+			#{pagerRowCount,jdbcType=SMALLINT}, #{pagerBlockCount,jdbcType=SMALLINT}, #{newPeriod,jdbcType=SMALLINT},
+			#{hotCount,jdbcType=INTEGER}, #{lfCount,jdbcType=SMALLINT}, #{subjectCharCount,jdbcType=SMALLINT},
+			#{pointView,jdbcType=INTEGER}, #{pointWrite,jdbcType=INTEGER}, #{pointReply,jdbcType=INTEGER},
+			#{pointRecomm,jdbcType=INTEGER}, #{pointDownload,jdbcType=INTEGER}, #{pointComment,jdbcType=INTEGER},
+			#{pointNoMsg,jdbcType=VARCHAR}, #{writerFormatFixedCode,jdbcType=VARCHAR}, #{regUser,jdbcType=VARCHAR},
+			#{filter,jdbcType=LONGVARCHAR}, #{previewImageAlign,jdbcType=VARCHAR}
+		)
+		ON DUPLICATE KEY UPDATE
+			<trim suffix=" " suffixOverrides=",">
+				MOD_DATE = now(), 
+				<if test="boardTypeFixedCode != null">
+					BOARD_TYPE_FIXED_CODE = #{boardTypeFixedCode,jdbcType=VARCHAR},
+				</if>
+				<if test="boardName != null">
+					BOARD_NAME = #{boardName,jdbcType=VARCHAR},
+				</if>
+				<if test="groupSeq != null">
+					GROUP_SEQ = #{groupSeq,jdbcType=INTEGER},
+				</if>
+				<if test="priority != null">
+					PRIORITY = #{priority,jdbcType=INTEGER},
+				</if>
+				<if test="boardAdmin != null">
+					BOARD_ADMIN = #{boardAdmin,jdbcType=VARCHAR},
+				</if>
+				<if test="authList != null">
+					AUTH_LIST = #{authList,jdbcType=SMALLINT},
+				</if>
+				<if test="authView != null">
+					AUTH_VIEW = #{authView,jdbcType=SMALLINT},
+				</if>
+				<if test="authWrite != null">
+					AUTH_WRITE = #{authWrite,jdbcType=SMALLINT},
+				</if>
+				<if test="authReply != null">
+					AUTH_REPLY = #{authReply,jdbcType=SMALLINT},
+				</if>
+				<if test="authComment != null">
+					AUTH_COMMENT = #{authComment,jdbcType=SMALLINT},
+				</if>
+				<if test="dateFormatList != null">
+					DATE_FORMAT_LIST = #{dateFormatList,jdbcType=VARCHAR},
+				</if>
+				<if test="dateFormatView != null">
+					DATE_FORMAT_VIEW = #{dateFormatView,jdbcType=VARCHAR},
+				</if>
+				<if test="cssPrefix != null">
+					CSS_PREFIX = #{cssPrefix,jdbcType=VARCHAR},
+				</if>
+				<if test="cssPrefixMobile != null">
+					CSS_PREFIX_MOBILE = #{cssPrefixMobile,jdbcType=VARCHAR},
+				</if>
+				<if test="noAuthMsg != null">
+					NO_AUTH_MSG = #{noAuthMsg,jdbcType=VARCHAR},
+				</if>
+				<if test="noAuthRedirect != null">
+					NO_AUTH_REDIRECT = #{noAuthRedirect,jdbcType=VARCHAR},
+				</if>
+				<if test="editorYn != null">
+					EDITOR_YN = #{editorYn,jdbcType=VARCHAR},
+				</if>
+				<if test="useYn != null">
+					USE_FLAG = #{useYn,jdbcType=VARCHAR},
+				</if>
+				<if test="autoSecretYn != null">
+					AUTO_SECRET_YN = #{autoSecretYn,jdbcType=VARCHAR},
+				</if>
+				<if test="commentYn != null">
+					COMMENT_YN = #{commentYn,jdbcType=VARCHAR},
+				</if>
+				<if test="commentLevel != null">
+					COMMENT_LEVEL = #{commentLevel,jdbcType=INTEGER},
+				</if>
+				<if test="showListYn != null">
+					SHOW_LIST_YN = #{showListYn,jdbcType=VARCHAR},
+				</if>
+				<if test="showPrevNextYn != null">
+					SHOW_PREV_NEXT_YN = #{showPrevNextYn,jdbcType=VARCHAR},
+				</if>
+				<if test="previewImageYn != null">
+					PREVIEW_IMAGE_YN = #{previewImageYn,jdbcType=VARCHAR},
+				</if>
+				<if test="previewImageAlign != null">
+					PREVIEW_IMAGE_ALIGN = #{previewImageAlign,jdbcType=VARCHAR},
+				</if>
+				<if test="recommYn != null">
+					RECOMM_YN = #{recommYn,jdbcType=VARCHAR},
+				</if>
+				<if test="emailYn != null">
+					EMAIL_YN = #{emailYn,jdbcType=VARCHAR},
+				</if>
+				<if test="phoneYn != null">
+					PHONE_YN = #{phoneYn,jdbcType=VARCHAR},
+				</if>
+				<if test="checkSpamYn != null">
+					CHECK_SPAM_YN = #{checkSpamYn,jdbcType=VARCHAR},
+				</if>
+				<if test="writeButtonYn != null">
+					WRITE_BUTTON_YN = #{writeButtonYn,jdbcType=VARCHAR},
+				</if>
+				<if test="filteringYn != null">
+					FILTERING_YN = #{filteringYn,jdbcType=VARCHAR},
+				</if>
+				<if test="smsYn != null">
+					SMS_YN = #{smsYn,jdbcType=VARCHAR},
+				</if>
+				<if test="fileUploadCount != null">
+					FILE_UPLOAD_COUNT = #{fileUploadCount,jdbcType=SMALLINT},
+				</if>
+				<if test="movieUploadCount != null">
+					MOVIE_UPLOAD_COUNT = #{movieUploadCount,jdbcType=SMALLINT},
+				</if>
+				<if test="imageSizeList != null">
+					IMAGE_SIZE_LIST = #{imageSizeList,jdbcType=SMALLINT},
+				</if>
+				<if test="imageSizeView != null">
+					IMAGE_SIZE_VIEW = #{imageSizeView,jdbcType=SMALLINT},
+				</if>
+				<if test="pagerRowCount != null">
+					PAGER_ROW_COUNT = #{pagerRowCount,jdbcType=SMALLINT},
+				</if>
+				<if test="pagerBlockCount != null">
+					PAGER_BLOCK_COUNT = #{pagerBlockCount,jdbcType=SMALLINT},
+				</if>
+				<if test="newPeriod != null">
+					NEW_PERIOD = #{newPeriod,jdbcType=SMALLINT},
+				</if>
+				<if test="hotCount != null">
+					HOT_COUNT = #{hotCount,jdbcType=INTEGER},
+				</if>
+				<if test="lfCount != null">
+					LF_COUNT = #{lfCount,jdbcType=SMALLINT},
+				</if>
+				<if test="subjectCharCount != null">
+					SUBJECT_CHAR_COUNT = #{subjectCharCount,jdbcType=SMALLINT},
+				</if>
+				<if test="pointView != null">
+					POINT_VIEW = #{pointView,jdbcType=INTEGER},
+				</if>
+				<if test="pointWrite != null">
+					POINT_WRITE = #{pointWrite,jdbcType=INTEGER},
+				</if>
+				<if test="pointReply != null">
+					POINT_REPLY = #{pointReply,jdbcType=INTEGER},
+				</if>
+				<if test="pointRecomm != null">
+					POINT_RECOMM = #{pointRecomm,jdbcType=INTEGER},
+				</if>
+				<if test="pointDownload != null">
+					POINT_DOWNLOAD = #{pointDownload,jdbcType=INTEGER},
+				</if>
+				<if test="pointComment != null">
+					POINT_COMMENT = #{pointComment,jdbcType=INTEGER},
+				</if>
+				<if test="pointNoMsg != null">
+					POINT_NO_MSG = #{pointNoMsg,jdbcType=VARCHAR},
+				</if>
+				<if test="writerFormatFixedCode != null">
+					WRITER_FORMAT_FIXED_CODE = #{writerFormatFixedCode,jdbcType=VARCHAR},
+				</if>
+				<if test="modUser != null">
+					MOD_USER = #{modUser,jdbcType=VARCHAR},
+				</if>
+				<if test="filter != null">
+					FILTER = #{filter,jdbcType=LONGVARCHAR},
+				</if>	
+			</trim>
+	</insert>
+	
+	<!-- 그룹 순번 업데이트 : 그룹 정보 삭제 시 -->
+	<update id="updateGroupSeq" parameterType="search">
+		UPDATE TS_BOARD_MASTER
+		SET GROUP_SEQ = 0
+			, PRIORITY = 1
+		WHERE GROUP_SEQ = #{gseq}
+	</update>
+	
+</mapper>

@@ -1,0 +1,58 @@
+@media (max-width: 767px) {
+  .board_basic_type01_01 table {
+    width: 100%;
+    display: block;
+  }
+  .board_basic_type01_01 table thead {
+    display: none;
+  }
+  .board_basic_type01_01 table tbody {
+    display: block;
+  }
+  .board_basic_type01_01 table tbody tr {
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -ms-flex-wrap: wrap;
+        flex-wrap: wrap;
+  }
+  .board_basic_type01_01 table tbody td:not(.title):not(.reg_date):not(.reg_user) {
+    display: none;
+  }
+  .board_basic_type01_01 table tbody td.title {
+    display: block;
+    max-width: 100%;
+    -webkit-box-flex: 0;
+        -ms-flex: 0 0 100%;
+            flex: 0 0 100%;
+    padding-bottom: 0;
+  }
+  .board_basic_type01_01 table tbody td.title a {
+    font-size: 4.4vw;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    display: block;
+  }
+  .board_basic_type01_01 table tbody td.reg_date, .board_basic_type01_01 table tbody td.reg_user {
+    font-weight: 300;
+  }
+  .board_basic_type01_01 table tbody td.reg_user {
+    padding-right: 10px;
+    margin-right: 5px;
+    position: relative;
+  }
+  .board_basic_type01_01 table tbody td.reg_user::after {
+    content: '';
+    position: absolute;
+    display: inline-block;
+    width: 1px;
+    height: 10px;
+    background: #ccc;
+    right: 0;
+    top: 50%;
+    -webkit-transform: translateY(-50%);
+            transform: translateY(-50%);
+  }
+}
+/*# sourceMappingURL=board.css.map */

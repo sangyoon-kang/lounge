@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="bank">
+
+	<resultMap id="BaseResultMap" type="com.tagosolution.service.model.BankVO">
+		<id column="BANK_SEQ" jdbcType="SMALLINT" property="bankSeq" />
+		<result column="BANK_FIXED_CODE" jdbcType="VARCHAR" property="bankFixedCode" />
+		<result column="ACCOUNT_NO" jdbcType="VARCHAR" property="accountNo" />
+		<result column="ACCOUNT_NAME" jdbcType="VARCHAR" property="accountName" />
+		<result column="CODE_NAME" jdbcType="VARCHAR" property="codeName" />
+
+	</resultMap>
+
+	<sql id="select">
+		BANK_SEQ, BANK_FIXED_CODE, ACCOUNT_NO, ACCOUNT_NAME
+	</sql>
+	
+	<sql id="whereClause">
+		<trim prefix="where" prefixOverrides="and">
+		</trim>
+	</sql>
+	
+	<select id="selectOne" resultMap="BaseResultMap">
+		SELECT	TB.BANK_SEQ, TFC.CODE_NAME, TB.ACCOUNT_NO, TB.ACCOUNT_NAME
+		FROM	ts_bank TB
+			INNER JOIN ts_fixed_code TFC
+				ON TFC.CODE_CODE = TB.BANK_FIXED_CODE
+		WHERE	TFC.CODE_CODE != '007000'
+			AND	TFC.CODE_CODE LIKE '007%'
+		ORDER BY TFC.CODE_CODE ASC
+		LIMIT 0,1
+	</select>
+	
+	<select id="selectList" resultMap="BaseResultMap">
+		SELECT	TB.BANK_SEQ, TFC.CODE_NAME, TB.ACCOUNT_NO, TB.ACCOUNT_NAME
+		FROM	ts_bank TB
+			INNER JOIN ts_fixed_code TFC
+				ON TFC.CODE_CODE = TB.BANK_FIXED_CODE
+		WHERE	TFC.CODE_CODE != '007000'
+			AND	TFC.CODE_CODE LIKE '007%'
+		ORDER BY TFC.CODE_CODE ASC;
+	</select>
+	
+	<select id="totalCount" parameterType="search" resultType="int">
+		SELECT COUNT(*)
+		FROM ts_bank
+		<include refid="whereClause" />
+	</select>
+	
+	<select id="selectByKey" parameterType="java.lang.Short" resultMap="BaseResultMap">
+		SELECT
+		<include refid="select" />
+		FROM TS_BANK
+		WHERE BANK_SEQ = #{bankSeq,jdbcType=SMALLINT}
+	</select>
+	
+	<delete id="deleteByKey" parameterType="java.lang.Short">
+		DELETE FROM TS_BANK
+		WHERE BANK_SEQ = #{bankSeq,jdbcType=SMALLINT}
+	</delete>
+
+	<insert id="merge" useGeneratedKeys="true" keyProperty="bankSeq" parameterType="com.tagosolution.service.model.BankVO">
+		INSERT INTO TS_BANK (
+		BANK_SEQ, BANK_FIXED_CODE, ACCOUNT_NO, ACCOUNT_NAME
+		)
+		VALUES (
+		#{bankSeq,jdbcType=SMALLINT}, #{bankFixedCode,jdbcType=VARCHAR}, #{accountNo,jdbcType=VARCHAR},
+		#{accountName,jdbcType=VARCHAR}
+		)
+		ON DUPLICATE KEY UPDATE
+		<trim suffix="" suffixOverrides=",">
+			<if test="bankSeq != null">
+				BANK_SEQ = #{bankSeq,jdbcType=SMALLINT},
+			</if>
+			<if test="bankFixedCode != null">
+				BANK_FIXED_CODE = #{bankFixedCode,jdbcType=VARCHAR},
+			</if>
+			<if test="accountNo != null">
+				ACCOUNT_NO = #{accountNo,jdbcType=VARCHAR},
+			</if>
+			<if test="accountName != null">
+				ACCOUNT_NAME = #{accountName,jdbcType=VARCHAR},
+			</if>
+		</trim>
+	</insert>
+	
+</mapper>

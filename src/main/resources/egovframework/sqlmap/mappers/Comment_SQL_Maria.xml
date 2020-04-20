@@ -1,0 +1,251 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="boardComment">
+
+	<resultMap id="BaseResultMap" type="com.tagosolution.service.model.CommentVO">
+		<id column="COMMENT_SEQ" jdbcType="BIGINT" property="commentSeq" />
+		<result column="PARENT_SEQ" jdbcType="BIGINT" property="parentSeq" />
+		<result column="BOARD_SEQ" jdbcType="INTEGER" property="boardSeq" />
+		<result column="BOARD_CODE" jdbcType="VARCHAR" property="boardCode" />
+		<result column="PRODUCT_CODE" jdbcType="VARCHAR" property="productCode" />
+		<result column="H_GROUP" jdbcType="BIGINT" property="hGroup" />
+		<result column="H_ORDER" jdbcType="INTEGER" property="hOrder" />
+		<result column="H_DEPTH" jdbcType="INTEGER" property="hDepth" />
+		<result column="STAR" jdbcType="SMALLINT" property="star" />
+		<result column="BODY" jdbcType="VARCHAR" property="body" />
+		<result column="PWD" jdbcType="VARCHAR" property="pwd" />
+		<result column="USER_NAME" jdbcType="VARCHAR" property="userName" />
+		<result column="USER_NICKNAME" jdbcType="VARCHAR" property="nickName" />
+		<result column="REG_USER" jdbcType="VARCHAR" property="regUser" />
+		<result column="REG_DATE" jdbcType="DATE" property="regDate" />
+		<result column="USE_FLAG" jdbcType="VARCHAR" property="useYn" />
+		<result column="DISPLAY_YN" jdbcType="VARCHAR" property="displayYn" />
+		<result column="DATE_FORMAT_LIST" jdbcType="VARCHAR" property="dateFormatList" />
+		<result column="IP_ADDR" jdbcType="VARCHAR" property="ipAddr" />
+	</resultMap>
+
+	<sql id="select">
+		COMMENT_SEQ, PARENT_SEQ, BOARD_SEQ, BOARD_CODE, H_GROUP,
+		H_ORDER, H_DEPTH, STAR, BODY, PWD, USER_NAME, USER_NICKNAME,
+		REG_USER,
+		REG_DATE, USE_FLAG, DISPLAY_YN
+		, (SELECT E.DATE_FORMAT_LIST FROM
+		TS_BOARD_MASTER E WHERE E.BOARD_CODE = TS_COMMENT.BOARD_CODE) AS
+		DATE_FORMAT_LIST
+		, inet_ntoa(IP_ADDR) AS IP_ADDR
+	</sql>
+
+	<sql id="whereClause">
+		<trim prefix="where" prefixOverrides="and">
+			<if test="id != null and id != ''">
+				AND REG_USER = #{id}
+			</if>
+			<if test="bcseq != null and bcseq != ''">
+				AND BOARD_SEQ = #{bcseq}
+			</if>
+			<if test="bcode != null and bcode != ''">
+				AND BOARD_CODE = #{bcode}
+			</if>
+			<if test="searchWord != ''">
+				<choose>
+					<when test="type1 == 'body'">
+						and BODY like CONCAT('%', #{searchWord}, '%')
+					</when>
+					<when test="type1 == 'username'">
+						and (USER_NAME like CONCAT('%', #{searchWord}, '%')
+						or USER_NICKNAME like CONCAT('%', #{searchWord}, '%'))
+					</when>
+					<when test="type1 == 'id'">
+						and REG_USER like CONCAT('%', #{searchWord}, '%')
+					</when>
+					<otherwise>
+						and (BODY like CONCAT('%', #{searchWord}, '%'))
+					</otherwise>
+				</choose>
+			</if>
+			<if test="startDate != null and startDate != ''">
+				<![CDATA[ 
+					AND STR_TO_DATE(DATE_FORMAT(REG_DATE, '%Y-%m-%d'), '%Y-%m-%d') >= STR_TO_DATE(#{startDate}, '%Y-%m-%d') 
+				]]>
+			</if>
+			<if test="endDate != null and endDate != ''">
+				<![CDATA[ 
+					AND STR_TO_DATE(DATE_FORMAT(REG_DATE, '%Y-%m-%d'), '%Y-%m-%d') <= STR_TO_DATE(#{endDate}, '%Y-%m-%d')
+				]]>
+			</if>
+			<if test="type2 != null and type2 != ''">
+				<choose>
+					<when test="type2 == 'today'">
+						AND STR_TO_DATE(DATE_FORMAT(REG_DATE, '%Y-%m-%d'),
+						'%Y-%m-%d') = STR_TO_DATE(current_date, '%Y-%m-%d')
+					</when>
+					<when test="type2 == 'yesterday'">
+						AND STR_TO_DATE(DATE_FORMAT(REG_DATE, '%Y-%m-%d'),
+						'%Y-%m-%d') = STR_TO_DATE(SUBDATE(current_date, 1), '%Y-%m-%d')
+					</when>
+					<when test="type2 == 'week'">
+						AND YEARWEEK(REG_DATE, 1) = YEARWEEK(current_date,
+						1)
+					</when>
+					<when test="type2 == 'month'">
+						AND MONTH(REG_DATE) = MONTH(current_date)
+					</when>
+				</choose>
+			</if>
+			AND USE_FLAG = 'Y'
+		</trim>
+	</sql>
+
+	<select id="selectPeriod" parameterType="search" resultMap="BaseResultMap">
+		SELECT
+		<include refid="select" />
+		FROM TS_COMMENT
+		WHERE PARENT_SEQ = #{bseq,jdbcType=BIGINT}
+		AND USE_FLAG = 'Y'
+		AND DISPLAY_YN = 'Y'
+	</select>
+
+	<select id="selectList" parameterType="search" resultMap="BaseResultMap">
+		select
+		<include refid="select" />
+		FROM TS_COMMENT
+		<include refid="whereClause" />
+		<choose>
+			<when test="orderBy != ''">
+				order by ${orderBy }
+			</when>
+			<otherwise>
+
+			</otherwise>
+		</choose>
+		<include refid="paging.limit" />
+	</select>
+
+	<select id="totalCount" parameterType="search" resultType="int">
+		select count(*)
+		FROM TS_COMMENT
+		WHERE USE_FLAG = 'Y'
+	</select>
+
+	<select id="selectCountToday" resultType="java.lang.Integer">
+		SELECT
+		COUNT(*)
+		FROM
+		TS_COMMENT
+		WHERE
+		DATE(REG_DATE) = CURDATE()
+		AND USE_FLAG = 'Y'
+	</select>
+
+	<select id="selectByKey" parameterType="java.lang.Long"
+		resultMap="BaseResultMap">
+		select
+		<include refid="select" />
+		FROM TS_COMMENT
+		where COMMENT_SEQ = #{commentSeq,jdbcType=BIGINT}
+	</select>
+
+	<select id="selectByBseq" parameterType="search" resultMap="BaseResultMap">
+		SELECT
+		<include refid="select" />
+		FROM TS_COMMENT
+		WHERE BOARD_SEQ = #{bseq }
+		AND USE_FLAG = 'Y'
+		AND DISPLAY_YN = 'Y'
+		AND PARENT_SEQ = 0
+		ORDER BY REG_DATE DESC
+	</select>
+
+
+	<insert id="merge" useGeneratedKeys="true" keyProperty="commentSeq"
+		parameterType="com.tagosolution.service.model.CommentVO">
+		INSERT INTO TS_COMMENT (
+		COMMENT_SEQ, PARENT_SEQ, STAR,
+		H_GROUP, H_ORDER, H_DEPTH,
+		USER_NAME, USER_NICKNAME,
+		REG_USER, BODY, BOARD_SEQ, BOARD_CODE, PRODUCT_CODE,
+		IP_ADDR, PWD, DISPLAY_YN
+		)
+		values (
+		#{commentSeq,jdbcType=BIGINT}, #{parentSeq,jdbcType=BIGINT}, #{star,jdbcType=SMALLINT},
+		#{hGroup,jdbcType=BIGINT}, #{hOrder,jdbcType=INTEGER},
+		#{hDepth,jdbcType=INTEGER},
+		#{userName,jdbcType=VARCHAR}, #{nickName,jdbcType=VARCHAR},
+		#{regUser,jdbcType=VARCHAR}, #{body,jdbcType=VARCHAR}, #{boardSeq,jdbcType=INTEGER},
+		#{boardCode,jdbcType=VARCHAR}, #{productCode,jdbcType=VARCHAR}
+		,inet_aton(#{ipAddr,jdbcType=VARCHAR}), #{pwd,jdbcType=VARCHAR},
+		#{displayYn,jdbcType=VARCHAR}
+		)
+		ON DUPLICATE KEY UPDATE
+		<trim suffix=" " suffixOverrides=",">
+			<if test="commentSeq != null">
+				COMMENT_SEQ = #{commentSeq,jdbcType=BIGINT},
+			</if>
+			<if test="parentSeq != null">
+				PARENT_SEQ = #{parentSeq,jdbcType=BIGINT},
+			</if>
+			<if test="star != null">
+				STAR = #{star,jdbcType=SMALLINT},
+			</if>
+			<if test="hGroup != null">
+				H_GROUP = #{hGroup,jdbcType=BIGINT},
+			</if>
+			<if test="hOrder != null">
+				H_ORDER = #{hOrder,jdbcType=INTEGER},
+			</if>
+			<if test="hDepth != null">
+				H_DEPTH = #{hDepth,jdbcType=INTEGER},
+			</if>
+			<if test="userName != null">
+				USER_NAME = #{userName,jdbcType=VARCHAR},
+			</if>
+			<if test="nickName != null">
+				USER_NICKNAME = #{nickName,jdbcType=VARCHAR},
+			</if>
+			<if test="regUser != null and regUser != ''">
+				REG_USER = #{regUser,jdbcType=VARCHAR},
+			</if>
+			<if test="body != null">
+				BODY = #{body,jdbcType=VARCHAR},
+			</if>
+			<if test="boardSeq != null">
+				BOARD_SEQ = #{boardSeq,jdbcType=INTEGER},
+			</if>
+			<if test="boardCode != null">
+				BOARD_CODE = #{boardCode,jdbcType=VARCHAR},
+			</if>
+			<if test="productCode != null">
+				PRODUCT_CODE = #{productCode,jdbcType=VARCHAR},
+			</if>
+			<if test="ipAddr != null">
+				IP_ADDR = inet_aton(#{ipAddr,jdbcType=VARCHAR}),
+			</if>
+			<if test="pwd != null">
+				PWD = #{pwd,jdbcType=VARCHAR},
+			</if>
+
+			<if test="useYn != null and useYn != ''">
+				USE_FLAG = #{useYn,jdbcType=VARCHAR},
+			</if>
+			<if test="displayYn != null">
+				DISPLAY_YN = #{displayYn,jdbcType=VARCHAR},
+			</if>
+
+		</trim>
+	</insert>
+
+	<delete id="delete" parameterType="com.tagosolution.service.model.CommentVO">
+		UPDATE TS_COMMENT
+		SET USE_FLAG
+		= 'N'
+		WHERE COMMENT_SEQ = #{commentSeq,jdbcType=BIGINT}
+	</delete>
+
+	<delete id="updateByFixedKey" parameterType="com.tagosolution.service.model.CommentVO">
+		UPDATE TS_COMMENT
+		SET DISPLAY_YN = #{displayYn,jdbcType=VARCHAR}
+		WHERE COMMENT_SEQ =
+		#{commentSeq,jdbcType=BIGINT}
+	</delete>
+
+</mapper>

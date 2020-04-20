@@ -1,0 +1,35 @@
+@import mixin
+
++respond-to-down(small)
+    .board_basic_type01_01
+        table
+            width: 100%
+            display: block
+            thead
+                display: none
+            tbody
+                display: block
+                tr
+                    display: flex
+                    flex-wrap: wrap
+                td
+                    &:not(.title):not(.reg_date):not(.reg_user)
+                        display: none
+                    &.title
+                        display: block
+                        max-width: 100%
+                        flex: 0 0 100%
+                        padding-bottom: 0
+                        
+                        a
+                            font-size: 4.4vw
+                            white-space: nowrap
+                            text-overflow: ellipsis
+                            overflow: hidden
+                            display: block
+                    &.reg_date,&.reg_user
+                        font-weight: 300
+                    &.reg_user
+                        padding-right: 10px
+                        margin-right: 5px
+                        +after-line(1px,10px,#ccc)

@@ -1,0 +1,203 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link href="/css/master.css" rel="stylesheet" type="text/css" />
+<link href="/js/jquery-ui.css" rel="stylesheet" type="text/css" />
+<link href="/css/SimpleLightBox.css" rel="stylesheet" type="text/css" />
+<link href="/css/tree.css" rel="stylesheet" type="text/css" />
+<script type="text/javascript" language="Javascript" src="/js/external/jquery/jquery.js"></script>
+<script type="text/javascript" language="Javascript" src="/js/jquery-ui.js"></script>
+<script type="text/javascript" language="Javascript" src="/js/jquery.form.min.js"></script>
+<script type="text/javascript" language="Javascript" src="/js/jquery.ui.datepicker-ko.js"></script>
+<script type="text/javascript" language="Javascript" src="/js/LightBox/SimpleLightBox.js"></script>
+<script type="text/javascript" language="Javascript" src="/js/tree.js"></script>
+<script type="text/javascript" language="Javascript" src="/js/Common.js"></script>
+<script type="text/javascript" language="Javascript" src="/js/page_function.js"></script>
+<script type="text/javascript" language="Javascript" src="/js/jquery.scrollbox.js"></script>
+<script type="text/javascript" language="Javascript" src="/js/jquery.flexisel.js"></script>
+<script type="text/javascript" language="Javascript" src="/js/jquery.easing.1.3.js"></script>
+<title>관리시스템</title>
+</head>
+
+<body>
+<div id="wrap">
+	<!--header S-->
+	<div id="wrap_header">
+		<ul class="gnb" id="gnb_link">
+			<li link="/config/config01.html">환경설정</li>
+			<li link="/basic/basic01.html">기본설정</li>
+			<li link="/bbs/bbs01.html">게시판관리</li>
+			<li link="/member/member01.html">회원관리</li>
+			<li link="/poll/poll01.html">설문관리</li>
+			<li link="/schedule/sch01.html">일정관리</li>
+			<li link="/product/pro01.html">상품관리</li>
+			<li link="/banner/banner01.html">배너관리</li>
+			<li link="/connect/connect01.html">접속통계</li>
+		</ul>
+		<script type="text/javascript" language="Javascript">
+		<!--
+
+			$(document).ready(function(){
+				
+				$('#gnb_link li').on("click", function(){
+
+					var link_info = $(this).attr("link");
+					//alert(link_info+'로 이동합니다.');
+					location.href=link_info;
+
+				});
+
+			});
+		-->
+		</script>
+		<p id="LogoutBtn">로그아웃</p>
+	</div>
+	<!--header E-->
+
+	<!--lnb S-->
+	<div id="wrap_lnb">
+		<h2 class="mg_logo">사이트관리자<br/><a href="" class="bt_gohome">내홈페이지바로가기→</a></h2>
+		<h2 class="lnb_title"><span class="title1">환경설정</span></h2>
+		<ul class="lnb">
+			<li class="lnb_depth1"><a href="/config/config01.html" class="depth1_on">기본설정</a></li>
+			<li class="lnb_depth1"><a href="/config/config02.html">로그분석 설정</a></li>
+			<li class="lnb_depth1"><a href="/config/config03.html">게시판</a></li>
+			<li class="lnb_depth1"><a href="/config/config04.html">메인게시물</a></li>
+			<li class="lnb_depth1"><a href="/config/config05.html">회원 관리</a></li>
+			<li class="lnb_depth1"><a href="/config/config06.html">폼메일</a></li>
+			<li class="lnb_depth1"><a href="/config/config07.html">상품 관리</a></li>
+			<li class="lnb_depth1"><a href="/config/config08.html">메인상품</a></li>
+			<li class="lnb_depth1"><a href="/config/config09.html">설문조사</a></li>
+			<li class="lnb_depth1"><a href="/config/config10.html">메인 설문</a></li>
+			<li class="lnb_depth1"><a href="/config/config11.html">일정 관리</a></li>
+			<li class="lnb_depth1"><a href="/config/config12.html">배너관리</a></li>
+			<li class="lnb_depth1"><a href="/config/config13.html">페이지 관리</a></li>
+			<li class="lnb_depth1"><a href="/config/config14.html">페이지 접근 권한</a></li>
+			<li class="lnb_depth1"><a href="/config/config15.html">전체 검색</a></li>
+			<li class="lnb_depth1"><a href="/config/config16.html">카운터</a></li>
+		</ul>
+		<div id="copyright">
+			<p>2016 LCDNS<br/>All rights reserved.</p>
+		</div>
+	</div>
+	<!--lnb E-->
+
+	<!--wrap_scon S-->
+	<div id="wrap_scon">
+		<div class="scon_title">
+			<h2>기본설정</h2>
+			<p>홈 > 환경설정 > 기본설정</p>
+		</div>
+		<div class="scon">
+			<h3>버전</h3>
+			<table class="table_style1">
+				<caption>버전</caption>
+				<colgroup>
+					<col width="20%" />
+					<col width="" />
+				</colgroup>
+				
+				<tbody>
+					<tr>
+						<th class="left"><strong>최종 업데이트 날짜</strong></th>
+						<td class="left">2016-10-11</td>
+					</tr>
+				</tbody>
+			</table>
+			<p class="tit_blank"></p>
+			<h3>라이선스 등록</h3>
+			<table class="table_style1">
+				<caption>라이선스등록</caption>
+				<colgroup>
+					<col width="20%"/>
+					<col width="" />
+				</colgroup>
+				<tbody>
+					<tr>
+						<th class="left"><strong>라이선스 키</strong></th>
+						<td class="left">
+							<input name="" class="table_input1" value="" maxlength="20" type="text" /> 발급받으신 라이선스 키를 입력해 주세요.
+
+						</td>
+					</tr>
+				</tbody>
+			</table>
+
+
+			<p class="tit_blank"></p>
+			<h3>관리자 로고 및 타이틀</h3>
+			<table class="table_style1">
+				<caption>관리자로고및타이틀</caption>
+				<colgroup>
+					<col width="20%" />
+					<col width="" />
+				</colgroup>
+				<tbody>
+					<tr>
+						<th class="left"><strong>관리자 로고</strong></th>
+						<td class="left">
+							<input type="file" />
+							<span class="table_file_logo"><img src="/images/mg/logo.png" alt="" /></span>
+						</td>
+					</tr>
+					<tr>
+						<th class="left"><strong>관리자 페이지 타이틀</strong></th>
+						<td class="left">
+							<input name="" class="table_input1" value="" type="text" style="width:300px;" />
+						</td>
+					</tr>
+					<tr>
+						<th class="left"><strong>관리자 카피라이트</strong></th>
+						<td class="left">
+							<textarea class="table_input1" rows="" cols="" style="width:95%; height:50px;"></textarea>
+						</td>
+					</tr>
+				</tbody>
+			</table>
+
+
+
+			<p class="tit_blank"></p>
+			<h3>사용폰트</h3>
+			<table class="table_style1">
+				<caption>사용폰트</caption>
+				<colgroup>
+					<col width="20%" />
+					<col width="" />
+				</colgroup>
+				<tbody>
+					<tr>
+						<th class="left"><strong>기본 폰트 설정</strong></th>
+						<td class="left">
+							<select><option>폰트1</option><option>폰트2</option></select> 사용하실 기본 폰트를 설정해주세요.
+						</td>
+					</tr>
+				</tbody>
+			</table>
+
+
+			<p class="tit_blank"></p>
+			<h3>에디터 설정</h3>
+			<table class="table_style1">
+				<caption>에디터 설정</caption>
+				<colgroup>
+					<col width="20%" />
+					<col width="" />
+				</colgroup>
+				<tbody>
+					<tr>
+						<th class="left"><strong>기본 에디터 설정</strong></th>
+						<td class="left">
+							<select><option>에디터1</option><option>에디터2</option></select> 사용하실 기본 에디터를 설정해 주세요.
+						</td>
+					</tr>
+				</tbody>
+			</table>
+		
+		</div>
+	</div>
+	<!--wrap_scon E-->
+</div>
+</body>
+</html>

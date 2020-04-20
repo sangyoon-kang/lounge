@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="formInfo">
+
+	<resultMap id="BaseResultMap" type="com.tagosolution.service.model.FormInfoVO">
+		<id column="FORM_INFO_SEQ" jdbcType="INTEGER" property="formInfoSeq" />
+		<result column="FORM_SEQ" jdbcType="INTEGER" property="formSeq" />
+		<result column="FORM_INFO_NAME" jdbcType="VARCHAR" property="formInfoName" />
+		<result column="PROPERTY" jdbcType="VARCHAR" property="property" />
+		<result column="SIZE" jdbcType="INTEGER" property="size" />
+		<result column="DETAIL_COUNT" jdbcType="INTEGER" property="detailCount" />
+		<result column="DETAIL_NAME" jdbcType="VARCHAR" property="detailName" />
+		<result column="ORDERING" jdbcType="SMALLINT" property="ordering" />
+		<result column="REQUIRED_YN" jdbcType="VARCHAR" property="requiredYn" />
+		
+		<result column="SAVE_FILE" jdbcType="VARCHAR" property="saveFile" />
+		
+		
+	</resultMap>
+
+	<sql id="select">
+		FORM_INFO_SEQ, FORM_SEQ, FORM_INFO_NAME, 
+		PROPERTY, SIZE, DETAIL_COUNT, DETAIL_NAME,
+		ORDERING, REQUIRED_YN,
+		(SELECT SAVE_FILENAME FROM TS_FILE WHERE TABLE_NAME = 'formmail' AND TS_FORM_INFO.FORM_INFO_SEQ = CAST(REF_SEQ AS signed integer)) AS SAVE_FILE
+	</sql>
+
+	<select id="selectByKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+		SELECT
+		<include refid="select" />
+		FROM TS_FORM_INFO
+		WHERE FORM_INFO_SEQ = #{formInfoSeq,jdbcType=INTEGER}
+	</select>
+	
+	<select id="selectByForm" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+		SELECT
+		<include refid="select" />
+		FROM TS_FORM_INFO
+		WHERE FORM_SEQ = #{formSeq}
+		ORDER BY ORDERING
+	</select>
+
+	<!-- 우선순위용 -->
+	<select id="selectByMaxOrdering" parameterType="search" resultType="java.lang.Integer">
+		SELECT MAX(ORDERING)
+		FROM TS_FORM_INFO
+		WHERE FORM_SEQ = #{fseq}
+	</select>
+	
+	<insert id="merge" useGeneratedKeys="true" keyProperty="formInfoSeq" parameterType="com.tagosolution.service.model.FormInfoVO">
+		INSERT INTO TS_FORM_INFO (
+			FORM_INFO_SEQ, FORM_SEQ, FORM_INFO_NAME,
+			PROPERTY, SIZE, DETAIL_COUNT,
+			DETAIL_NAME, REQUIRED_YN, ORDERING
+		)
+		VALUES (
+			#{formInfoSeq,jdbcType=INTEGER}, #{formSeq,jdbcType=INTEGER}, #{formInfoName,jdbcType=VARCHAR},
+			#{property,jdbcType=VARCHAR}, #{size,jdbcType=INTEGER}, #{detailCount,jdbcType=INTEGER},
+			#{detailName,jdbcType=VARCHAR}, #{requiredYn,jdbcType=VARCHAR}, #{ordering, jdbcType=SMALLINT}
+		)
+		ON DUPLICATE KEY UPDATE
+		<trim suffix="" suffixOverrides=",">
+			<if test="formSeq != null">
+				FORM_SEQ = #{formSeq,jdbcType=INTEGER},
+			</if>
+			<if test="formInfoName != null">
+				FORM_INFO_NAME = #{formInfoName,jdbcType=VARCHAR},
+			</if>
+			<if test="property != null">
+				PROPERTY = #{property,jdbcType=VARCHAR},
+			</if>
+			<if test="size != null">
+				SIZE = #{size,jdbcType=INTEGER},
+			</if>
+			<if test="detailCount != null">
+				DETAIL_COUNT = #{detailCount,jdbcType=INTEGER},
+			</if>
+			<if test="detailName != null">
+				DETAIL_NAME = #{detailName,jdbcType=VARCHAR},
+			</if>
+			<if test="requiredYn != null">
+				REQUIRED_YN = #{requiredYn,jdbcType=VARCHAR},
+			</if>
+			<if test="ordering != null">
+				ORDERING = #{ordering, jdbcType=SMALLINT}
+			</if>
+		</trim>
+	
+	</insert>
+	
+	<!-- 순서 업데이트 -->
+	<update id="updateOrdering" parameterType="com.tagosolution.service.model.FormInfoVO">
+		UPDATE TS_FORM_INFO
+		<set>
+			<if test="ordering != null">
+				ORDERING = #{ordering,jdbcType=SMALLINT},
+			</if>
+		</set>
+		where FORM_INFO_SEQ = #{formInfoSeq,jdbcType=INTEGER}
+	</update>
+
+	<delete id="deleteByKey" parameterType="java.lang.Integer">
+		DELETE FROM TS_FORM_INFO
+		WHERE FORM_INFO_SEQ = #{formInfoSeq,jdbcType=INTEGER}
+	</delete>
+	<delete id="deleteByFormSeq" parameterType="java.lang.Integer">
+		DELETE FROM TS_FORM_INFO
+		WHERE FORM_SEQ = #{formSeq,jdbcType=INTEGER}
+	</delete>
+	
+</mapper>

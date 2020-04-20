@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<config xmlns="http://www.nhncorp.com/lucy-xss" extends="lucy-xss-superset-sax.xml">
+<!-- 
+	xss 필터 - html 엘리먼트 허용 목록
+ -->
+
+	<elementRule>
+		<element name="script" disable="true" />
+		
+		<element name="a" disable="false" />
+		<element name="abbr" disable="false" />
+		<element name="address" disable="false" />
+		<element name="area" disable="false" />
+		<element name="aside" disable="false" />
+		<element name="audio" disable="false" />
+		
+		<element name="b" disable="false" />
+		<element name="base" disable="false" />
+		<element name="bdi" disable="false" />
+		<element name="bdo" disable="false" />
+		<element name="big" disable="false" />
+		<element name="blockquote" disable="false" />
+		<element name="body" disable="false" />
+		<element name="br" disable="false" />
+		<element name="button" disable="false" />
+		
+		<element name="canvas" disable="false" />
+		<element name="caption" disable="false" />
+		<element name="cite" disable="false" />
+		<element name="code" disable="false" />
+		<element name="col" disable="false" />
+		<element name="colgroup" disable="false" />
+		<element name="command" disable="false" />
+		
+		
+		<element name="datalist" disable="false" />
+		<element name="dd" disable="false" />
+		<element name="del" disable="false" />
+		<element name="details" disable="false" />
+		<element name="dfn" disable="false" />
+		<element name="div" disable="false" />
+		<element name="dl" disable="false" />
+		<element name="dt" disable="false" />
+		
+		<element name="embed" disable="true" />
+		
+		<element name="fieldset" disable="false" />
+		<element name="figcaption" disable="false" />
+		<element name="figure" disable="false" />
+		<element name="footer" disable="false" />
+		<element name="form" disable="false" />
+		
+		
+		<element name="h1" disable="false" />
+		<element name="h2" disable="false" />
+		<element name="h3" disable="false" />
+		<element name="h4" disable="false" />
+		<element name="h5" disable="false" />
+		<element name="h6" disable="false" />
+		<element name="head" disable="false" />
+		<element name="header" disable="false" />
+		<element name="hgroup" disable="false" />
+		<element name="hr" disable="false" />
+		<element name="html" disable="false" />
+		
+		<element name="i" disable="false" />
+		
+		<element name="iframe" disable="true" />
+		
+		<element name="img" disable="false" />
+		<element name="input" disable="false" />
+		<element name="ins" disable="false" />
+		
+		<element name="kbd" disable="false" />
+		<element name="keygen" disable="false" />
+		
+		<element name="label" disable="false" />
+		<element name="legend" disable="false" />
+		<element name="li" disable="false" />
+		<element name="link" disable="false" />
+		
+		<element name="map" disable="false" />
+		<element name="mark" disable="false" />
+		<element name="menu" disable="false" />
+		<element name="meta" disable="false" />
+		<element name="meter" disable="false" />
+		
+		<element name="nav" disable="false" />
+		<element name="noscript" disable="false" />
+		
+		<element name="object" disable="true" />
+		
+		<element name="ol" disable="false" />
+		<element name="optgroup" disable="false" />
+		<element name="option" disable="false" />
+		<element name="output" disable="false" />
+		
+		<element name="p" disable="false" />
+		<element name="param" disable="false" />
+		<element name="pre" disable="false" />
+		<element name="progress" disable="false" />
+		
+		<element name="q" disable="false" />
+		
+		<element name="rp" disable="false" />
+		<element name="rt" disable="false" />
+		<element name="ruby" disable="false" />
+		
+		<element name="s" disable="false" />
+		<element name="samp" disable="false" />
+		
+		<element name="script" disable="true" />
+		
+		<element name="section" disable="false" />
+		<element name="select" disable="false" />
+		<element name="small" disable="false" />
+		<element name="source" disable="false" />
+		<element name="span" disable="false" />
+		<element name="strong" disable="false" />
+		<element name="style" disable="false" />
+		<element name="sub" disable="false" />
+		<element name="summary" disable="false" />
+		<element name="sup" disable="false" />
+		
+		<element name="table" disable="false" />
+		<element name="tbody" disable="false" />
+		<element name="td" disable="false" />
+		<element name="textarea" disable="false" />
+		<element name="tfoot" disable="false" />
+		<element name="th" disable="false" />
+		<element name="thead" disable="false" />
+		<element name="time" disable="false" />
+		<element name="title" disable="false" />
+		<element name="tr" disable="false" />
+		<element name="track" disable="false" />
+		
+		<element name="u" disable="false" />
+		<element name="ul" disable="false" />
+		<element name="var" disable="false" />
+		<element name="video" disable="false" />
+		<element name="wbr" disable="false" />
+		
+	</elementRule>
+
+		<attributeRule>
+		<attribute name="src">
+			<allowedPattern><![CDATA[['"]?\s*http://.*]]></allowedPattern>
+		</attribute>
+		<attribute name="href">
+			<notAllowedPattern><![CDATA[(?i:script)]]></notAllowedPattern>
+			<notAllowedPattern><![CDATA[(?i:\.css)]]></notAllowedPattern>
+		</attribute>
+		<attribute name="style">
+			<notAllowedPattern><![CDATA[(?i:expression)]]></notAllowedPattern>
+			<notAllowedPattern><![CDATA[(?i:alert)]]></notAllowedPattern>
+		</attribute>
+	</attributeRule>
+</config>

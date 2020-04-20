@@ -1,0 +1,95 @@
+<?xml version="1.0" ?>
+<!--
+	ts1_test ant
+-->
+<project name="fx-lounge" default="default" basedir="..">
+	<property file="${basedir}/ant/ant.properties" />
+
+	<target name="clean" description="Clean...">
+		<delete dir="${dir.dist}" includeemptydirs="true" excludes="**/*.war"/>
+		<mkdir dir="${dir.dist}" />
+		<mkdir dir="${dir.dist.classes}" />
+	</target>
+
+	<target name="init" depends="clean" description="Initializing...">
+		<path id="compile.classpath">
+			<fileset dir="${dir.lib}" includes="*.jar" />
+			<fileset dir="${dir.was.lib}" includes="*.jar" />
+		</path>
+	</target>
+	
+	<target name="build" depends="init" description="Build...">
+		<!-- 컴파일 -->
+		<javac srcdir="${dir.src}" destdir="${dir.dist.classes}" debug="true" classpathref="compile.classpath" includeantruntime="false" />
+		
+		<!-- 리소스 : xml, properties, ... -->
+		<copy todir="${dir.dist.classes}">
+			<fileset dir="${dir.res}">
+				<exclude name="log4j2.*.xml" />
+			</fileset>
+			
+			<file name="${dir.res}/log4j2.${projectName}.xml"/>
+		</copy>
+		
+		<!-- 리눅스에서 jar를 별도로 빼면 안돌아감 -->
+		<!--프로젝트 클래스 jar 생성 : 전자정부 프레임워크 class제외, 환경설정 리소스 제외 -->
+		<!--<jar destfile="${dir.dist}/${projectName}.jar"
+			 basedir="${dir.dist.classes}" 
+			 excludes="**/egovframework/**, **/*.xml" />-->
+		
+		<!-- 프로젝트 클래스 jar classpath로 이동-->
+		<!--<move file="${dir.dist}/${projectName}.jar" tofile="${dir.dist}/WEB-INF/lib/${projectName}.jar" />
+		
+		<delete dir="${dir.dist.classes}/com" />-->
+		
+		<!-- static 리소스 복사 : classpath 제외 -->
+		<copy todir="${dir.dist}">
+			<fileset dir="${dir.www}">
+				<exclude name="**/html/**"/>
+				<exclude name="**/htmlMgr/**"/>
+				<exclude name="**/WEB-INF/classes/**" />
+				<exclude name="**/WEB-INF/web.*.xml" />
+			</fileset>
+		</copy>
+		
+		<!-- web.xml -->
+		<copy todir="${dir.dist}/WEB-INF/">
+			<file name="${dir.www}/WEB-INF/web.${projectName}.xml" />
+		</copy>
+		
+		
+		<!--설정 파일 변경 -->
+<!--		<move todir="${dir.dist.classes}/egovframework/egovProps/">-->
+<!--			<fileset dir="${dir.dist.classes}/egovframework/egovProps/server/${projectName}/" />-->
+<!--		</move>-->
+<!--		-->
+<!--		<delete dir="${dir.dist.classes}/egovframework/egovProps/server" />-->
+		
+		<move file="${dir.dist.classes}/log4j2.${projectName}.xml" 
+			tofile="${dir.dist.classes}/log4j2.xml" />
+			
+		<!--<move file="${dir.dist.classes}/egovframework/spring/com/context.dev-common.xml"
+			tofile="${dir.dist.classes}/egovframework/spring/com/context-common.xml" />
+		
+		<move file="${dir.dist.classes}/egovframework/spring/com/context.dev-datasource.xml" 
+			tofile="${dir.dist.classes}/egovframework/spring/com/context-datasource.xml" />
+		
+		<move file="${dir.dist.classes}/egovframework/spring/com/context.dev-transaction.xml" 
+			tofile="${dir.dist.classes}/egovframework/spring/com/context-transaction.xml" />-->
+		
+		<move file="${dir.dist}/WEB-INF/web.${projectName}.xml" 
+			tofile="${dir.dist}/WEB-INF/web.xml" />
+		
+		<!-- war -->
+<!--		<war destfile="${dir.dist}/${projectName}.war">-->
+<!--			<fileset dir="${dir.dist}" excludes="**/*.war"/>-->
+<!--		</war>-->
+
+<!--		<delete includeemptydirs="true">-->
+<!--			<fileset dir="${dir.dist}" excludes="**/*.war"/>-->
+<!--		</delete>-->
+	</target>
+	
+	<target name="default" depends="build" />			
+
+</project>

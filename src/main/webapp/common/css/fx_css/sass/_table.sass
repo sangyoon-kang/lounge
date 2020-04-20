@@ -1,0 +1,160 @@
+.table
+     caption
+          font-size: 34px
+          font-weight: 500
+          margin-bottom: 30px
+          span
+               font-weight: 300
+               font-size: 30px
+     width: 100%
+     margin-bottom: 1rem
+     color: #212529
+     text-align: left
+     font-size: 16px
+     letter-spacing: -0.05em
+     +respond-to-down(medium)
+          font-size: 14px
+          td,th
+               +py(10px)
+     .form-control
+          +my(0)
+     .input-group
+          +respond-to-down(small)
+               .sellLot,.buylot
+                    flex: 0 0 100%
+                    max-width: 100%
+     .sellLot,.buylot
+          flex: 1 1 100px
+          max-width: 100px
+     &.small
+          td,th
+               +respond-to(small)
+                    padding: 8px 8px
+                    font-size: 14px
+     &.medium
+          td,th
+               +respond-to(small)
+                    padding: 8px
+                    font-size: 18px
+     tr
+          &:not(:last-child)
+               border-bottom: 1px solid rgba(0,0,0,0.12)
+     thead
+          td,th
+               border-top: 2px solid rgba(0,0,0,0.24)
+               font-size: 17px
+               +respond-to-down(medium)
+                    font-size: 14px
+               font-weight: 500
+          th
+               background-color: $light-grey
+               vertical-align: middle
+          &.primary
+               th
+                    background-color: $primary
+                    color: white
+     td,th
+          border-top: 1px solid $grey
+          font-weight: 500
+          text-align: center
+          +respond-to(small)
+               padding: 18px 12px
+     tbody
+          img
+               vertical-align: middle
+               margin-left: 6px
+          th
+               background-color: $light-grey
+     tfoot
+          +respond-to(small)
+               td
+                    font-size: 18px
+                    padding: 1rem
+     &.danger
+          border-bottom: 1px solid $red
+          thead
+               td,th
+                    background: #ffe9e8
+                    border-top: 1px solid $red
+                    border-bottom: 1px solid $red
+     &.blue
+          border-bottom: 1px solid $blue
+          thead
+               td,th
+                    background: #e4f0ff
+                    border-top: 1px solid $blue
+                    border-bottom: 1px solid $blue
+     &.bordered
+          td,th
+               border: 1px solid $grey
+     &.striped
+          tr:nth-child(even)
+               background-color: $light-grey
+	
+
+th
+     font-weight: 500
+     text-align: center
+     vertical-align: middle
+
+.table-responsive
+     overflow-x: scroll
+.table-title
+     font-size: 1.5rem
+     +respond-to-down(medium)
+          font-size: 18px
+.t-cell
+     padding: 1rem
+     border: 1px solid $grey
+     margin-left: -1px
+     margin-bottom: -1px
+     &:nth-child(odd)
+          background: $light-grey
+          font-weight: 500
+.battery
+     position: relative
+     display: flex
+     //width: 26px
+     justify-content: center
+     align-items: flex-end
+     
+
+           
+     span
+          width: 5px
+          background: #d5d5d5
+          margin-right: 2px
+          $base : 9px
+          $count: 4px
+          @for $i from 1 through 4
+               &:nth-child(#{$i})
+                    height: ($base+($i - 1)*$count)
+          
+          &.on
+               background: $green
+                    
+.totalcalc
+     margin-top: 16px
+     display: flex
+     text-align: center
+     p
+          padding: 8px
+          flex: 1
+          border: 1px solid #bebebe
+          span
+               border-top: 1px solid #bebebe
+               display: block
+               padding-top: 8px
+               margin-top: 8px
+
+.deal_info_wrapper
+     display: flex
+     align-items: center
+     +respond-to-down(medium)
+          flex-wrap: wrap
+          &>div:not(.deal_info)
+               flex: 1
+
+.will-hide
+     +respond-to-down(small)
+          display: none

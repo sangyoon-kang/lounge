@@ -1,0 +1,558 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cash">
+	<resultMap id="BaseResultMap" type="com.tagosolution.service.model.CashVO">
+		<id column="CASH_SEQ" jdbcType="INTEGER" property="cashSeq" />
+		<result column="USER_ID" jdbcType="VARCHAR" property="userId" />
+		<result column="CASH" jdbcType="INTEGER" property="cash" />
+		<result column="REG_USER" jdbcType="VARCHAR" property="regUser" />
+		<result column="REG_DATE" jdbcType="TIMESTAMP" property="regDate" />
+		<result column="MEMO1" jdbcType="VARCHAR" property="memo1" />
+		<result column="MAIN_SEQ" jdbcType="BIGINT" property="mainSeq" />
+		<result column="ORI_PRICE" jdbcType="INTEGER" property="oriPrice" />
+
+		<result column="DEALER_COUNT" jdbcType="INTEGER" property="dealerCount" />
+		<result column="USER_COUNT" jdbcType="INTEGER" property="userCount" />
+		<result column="WIN_CASH" jdbcType="BIGINT" property="winCash" />
+		<result column="FXOFFICE_CASH" jdbcType="INTEGER" property="fxofficeCash" />
+		<result column="COMMI_CASH" jdbcType="INTEGER" property="commiCash" />
+		<result column="COMMI_CALCULATE" jdbcType="INTEGER" property="commiCalculate" />
+		<result column="RUN_TIME" jdbcType="INTEGER" property="runTime" />
+		<result column="GRADE_NAME" jdbcType="VARCHAR" property="gradeName" />
+		<result column="GRADE_LEVEL" jdbcType="VARCHAR" property="gradeLevel" />
+		<result column="USER_NAME" jdbcType="VARCHAR" property="userName" />
+		<result column="NICK_NAME" jdbcType="VARCHAR" property="nickName" />
+		<result column="PHONE" jdbcType="VARCHAR" property="phone" />
+		
+		<result column="CASH_TYPE" jdbcType="VARCHAR" property="cashType" />
+		<result column="GOODS_DATE" jdbcType="VARCHAR" property="goodsDate" />
+		<result column="GOODS_TIME" jdbcType="VARCHAR" property="goodsTime" />
+		<result column="LOT" jdbcType="DECIMAL" property="lot" />
+		<result column="BS_TYPE_TEXT" jdbcType="VARCHAR" property="bsTypeText" />
+		<result column="PROFIT" jdbcType="INTEGER" property="profit" />
+		<result column="LOSS" jdbcType="INTEGER" property="loss" />
+		<result column="COMMISSION" jdbcType="BIGINT" property="commission" />
+		<result column="TAX_COMMISSION" jdbcType="BIGINT" property="taxCommission" />
+		
+		<result column="DATE_TODAY" jdbcType="VARCHAR" property="dateToday" />
+		<result column="TRANS_TOTAL" jdbcType="INTEGER" property="transTotal" />
+		<result column="SETTLE_TOTAL" jdbcType="INTEGER" property="settleTotal" />
+		<result column="FEE_FOR" jdbcType="INTEGER" property="feeFor" />
+		
+	</resultMap>
+
+	<sql id="Base_Column_List">
+		CASH_SEQ, USER_ID, CASH, REG_USER, REG_DATE, MEMO1, MAIN_SEQ
+	</sql>
+	
+	<sql id="whereClause">
+		<trim prefix="where" prefixOverrides="and">
+			<if test="startDate != null and startDate != ''">
+				<![CDATA[ FO.GOODS_DATE >= #{startDate}]]>
+			</if>
+			<if test="endDate != null and endDate != ''">
+				<![CDATA[ AND FO.GOODS_DATE <= #{endDate}]]>
+			</if>
+			<if test="glevel != null and glevel !=''">
+				AND TMI.GRADE_LEVEL = #{glevel}
+			</if>
+			<if test="userId != null and userId != ''">
+				AND FO.USER_ID = #{userId}
+			</if>
+		</trim>
+	</sql>
+
+	<select id="selectByKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+		SELECT
+		<include refid="Base_Column_List" />
+		FROM		ts_cash
+		WHERE	CASH_SEQ = #{cashSeq,jdbcType=INTEGER}
+	</select>
+	
+	<select id="selectByCurDay" parameterType="search" resultMap="BaseResultMap">
+		SELECT DATE_FORMAT(SYSDATE(), '%Y-%m-%d') AS DATE_TODAY 
+				, ( SELECT	CONVERT(IFNULL(SUM(FO.LOT), 0) * 50000, INT)
+					FROM	fx_order FO
+						INNER JOIN v_member_line_rate TML
+							ON TML.USER_ID = FO.USER_ID
+								AND	TML.RUN_TIME = FO.RUN_TIME
+					WHERE	FO.GOODS_DATE = DATE_FORMAT(SYSDATE(), '%Y-%m-%d')
+						AND	(TML.LINE_ID1 = #{userId} OR TML.LINE_ID2 = #{userId} OR TML.LINE_ID3 = #{userId} OR TML.LINE_ID4 = #{userId} OR TML.LINE_ID5 = #{userId})) AS TRANS_TOTAL
+				, SUM(IFNULL(ORI_PRICE, 0)) AS SETTLE_TOTAL
+				, CONVERT(IFNULL(SUM(TC.CASH), 0), INT) AS FEE_FOR
+		FROM 	ts_cash TC
+			INNER JOIN fx_order FO
+				ON FO.ORDER_SEQ = TC.MAIN_SEQ
+		WHERE 	TC.CASH_TYPE = 'C'
+			AND	TC.USER_ID = #{userId}
+			AND	FO.GOODS_DATE = DATE_FORMAT(SYSDATE(), '%Y-%m-%d')
+	</select>
+	
+	<select id="selectListForUser" parameterType="search" resultMap="BaseResultMap">
+		SELECT	TMI.USER_ID, TMI.USER_NAME, TMI.CASH, TMI.PHONE
+			, SUM(IFNULL(TC.ORI_PRICE, 0)) AS SETTLE_TOTAL
+			, CONVERT(IFNULL(SUM(TC.CASH), 0), INT) AS FEE_FOR
+			FROM	v_member_line TML
+				INNER JOIN ts_member_info TMI
+					ON TML.USER_ID = TMI.USER_ID
+				INNER JOIN fx_order FO
+					ON	FO.USER_ID = TML.USER_ID
+						AND	FO.ORDER_RESULT = 'W'
+						AND	FO.RUN_TIME = TML.RUN_TIME
+						AND	<![CDATA[FO.GOODS_DATE >= #{startDate}]]>
+						AND	<![CDATA[FO.GOODS_DATE <= #{endDate}]]>
+				INNER JOIN ts_cash TC
+					ON TC.CASH_TYPE = 'C'
+						AND	TC.MAIN_SEQ = FO.ORDER_SEQ
+			WHERE	(TML.LINE_ID1 = #{userId} OR TML.LINE_ID2 = #{userId} OR TML.LINE_ID3 = #{userId} OR TML.LINE_ID4 = #{userId} OR TML.LINE_ID5 = #{userId})
+			GROUP BY TMI.USER_ID, TMI.USER_NAME, TMI.CASH, TMI.PHONE
+	</select>
+	
+	<select id="selectCashTotal" parameterType="search" resultMap="BaseResultMap">		
+		SELECT	(SELECT COUNT(MEMBER_SEQ) FROM ts_member_info WHERE GRADE_LEVEL IN ('2', '3', '4', '5')) AS DEALER_COUNT
+			, (SELECT COUNT(MEMBER_SEQ) FROM ts_member_info WHERE GRADE_LEVEL = 6) AS USER_COUNT
+			, IFNULL(SUM(PROFIT), 0) AS WIN_CASH
+			, IFNULL(SUM(OFFICE_CASH), 0) AS FXOFFICE_CASH
+			, IFNULL(SUM(ORI_PRICE), 0) AS COMMI_CASH
+			, IFNULL(SUM(DEALER_CASH), 0) AS COMMI_CALCULATE
+		FROM	(
+			SELECT	CASE WHEN TC.USER_ID = (SELECT USER_ID FROM ts_member_info WHERE GRADE_LEVEL = 1 LIMIT 0, 1) THEN PROFIT ELSE 0 END PROFIT
+						, CASE WHEN TC.USER_ID = (SELECT USER_ID FROM ts_member_info WHERE GRADE_LEVEL = 1 LIMIT 0, 1) THEN CASH ELSE 0 END OFFICE_CASH
+						, <![CDATA[CASE WHEN TC.USER_ID <> (SELECT USER_ID FROM ts_member_info WHERE GRADE_LEVEL = 1 LIMIT 0, 1) THEN CASH ELSE 0 END AS DEALER_CASH]]>
+						, <![CDATA[CASE WHEN TC.USER_ID <> (SELECT USER_ID FROM ts_member_info WHERE GRADE_LEVEL = 1 LIMIT 0, 1) THEN ORI_PRICE ELSE 0 END AS ORI_PRICE]]>
+						
+			FROM		ts_cash TC
+				LEFT OUTER JOIN fx_order FO
+					ON FO.ORDER_SEQ = TC.MAIN_SEQ
+			WHERE	
+				TC.CASH_TYPE = 'C'
+				AND	<![CDATA[FO.GOODS_DATE >= #{startDate}]]>
+				AND	<![CDATA[FO.GOODS_DATE <= #{endDate}]]>
+		) TEMP;
+	</select>
+	
+	<select id="selectCashList" parameterType="search" resultMap="BaseResultMap">		
+		SELECT	
+			GRADE_NAME, USER_NAME, NICKNAME AS NICK_NAME, USER_ID, PHONE
+			, DEALER_COUNT, USER_COUNT, COMMI_CASH, COMMI_CALCULATE
+		FROM	(
+			SELECT	TMI.GRADE_LEVEL, TMG.GRADE_NAME, TMI.USER_NAME, TMI.NICKNAME, TMI.USER_ID, TMI.PHONE
+				, (SELECT	COUNT(A.USER_ID)
+					FROM	ts_member_info A
+						INNER JOIN fx_line TML
+							ON TML.USER_ID = A.USER_ID
+					WHERE	A.GRADE_LEVEL IN (2, 3, 4, 5)
+						AND	A.USE_FLAG = 'Y'
+						AND	(TML.LINE_ID1 = TMI.USER_ID OR TML.LINE_ID2 = TMI.USER_ID OR TML.LINE_ID3 = TMI.USER_ID OR TML.LINE_ID4 = TMI.USER_ID OR TML.LINE_ID5 = TMI.USER_ID) ) DEALER_COUNT
+				, (SELECT	COUNT(A.USER_ID)
+					FROM	ts_member_info A
+						INNER JOIN fx_line TML
+							ON TML.USER_ID = A.USER_ID
+					WHERE	A.GRADE_LEVEL IN (6)
+						AND	A.USE_FLAG = 'Y'
+						AND	(TML.LINE_ID1 = TMI.USER_ID OR TML.LINE_ID2 = TMI.USER_ID OR TML.LINE_ID3 = TMI.USER_ID OR TML.LINE_ID4 = TMI.USER_ID OR TML.LINE_ID5 = TMI.USER_ID) ) USER_COUNT
+				, IFNULL((SELECT	SUM(ORI_PRICE)
+					FROM	ts_cash TC
+						INNER JOIN fx_order FO
+							ON TC.CASH_TYPE IN ('C')
+							AND FO.ORDER_SEQ = TC.MAIN_SEQ
+					WHERE	
+						<![CDATA[ FO.GOODS_DATE >= #{startDate}
+						AND FO.GOODS_DATE <= #{endDate}]]>
+						AND	TC.USER_ID = TMI.USER_ID), 0) AS COMMI_CASH
+				, IFNULL((SELECT	SUM(CASH)
+					FROM	ts_cash TC
+						INNER JOIN fx_order FO
+							ON TC.CASH_TYPE IN ('C')
+							AND FO.ORDER_SEQ = TC.MAIN_SEQ
+					WHERE	
+						<![CDATA[ FO.GOODS_DATE >= #{startDate}
+						AND FO.GOODS_DATE <= #{endDate}]]>
+						AND	TC.USER_ID = TMI.USER_ID), 0) AS COMMI_CALCULATE			
+			FROM	ts_member_info TMI
+				INNER JOIN ts_member_grade TMG
+					ON TMG.GRADE_LEVEL = TMI.GRADE_LEVEL
+			WHERE	
+				TMI.USE_FLAG = 'Y'
+				<if test="glevel != null and glevel == 0">
+					AND TMI.GRADE_LEVEL IN (1, 2, 3, 4, 5)
+				</if>
+				<if test="glevel != null and glevel != 0">
+					AND TMI.GRADE_LEVEL = #{glevel}
+				</if>
+				<if test="searchWord != null and searchWord != ''">
+					AND TMI.USER_NAME like CONCAT('%', #{searchWord}, '%')
+				</if>
+			) TEMP
+		ORDER BY GRADE_LEVEL, COMMI_CASH DESC, USER_NAME
+		<include refid="paging.limit"/>
+	</select>
+	
+	<select id="selectCash16List" parameterType="search" resultMap="BaseResultMap">
+		SELECT	A.USER_NAME, A.NICKNAME, A.USER_ID, A.PHONE, A.CASH, A.GRADE_LEVEL
+		FROM	ts_member_info A
+			INNER JOIN fx_line TML
+				ON TML.USER_ID = A.USER_ID
+		WHERE	A.USE_FLAG = 'Y'
+		<if test="glevel == 1 and sellUserId != null and sellUserId != ''">
+			AND	TML.LINE_ID1 = #{sellUserId}
+			AND	(IFNULL(TML.LINE_ID2, '') = '' OR TML.LINE_ID2 = A.USER_ID)
+		</if>
+		<if test="glevel == 2 and sellUserId != null and sellUserId != ''">
+			AND	TML.LINE_ID2 = #{sellUserId}
+			AND	(IFNULL(TML.LINE_ID3, '') = '' OR TML.LINE_ID3 = A.USER_ID)
+		</if>
+		<if test="glevel == 3 and sellUserId != null and sellUserId != ''">
+			AND	TML.LINE_ID3 = #{sellUserId}
+			AND	(IFNULL(TML.LINE_ID4, '') = '' OR TML.LINE_ID4 = A.USER_ID)
+		</if>
+		<if test="glevel == 4 and sellUserId != null and sellUserId != ''">
+			AND	TML.LINE_ID4 = #{sellUserId}
+			AND	(IFNULL(TML.LINE_ID5, '') = '' OR TML.LINE_ID5 = A.USER_ID)
+		</if>
+		<if test="glevel == 5 and sellUserId != null and sellUserId != ''">
+			AND	TML.LINE_ID5 = #{sellUserId}
+		</if>
+		ORDER BY A.GRADE_LEVEL;
+	</select>
+	
+	<select id="selectCash16Sub" parameterType="search" resultType="java.lang.Long">
+		SELECT	IFNULL(SUM(TC.ORI_PRICE), 0) AS COMMISSION
+		FROM	ts_cash TC
+			INNER JOIN fx_order FO
+				ON TC.CASH_TYPE IN ('C')
+					AND FO.ORDER_SEQ = TC.MAIN_SEQ
+		WHERE	
+			<![CDATA[FO.GOODS_DATE >= #{startDate}
+			AND FO.GOODS_DATE <= #{endDate}]]>
+			AND TC.USER_ID = #{userId}
+		<choose>
+			<when test="glevel &lt; 6 and listUserId != sellUserId">
+				<if test="glevel == 2">
+					AND FO.USER_ID IN (SELECT USER_ID FROM fx_line WHERE LINE_ID2 = #{listUserId});
+				</if>
+				<if test="glevel == 3">
+					AND FO.USER_ID IN (SELECT USER_ID FROM fx_line WHERE LINE_ID3 = #{listUserId});
+				</if>
+				<if test="glevel == 4">
+					AND FO.USER_ID IN (SELECT USER_ID FROM fx_line WHERE LINE_ID4 = #{listUserId});
+				</if>
+				<if test="glevel == 5">
+					AND FO.USER_ID IN (SELECT USER_ID FROM fx_line WHERE LINE_ID5 = #{listUserId});
+				</if>
+			</when>
+			<otherwise>
+				AND FO.USER_ID = #{listUserId};
+			</otherwise>
+		</choose>	
+	</select>
+	
+	<select id="selectCash16SubTax" parameterType="search" resultType="java.lang.Long">
+		SELECT	IFNULL(SUM(TC.CASH), 0) AS TAX_COMMISSION
+		FROM	ts_cash TC
+			INNER JOIN fx_order FO
+				ON TC.CASH_TYPE IN ('C')
+					AND FO.ORDER_SEQ = TC.MAIN_SEQ
+		WHERE	
+			<![CDATA[FO.GOODS_DATE >= #{startDate}
+			AND FO.GOODS_DATE <= #{endDate}]]>
+			AND TC.USER_ID = #{userId}
+		<choose>
+			<when test="glevel &lt; 6 and listUserId != sellUserId">
+				<if test="glevel == 2">
+					AND FO.USER_ID IN (SELECT USER_ID FROM fx_line WHERE LINE_ID2 = #{listUserId});
+				</if>
+				<if test="glevel == 3">
+					AND FO.USER_ID IN (SELECT USER_ID FROM fx_line WHERE LINE_ID3 = #{listUserId});
+				</if>
+				<if test="glevel == 4">
+					AND FO.USER_ID IN (SELECT USER_ID FROM fx_line WHERE LINE_ID4 = #{listUserId});
+				</if>
+				<if test="glevel == 5">
+					AND FO.USER_ID IN (SELECT USER_ID FROM fx_line WHERE LINE_ID5 = #{listUserId});
+				</if>
+			</when>
+			<otherwise>
+				AND FO.USER_ID = #{listUserId};
+			</otherwise>
+		</choose>	
+	</select>
+	
+	<select id="selecMemCashList" parameterType="search" resultMap="BaseResultMap">
+		SELECT 	'GBP/AUD' AS CASH_TYPE
+					, CASE WHEN FO.BS_TYPE = 'B' THEN '매수' ELSE '매도' END BS_TYPE_TEXT
+					, CONVERT(FO.LOT, DECIMAL(9, 1)) AS LOT
+					, CONVERT(FO.LOT * 50000, INT) AS CASH
+					, FO.PROFIT, FO.LOSS
+					, IFNULL(TC.ORI_PRICE, 0) AS COMMISSION
+					, IFNULL(TC.CASH, 0) AS TAX_COMMISSION
+					, TIME_FORMAT(DATE_ADD(STR_TO_DATE(CONCAT(FO.GOODS_DATE, ' ', FO.GOODS_TIME), '%Y-%m-%d %H:%i'), INTERVAL FO.RUN_TIME MINUTE), '%H:%i') AS GOODS_TIME
+					, DATE_FORMAT(DATE_ADD(STR_TO_DATE(CONCAT(FO.GOODS_DATE, ' ', FO.GOODS_TIME), '%Y-%m-%d %H:%i'), INTERVAL FO.RUN_TIME MINUTE), '%Y-%m-%d') AS GOODS_DATE
+		FROM	fx_order FO
+			LEFT OUTER JOIN ts_cash TC
+				ON TC.MAIN_SEQ = FO.ORDER_SEQ
+					AND	TC.CASH_TYPE = 'C'
+		WHERE	TC.USER_ID = #{userId}
+			<![CDATA[ AND FO.GOODS_DATE >= #{startDate}
+			AND FO.GOODS_DATE <= #{endDate} ]]>
+	</select>
+	
+	<select id="selectMemPopList" parameterType="search" resultMap="BaseResultMap">		
+		SELECT 'GBP/AUD' AS CASH_TYPE, FO.RUN_TIME
+				, CASE FO.BS_TYPE WHEN 'B' THEN '매수' ELSE '매도' END BS_TYPE_TEXT
+				, FO.LOT, FO.LOT * 50000 AS CASH
+				, FO.PROFIT, FO.LOSS
+				, IFNULL(TC.ORI_PRICE, 0) AS TAX_COMMISSION
+				, IFNULL(TC.CASH, 0) AS COMMISSION
+				, TIME_FORMAT(DATE_ADD(STR_TO_DATE(CONCAT(FO.GOODS_DATE, ' ', FO.GOODS_TIME), '%Y-%m-%d %H:%i'), INTERVAL FO.RUN_TIME MINUTE), '%H:%i') AS GOODS_TIME
+				, DATE_FORMAT(DATE_ADD(STR_TO_DATE(CONCAT(FO.GOODS_DATE, ' ', FO.GOODS_TIME), '%Y-%m-%d %H:%i'), INTERVAL FO.RUN_TIME MINUTE), '%Y-%m-%d') AS GOODS_DATE
+		FROM	fx_order FO
+			LEFT OUTER JOIN ts_cash TC
+				ON TC.MAIN_SEQ = FO.ORDER_SEQ
+				AND TC.CASH_TYPE IN ('C')
+				AND TC.USER_ID = #{userId}
+		WHERE
+			<![CDATA[ FO.GOODS_DATE >= #{startDate}
+			AND FO.GOODS_DATE <= #{endDate} ]]>
+			AND FO.USER_ID = #{sellUserId}
+		ORDER BY FO.ORDER_SEQ DESC;
+	</select>
+	
+	<select id="totalCount" parameterType="search" resultType="int">
+		SELECT	COUNT(*)
+		FROM	(
+			SELECT	TMI.GRADE_LEVEL, TMG.GRADE_NAME, TMI.USER_NAME, TMI.NICKNAME, TMI.USER_ID, TMI.PHONE
+				, (SELECT	COUNT(A.USER_ID)
+					FROM	ts_member_info A
+						INNER JOIN fx_line TML
+							ON TML.USER_ID = A.USER_ID
+					WHERE	A.GRADE_LEVEL IN (2, 3, 4, 5)
+						AND	A.USE_FLAG = 'Y'
+						AND	(TML.LINE_ID1 = TMI.USER_ID OR TML.LINE_ID2 = TMI.USER_ID OR TML.LINE_ID3 = TMI.USER_ID OR TML.LINE_ID4 = TMI.USER_ID OR TML.LINE_ID5 = TMI.USER_ID) ) DEALER_COUNT
+				, (SELECT	COUNT(A.USER_ID)
+					FROM	ts_member_info A
+						INNER JOIN fx_line TML
+							ON TML.USER_ID = A.USER_ID
+					WHERE	A.GRADE_LEVEL IN (6)
+						AND	A.USE_FLAG = 'Y'
+						AND	(TML.LINE_ID1 = TMI.USER_ID OR TML.LINE_ID2 = TMI.USER_ID OR TML.LINE_ID3 = TMI.USER_ID OR TML.LINE_ID4 = TMI.USER_ID OR TML.LINE_ID5 = TMI.USER_ID) ) USER_COUNT
+				, IFNULL((SELECT	SUM(CASH)
+					FROM	ts_cash TC
+						INNER JOIN fx_order FO
+							ON TC.CASH_TYPE IN ('C')
+							AND FO.ORDER_SEQ = TC.MAIN_SEQ
+					WHERE	
+						TC.USER_ID = TMI.USER_ID), 0) AS TAX_COMMISSION
+			FROM	ts_member_info TMI
+				INNER JOIN ts_member_grade TMG
+					ON TMG.GRADE_LEVEL = TMI.GRADE_LEVEL
+			WHERE
+				TMI.USE_FLAG = 'Y'
+				<if test="glevel != null and glevel == 0">
+					AND TMI.GRADE_LEVEL IN (1, 2, 3, 4, 5)
+				</if>
+				<if test="glevel != null and glevel != 0">
+					AND TMI.GRADE_LEVEL = #{glevel}
+				</if>
+				<if test="searchWord != null and searchWord != ''">
+					AND TMI.USER_NAME like CONCAT('%', #{searchWord}, '%')
+				</if>
+			) TEMP
+	</select>
+
+	<delete id="deleteByKey" parameterType="java.lang.Integer">
+		DELETE
+		FROM		ts_cash
+		WHERE	CASH_SEQ = #{cashSeq,jdbcType=INTEGER}
+	</delete>
+
+	<insert id="merge" useGeneratedKeys="true" keyProperty="cashSeq"
+		parameterType="com.tagosolution.service.model.CashVO">
+		insert into ts_cash (CASH_SEQ, USER_ID, CASH, REG_USER,
+		MEMO1, MAIN_SEQ, ORI_PRICE)
+		values (#{cashSeq,jdbcType=INTEGER}, #{userId,jdbcType=VARCHAR},
+		#{cash,jdbcType=INTEGER}, #{regUser,jdbcType=VARCHAR},
+		#{memo1,jdbcType=VARCHAR}, #{mainSeq,jdbcType=BIGINT}, #{cash,jdbcType=INTEGER})
+		ON DUPLICATE KEY UPDATE
+		<trim suffix=" " suffixOverrides=",">
+			<if test="cashSeq != null">
+				CASH_SEQ = #{cashSeq,jdbcType=INTEGER},
+			</if>
+			<if test="userId != null">
+				USER_ID = #{userId,jdbcType=VARCHAR},
+			</if>
+			<if test="cash != null">
+				CASH = #{cash,jdbcType=INTEGER},
+			</if>
+			<if test="regUser != null">
+				REG_USER = #{regUser,jdbcType=INTEGER},
+			</if>
+			<if test="memo1 != null">
+				MEMO1 = #{memo1,jdbcType=INTEGER},
+			</if>
+			<if test="mainSeq != null">
+				MAIN_SEQ = #{mainSeq,jdbcType=INTEGER},
+			</if>
+			<if test="cash != null">
+				ORI_PRICE = #{cash,jdbcType=INTEGER},
+			</if>
+		</trim>
+	</insert>
+
+	<update id="updateByKey" parameterType="com.tagosolution.service.model.CashVO">
+		UPDATE	ts_cash
+			SET	USER_ID = #{userId,jdbcType=VARCHAR},
+					CASH = #{cash,jdbcType=INTEGER},
+					REG_USER = #{regUser,jdbcType=VARCHAR},
+					REG_DATE = #{regDate,jdbcType=TIMESTAMP},
+					MEMO1 = #{memo1,jdbcType=VARCHAR},
+					MAIN_SEQ = #{mainSeq,jdbcType=BIGINT},
+					ORI_PRICE = #{cash,jdbcType=INTEGER}
+		WHERE	CASH_SEQ = #{cashSeq,jdbcType=INTEGER}
+	</update>
+
+	<insert id="insertByDeposit" useGeneratedKeys="true"
+		keyProperty="cashSeq" parameterType="com.tagosolution.service.model.MoneyVO">
+		INSERT INTO ts_cash (CASH_TYPE, USER_ID, CASH, REG_USER, REG_DATE, MEMO1, MAIN_SEQ, ORI_PRICE)
+		SELECT	'M'
+					,USER_ID
+					, CASE WHEN IO_TYPE = 'I' THEN CASH ELSE -1 * CASH END
+					, #{userId}
+					, SYSDATE()
+					, CONCAT(CASH, CASE WHEN IO_TYPE = 'I' THEN '원 입금' ELSE '원 출금' END)
+					, MONEY_SEQ
+					, CASE WHEN IO_TYPE = 'I' THEN CASH ELSE -1 * CASH END
+		FROM 	fx_money
+		WHERE 	MONEY_SEQ = #{moneySeq,jdbcType=INTEGER};
+	</insert>
+
+	<insert id="insertFront" useGeneratedKeys="true" keyProperty="cashSeq"
+		parameterType="search">
+		INSERT INTO 	ts_cash (CASH_TYPE, USER_ID, CASH, REG_USER, REG_DATE, MEMO1, MAIN_SEQ, ORI_PRICE)
+		VALUES	('O'
+					, #{userId,jdbcType=VARCHAR}
+					, (-1 * #{totalLot} * 50000)
+					, #{userId,jdbcType=VARCHAR}
+					, SYSDATE()
+					, CONCAT(DATE_FORMAT(SYSDATE(), '%Y-%m-%d'), ' ', #{goodsTime}, ' ', CASE #{bsType} WHEN 'B' THEN '매수' ELSE '매도' END)
+					, #{orderSeq,jdbcType=BIGINT}
+					, (-1 * #{totalLot} * 50000))
+	</insert>
+	
+	<insert id="insertAdminUD" useGeneratedKeys="true" keyProperty="cashSeq" parameterType="search">		
+		INSERT INTO		ts_cash (CASH_TYPE, USER_ID, CASH, REG_USER, REG_DATE, MEMO1, MAIN_SEQ, ORI_PRICE)
+		SELECT	'W',
+					USER_ID, 
+					(LOT * 50000 * (SELECT 1 + ((100 - FLR.LINE_RATET) / 100) FROM fx_line_rate FLR WHERE FLR.RUN_TIME = #{runTime,jdbcType=INTEGER} AND FLR.LR_VER = 0)), 
+					#{userId,jdbcType=VARCHAR},
+					SYSDATE(), 
+					CONCAT(GOODS_DATE, ' ', GOODS_TIME, ' ', CASE BS_TYPE WHEN 'B' THEN '매수' ELSE '매도' END, ' 실현'), 
+					ORDER_SEQ,
+					LOT * 50000
+		FROM		fx_order FO
+		WHERE	RESULT_TIME = CONCAT(#{goodsDate,jdbcType=VARCHAR}, ' ', #{goodsTime,jdbcType=VARCHAR})
+			AND	FO.RUN_TIME = #{runTime,jdbcType=INTEGER}
+			AND 	FO.BS_TYPE = #{profitType,jdbcType=VARCHAR}
+	</insert>
+	
+	<insert id="insertRecommCash" useGeneratedKeys="true" keyProperty="cashSeq" parameterType="search">
+		INSERT INTO ts_cash (CASH_TYPE, USER_ID, CASH, REG_USER, REG_DATE, MEMO1, MAIN_SEQ, ORI_PRICE)
+		SELECT	'C', LINE_ID
+					, CASE WHEN TMI.ADDITIONAL_ITEM1 = 'Y' THEN CONVERT(LOT * 50000 * LINE_RATE * 0.01, INT) ELSE CONVERT(LOT * 50000 * LINE_RATE * 0.01 * 0.967, INT) END PRICE
+					, #{userId,jdbcType=VARCHAR}, SYSDATE()
+					, CONCAT(GOODS_DATE, ' ', GOODS_TIME, ' ', USER_ID, ' 실현 수수료')
+					, ORDER_SEQ
+					, CONVERT(LOT * 50000 * LINE_RATE * 0.01, INT) AS ORI_PRICE
+		FROM	(
+				SELECT	FO.ORDER_SEQ, FO.GOODS_DATE, FO.GOODS_TIME, FO.USER_ID, FO.LOT, ML.LINE_ID1 AS LINE_ID, LINE_RATE1 AS LINE_RATE, 1 AS LINE_LEVEL
+				FROM	fx_order FO
+					INNER JOIN v_member_line_rate ML
+						ON ML.USER_ID = FO.USER_ID
+							AND	ML.RUN_TIME = FO.RUN_TIME
+				WHERE	FO.RESULT_TIME = CONCAT(#{goodsDate,jdbcType=VARCHAR}, ' ', #{goodsTime,jdbcType=VARCHAR})
+					AND	FO.RUN_TIME = #{runTime,jdbcType=INTEGER}
+					AND	FO.ORDER_RESULT = 'W'
+					AND	ML.LINE_ID1 IS NOT NULL
+				UNION ALL
+				SELECT	FO.ORDER_SEQ, FO.GOODS_DATE, FO.GOODS_TIME, FO.USER_ID, FO.LOT, ML.LINE_ID2 AS LINE_ID, LINE_RATE2 AS LINE_RATE, 2 AS LINE_LEVEL
+				FROM	fx_order FO
+					INNER JOIN v_member_line_rate ML
+						ON ML.USER_ID = FO.USER_ID
+							AND	ML.RUN_TIME = FO.RUN_TIME
+				WHERE	FO.RESULT_TIME = CONCAT(#{goodsDate,jdbcType=VARCHAR}, ' ', #{goodsTime,jdbcType=VARCHAR})
+					AND	FO.RUN_TIME = #{runTime,jdbcType=INTEGER}
+					AND	FO.ORDER_RESULT = 'W'
+					AND	ML.LINE_ID2 IS NOT NULL	
+				UNION ALL
+				SELECT	FO.ORDER_SEQ, FO.GOODS_DATE, FO.GOODS_TIME, FO.USER_ID, FO.LOT, ML.LINE_ID3 AS LINE_ID, LINE_RATE3 AS LINE_RATE, 3 AS LINE_LEVEL
+				FROM	fx_order FO
+					INNER JOIN v_member_line_rate ML
+						ON ML.USER_ID = FO.USER_ID
+							AND	ML.RUN_TIME = FO.RUN_TIME
+				WHERE	FO.RESULT_TIME = CONCAT(#{goodsDate,jdbcType=VARCHAR}, ' ', #{goodsTime,jdbcType=VARCHAR})
+					AND	FO.RUN_TIME = #{runTime,jdbcType=INTEGER}
+					AND	FO.ORDER_RESULT = 'W'
+					AND	ML.LINE_ID3 IS NOT NULL
+				UNION ALL
+				SELECT	FO.ORDER_SEQ, FO.GOODS_DATE, FO.GOODS_TIME, FO.USER_ID, FO.LOT, ML.LINE_ID4 AS LINE_ID, LINE_RATE4 AS LINE_RATE, 4 AS LINE_LEVEL
+				FROM	fx_order FO
+					INNER JOIN v_member_line_rate ML
+						ON ML.USER_ID = FO.USER_ID
+							AND	ML.RUN_TIME = FO.RUN_TIME
+				WHERE	FO.RESULT_TIME = CONCAT(#{goodsDate,jdbcType=VARCHAR}, ' ', #{goodsTime,jdbcType=VARCHAR})
+					AND	FO.RUN_TIME = #{runTime,jdbcType=INTEGER}
+					AND	FO.ORDER_RESULT = 'W'
+					AND	ML.LINE_ID4 IS NOT NULL
+				UNION ALL
+				SELECT	FO.ORDER_SEQ, FO.GOODS_DATE, FO.GOODS_TIME, FO.USER_ID, FO.LOT, ML.LINE_ID5 AS LINE_ID, LINE_RATE5 AS LINE_RATE, 5 AS LINE_LEVEL
+				FROM	fx_order FO
+					INNER JOIN v_member_line_rate ML
+						ON ML.USER_ID = FO.USER_ID
+							AND	ML.RUN_TIME = FO.RUN_TIME
+				WHERE	FO.RESULT_TIME = CONCAT(#{goodsDate,jdbcType=VARCHAR}, ' ', #{goodsTime,jdbcType=VARCHAR})
+					AND	FO.RUN_TIME = #{runTime,jdbcType=INTEGER}
+					AND	FO.ORDER_RESULT = 'W'
+					AND	ML.LINE_ID5 IS NOT NULL
+			) CL
+			INNER JOIN ts_member_info TMI
+				ON TMI.USER_ID = CL.LINE_ID;
+	</insert>
+	
+	<insert id="insertAdminT" useGeneratedKeys="true" keyProperty="cashSeq" parameterType="search">
+		INSERT INTO ts_cash	(CASH_TYPE, USER_ID, CASH, REG_USER, REG_DATE, MEMO1, MAIN_SEQ, ORI_PRICE)
+		SELECT	'T',
+					USER_ID, 
+					LOT * 50000, 
+					'', 
+					SYSDATE(), 
+					CONCAT(#{goodsDate,jdbcType=VARCHAR}, ' ', #{goodsTime,jdbcType=VARCHAR}, ' ', CASE WHEN BS_TYPE = 'B' THEN '매수' ELSE '매도' END, ' 틱차트 반환'), 
+					ORDER_SEQ,
+					LOT * 50000
+		FROM		fx_order
+		WHERE	RESULT_TIME = CONCAT(#{goodsDate,jdbcType=VARCHAR}, ' ', #{goodsTime,jdbcType=VARCHAR})
+			AND	RUN_TIME = #{runTime,jdbcType=INTEGER};
+	</insert>
+	
+	<delete id="deleteCashCancle" parameterType="search">
+		DELETE
+		FROM	ts_cash
+		WHERE	CASH_TYPE IN ('T', 'W', 'C') 
+			AND	MAIN_SEQ IN (	SELECT	ORDER_SEQ
+										FROM		fx_order
+										WHERE	RESULT_TIME = CONCAT(#{goodsDate,jdbcType=VARCHAR}, ' ', #{goodsTime,jdbcType=VARCHAR})
+											AND	RUN_TIME = #{runTime,jdbcType=INTEGER}
+								);
+	</delete>
+	
+	<insert id="insertCashByUser" useGeneratedKeys="true" parameterType="search">
+		INSERT INTO 	ts_cash (CASH_TYPE, USER_ID, CASH, REG_USER, REG_DATE, MEMO1, MAIN_SEQ)
+		VALUES	('M'
+					, #{userId,jdbcType=VARCHAR}
+					, (#{cash})
+					, #{userId,jdbcType=VARCHAR}
+					, SYSDATE()
+					, '관리자 지급'
+					, null)
+	</insert>
+	
+</mapper>

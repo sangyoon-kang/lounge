@@ -1,0 +1,235 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="siteApi">
+
+ 	<resultMap id="BaseResultMap" type="com.tagosolution.service.model.SiteApiVO">
+		<id column="SITE_SEQ" jdbcType="TINYINT" property="siteSeq" />
+		<result column="MAP_TYPE" jdbcType="VARCHAR" property="mapType" />
+		<result column="MAP_KEY" jdbcType="VARCHAR" property="mapKey" />
+		<result column="EDITOR_TYPE" jdbcType="VARCHAR" property="editorType" />
+		<result column="EDITOR_KEY" jdbcType="VARCHAR" property="editorKey" />
+		<result column="UPLOAD_TYPE" jdbcType="VARCHAR" property="uploadType" />
+		<result column="UPLOAD_KEY" jdbcType="VARCHAR" property="uploadKey" />
+		<result column="NAVER_LOG_ID" jdbcType="VARCHAR" property="naverlogID" />
+		<result column="NAVER_LOG_VALUE" jdbcType="VARCHAR" property="naverlogValue" />
+		<result column="GOOGLE_LOG_ID" jdbcType="VARCHAR" property="googlelogId" />
+		<result column="GOOGLE_LOG_VALUE" jdbcType="VARCHAR" property="googlelogValue" />
+		<result column="GOOGLE_UA" jdbcType="VARCHAR" property="googleUa" />
+		<result column="PHONE_CHECK_ID" jdbcType="VARCHAR" property="phonecheckID" />
+		<result column="PHONE_CHECK_PW" jdbcType="VARCHAR" property="phonecheckPW" />
+		<result column="IPIN_ID" jdbcType="VARCHAR" property="ipinID" />
+		<result column="IPIN_PW" jdbcType="VARCHAR" property="ipinPW" />
+		<result column="FACEBOOK_KEY" jdbcType="VARCHAR" property="facebookKey" />
+		<result column="TWITTER_KEY" jdbcType="VARCHAR" property="twitterKey" />
+		<result column="KAKAO_KEY" jdbcType="VARCHAR" property="kakaoKey" />
+		<result column="NAVER_KEY" jdbcType="VARCHAR" property="naverKey" />
+		<result column="FACEBOOK_FLAG" jdbcType="VARCHAR" property="facebookFlag" />
+		<result column="TWITTER_FLAG" jdbcType="VARCHAR" property="twitterFlag" />
+		<result column="KAKAO_FLAG" jdbcType="VARCHAR" property="kakaoFlag" />
+		<result column="NAVER_FLAG" jdbcType="VARCHAR" property="naverFlag" />
+		<result column="GOOGLE_ACCESS_TOKEN" jdbcType="VARCHAR" property="googleAccessToken" />
+		<result column="GOOGLE_REFRESH_TOKEN" jdbcType="VARCHAR" property="googleRefreshToken" />
+		<result column="LIVERATE_KEY" jdbcType="VARCHAR" property="liverateKey" />
+		
+	</resultMap>
+
+	<sql id="select">
+		SITE_SEQ, MAP_TYPE, MAP_KEY, EDITOR_TYPE, EDITOR_KEY, UPLOAD_TYPE, UPLOAD_KEY, NAVER_LOG_ID, NAVER_LOG_VALUE, GOOGLE_LOG_ID, GOOGLE_LOG_VALUE, GOOGLE_UA, 
+		PHONE_CHECK_ID, PHONE_CHECK_PW, IPIN_ID, IPIN_PW, FACEBOOK_KEY, TWITTER_KEY, KAKAO_KEY, NAVER_KEY, GOOGLE_ACCESS_TOKEN, GOOGLE_REFRESH_TOKEN,
+		FACEBOOK_FLAG, TWITTER_FLAG, KAKAO_FLAG, NAVER_FLAG, LIVERATE_KEY
+	</sql>
+	
+	<select id="selectByKey" parameterType="java.lang.Byte" resultMap="BaseResultMap">
+		SELECT
+		<include refid="select" />
+		FROM TS_SITE_API
+		WHERE SITE_SEQ = #{siteSeq,jdbcType=TINYINT}
+	</select>
+	<insert id="merge" useGeneratedKeys="true" keyProperty="siteSeq" parameterType="com.tagosolution.service.model.SiteApiVO">
+		INSERT INTO TS_SITE_API (
+			SITE_SEQ, MAP_TYPE, MAP_KEY, EDITOR_TYPE, EDITOR_KEY, UPLOAD_TYPE, UPLOAD_KEY, NAVER_LOG_ID, NAVER_LOG_VALUE, GOOGLE_LOG_ID, GOOGLE_LOG_VALUE, GOOGLE_UA, 
+			PHONE_CHECK_ID, PHONE_CHECK_PW, IPIN_ID, IPIN_PW, FACEBOOK_KEY, TWITTER_KEY, KAKAO_KEY, NAVER_KEY, GOOGLE_ACCESS_TOKEN, GOOGLE_REFRESH_TOKEN, LIVERATE_KEY
+		)
+		VALUES (
+			#{siteSeq,jdbcType=TINYINT}, #{mapType,jdbcType=VARCHAR}, #{mapKey,jdbcType=VARCHAR}, #{editorType,jdbcType=VARCHAR}, #{editorKey,jdbcType=VARCHAR}, #{uploadType,jdbcType=VARCHAR}, #{uploadKey,jdbcType=VARCHAR}, 
+			#{naverlogID,jdbcType=VARCHAR}, #{naverlogValue,jdbcType=VARCHAR}, #{googlelogId,jdbcType=VARCHAR}, #{googlelogValue,jdbcType=VARCHAR}, #{googleUa,jdbcType=VARCHAR}, #{phonecheckID,jdbcType=VARCHAR}, #{phonecheckPW,jdbcType=VARCHAR}, #{ipinID,jdbcType=VARCHAR},
+			#{ipinPW,jdbcType=VARCHAR}, #{facebookKey,jdbcType=VARCHAR}, #{twitterKey,jdbcType=VARCHAR}, #{kakaoKey,jdbcType=VARCHAR},  #{naverKey,jdbcType=VARCHAR},  #{googleAccessToken,jdbcType=VARCHAR},  #{googleAccessToken,jdbcType=VARCHAR}
+			,#{liverateKey,jdbcType=VARCHAR}
+		)
+		ON DUPLICATE KEY UPDATE
+		<trim suffix="" suffixOverrides=",">
+			<if test="siteSeq != null">
+				SITE_SEQ = #{siteSeq,jdbcType=TINYINT},
+			</if>
+			<if test="mapType != null">
+				MAP_TYPE = #{mapType,jdbcType=VARCHAR},
+			</if>
+			<if test="mapKey != null">
+				MAP_KEY = #{mapKey,jdbcType=VARCHAR},
+			</if>
+			<if test="editorType != null">
+				EDITOR_TYPE = #{editorType,jdbcType=VARCHAR},
+			</if>
+			<if test="editorKey != null">
+				EDITOR_KEY = #{editorKey,jdbcType=VARCHAR},
+			</if>
+			<if test="uploadType != null">
+				UPLOAD_TYPE = #{uploadType,jdbcType=VARCHAR},
+			</if>
+			<if test="uploadKey != null">
+				UPLOAD_KEY = #{uploadKey,jdbcType=VARCHAR},
+			</if>
+			<if test="naverlogID != null">
+				NAVER_LOG_ID = #{naverlogID,jdbcType=VARCHAR},
+			</if>
+			<if test="naverlogValue != null">
+				NAVER_LOG_VALUE = #{naverlogValue,jdbcType=VARCHAR},
+			</if>
+			<if test="googlelogId != null">
+				GOOGLE_LOG_ID = #{googlelogId,jdbcType=VARCHAR},
+			</if>
+			<if test="googlelogValue != null">
+				GOOGLE_LOG_VALUE = #{googlelogValue,jdbcType=VARCHAR},
+			</if>
+			<if test="googleUa != null">
+				GOOGLE_UA = #{googleUa,jdbcType=VARCHAR},
+			</if>
+			<if test="phonecheckID != null">
+				PHONE_CHECK_ID = #{phonecheckID,jdbcType=VARCHAR},
+			</if>
+			<if test="phonecheckPW != null">
+				PHONE_CHECK_PW = #{phonecheckPW,jdbcType=VARCHAR},
+			</if>
+			<if test="ipinID != null">
+				IPIN_ID = #{ipinID,jdbcType=VARCHAR},
+			</if>
+			<if test="ipinPW != null">
+				IPIN_PW = #{ipinPW,jdbcType=VARCHAR},
+			</if>
+			<if test="facebookKey != null">
+				FACEBOOK_KEY = #{facebookKey,jdbcType=VARCHAR},
+			</if>
+			<if test="twitterKey != null">
+				TWITTER_KEY = #{twitterKey,jdbcType=VARCHAR},
+			</if>
+			<if test="kakaoKey != null">
+				KAKAO_KEY = #{kakaoKey,jdbcType=VARCHAR},
+			</if>
+			<if test="naverKey != null">
+				NAVER_KEY = #{naverKey,jdbcType=VARCHAR},
+			</if>
+			<if test="facebookFlag != null">
+				FACEBOOK_FLAG = #{facebookFlag,jdbcType=VARCHAR},
+			</if>
+			<if test="twitterFlag != null">
+				TWITTER_FLAG = #{twitterFlag,jdbcType=VARCHAR},
+			</if>
+			<if test="kakaoFlag != null">
+				KAKAO_FLAG = #{kakaoFlag,jdbcType=VARCHAR},
+			</if>
+			<if test="naverFlag != null">
+				NAVER_FLAG = #{naverFlag,jdbcType=VARCHAR},
+			</if>
+			<if test="googleAccessToken != null">
+				GOOGLE_ACCESS_TOKEN = #{googleAccessToken,jdbcType=VARCHAR},
+			</if>
+			<if test="googleRefreshToken != null">
+				GOOGLE_REFRESH_TOKEN = #{googleRefreshToken,jdbcType=VARCHAR},
+			</if>
+			
+			<if test="liverateKey != null">
+        LIVERATE_KEY = #{liverateKey,jdbcType=VARCHAR}
+      </if>
+					
+		</trim>
+		
+	</insert>
+	
+
+	
+	<update id="updateByKeySelective" parameterType="com.tagosolution.service.model.SiteApiVO">
+		update TS_SITE_API
+		<set>
+			<if test="mapType != null">
+				MAP_TYPE = #{mapType,jdbcType=VARCHAR},
+			</if>
+			<if test="mapKey != null">
+				MAP_KEY = #{mapKey,jdbcType=VARCHAR},
+			</if>
+			<if test="editorType != null">
+				EDITOR_TYPE = #{editorType,jdbcType=VARCHAR},
+			</if>
+			<if test="editorKey != null">
+				EDITOR_KEY = #{editorKey,jdbcType=VARCHAR},
+			</if>
+			<if test="uploadType != null">
+				UPLOAD_TYPE = #{uploadType,jdbcType=VARCHAR},
+			</if>
+			<if test="uploadKey != null">
+				UPLOAD_KEY = #{uploadKey,jdbcType=VARCHAR},
+			</if>
+			<if test="naverlogID != null">
+				NAVER_LOG_ID = #{naverlogID,jdbcType=VARCHAR},
+			</if>
+			<if test="naverlogValue != null">
+				NAVER_LOG_VALUE = #{naverlogValue,jdbcType=VARCHAR},
+			</if>
+			<if test="googlelogId != null">
+				GOOGLE_LOG_ID = #{googlelogId,jdbcType=VARCHAR},
+			</if>
+			<if test="googlelogValue != null">
+				GOOGLE_LOG_VALUE = #{googlelogValue,jdbcType=VARCHAR},
+			</if>
+			<if test="googleUa != null">
+				GOOGLE_UA = #{googleUa,jdbcType=VARCHAR},
+			</if>
+			<if test="phonecheckID != null">
+				PHONE_CHECK_ID = #{phonecheckID,jdbcType=VARCHAR},
+			</if>
+			<if test="phonecheckPW != null">
+				PHONE_CHECK_PW = #{phonecheckPW,jdbcType=VARCHAR},
+			</if>
+			<if test="ipinID != null">
+				IPIN_ID = #{ipinID,jdbcType=VARCHAR},
+			</if>
+			<if test="ipinPW != null">
+				IPIN_PW = #{ipinPW,jdbcType=VARCHAR},
+			</if>
+			<if test="facebookKey != null">
+				FACEBOOK_KEY = #{facebookKey,jdbcType=VARCHAR},
+			</if>
+			<if test="twitterKey != null">
+				TWITTER_KEY = #{twitterKey,jdbcType=VARCHAR},
+			</if>
+			<if test="kakaoKey != null">
+				KAKAO_KEY = #{kakaoKey,jdbcType=VARCHAR},
+			</if>
+			<if test="naverKey != null">
+				NAVER_KEY = #{naverKey,jdbcType=VARCHAR},
+			</if>
+			<if test="facebookFlag != null">
+				FACEBOOK_FLAG = #{facebookFlag,jdbcType=VARCHAR},
+			</if>
+			<if test="twitterFlag != null">
+				TWITTER_FLAG = #{twitterFlag,jdbcType=VARCHAR},
+			</if>
+			<if test="kakaoFlag != null">
+				KAKAO_FLAG = #{kakaoFlag,jdbcType=VARCHAR},
+			</if>
+			<if test="naverFlag != null">
+				NAVER_FLAG = #{naverFlag,jdbcType=VARCHAR},
+			</if>
+			<if test="googleAccessToken != null">
+				GOOGLE_ACCESS_TOKEN = #{googleAccessToken,jdbcType=VARCHAR},
+			</if>
+			<if test="googleRefreshToken != null">
+				GOOGLE_REFRESH_TOKEN = #{googleRefreshToken,jdbcType=VARCHAR}
+			</if>
+			<if test="liverateKey != null">
+        LIVERATE_KEY = #{liverateKey,jdbcType=VARCHAR}
+      </if>
+		</set>
+		where SITE_SEQ = #{siteSeq,jdbcType=TINYINT}
+	</update>
+
+</mapper>

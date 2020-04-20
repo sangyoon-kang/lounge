@@ -1,0 +1,351 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="menuSetting">
+
+	<resultMap id="BaseResultMap" type="com.tagosolution.service.model.MenuSettingVO">
+		<!-- <id column="IDX" jdbcType="INTEGER" property="idX" /> -->
+		<id column="MENU_ID" jdbcType="VARCHAR" property="menuIdx" />
+		<result column="MENU_LEVEL" jdbcType="SMALLINT" property="menuLevel" />
+		<result column="PARENT_ID" jdbcType="VARCHAR" property="parentIdx" />
+		<result column="MENU_NAME" jdbcType="VARCHAR" property="menuName" />
+		<result column="MENU_TABLE" jdbcType="VARCHAR" property="menuTable" />
+		<result column="FOLDER_PATH" jdbcType="VARCHAR" property="folderPath" />
+		<result column="PREFIX_PATH" jdbcType="VARCHAR" property="prefixPath" />
+		<result column="SORT_NUM" jdbcType="VARCHAR" property="sortNum" />
+		<result column="USE_FLAG" jdbcType="VARCHAR" property="useFlag" />
+		<result column="REG_USER" jdbcType="VARCHAR" property="regUser" />
+		<result column="REG_DATE" jdbcType="DATE" property="regDate" />
+		<result column="MOD_USER" jdbcType="VARCHAR" property="modUser" />
+		<result column="MOD_DATE" jdbcType="DATE" property="modDate" />
+	</resultMap>
+	
+	<sql id="select">
+			MENU_ID, MENU_LEVEL, PARENT_ID, MENU_NAME, MENU_TABLE, FOLDER_PATH,  SORT_NUM, USE_FLAG, REG_USER, REG_DATE,  MOD_USER, MOD_DATE, PREFIX_PATH
+	</sql>
+	
+	<sql id="whereClause">
+		<trim prefix="where" prefixOverrides="and">
+			<!-- <if test="menuLevel != null and menuLevel !=''">
+				AND MENU_LEVEL = #{menuLevel}
+			</if> -->
+			
+				AND USE_FLAG != "D"
+		</trim>
+	</sql>
+	
+	<select id="selectList" parameterType="search" resultMap="BaseResultMap">
+		SELECT
+		<include refid="select" />
+		FROM TS_MENU
+		<include refid="whereClause" />
+		<choose>
+			<when test="orderBy != ''">
+				
+			</when>
+			<otherwise>
+				ORDER BY
+					CASE WHEN MENU_LEVEL = 1 THEN CAST(CONCAT(SORT_NUM, '00')AS UNSIGNED)
+						 WHEN MENU_LEVEL = 2 THEN CAST(CONCAT(REPLACE(SORT_NUM, '.', ''), '0') AS UNSIGNED)
+					 	 WHEN MENU_LEVEL = 3 THEN CAST(REPLACE(SORT_NUM, '.', '')AS UNSIGNED)
+					END ASC
+			</otherwise>					
+		</choose>
+	</select>
+	<select id="parentList" parameterType="search" resultMap="BaseResultMap">
+		SELECT
+		<include refid="select" />
+		FROM TS_MENU
+		<include refid="whereClause" />
+		<choose>
+			<when test="orderBy != ''">
+				ORDER BY ${orderBy }, SORT_NUM ASC
+			</when>
+								
+		</choose>
+		
+	</select>
+	<select id="totalCount" parameterType="search" resultType="int">
+		SELECT COUNT(*)
+		FROM TS_MENU
+		<include refid="whereClause" />
+	</select>
+	
+	<select id="mainmenu"  parameterType="search" resultMap="BaseResultMap">
+		SELECT MENU_ID, PARENT_ID, MENU_LEVEL, MENU_NAME
+		FROM TS_MENU
+		<include refid="whereClause" />
+		AND MENU_LEVEL != 3
+	</select>
+	
+	<select id="selectMenuForGroup"  parameterType="search" resultMap="BaseResultMap">
+		SELECT 
+		<include refid="select" />
+		FROM TS_MENU
+		WHERE 
+			USE_FLAG = 'U'
+			AND FOLDER_PATH NOT LIKE '%/config%'
+		ORDER BY
+			CASE WHEN MENU_LEVEL = 1 THEN CAST(CONCAT(SORT_NUM, '00')AS UNSIGNED)
+				 WHEN MENU_LEVEL = 2 THEN CAST(CONCAT(REPLACE(SORT_NUM, '.', ''), '0') AS UNSIGNED)
+			 	 WHEN MENU_LEVEL = 3 THEN CAST(REPLACE(SORT_NUM, '.', '')AS UNSIGNED)
+			END ASC
+	</select>
+	
+	<select id="maxIdBylevel"  parameterType="search" resultType="int">
+		SELECT
+			<choose>
+				<when test="menuLevel != null and menuLevel == 1">
+					IFNULL(MAX(CAST(SUBSTR(MENU_ID, 1,2) AS INTEGER)), 0) AS MAX_ID
+				</when>
+				<when test="menuLevel != null and menuLevel == 2">
+					IFNULL(MAX(CAST(SUBSTR(MENU_ID, 3,2) AS INTEGER)), 0) AS MAX_ID
+				</when>
+				<otherwise>
+					IFNULL(MAX(CAST(SUBSTR(MENU_ID, 5,2) AS INTEGER)), 0) AS MAX_ID
+				</otherwise>					
+			</choose>
+		FROM 
+			TS_MENU
+		<include refid="whereClause" />
+	</select>
+	
+	<select id="maxSortNumBylevel"  parameterType="search" resultType="String">
+		SELECT
+			<choose>
+				<when test="menuLevel != null and menuLevel == 1">
+					IFNULL(MAX(CAST(SORT_NUM+1 AS INTEGER)), 1) SORT_NUM 
+				</when>
+				<otherwise>
+					CONCAT(SORT_NUM, '.', (SELECT COUNT(*) FROM TS_MENU WHERE PARENT_ID = #{parentIdx}) + 1) SORT_NUM
+				</otherwise>					
+			</choose>
+		FROM 
+			TS_MENU
+	 	<if test="parentIdx != null and parentIdx !=''">
+		WHERE
+			MENU_ID = #{parentIdx}
+		</if>
+	</select>
+	
+	<select id="selectByKey" parameterType="java.lang.Short" resultMap="BaseResultMap">
+		SELECT
+		<include refid="select" />
+		FROM 
+			TS_MENU
+		WHERE 
+			MENU_LEVEL = #{_parameter }
+			AND USE_FLAG = 'U'
+		ORDER BY
+			CAST(SORT_NUM AS UNSIGNED) ASC
+	</select>
+	
+	<select id="selectByLnb" parameterType="java.lang.String" resultMap="BaseResultMap">
+		SELECT
+		<include refid="select" />
+		FROM
+			TS_MENU
+		WHERE 
+			SUBSTR(MENU_ID, 1,2) = SUBSTR(#{_parameter }, 1,2)
+			AND USE_FLAG = 'U'
+		ORDER BY SORT_NUM
+	</select>
+	
+	<select id="selectByUrl" parameterType="java.lang.String" resultMap="BaseResultMap">
+		SELECT
+			<include refid="select" /> 
+		FROM
+		((SELECT <include refid="select" />  
+		FROM 
+			TS_MENU 
+		WHERE 
+			MENU_ID = (SELECT PARENT_ID FROM TS_MENU WHERE FOLDER_PATH = #{_parameter } AND MENU_LEVEL = 3)
+			AND MENU_LEVEL = 2)
+		UNION
+		(SELECT 
+			<include refid="select" /> 
+		FROM 
+			TS_MENU 
+		WHERE 
+			PARENT_ID = (SELECT PARENT_ID FROM TS_MENU WHERE FOLDER_PATH = #{_parameter } AND MENU_LEVEL = 3)
+		)) result
+		ORDER BY 
+			CASE WHEN MENU_LEVEL = 1 THEN CAST(CONCAT(SORT_NUM, '00')AS UNSIGNED)
+		 	WHEN MENU_LEVEL = 2 THEN CAST(CONCAT(REPLACE(SORT_NUM, '.', ''), '0') AS UNSIGNED)
+	 	 	WHEN MENU_LEVEL = 3 THEN CAST(REPLACE(SORT_NUM, '.', '')AS UNSIGNED)END ASC
+	</select>
+	
+	<insert id="merge" useGeneratedKeys="true" keyProperty="menuIdx" parameterType="com.tagosolution.service.model.MenuSettingVO">
+		INSERT INTO TS_MENU (
+		MENU_ID,MENU_LEVEL, PARENT_ID, MENU_NAME, MENU_TABLE, FOLDER_PATH,  SORT_NUM, USE_FLAG, REG_USER, PREFIX_PATH
+		)
+		VALUES (
+		#{menuIdx,jdbcType=VARCHAR},
+		#{menuLevel,jdbcType=INTEGER},
+		#{parentIdx,jdbcType=VARCHAR},
+		#{menuName,jdbcType=VARCHAR},
+		#{menuTable,jdbcType=VARCHAR},
+		#{folderPath,jdbcType=VARCHAR},
+		#{sortNum,jdbcType=SMALLINT},
+		#{useFlag,jdbcType=VARCHAR},
+		#{regUser,jdbcType=VARCHAR},
+		#{prefixPath,jdbcType=VARCHAR}
+		)
+		ON DUPLICATE KEY UPDATE
+		<trim suffix="" suffixOverrides=",">
+			<if test="menuName != null">
+				MENU_NAME = #{menuName,jdbcType=VARCHAR},
+			</if>
+			<if test="menuTable != null">
+				MENU_TABLE = #{menuTable,jdbcType=VARCHAR},
+			</if>
+			<if test="folderPath != null">
+				FOLDER_PATH = #{folderPath,jdbcType=VARCHAR},
+			</if>
+			<if test="useFlag != null">
+				USE_FLAG = #{useFlag,jdbcType=VARCHAR},
+			</if>
+			<if test="modUser != null">
+				MOD_USER = #{modUser,jdbcType=VARCHAR},
+			</if>
+			<if test="sortNum != null">
+				SORT_NUM = #{sortNum,jdbcType=SMALLINT},
+			</if>
+			<if test="prefixPath != null">
+				PREFIX_PATH = #{prefixPath,jdbcType=VARCHAR}
+			</if>
+		</trim>
+	</insert>
+	
+	<select id="selectOrderingForUpdate" parameterType="search" resultMap="BaseResultMap">
+		SELECT
+			MENU_ID,
+			SORT_NUM
+		FROM TS_MENU
+		WHERE
+		 	<choose>
+				<when test="menuLevel != null and menuLevel == 1">
+					SUBSTRING_INDEX(SORT_NUM,'.',1) = (SELECT
+						<if test="type == 'up'">
+							MAX(CONVERT(A.SORT_NUM, UNSIGNED)) AS SORT_NUM
+						</if>
+						<if test="type == 'down'">
+							MIN(CONVERT(A.SORT_NUM, UNSIGNED)) AS SORT_NUM
+						</if>
+						FROM TS_MENU A
+						WHERE 
+						<if test="type == 'up'">
+							CONVERT(A.SORT_NUM, UNSIGNED) <![CDATA[<]]> CONVERT(#{sortNum}, UNSIGNED) 
+						</if>
+						<if test="type == 'down'">
+							CONVERT(A.SORT_NUM, UNSIGNED) > CONVERT(#{sortNum}, UNSIGNED) 
+						</if>
+						AND ( USE_FLAG = 'U' OR USE_FLAG = 'S')
+						AND MENU_LEVEL = #{menuLevel}
+					)
+				</when>
+				<when test="menuLevel != null and menuLevel == 2">
+					SUBSTRING_INDEX(SORT_NUM,'.',2) = (SELECT
+						<if test="type == 'up'">
+							MAX(A.SORT_NUM) AS SORT_NUM
+						</if>
+						<if test="type == 'down'">
+							MIN(A.SORT_NUM) AS SORT_NUM
+						</if>
+						FROM TS_MENU A
+						WHERE 
+						<if test="type == 'up'">
+							A.SORT_NUM <![CDATA[<]]> #{sortNum}
+						</if>
+						<if test="type == 'down'">
+							A.SORT_NUM > #{sortNum}
+						</if>
+						AND ( USE_FLAG = 'U' OR USE_FLAG = 'S')
+						AND MENU_LEVEL = #{menuLevel}
+						AND PARENT_ID = #{parentIdx}
+					)
+				</when>
+				<otherwise>
+					SORT_NUM = (SELECT
+					<if test="type == 'up'">
+						MAX(A.SORT_NUM) AS SORT_NUM
+					</if>
+					<if test="type == 'down'">
+						MIN(A.SORT_NUM) AS SORT_NUM
+					</if>
+					FROM TS_MENU A
+					WHERE 
+					<if test="type == 'up'">
+						A.SORT_NUM <![CDATA[<]]> #{sortNum}
+					</if>
+					<if test="type == 'down'">
+						A.SORT_NUM > #{sortNum}
+					</if>
+					AND ( USE_FLAG = 'U' OR USE_FLAG = 'S')
+					AND MENU_LEVEL = #{menuLevel}
+					AND PARENT_ID = #{parentIdx}
+					)
+				</otherwise>					
+			</choose>
+	</select>
+	
+	<select id="selectOrderingSecondLevel" parameterType="String" resultMap="BaseResultMap">
+		SELECT
+		<include refid="select" />
+		FROM
+			TS_MENU
+		WHERE 
+			SUBSTR(MENU_ID, 1,4) = SUBSTR(#{_parameter }, 1,4)
+			AND ( USE_FLAG = 'U' OR USE_FLAG = 'S')
+		ORDER BY SORT_NUM
+	</select>
+	
+	<update id="updateOrdering" parameterType="com.tagosolution.service.model.MenuSettingVO">	
+		UPDATE TS_MENU
+		<choose>
+				<when test="menuLevel != null and menuLevel == 1">
+					SET SORT_NUM = CONCAT
+									 (REPLACE(SUBSTRING_INDEX(SORT_NUM,'.',1), SUBSTRING_INDEX(SORT_NUM,'.',1), #{sortNum,jdbcType=VARCHAR}), CASE WHEN MENU_LEVEL != 1 THEN '.' ELSE '' END, 
+										CASE
+									 		WHEN MENU_LEVEL = 1 THEN ''
+										 	WHEN MENU_LEVEL = 2 THEN SUBSTRING_INDEX(SORT_NUM, '.', -1)
+									 		WHEN MENU_LEVEL = 3 THEN SUBSTRING_INDEX(SORT_NUM, '.', -2)
+										END
+								    )
+					WHERE MENU_ID IN
+						<foreach item="item" index="index" collection="menuIds"
+			             open="(" separator="," close=")">
+					        #{item}
+					    </foreach>
+				</when>
+				<when test="menuLevel != null and menuLevel == 2">
+					SET SORT_NUM = REPLACE(SUBSTRING_INDEX(SORT_NUM,'.',3), SUBSTRING_INDEX(SORT_NUM,'.',2), #{sortNum,jdbcType=VARCHAR})
+					WHERE MENU_ID IN
+						<foreach item="item" index="index" collection="menuIds"
+			             open="(" separator="," close=")">
+					        #{item}
+					    </foreach>
+				</when>
+				<otherwise>
+					SET SORT_NUM = #{sortNum,jdbcType=VARCHAR}
+					WHERE MENU_ID = #{menuIdx,jdbcType=VARCHAR}
+				</otherwise>					
+			</choose>
+	</update>
+	
+	<update id="updateChildFlag" parameterType="com.tagosolution.service.model.MenuSettingVO">	
+		UPDATE 
+			TS_MENU
+		SET 
+			USE_FLAG = #{useFlag,jdbcType=VARCHAR}
+		WHERE 
+			<choose>
+				<when test="menuLevel != null and menuLevel == 1">
+				SUBSTR(MENU_ID, 1,2) = SUBSTR(#{menuIdx,jdbcType=VARCHAR }, 1,2)
+				</when>
+				<otherwise>
+				SUBSTR(MENU_ID, 1,4) = SUBSTR(#{menuIdx,jdbcType=VARCHAR }, 1,4)
+				</otherwise>
+			</choose>
+	</update>
+	
+</mapper>

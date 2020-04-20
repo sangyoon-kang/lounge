@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="recentBoard">
+	<resultMap id="BaseResultMap" type="com.tagosolution.service.model.RecentBoardVO">
+		<id column="RECENT_BOARD_SEQ" jdbcType="INTEGER" property="recentBoardSeq" />
+		<result column="BOARD_CODE" jdbcType="VARCHAR" property="boardCode" />
+		<result column="BC_SEQ" jdbcType="INTEGER" property="bcSeq" />
+		<result column="LINK_URL" jdbcType="VARCHAR" property="linkUrl" />
+		<result column="ARTICLE_COUNT" jdbcType="SMALLINT" property="articleCount" />
+		<result column="SUBJECT_CHAR_COUNT" jdbcType="SMALLINT" property="subjectCharCount" />
+		<result column="BODY_CHAR_COUNT" jdbcType="SMALLINT" property="bodyCharCount" />
+		<result column="CODING_START" jdbcType="LONGVARCHAR" property="codingStart" />
+		<result column="CODING_LOOP" jdbcType="LONGVARCHAR" property="codingLoop" />
+		<result column="CODING_END" jdbcType="LONGVARCHAR" property="codingEnd" />
+		
+		<result column="CATE_NAME" jdbcType="VARCHAR" property="cateName" />
+		
+		<association property="boardMasterVO" column="BOARD_CODE" select="boardMaster.selectByKey" />
+	</resultMap>
+	
+	<sql id="select">
+		RECENT_BOARD_SEQ, BOARD_CODE, LINK_URL, ARTICLE_COUNT, SUBJECT_CHAR_COUNT, BODY_CHAR_COUNT
+		, CODING_START, CODING_LOOP, CODING_END
+		, BC_SEQ
+		, (SELECT E.CATE_NAME FROM TS_BOARD_CATEGORY E WHERE E.BC_SEQ = TS_RECENT_BOARD.BC_SEQ) AS CATE_NAME
+	</sql>
+	
+	<select id="selectList" parameterType="search" resultMap="BaseResultMap">
+		SELECT
+		<include refid="select" />
+		FROM TS_RECENT_BOARD
+		ORDER BY RECENT_BOARD_SEQ DESC
+	</select>
+	
+	<select id="totalCount" parameterType="search" resultType="int">
+		SELECT COUNT(*)
+		FROM TS_RECENT_BOARD
+	</select>
+	
+	<select id="selectByKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+		select
+		<include refid="select" />
+		FROM TS_RECENT_BOARD
+		where RECENT_BOARD_SEQ = #{recentBoardSeq,jdbcType=INTEGER}
+	</select>
+	
+	<delete id="deleteByKey" parameterType="java.lang.Integer">
+		delete FROM TS_RECENT_BOARD
+		where RECENT_BOARD_SEQ = #{recentBoardSeq,jdbcType=INTEGER}
+	</delete>
+	
+	
+	<insert id="merge" useGeneratedKeys="true" keyProperty="recentBoardSeq" parameterType="com.tagosolution.service.model.RecentBoardVO">
+		insert INTO TS_RECENT_BOARD (
+			RECENT_BOARD_SEQ, BOARD_CODE, LINK_URL,
+			ARTICLE_COUNT, SUBJECT_CHAR_COUNT, BODY_CHAR_COUNT,
+			CODING_START, CODING_LOOP, CODING_END,
+			BC_SEQ
+		)
+		values (
+			#{recentBoardSeq,jdbcType=INTEGER}, #{boardCode,jdbcType=VARCHAR}, #{linkUrl,jdbcType=VARCHAR},
+			#{articleCount,jdbcType=SMALLINT}, #{subjectCharCount,jdbcType=SMALLINT}, #{bodyCharCount,jdbcType=SMALLINT},
+			#{codingStart,jdbcType=LONGVARCHAR}, #{codingLoop,jdbcType=LONGVARCHAR}, #{codingEnd,jdbcType=LONGVARCHAR},
+			#{bcSeq,jdbcType=INTEGER}
+		)
+		ON DUPLICATE KEY UPDATE
+		<trim suffix=" " suffixOverrides=",">
+			<if test="boardCode != null">
+				BOARD_CODE = #{boardCode,jdbcType=VARCHAR},
+			</if>
+			<if test="bcSeq != null">
+				BC_SEQ = #{bcSeq,jdbcType=INTEGER},
+			</if>
+			<if test="linkUrl != null">
+				LINK_URL = #{linkUrl,jdbcType=VARCHAR},
+			</if>
+			<if test="articleCount != null">
+				ARTICLE_COUNT = #{articleCount,jdbcType=SMALLINT},
+			</if>
+			<if test="subjectCharCount != null">
+				SUBJECT_CHAR_COUNT = #{subjectCharCount,jdbcType=SMALLINT},
+			</if>
+			<if test="bodyCharCount != null">
+				BODY_CHAR_COUNT = #{bodyCharCount,jdbcType=SMALLINT},
+			</if>
+			<if test="codingStart != null">
+				CODING_START = #{codingStart,jdbcType=LONGVARCHAR},
+			</if>
+			<if test="codingLoop != null">
+				CODING_LOOP = #{codingLoop,jdbcType=LONGVARCHAR},
+			</if>
+			<if test="codingStart != null">
+				CODING_END = #{codingEnd,jdbcType=LONGVARCHAR},
+			</if>
+		</trim>
+	</insert>
+	
+	
+</mapper>

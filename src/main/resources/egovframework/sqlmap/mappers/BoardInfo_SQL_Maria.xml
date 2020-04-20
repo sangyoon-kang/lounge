@@ -1,0 +1,637 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="boardInfo">
+
+	<resultMap id="BaseResultMap" type="com.tagosolution.service.model.BoardInfoVO">
+		<id column="BOARD_SEQ" jdbcType="BIGINT" property="boardSeq" />
+		<result column="BOARD_CODE" jdbcType="VARCHAR" property="boardCode" />
+		<result column="PRODUCT_CODE" jdbcType="VARCHAR" property="productCode" />
+		<result column="H_GROUP" jdbcType="BIGINT" property="hGroup" />
+		<result column="H_ORDER" jdbcType="INTEGER" property="hOrder" />
+		<result column="H_DEPTH" jdbcType="INTEGER" property="hDepth" />
+		<result column="STAR" jdbcType="SMALLINT" property="star" />
+		<result column="NOTICE_YN" jdbcType="VARCHAR" property="noticeYn" />
+		<result column="USER_NAME" jdbcType="VARCHAR" property="userName" />
+		<result column="NICKNAME" jdbcType="VARCHAR" property="nickname" />
+		<result column="EMAIL" jdbcType="VARCHAR" property="email" />
+		<result column="PHONE" jdbcType="VARCHAR" property="phone" />
+		<result column="MOBILE" jdbcType="VARCHAR" property="mobile" />
+		<result column="ZIPCODE" jdbcType="VARCHAR" property="zipcode" />
+		<result column="ADDR1" jdbcType="VARCHAR" property="addr1" />
+		<result column="ADDR2" jdbcType="VARCHAR" property="addr2" />
+		<result column="SUBJECT" jdbcType="VARCHAR" property="subject" />
+		<result column="HTML_YN" jdbcType="VARCHAR" property="htmlYn" />
+		<result column="SECRET_YN" jdbcType="VARCHAR" property="secretYn" />
+		<result column="PWD" jdbcType="VARCHAR" property="pwd" />
+		<result column="READ_COUNT" jdbcType="INTEGER" property="readCount" />
+		<result column="RECOMM_COUNT" jdbcType="INTEGER" property="recommCount" />
+		<result column="NOT_RECOMM_COUNT" jdbcType="INTEGER" property="notRecommCount" />
+		<result column="COMMENT_COUNT" jdbcType="INTEGER" property="commentCount" />
+		<!-- Added By Mongolian Team  -->
+		<result column="ALOW_COM_YN" jdbcType="VARCHAR" property="allowCommYn" />
+		<!-- 주의 : select inet_aton('127.0.0.1'), select inet_ntoa(2130706433)-->
+		<result column="IP_ADDR" jdbcType="VARCHAR" property="ipAddr" />
+		<result column="REG_USER" jdbcType="VARCHAR" property="regUser" />
+		<result column="REG_DATE" jdbcType="TIMESTAMP" property="regDate" />
+		<result column="MOD_USER" jdbcType="VARCHAR" property="modUser" />
+		<result column="MOD_DATE" jdbcType="TIMESTAMP" property="modDate" />		
+		<result column="FAQ_FIXED_CODE" jdbcType="VARCHAR" property="faqFixedCode" />
+		<result column="LINK_URL" jdbcType="VARCHAR" property="linkUrl" />
+		<result column="STATUS_FIXED_CODE" jdbcType="VARCHAR" property="statusFixedCode" />
+		<result column="ADD_COL1" jdbcType="VARCHAR" property="addCol1" />
+		<result column="ADD_COL2" jdbcType="VARCHAR" property="addCol2" />
+		<result column="ADD_COL3" jdbcType="VARCHAR" property="addCol3" />
+		<result column="ADD_COL4" jdbcType="VARCHAR" property="addCol4" />
+		<result column="USE_FLAG" jdbcType="VARCHAR" property="useYn" />
+		
+		<result column="BODY" jdbcType="LONGVARCHAR" property="body" />
+		<result column="ANSWER" jdbcType="LONGVARCHAR" property="answer" />
+		<result column="WRITER_FORMAT_FIXED_CODE" jdbcType="VARCHAR" property="writerFormatFixedCode"/>
+		<result column="DATE_FORMAT_LIST" jdbcType="VARCHAR" property="dateFormatList" />
+		
+		<result column="BOARD_NAME" jdbcType="VARCHAR" property="boardName" />
+		<result column="REG_USER_NAME" jdbcType="VARCHAR" property="regUserName" />
+		<result column="MOD_USER_NAME" jdbcType="VARCHAR" property="modUserName" />
+		
+		<result column="BC_SEQ" jdbcType="INTEGER" property="bcSeq" />
+		<result column="CATE_NAME" jdbcType="VARCHAR" property="cateName" />
+		
+		<result column="PREV_BOARD_SEQ" jdbcType="BIGINT" property="prevBoardSeq" />
+		<result column="NEXT_BOARD_SEQ" jdbcType="BIGINT" property="nextBoardSeq" />
+		<result column="PREV_SUBJECT" jdbcType="VARCHAR" property="prevSubject" />
+		<result column="NEXT_SUBJECT" jdbcType="VARCHAR" property="nextSubject" />
+		<result column="BOARD_TYPE_FIXED_CODE" jdbcType="VARCHAR" property="bmVO.boardTypeFixedCode" />
+		<collection property="fileVOList" column="{bseq=BOARD_SEQ,ruser=REG_USER}" select="file.selectBoardByRefSeq"/>
+	</resultMap>
+	
+	<sql id="select">
+		BOARD_SEQ, BOARD_CODE, PRODUCT_CODE, H_ORDER, H_GROUP, H_DEPTH, STAR, NOTICE_YN,
+		USER_NAME, NICKNAME, EMAIL, PHONE, MOBILE, ZIPCODE, ADDR1, ADDR2, SUBJECT, HTML_YN,
+		SECRET_YN, PWD, READ_COUNT, RECOMM_COUNT, NOT_RECOMM_COUNT, ALOW_COM_YN, inet_ntoa(IP_ADDR) AS IP_ADDR,
+		REG_USER, REG_DATE, MOD_USER, MOD_DATE, STATUS_FIXED_CODE, ADD_COL1, ADD_COL2, ADD_COL3,
+		ADD_COL4, USE_FLAG, FAQ_FIXED_CODE, LINK_URL
+		, (SELECT E.BOARD_TYPE_FIXED_CODE FROM TS_BOARD_MASTER E WHERE E.BOARD_CODE = TS_BOARD_INFO.BOARD_CODE) AS BOARD_TYPE_FIXED_CODE
+		, (SELECT E.DATE_FORMAT_LIST FROM TS_BOARD_MASTER E WHERE E.BOARD_CODE = TS_BOARD_INFO.BOARD_CODE) AS DATE_FORMAT_LIST
+		, (SELECT E.WRITER_FORMAT_FIXED_CODE FROM TS_BOARD_MASTER E WHERE E.BOARD_CODE = TS_BOARD_INFO.BOARD_CODE) AS WRITER_FORMAT_FIXED_CODE
+		, BODY, ANSWER 
+		, (SELECT E.BOARD_NAME FROM TS_BOARD_MASTER E WHERE E.BOARD_CODE = TS_BOARD_INFO.BOARD_CODE) AS BOARD_NAME
+		, BC_SEQ
+		, (SELECT E.CATE_NAME FROM TS_BOARD_CATEGORY E WHERE E.BOARD_CODE = TS_BOARD_INFO.BOARD_CODE AND E.BC_SEQ = TS_BOARD_INFO.BC_SEQ) AS CATE_NAME
+		, GET_USER_NAME(REG_USER) AS REG_USER_NAME
+		, GET_USER_NAME(MOD_USER) AS MOD_USER_NAME
+	</sql>
+
+	<sql id="whereClause">
+		<trim prefix="where" prefixOverrides="and">
+			<if test="id != null and id != ''">
+				AND REG_USER = #{id}
+			</if>
+			<if test="bcode != null and bcode != ''">
+				AND BOARD_CODE = #{bcode}
+			</if>
+			<if test="bcseq != null and bcseq != ''">
+				AND BC_SEQ = #{bcseq}
+			</if>
+			<if test="searchType != null and searchType != ''">
+				<choose>
+					<when test="searchType == 'subject'">
+						and SUBJECT like CONCAT('%', #{searchWord}, '%')
+					</when>
+					<when test="searchType == 'body'">
+						and BODY like CONCAT('%', #{searchWord}, '%')
+					</when> 
+					<when test="searchType == 'author'">
+						<if test="type1 != null and type1 != ''">
+							<choose>
+								<when test="type1 == 'regUser'">
+									AND REG_USER like CONCAT('%', #{searchWord}, '%')
+								</when>
+								<when test="type1 == 'userName'">
+									AND USER_NAME like CONCAT('%', #{searchWord}, '%')
+								</when>
+								<when test="type1 == 'nickName'">
+									AND NICKNAME like CONCAT('%', #{searchWord}, '%')
+								</when>
+								<when test="type1 == 'nickUserName'">
+									AND (NICKNAME like CONCAT('%', #{searchWord}, '%') OR USER_NAME like CONCAT('%', #{searchWord}, '%'))
+								</when>
+								<when test="type1 == 'regUserName'">
+									AND (USER_NAME like CONCAT('%', #{searchWord}, '%') OR REG_USER like CONCAT('%', #{searchWord}, '%'))
+								</when>
+								<when test="type1 == 'nickRegName'">
+									AND (NICKNAME like CONCAT('%', #{searchWord}, '%') OR REG_USER like CONCAT('%', #{searchWord}, '%'))
+								</when>
+							</choose>
+						</if>
+					</when>
+					<otherwise>
+						and (SUBJECT like CONCAT('%', #{searchWord}, '%') or BODY like CONCAT('%', #{searchWord}, '%'))
+					</otherwise>
+				</choose>				
+			</if> 
+			AND USE_FLAG = 'Y'
+		</trim>
+	</sql>
+	
+	<sql id="whereClauseAdmin">
+		<trim prefix="where" prefixOverrides="and">
+			<if test="id != null and id != ''">
+				AND REG_USER = #{id}
+			</if>
+			<if test="bcode != null and bcode != ''">
+				AND BOARD_CODE = #{bcode}
+			</if>
+			<if test="bcseq != null and bcseq != ''">
+				AND BC_SEQ = #{bcseq}
+			</if>
+			<if test="searchWord != ''">
+				<choose>
+					<when test="type1 == 'subject'">
+						and SUBJECT like CONCAT('%', #{searchWord}, '%')
+					</when>
+					<when test="type1 == 'body'">
+						and BODY like CONCAT('%', #{searchWord}, '%')
+					</when>
+					<when test="type1 == 'username'">
+						and (USER_NAME like CONCAT('%', #{searchWord}, '%') or NICKNAME like CONCAT('%', #{searchWord}, '%'))
+					</when>
+					<when test="type1 == 'id'">
+						and REG_USER like CONCAT('%', #{searchWord}, '%')
+					</when>
+					<otherwise>
+						and (SUBJECT like CONCAT('%', #{searchWord}, '%') or BODY like CONCAT('%', #{searchWord}, '%'))
+					</otherwise>
+				</choose>				
+			</if> 
+			AND USE_FLAG = 'Y'
+		</trim>
+	</sql>
+	
+	<select id="selectList" parameterType="search" resultMap="BaseResultMap">
+		select 
+		<include refid="select" />
+		FROM TS_BOARD_INFO 
+		<include refid="whereClause" />
+		<choose>
+			<when test="orderBy != ''">
+				order by ${orderBy }
+			</when>
+			<otherwise>
+				order by H_GROUP DESC, H_ORDER, H_DEPTH
+			</otherwise>					
+		</choose>
+		<include refid="paging.limit"/>
+	</select>
+	
+	<select id="selectListForAdmin" parameterType="search" resultMap="BaseResultMap">
+		select 
+		<include refid="select" />
+		FROM TS_BOARD_INFO 
+		<include refid="whereClauseAdmin" />
+		<choose>
+			<when test="orderBy != ''">
+				order by ${orderBy }
+			</when>
+			<otherwise>
+				order by H_GROUP DESC, H_ORDER, H_DEPTH
+			</otherwise>					
+		</choose>
+		<include refid="paging.limit"/>
+	</select>
+	
+	<select id="totalCount" parameterType="search" resultType="int">
+		select count(*)
+		FROM TS_BOARD_INFO
+		<include refid="whereClause" />
+	</select>
+	
+	<select id="totalCountForDash" parameterType="search" resultType="int">
+		select count(*)
+		FROM TS_BOARD_INFO
+		WHERE USE_FLAG = 'Y'
+	</select>
+	
+	<select id="selectByKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+		select
+		<include refid="select" />
+		FROM TS_BOARD_INFO
+		where BOARD_SEQ = #{boardSeq,jdbcType=BIGINT}
+	</select>
+	
+	
+	<select id="selectDashboardChart" parameterType="search" resultType="com.tagosolution.service.model.BoardInfoVO">		
+		SELECT date_format( REG_DATE, '%Y-%m-%d' ) as SUBJECT  , count(BOARD_SEQ) as  BOARD_SEQ FROM
+ 			(SELECT
+			*
+			FROM TS_BOARD_INFO
+			WHERE  USE_FLAG = 'Y'			
+			ORDER BY REG_DATE DESC
+			LIMIT 50
+			) AS subqry1
+			group by date_format( REG_DATE, '%Y-%m-%d' )
+		ORDER BY subqry1.REG_DATE ASC
+	</select>
+	
+	
+	<select id="selectPosttoday" parameterType="String" resultType="java.lang.Integer">
+		SELECT 
+			COUNT(*)
+		FROM 
+			TS_BOARD_INFO
+		WHERE 
+			DATE(REG_DATE) = CURDATE()
+			AND USE_FLAG = 'Y'
+	</select>	
+	
+	<select id="selectBulletinBoardsTotal" parameterType="String" resultType="java.lang.Integer">
+		SELECT count(BOARD_CODE) as BOARD_CODE  FROM
+			(select 
+			(BOARD_CODE)
+			FROM TS_BOARD_INFO
+			GROUP BY BOARD_CODE
+			)
+	 	AS subqry		
+	</select>	
+
+	
+	
+	
+	
+	
+	<select id="selectByVo" parameterType="search" resultMap="BaseResultMap">
+		select
+		<include refid="select" />,
+		(SELECT BOARD_SEQ FROM TS_BOARD_INFO WHERE USE_FLAG = 'Y' AND BOARD_SEQ = (SELECT MAX(BOARD_SEQ) FROM TS_BOARD_INFO WHERE BOARD_CODE = #{bcode } <if test="id != null and id != ''">AND REG_USER = #{id}</if> AND BOARD_SEQ <![CDATA[<]]> #{bseq} AND USE_FLAG = 'Y')) AS PREV_BOARD_SEQ,
+		(SELECT BOARD_SEQ FROM TS_BOARD_INFO WHERE USE_FLAG = 'Y' AND BOARD_SEQ = (SELECT MIN(BOARD_SEQ) FROM TS_BOARD_INFO WHERE BOARD_CODE = #{bcode } <if test="id != null and id != ''">AND REG_USER = #{id}</if> AND BOARD_SEQ > #{bseq} AND USE_FLAG = 'Y')) AS NEXT_BOARD_SEQ,
+		(SELECT SUBJECT FROM TS_BOARD_INFO WHERE USE_FLAG = 'Y' AND BOARD_SEQ = (SELECT MAX(BOARD_SEQ) FROM TS_BOARD_INFO WHERE BOARD_CODE = #{bcode } <if test="id != null and id != ''">AND REG_USER = #{id}</if> AND BOARD_SEQ <![CDATA[<]]> #{bseq} AND USE_FLAG = 'Y')) AS PREV_SUBJECT,
+		(SELECT SUBJECT FROM TS_BOARD_INFO WHERE USE_FLAG = 'Y' AND BOARD_SEQ = (SELECT MIN(BOARD_SEQ) FROM TS_BOARD_INFO WHERE BOARD_CODE = #{bcode } <if test="id != null and id != ''">AND REG_USER = #{id}</if> AND BOARD_SEQ > #{bseq} AND USE_FLAG = 'Y')) AS NEXT_SUBJECT,
+		(SELECT count(*) FROM TS_COMMENT WHERE BOARD_SEQ = #{bseq } AND BOARD_CODE = #{bcode } AND USE_FLAG = 'Y') AS COMMENT_COUNT
+		FROM TS_BOARD_INFO
+		WHERE BOARD_SEQ = #{bseq}
+		AND BOARD_CODE = #{bcode }
+		AND USE_FLAG = 'Y'
+	</select>
+	
+	<!-- 부모 글 한 건 필수 정보 가져오기 : 계층형 게시판 답글 처리용 -->
+	<select id="selectDashboardLast" parameterType="long" resultType="com.tagosolution.service.model.BoardInfoVO">
+		select 
+			  BOARD_SEQ
+			 , BOARD_CODE
+			 , SUBJECT			
+			 , REG_DATE
+		FROM TS_BOARD_INFO
+		WHERE  USE_FLAG = 'Y'
+		ORDER BY REG_DATE DESC
+		LIMIT 6
+	</select>
+	
+	<select id="selectParent" parameterType="long" resultType="com.tagosolution.service.model.BoardInfoVO">
+		select BOARD_SEQ
+			, H_GROUP
+			, H_ORDER
+			, H_DEPTH
+			, SUBJECT
+			, BODY
+		FROM TS_BOARD_INFO
+		WHERE BOARD_SEQ = #{_parameter}
+	</select>
+	
+	<!-- 게시판 통계 - 코멘트 테이블 없음 -->
+	<select id="selectStatistics" parameterType="search" resultType="java.util.HashMap">
+		SELECT
+			COUNT(*) AS BOARD_COUNT,
+			0 AS COMMENT_COUNT			
+		FROM TS_BOARD_INFO
+		WHERE USE_FLAG = 'Y'
+		<trim suffix="" suffixOverrides="and">
+			<if test="type1 != null and type1 != ''">
+				AND BOARD_CODE = #{type1}
+			</if>
+			<if test="type2 != null and type2 != ''">
+				AND DATE_FORMAT(REG_DATE, '%Y') = #{type2}
+			</if>
+			<if test="type3 != null and type3 != ''">
+				AND DATE_FORMAT(REG_DATE, '%m') = #{type3}
+			</if>
+		</trim>		
+	</select>
+	
+	<delete id="deleteByKey" parameterType="java.lang.Long">
+		delete FROM TS_BOARD_INFO
+		where BOARD_SEQ = #{boardSeq,jdbcType=BIGINT}
+	</delete>
+	
+	
+	<insert id="merge" useGeneratedKeys="true" keyProperty="boardSeq" parameterType="com.tagosolution.service.model.BoardInfoVO">
+		INSERT INTO TS_BOARD_INFO (
+			BOARD_SEQ, BOARD_CODE, PRODUCT_CODE,
+			H_GROUP, H_ORDER, H_DEPTH,
+			STAR, NOTICE_YN, USER_NAME,
+			NICKNAME, EMAIL, PHONE,
+			MOBILE, ZIPCODE, ADDR1,
+			ADDR2, SUBJECT, HTML_YN,
+			SECRET_YN, PWD, READ_COUNT,
+			IP_ADDR, REG_USER, FAQ_FIXED_CODE, LINK_URL, 
+			MOD_USER, MOD_DATE, STATUS_FIXED_CODE,
+			ADD_COL1, ADD_COL2, ADD_COL3,
+			ADD_COL4, BODY,
+			ANSWER, BC_SEQ, ALOW_COM_YN
+		)
+		values (
+			#{boardSeq,jdbcType=BIGINT}, #{boardCode,jdbcType=VARCHAR}, #{productCode,jdbcType=VARCHAR},
+			#{boardSeq,jdbcType=BIGINT}, #{hOrder,jdbcType=INTEGER}, #{hDepth,jdbcType=INTEGER},
+			#{star,jdbcType=SMALLINT}, #{noticeYn,jdbcType=VARCHAR}, #{userName,jdbcType=VARCHAR},
+			#{nickname,jdbcType=VARCHAR}, #{email,jdbcType=VARCHAR}, #{phone,jdbcType=VARCHAR},
+			#{mobile,jdbcType=VARCHAR}, #{zipcode,jdbcType=VARCHAR}, #{addr1,jdbcType=VARCHAR},
+			#{addr2,jdbcType=VARCHAR}, #{subject,jdbcType=VARCHAR}, #{htmlYn,jdbcType=VARCHAR},
+			#{secretYn,jdbcType=VARCHAR}, #{pwd,jdbcType=VARCHAR}, #{readCount,jdbcType=INTEGER},
+			inet_aton(#{ipAddr,jdbcType=VARCHAR}), #{regUser,jdbcType=VARCHAR},
+			#{faqFixedCode,jdbcType=VARCHAR}, #{linkUrl,jdbcType=VARCHAR},
+			#{modUser,jdbcType=VARCHAR}, #{modDate,jdbcType=TIMESTAMP}, #{statusFixedCode,jdbcType=VARCHAR},
+			#{addCol1,jdbcType=VARCHAR}, #{addCol2,jdbcType=VARCHAR}, #{addCol3,jdbcType=VARCHAR},
+			#{addCol4,jdbcType=VARCHAR}, #{body,jdbcType=LONGVARCHAR},
+			#{answer,jdbcType=LONGVARCHAR}, #{bcSeq,jdbcType=INTEGER}, #{allowCommYn,jdbcType=VARCHAR}
+		)
+		ON DUPLICATE KEY UPDATE
+		<trim suffix=" " suffixOverrides=",">
+				MOD_DATE = now(),
+			<if test="boardSeq != null">
+				BOARD_SEQ = #{boardSeq,jdbcType=BIGINT},
+			</if>
+			<if test="boardCode != null">
+				BOARD_CODE = #{boardCode,jdbcType=VARCHAR},
+			</if>
+			<if test="productCode != null">
+				PRODUCT_CODE = #{productCode,jdbcType=VARCHAR},
+			</if>
+			<if test="hGroup != null">
+				H_GROUP = #{hGroup,jdbcType=BIGINT},
+			</if>
+			<if test="hOrder != null">
+				H_ORDER = #{hOrder,jdbcType=INTEGER},
+			</if>
+			<if test="hDepth != null">
+				H_DEPTH = #{hDepth,jdbcType=INTEGER},
+			</if>
+			<if test="star != null">
+				STAR = #{star,jdbcType=SMALLINT},
+			</if>
+			<if test="noticeYn != null">
+				NOTICE_YN = #{noticeYn,jdbcType=VARCHAR},
+			</if>
+			<if test="userName != null">
+				USER_NAME = #{userName,jdbcType=VARCHAR},
+			</if>
+			<if test="nickname != null">
+				NICKNAME = #{nickname,jdbcType=VARCHAR},
+			</if>
+			<if test="email != null">
+				EMAIL = #{email,jdbcType=VARCHAR},
+			</if>
+			<if test="phone != null">
+				PHONE = #{phone,jdbcType=VARCHAR},
+			</if>
+			<if test="mobile != null">
+				MOBILE = #{mobile,jdbcType=VARCHAR},
+			</if>
+			<if test="zipcode != null">
+				ZIPCODE = #{zipcode,jdbcType=VARCHAR},
+			</if>
+			<if test="addr1 != null">
+				ADDR1 = #{addr1,jdbcType=VARCHAR},
+			</if>
+			<if test="addr2 != null">
+				ADDR2 = #{addr2,jdbcType=VARCHAR},
+			</if>
+			<if test="subject != null">
+				SUBJECT = #{subject,jdbcType=VARCHAR},
+			</if>
+			<if test="htmlYn != null">
+				HTML_YN = #{htmlYn,jdbcType=VARCHAR},
+			</if>
+			<if test="secretYn != null">
+				SECRET_YN = #{secretYn,jdbcType=VARCHAR},
+			</if>
+			<if test="pwd != null">
+				PWD = #{pwd,jdbcType=VARCHAR},
+			</if>
+			<if test="readCount != null">
+				READ_COUNT = #{readCount,jdbcType=INTEGER},
+			</if>
+			<if test="recommCount != null">
+				RECOMM_COUNT = #{recommCount,jdbcType=INTEGER},
+			</if>
+			<if test="notRecommCount != null">
+				NOT_RECOMM_COUNT = #{notRecommCount,jdbcType=INTEGER},
+			</if>
+			<if test="commentCount != null">
+				COMMENT_COUNT = #{commentCount,jdbcType=INTEGER},
+			</if>
+			<if test="allowCommYn != null">
+				ALOW_COM_YN = #{allowCommYn,jdbcType=VARCHAR},
+			</if>
+			<if test="ipAddr != null">
+				IP_ADDR = inet_aton(#{ipAddr,jdbcType=VARCHAR}),
+			</if>
+			<if test="modUser != null">
+				MOD_USER = #{modUser,jdbcType=VARCHAR},
+			</if>
+			<if test="faqFixedCode != null">
+				FAQ_FIXED_CODE = #{faqFixedCode,jdbcType=VARCHAR},
+			</if>
+			<if test="linkUrl != null">
+				LINK_URL = #{linkUrl,jdbcType=VARCHAR},
+			</if>
+			<if test="statusFixedCode != null">
+				STATUS_FIXED_CODE = #{statusFixedCode,jdbcType=VARCHAR},
+			</if>
+			<if test="addCol1 != null">
+				ADD_COL1 = #{addCol1,jdbcType=VARCHAR},
+			</if>
+			<if test="addCol2 != null">
+				ADD_COL2 = #{addCol2,jdbcType=VARCHAR},
+			</if>
+			<if test="addCol3 != null">
+				ADD_COL3 = #{addCol3,jdbcType=VARCHAR},
+			</if>
+			<if test="addCol4 != null">
+				ADD_COL4 = #{addCol4,jdbcType=VARCHAR},
+			</if>
+			<if test="useYn != null and useYn != ''">
+				USE_FLAG = #{useYn,jdbcType=VARCHAR},
+			</if>
+			<if test="body != null">
+				BODY = #{body,jdbcType=LONGVARCHAR},
+			</if>
+			<if test="answer != null">
+				ANSWER = #{answer,jdbcType=LONGVARCHAR},
+			</if>
+			<if test="bcSeq != null">
+				BC_SEQ = #{bcSeq,jdbcType=INTEGER},
+			</if>
+		</trim>
+	</insert>
+	
+	<!-- 게시물 다른 카테고리로 복사 - boardInfo, file // 등록자, star, count관련, 댓글 복사 하지 않음-->
+	<insert id="insertSelectByKey" parameterType="com.tagosolution.service.model.BoardInfoVO">
+		INSERT INTO TS_BOARD_INFO (
+			BOARD_CODE, PRODUCT_CODE, H_GROUP, H_ORDER, H_DEPTH, STAR, NOTICE_YN, USER_NAME, NICKNAME, EMAIL, 
+			PHONE, MOBILE, ZIPCODE, ADDR1, ADDR2, SUBJECT, HTML_YN, SECRET_YN, PWD, IP_ADDR, REG_USER, FAQ_FIXED_CODE, 
+			LINK_URL, 	STATUS_FIXED_CODE, ADD_COL1, ADD_COL2, ADD_COL3, ADD_COL4, BODY, ANSWER, USE_FLAG, BC_SEQ)
+		SELECT
+			BOARD_CODE, PRODUCT_CODE, H_ORDER, H_GROUP, H_DEPTH, STAR, NOTICE_YN, USER_NAME, NICKNAME, EMAIL, 
+			PHONE, MOBILE, ZIPCODE, ADDR1, ADDR2, SUBJECT, HTML_YN, SECRET_YN, PWD, inet_aton(#{ipAddr,jdbcType=VARCHAR}), #{regUser}, FAQ_FIXED_CODE, 
+			LINK_URL, 	STATUS_FIXED_CODE, ADD_COL1, ADD_COL2, ADD_COL3, ADD_COL4, BODY, 	ANSWER, USE_FLAG, #{bcSeq}
+		FROM TS_BOARD_INFO
+		WHERE BOARD_SEQ = #{boardSeq}
+		<selectKey resultType="java.lang.Long" keyProperty="boardSeq" order="AFTER">
+	        SELECT LAST_INSERT_ID()
+	    </selectKey>
+	</insert>
+	
+	<!-- 계층형 게시판 - 답글 등록 후 기존 데이터 업데이트 -->
+	<update id="updateHOrder" parameterType="com.tagosolution.service.model.BoardInfoVO">
+		UPDATE TS_BOARD_INFO
+		SET H_ORDER = H_ORDER + 1
+		WHERE H_GROUP = #{hGroup,jdbcType=INTEGER}
+		AND H_ORDER >= #{hOrder,jdbcType=INTEGER}
+		AND BOARD_SEQ != #{boardSeq,jdbcType=BIGINT}
+	</update>
+	
+	<!-- insert 완료 후 H_GROUP 업데이트 -->
+	<update id="updateHGroup" parameterType="com.tagosolution.service.model.BoardInfoVO">
+		UPDATE TS_BOARD_INFO
+		SET H_GROUP = #{boardSeq,jdbcType=BIGINT}
+		WHERE BOARD_SEQ = #{boardSeq,jdbcType=BIGINT}
+	</update>
+	
+	<!-- 조회 수 1 증가 -->
+	<update id="updateReadCount" parameterType="long">
+		UPDATE TS_BOARD_INFO
+		SET READ_COUNT = READ_COUNT + 1 
+		WHERE BOARD_SEQ = #{_parameter,jdbcType=BIGINT}
+	</update>
+		
+	<update id="updateByKeySelective" parameterType="com.tagosolution.service.model.BoardInfoVO">
+		UPDATE TS_BOARD_INFO
+		SET
+		<trim suffix=" " suffixOverrides=",">
+			<if test="boardCode != null">
+				BOARD_CODE = #{boardCode,jdbcType=VARCHAR},
+			</if>
+			<if test="productCode != null">
+				PRODUCT_CODE = #{productCode,jdbcType=VARCHAR},
+			</if>
+			<if test="hGroup != null">
+				H_GROUP = #{hGroup,jdbcType=BIGINT},
+			</if>
+			<if test="hOrder != null">
+				H_ORDER = #{hOrder,jdbcType=INTEGER},
+			</if>
+			<if test="hDepth != null">
+				H_DEPTH = #{hDepth,jdbcType=INTEGER},
+			</if>
+			<if test="star != null">
+				STAR = #{star,jdbcType=SMALLINT},
+			</if>
+			<if test="noticeYn != null">
+				NOTICE_YN = #{noticeYn,jdbcType=VARCHAR},
+			</if>
+			<if test="userName != null">
+				USER_NAME = #{userName,jdbcType=VARCHAR},
+			</if>
+			<if test="nickname != null">
+				NICKNAME = #{nickname,jdbcType=VARCHAR},
+			</if>
+			<if test="email != null">
+				EMAIL = #{email,jdbcType=VARCHAR},
+			</if>
+			<if test="phone != null">
+				PHONE = #{phone,jdbcType=VARCHAR},
+			</if>
+			<if test="mobile != null">
+				MOBILE = #{mobile,jdbcType=VARCHAR},
+			</if>
+			<if test="zipcode != null">
+				ZIPCODE = #{zipcode,jdbcType=VARCHAR},
+			</if>
+			<if test="addr1 != null">
+				ADDR1 = #{addr1,jdbcType=VARCHAR},
+			</if>
+			<if test="addr2 != null">
+				ADDR2 = #{addr2,jdbcType=VARCHAR},
+			</if>
+			<if test="subject != null">
+				SUBJECT = #{subject,jdbcType=VARCHAR},
+			</if>
+			<if test="htmlYn != null">
+				HTML_YN = #{htmlYn,jdbcType=VARCHAR},
+			</if>
+			<if test="secretYn != null">
+				SECRET_YN = #{secretYn,jdbcType=VARCHAR},
+			</if>
+			<if test="pwd != null">
+				PWD = #{pwd,jdbcType=VARCHAR},
+			</if>
+			<if test="readCount != null">
+				READ_COUNT = #{readCount,jdbcType=INTEGER},
+			</if>
+			<if test="recommCount != null">
+				RECOMM_COUNT = #{recommCount,jdbcType=INTEGER},
+			</if>
+			<if test="notRecommCount != null">
+				NOT_RECOMM_COUNT = #{notRecommCount,jdbcType=INTEGER},
+			</if>
+			<if test="commentCount != null">
+				COMMENT_COUNT = #{commentCount,jdbcType=INTEGER},
+			</if>
+			<if test="ipAddr != null">
+				IP_ADDR = inet_aton(#{ipAddr,jdbcType=VARCHAR}),
+			</if>
+			<if test="modUser != null">
+				MOD_USER = #{modUser,jdbcType=VARCHAR},				
+				MOD_DATE = now(),
+			</if>
+			<if test="faqFixedCode != null">
+				FAQ_FIXED_CODE = #{faqFixedCode,jdbcType=VARCHAR},
+			</if>
+			<if test="linkUrl != null">
+				LINK_URL = #{linkUrl,jdbcType=VARCHAR},
+			</if>
+			<if test="statusFixedCode != null">
+				STATUS_FIXED_CODE = #{statusFixedCode,jdbcType=VARCHAR},
+			</if>
+			<if test="addCol1 != null">
+				ADD_COL1 = #{addCol1,jdbcType=VARCHAR},
+			</if>
+			<if test="addCol2 != null">
+				ADD_COL2 = #{addCol2,jdbcType=VARCHAR},
+			</if>
+			<if test="addCol3 != null">
+				ADD_COL3 = #{addCol3,jdbcType=VARCHAR},
+			</if>
+			<if test="addCol4 != null">
+				ADD_COL4 = #{addCol4,jdbcType=VARCHAR},
+			</if>
+			<if test="useYn != null and useYn != ''">
+				USE_FLAG = #{useYn,jdbcType=VARCHAR},
+			</if>
+			<if test="body != null">
+				BODY = #{body,jdbcType=LONGVARCHAR},
+			</if>
+			<if test="answer != null">
+				ANSWER = #{answer,jdbcType=LONGVARCHAR},
+			</if>
+			<if test="bcSeq != null">
+				BC_SEQ = #{bcSeq,jdbcType=INTEGER},
+			</if>
+		</trim>
+		WHERE BOARD_SEQ = #{boardSeq,jdbcType=BIGINT}
+	</update>
+	
+	<delete id="delete" parameterType="long">
+		DELETE FROM TS_BOARD_INFO
+		WHERE BOARD_SEQ = #{boardSeq,jdbcType=BIGINT}
+	</delete>
+	
+</mapper>

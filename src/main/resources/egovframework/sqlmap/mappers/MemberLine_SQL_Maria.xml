@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="memberLine">
+
+  <resultMap id="BaseResultMap" type="com.tagosolution.service.model.MemberLineVO">
+    <id column="USER_ID" jdbcType="VARCHAR" property="userId" />
+    <result column="LINE_ID1" jdbcType="VARCHAR" property="lineId1" />
+    <result column="LINE_RATE1" jdbcType="INTEGER" property="lineRate1" />
+    <result column="LINE_ID2" jdbcType="VARCHAR" property="lineId2" />
+    <result column="LINE_RATE2" jdbcType="INTEGER" property="lineRate2" />
+    <result column="LINE_ID3" jdbcType="VARCHAR" property="lineId3" />
+    <result column="LINE_RATE3" jdbcType="INTEGER" property="lineRate3" />
+    <result column="LINE_ID4" jdbcType="VARCHAR" property="lineId4" />
+    <result column="LINE_RATE4" jdbcType="INTEGER" property="lineRate4" />
+	<result column="LINE_ID5" jdbcType="VARCHAR" property="lineId5" />
+    <result column="LINE_RATE5" jdbcType="INTEGER" property="lineRate5" />
+  </resultMap>
+  
+  <sql id="select">
+    USER_ID, LINE_ID1, LINE_RATE1, LINE_ID2, LINE_RATE2, LINE_ID3, LINE_RATE3, LINE_ID4, LINE_RATE4, LINE_ID5, LINE_RATE5
+  </sql>
+  
+  <select id="selectByKey" parameterType="String" resultMap="BaseResultMap">
+    select 
+    <include refid="select" />
+    from fx_line
+    where USER_ID = #{userId,jdbcType=VARCHAR}
+  </select>
+  
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from fx_line
+    where USER_ID = #{userId,jdbcType=VARCHAR}
+  </delete>
+  
+  <insert id="merge" useGeneratedKeys="true" keyProperty="memberSeq" parameterType="com.tagosolution.service.model.MemberLineVO">
+	insert into fx_line (USER_ID, LINE_ID1, LINE_ID2, LINE_ID3, LINE_ID4, LINE_ID5)
+	SELECT	TMI1.USER_ID
+				, FL.LINE_ID1
+				, CASE WHEN TMI1.GRADE_LEVEL = 2 THEN TMI1.USER_ID ELSE FL.LINE_ID2 END LINE_ID2
+				, CASE WHEN TMI1.GRADE_LEVEL = 3 THEN TMI1.USER_ID ELSE FL.LINE_ID3 END LINE_ID3
+				, CASE WHEN TMI1.GRADE_LEVEL = 4 THEN TMI1.USER_ID ELSE FL.LINE_ID4 END LINE_ID4
+				, CASE WHEN TMI1.GRADE_LEVEL = 5 THEN TMI1.USER_ID ELSE FL.LINE_ID5 END LINE_ID5
+	FROM	ts_member_info TMI1
+		LEFT JOIN ts_member_info TMI2
+			ON TMI2.USER_ID = TMI1.RECOMM_USER_ID
+		LEFT JOIN fx_line FL
+			ON	FL.USER_ID = TMI2.USER_ID
+	WHERE TMI1.USER_ID = #{userId,jdbcType=VARCHAR};
+  </insert>
+  
+  <update id="updateByKey" parameterType="java.lang.String">
+    update fx_line
+    <set>
+      <if test="lineId1 != null">
+        LINE_ID1 = #{lineId1,jdbcType=VARCHAR},
+      </if>
+      <if test="lineId2 != null">
+        LINE_ID2 = #{lineId2,jdbcType=VARCHAR},
+      </if>
+      <if test="lineId3 != null">
+        LINE_ID3 = #{lineId3,jdbcType=VARCHAR},
+      </if>
+      <if test="lineId4 != null">
+        LINE_ID4 = #{lineId4,jdbcType=VARCHAR},
+      </if>
+      <if test="lineId5 != null">
+        LINE_ID5 = #{lineId5,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where USER_ID = #{userId,jdbcType=VARCHAR}
+  </update>
+  
+  <update id="updateByPrimaryKey" parameterType="com.tagosolution.service.model.MemberLineVO">
+    update fx_line
+    set LINE_ID1 = #{lineId1,jdbcType=VARCHAR},
+      LINE_ID2 = #{lineId2,jdbcType=VARCHAR},
+      LINE_ID3 = #{lineId3,jdbcType=VARCHAR},
+      LINE_ID4 = #{lineId4,jdbcType=VARCHAR},
+	  LINE_ID5 = #{lineId5,jdbcType=VARCHAR}
+    where USER_ID = #{userId,jdbcType=VARCHAR}
+  </update>
+</mapper>

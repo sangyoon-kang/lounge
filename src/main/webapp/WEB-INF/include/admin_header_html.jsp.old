@@ -1,0 +1,42 @@
+<%@ page language="java" contentType="text/html;charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ include file="/WEB-INF/jsp/common/tags.jsp"%>
+<%
+/**
+	PC web admin 공통 html <header> 선언부
+		-- 사용안함 : <jsp:include>로 변경
+*/
+%>	
+	<div id="wrap_header">
+		<h2 class="mg_logo">사이트관리자<br/><a href="" class="bt_gohome">내홈페이지바로가기→</a></h2>
+		<ul class="gnb" id="gnb_link">
+			<li><a class="white" href="/config/config01.html">환경설정</a></li>
+			<li><a class="white" href="/basic/basic01.html">기본설정</a></li>
+			<li><a class="white" href="/bbs/bbs01.html">게시판관리</a></li>
+			<li><a class="white" href="/member/member01.html">회원관리</a></li>
+			<!-- 
+			<li><a href="/poll/poll01.html">설문관리</a></li>
+			<li><a href="/product/pro01.html">상품관리</a></li>
+			 -->
+			<li><a class="white" href="/banner/banner01.html">배너관리</a></li>
+			<li><a class="white" href="/connect/connect01.html">통계관리</a></li>
+			<li><a class="white" href="/mgr/login/logout">로그아웃</a></li>
+		</ul>
+	</div>
+	
+	<!--lnb S-->
+	<div id="wrap_lnb">
+		
+		<h2 class="lnb_title"><span class="title1">회원관리</span></h2>
+		<ul class="lnb">
+			<li class="lnb_depth1"><a href="/member/member01.html" class="depth1_on">회원 목록</a></li>
+			<li class="lnb_depth1"><a href="/member/member02.html">회원 등급 관리</a></li>
+			<li class="lnb_depth1"><a href="/member/member03.html">탈퇴회원</a></li>
+			<li class="lnb_depth1"><a href="/member/member04.html">메일 발송 테스트</a></li>
+			<li class="lnb_depth1"><a href="/member/member05.html">포인트 설정</a></li>
+			<li class="lnb_depth1"><a href="/member/member06.html">포인트 목록</a></li>		
+		</ul>
+		<div id="copyright">
+			<p>2016 LCDNS<br/>All rights reserved.</p>
+		</div>
+	</div>
+	<!--lnb E-->

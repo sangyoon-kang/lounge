@@ -1,0 +1,40 @@
+@import scss
+@import functions
+@import color
+@import variables
+@import mixin
+@import reboot
+@import text
+@import paint
+@import spacing
+@import borders
+@import layout
+@import breadcrumb
+@import form
+@import button
+@import alerts
+@import order
+@import nav
+@import cards
+@import dropdown
+@import tabs
+@import table
+@import pagination
+@import swiper
+@import banner
+@import lightbox
+@import video
+@import badge
+@import contract
+@import toast
+
+@for $i from 1 to 11
+    .h-#{$i*10}
+        height: $i*10%
+    .w-#{$i*10}
+        width: $i*10%
+        
+#tv_chart_container
+    height: 500px
+    +respond-to-down(small)
+        height: 300px

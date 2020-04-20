@@ -1,0 +1,12 @@
+.badge
+     display: inline-block
+     font-weight: 300
+     font-size: 14px
+     +px(.6rem)
+     border: 1px solid $grey
+     +radius(5rem)
+     text-shadow: none
+     @each $color, $value in $theme-colors
+          &.#{$color}
+               color: $value
+               border-color: $value

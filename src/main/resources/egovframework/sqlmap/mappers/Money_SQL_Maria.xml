@@ -1,0 +1,317 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="money">
+  <resultMap id="BaseResultMap" type="com.tagosolution.service.model.MoneyVO">
+    <id column="MONEY_SEQ" jdbcType="INTEGER" property="moneySeq" />
+    <result column="USER_ID" jdbcType="VARCHAR" property="userId" />
+    <result column="IO_TYPE" jdbcType="CHAR" property="ioType" />
+    <result column="CASH" jdbcType="INTEGER" property="cash" />
+    <result column="BANK_NAME" jdbcType="VARCHAR" property="bankName" />
+    <result column="ACCOUNT_NO" jdbcType="VARCHAR" property="accountNo" />
+    <result column="ACCOUNT_NAME" jdbcType="VARCHAR" property="accountName" />
+    <result column="REG_DATE" jdbcType="TIMESTAMP" property="regDate" />
+    <result column="STATE" jdbcType="CHAR" property="state" />
+    <result column="ACCEPT_DATE" jdbcType="TIMESTAMP" property="acceptDate" />
+    <result column="ACCEPT_ID" jdbcType="VARCHAR" property="acceptId" />
+    <result column="DEPOSIT_NAME" jdbcType="VARCHAR" property="depositName" />
+    <result column="BALANCE" jdbcType="INTEGER" property="balance" />
+    <result column="MEMBER_CASH" jdbcType="INTEGER" property="memberCash" />
+    
+    <result column="CASH_R" jdbcType="BIGINT" property="cashR" />
+    <result column="CASH_C" jdbcType="BIGINT" property="cashC" />
+    <result column="CASH_A" jdbcType="BIGINT" property="cashA" />
+    <result column="STATE_R" jdbcType="INTEGER" property="stateR" />
+    <result column="STATE_C" jdbcType="INTEGER" property="stateC" />
+    <result column="STATE_A" jdbcType="INTEGER" property="stateA" />
+    <result column="IO_TYPE_NAME" jdbcType="VARCHAR" property="ioTypeName" />
+    <result column="USER_NAME" jdbcType="VARCHAR" property="userName" />
+    <result column="GRADE_LEVEL" jdbcType="INTEGER" property="gradeLevel" />
+    <result column="NICKNAME" jdbcType="VARCHAR" property="nickName" />
+    <result column="GRADE_NAME" jdbcType="VARCHAR" property="gradeName" />
+    <result column="ORDER_SEQ" jdbcType="VARCHAR" property="orderSeq" />
+    
+    <result column="MEMO" jdbcType="LONGVARCHAR" property="memo" />
+    
+    <result column="IO_DATE" jdbcType="VARCHAR" property="ioDate" />
+    <result column="I_COUNT" jdbcType="INTEGER" property="iCount" />
+    <result column="I_CASH" jdbcType="INTEGER" property="iCash" />
+    <result column="O_COUNT" jdbcType="INTEGER" property="oCount" />
+    <result column="O_CASH" jdbcType="INTEGER" property="oCash" />
+    <result column="TOTAL_CASH" jdbcType="INTEGER" property="totalCash" />
+    
+    <result column="REG_YEARS" jdbcType="VARCHAR" property="regYears" />
+    <result column="REG_YEARS_TEXT" jdbcType="VARCHAR" property="regYearsText" />
+    
+    <result column="REQUEST_SEQ" jdbcType="INTEGER" property="requestSeq" />
+    <result column="AMOUNT" jdbcType="VARCHAR" property="amount" />
+    <result column="NAME" jdbcType="VARCHAR" property="name" />
+    <result column="BANK_NAME" jdbcType="VARCHAR" property="bankName" />
+    <result column="BANK_NUM" jdbcType="VARCHAR" property="bankNum" />
+    <result column="TIMES" jdbcType="VARCHAR" property="times" />
+    <result column="FAILED" jdbcType="VARCHAR" property="failed" />
+  </resultMap>
+  
+  <sql id="Base_Column_List">
+    MONEY_SEQ, USER_ID, IO_TYPE, CASH, BANK_NAME, ACCOUNT_NO, ACCOUNT_NAME, REG_DATE, 
+    STATE, ACCEPT_DATE, ACCEPT_ID, DEPOSIT_NAME, MEMO, BALANCE,
+    IFNULL((SELECT M.CASH FROM TS_MEMBER_INFO M WHERE M.USER_ID = fx_money.USER_ID), 0) AS MEMBER_CASH
+    , CASE WHEN IO_TYPE = 'I' THEN '입금' ELSE '출금' END AS IO_TYPE_NAME
+  </sql>
+  
+  <sql id="whereClause">
+  	<trim prefix="where" prefixOverrides="and">
+  		<if test="startDate != null and startDate != ''">
+		  	<![CDATA[ FM.REG_DATE >= CONVERT(#{startDate}, DATETIME) ]]>
+	  	</if>
+	  	<if test="endDate != null and endDate != ''">
+			<![CDATA[ AND FM.REG_DATE <= DATE_ADD(CONVERT(#{endDate}, DATETIME), INTERVAL 1 DAY)]]>
+		</if>
+		<if test="ioType != null and ioType != ''">
+			AND FM.IO_TYPE = #{ioType}
+		</if>
+		<if test="searchWord != null and searchWord != ''">
+			AND (FM.DEPOSIT_NAME LIKE CONCAT('%', #{searchWord}, '%') OR TMI.USER_NAME LIKE CONCAT('%', #{searchWord}, '%') OR TMI.NICKNAME LIKE CONCAT('%', #{searchWord}, '%'))
+		</if>
+	</trim>
+  </sql>
+  
+  
+  <select id="selectByKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from fx_money
+    where MONEY_SEQ = #{moneySeq,jdbcType=INTEGER}
+  </select>
+  
+  <select id="selectListUser" parameterType="search" resultMap="BaseResultMap">
+	select 
+	<include refid="Base_Column_List" />
+	, CASE WHEN STATE = 'R' THEN 1 ELSE 2 END ORDER_SEQ
+	from fx_money 
+	where 
+		USER_ID = #{userId}
+	order by ORDER_SEQ, MONEY_SEQ DESC
+	<include refid="paging.limit"/>
+  </select>
+  
+  <select id="selectDayTotalBill" parameterType="search" resultMap="BaseResultMap">
+  	SELECT	IO_DATE, SUM(I_COUNT) AS I_COUNT, SUM(I_CASH) AS I_CASH, SUM(O_COUNT) AS O_COUNT, SUM(O_CASH) AS O_CASH
+			, SUM(I_CASH) - SUM(O_CASH) AS TOTAL_CASH
+	FROM	(
+		SELECT	DATE_FORMAT(REG_DATE, '%Y-%m-%d') AS IO_DATE
+					, CASE WHEN IO_TYPE = 'I' THEN CASH ELSE 0 END I_CASH
+					, CASE WHEN IO_TYPE = 'I' THEN 1 ELSE 0 END I_COUNT
+					, CASE WHEN IO_TYPE = 'O' THEN CASH ELSE 0 END O_CASH
+					, CASE WHEN IO_TYPE = 'O' THEN 1 ELSE 0 END O_COUNT
+		FROM	fx_money
+		WHERE	LEFT(REG_DATE, 7) = CONCAT(#{sYear}, '-', #{sMonth})
+			AND	STATE = 'A'
+		) TEMP
+	GROUP BY IO_DATE
+	ORDER BY IO_DATE
+  </select>
+  
+  <select id="selectRegDate" resultMap="BaseResultMap">
+	 SELECT 
+	   YEAR(REG_DATE) AS REG_YEARS, CONCAT(YEAR(REG_DATE), '년') AS REG_YEARS_TEXT
+	FROM 
+	   fx_money
+	GROUP BY
+	   YEAR(REG_DATE)
+	  ORDER BY REG_YEARS DESC
+  </select>
+  
+  
+  <select id="totalCountUser" parameterType="search" resultType="int">
+	SELECT COUNT(*)
+	FROM fx_money
+	where 
+		USER_ID = #{userId}
+  </select>
+  
+	<select id="limitToday" parameterType="search" resultType="int">
+		SELECT COUNT(MONEY_SEQ) AS today_count
+		FROM fx_money
+		WHERE USER_ID = #{userId}
+		AND IO_TYPE = 'O'
+		AND CONVERT (REG_DATE, DATE) = CONVERT(SYSDATE(), DATE)
+		AND STATE IN ('A', 'R')
+	</select>
+  
+  <select id="selectListAdmin" parameterType="search" resultMap="BaseResultMap">
+	SELECT	FM.MONEY_SEQ, FM.USER_ID, FM.IO_TYPE, FM.CASH, FM.BANK_NAME
+			, FM.ACCOUNT_NO, FM.ACCOUNT_NAME, FM.DEPOSIT_NAME, FM.MEMO, FM.BALANCE, FM.REG_DATE
+			, FM.STATE, FM.ACCEPT_DATE, FM.ACCEPT_ID
+			, TMI.USER_NAME, TMI.GRADE_LEVEL, TMI.NICKNAME, TMG.GRADE_NAME
+			, CASE WHEN STATE = 'R' THEN 1 ELSE 2 END ORDER_SEQ
+			, CASE WHEN IO_TYPE = 'I' THEN '입금' ELSE '출금' END AS IO_TYPE_NAME
+	FROM	fx_money FM
+		INNER JOIN	ts_member_info TMI
+			ON	TMI.USER_ID = FM.USER_ID
+		INNER JOIN	ts_member_grade TMG
+			ON	TMG.GRADE_LEVEL = TMI.GRADE_LEVEL		
+	<include refid="whereClause" />
+	ORDER BY ORDER_SEQ, MONEY_SEQ DESC
+	<include refid="paging.limit"/>
+  </select>
+  
+   <select id="totalCountAdmin" parameterType="search" resultType="int">
+	SELECT COUNT(*)
+	FROM fx_money FM
+		INNER JOIN	ts_member_info TMI
+			ON	TMI.USER_ID = FM.USER_ID
+	<include refid="whereClause" />
+  </select>
+  
+  <select id="selectTotalSum" parameterType="search" resultMap="BaseResultMap">
+	SELECT	IO_TYPE
+		, CASE WHEN IO_TYPE = 'I' THEN '입금' ELSE '출금' END AS IO_TYPE_NAME
+		, SUM(CASH_R) AS CASH_R
+		, SUM(CASH_C) AS CASH_C
+		, SUM(CASH_A) AS CASH_A
+		, COUNT(IF(STATE= 'R',1, NULL)) AS STATE_R
+		, COUNT(IF(STATE= 'C',1, NULL)) AS STATE_C
+		, COUNT(IF(STATE= 'A',1, NULL)) AS STATE_A
+	FROM (
+		SELECT	IO_TYPE, STATE
+			, CASE WHEN STATE = 'R' THEN CASH ELSE 0 END CASH_R
+			, CASE WHEN STATE = 'C' THEN CASH ELSE 0 END CASH_C
+			, CASE WHEN STATE = 'A' THEN CASH ELSE 0 END CASH_A
+		FROM	
+			fx_money
+		<trim prefix="where" prefixOverrides="and">
+	  		<if test="startDate != null and startDate != ''">
+			  	<![CDATA[ REG_DATE >= CONVERT(#{startDate}, DATETIME) ]]>
+		  	</if>
+		  	<if test="endDate != null and endDate != ''">
+				<![CDATA[ AND REG_DATE <= DATE_ADD(CONVERT(#{endDate}, DATETIME), INTERVAL 1 DAY)]]>
+			</if>
+		</trim>
+	) TEMP
+	GROUP BY IO_TYPE;
+  </select>
+  
+  
+  
+  <delete id="deleteByKey" parameterType="java.lang.Integer">
+    delete from fx_money
+    where MONEY_SEQ = #{moneySeq,jdbcType=INTEGER}
+  </delete>
+  
+  <insert id="merge" useGeneratedKeys="true" keyProperty="moneySeq" parameterType="com.tagosolution.service.model.MoneyVO">
+    insert into fx_money (MONEY_SEQ, USER_ID, IO_TYPE, CASH, 
+      BANK_NAME, ACCOUNT_NO, ACCOUNT_NAME, STATE, DEPOSIT_NAME, MEMO
+      )
+    values (#{moneySeq,jdbcType=INTEGER}, #{userId,jdbcType=VARCHAR}, #{ioType,jdbcType=CHAR}, #{cash,jdbcType=INTEGER}, 
+      #{bankName,jdbcType=VARCHAR}, #{accountNo,jdbcType=VARCHAR}, #{accountName,jdbcType=VARCHAR}, 
+      #{regDate,jdbcType=TIMESTAMP}, #{state,jdbcType=CHAR}, #{depositName,jdbcType=VARCHAR}, #{memo,jdbcType=LONGVARCHAR}
+      )
+      ON DUPLICATE KEY UPDATE
+	<trim suffix=" " suffixOverrides=",">
+	  <if test="userId != null">
+        USER_ID = #{userId,jdbcType=VARCHAR},
+      </if>
+      <if test="ioType != null">
+        IO_TYPE = #{ioType,jdbcType=CHAR},
+      </if>
+      <if test="cash != null">
+        CASH = #{cash,jdbcType=INTEGER},
+      </if>
+      <if test="bankName != null">
+        BANK_NAME = #{bankName,jdbcType=VARCHAR},
+      </if>
+      <if test="accountNo != null">
+        ACCOUNT_NO = #{accountNo,jdbcType=VARCHAR},
+      </if>
+      <if test="accountName != null">
+        ACCOUNT_NAME = #{accountName,jdbcType=VARCHAR},
+      </if>
+      <if test="regDate != null">
+        REG_DATE = #{regDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="state != null">
+        STATE = #{state,jdbcType=CHAR},
+      </if>
+      <if test="acceptDate != null">
+        ACCEPT_DATE = #{acceptDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="acceptId != null">
+        ACCEPT_ID = #{acceptId,jdbcType=VARCHAR},
+      </if>
+      <if test="depositName != null">
+        DEPOSIT_NAME = #{depositName,jdbcType=VARCHAR},
+      </if>
+      <if test="memo != null">
+        MEMO = #{memo,jdbcType=LONGVARCHAR},
+      </if>
+	</trim>
+  </insert>
+  
+  <insert id="insertDeposit" useGeneratedKeys="true" keyProperty="moneySeq" parameterType="com.tagosolution.service.model.MoneyVO">
+    INSERT INTO fx_money (USER_ID, IO_TYPE, CASH, BANK_NAME, ACCOUNT_NO, ACCOUNT_NAME, DEPOSIT_NAME, MEMO, STATE, BALANCE)
+	SELECT	#{userId,jdbcType=VARCHAR}, 'I', #{cash,jdbcType=INTEGER}, TFC.CODE_NAME, TB.ACCOUNT_NO, TB.ACCOUNT_NAME, #{depositName,jdbcType=VARCHAR}, #{memo,jdbcType=LONGVARCHAR}, 'R', MI.CASH
+	FROM	
+		ts_bank TB
+	INNER JOIN ts_fixed_code TFC
+	ON TFC.CODE_CODE = TB.BANK_FIXED_CODE
+    INNER JOIN ts_member_info MI
+	WHERE TB.BANK_SEQ = #{bankSeq,jdbcType=INTEGER} AND MI.USER_ID = #{userId,jdbcType=INTEGER}
+  </insert>
+  
+  <insert id="insertWithdraw" useGeneratedKeys="true" keyProperty="moneySeq" parameterType="com.tagosolution.service.model.MoneyVO">
+    INSERT INTO fx_money 
+    	(USER_ID, IO_TYPE, CASH, BANK_NAME, ACCOUNT_NO, ACCOUNT_NAME, MEMO, STATE, DEPOSIT_NAME, BALANCE)
+	VALUES 
+		(#{userId,jdbcType=VARCHAR}, 'O', #{cash,jdbcType=INTEGER}, #{bankName,jdbcType=VARCHAR}, 
+		#{accountNo,jdbcType=VARCHAR}, #{accountName,jdbcType=VARCHAR}, #{memo,jdbcType=VARCHAR}, 'R', #{depositName,jdbcType=VARCHAR}, (SELECT CASH FROM ts_member_info WHERE USER_ID = #{userId}) - #{cash,jdbcType=INTEGER})
+  </insert>
+  
+  <update id="updateDepositCancel" parameterType="com.tagosolution.service.model.MoneyVO">
+  	UPDATE	
+  		fx_money
+	SET	STATE = 'C'
+		, ACCEPT_DATE = SYSDATE()
+		, ACCEPT_ID = #{userId,jdbcType=VARCHAR}
+		, BALANCE = (SELECT M.CASH FROM TS_MEMBER_INFO M WHERE M.USER_ID = fx_money.USER_ID) + (CASE WHEN IO_TYPE = 'O' THEN CASH ELSE 0 END)
+	WHERE 
+		MONEY_SEQ = #{moneySeq,jdbcType=INTEGER}
+  </update>
+  
+  <update id="updateDepositAccept" parameterType="com.tagosolution.service.model.MoneyVO">
+  	UPDATE	
+  		fx_money
+	SET	STATE = 'A'
+		, ACCEPT_DATE = SYSDATE()
+		, ACCEPT_ID = #{userId,jdbcType=VARCHAR}
+		, BALANCE = (SELECT M.CASH FROM TS_MEMBER_INFO M WHERE M.USER_ID = fx_money.USER_ID) + (CASE WHEN IO_TYPE = 'I' THEN CASH ELSE 0 END)
+	WHERE	
+		MONEY_SEQ = #{moneySeq,jdbcType=INTEGER}
+  </update>
+  
+  <update id="updateDepositBigdb" parameterType="com.tagosolution.service.model.MoneyVO">
+    UPDATE  
+      fx_money
+  SET ACCEPT_DATE = #{acceptDate,jdbcType=TIMESTAMP}
+    , BANK_NAME = #{bankName,jdbcType=VARCHAR}
+    , ACCOUNT_NO = #{accountNo,jdbcType=VARCHAR}
+    , CASH = #{cash,jdbcType=INTEGER}
+  WHERE 
+    MONEY_SEQ = #{moneySeq,jdbcType=INTEGER}
+  </update>
+  
+   <select id="selectByAccountName" parameterType="search" resultType="int">
+  SELECT fm.MONEY_SEQ as MONEY_SEQ FROM fx_money fm, ts_member_info tm
+	WHERE fm.USER_ID = tm.USER_ID
+  	AND tm.USER_NAME = #{userName}
+  	AND fm.CASH = #{cash}
+  	AND fm.ACCEPT_DATE IS null
+ 	ORDER BY fm.MONEY_SEQ desc LIMIT 1;
+  </select>
+  
+  <insert id="insertDepositRequest" useGeneratedKeys="true" keyProperty="requestSeq" parameterType="com.tagosolution.service.model.CommonMdlVO">
+    INSERT INTO fx_money_request 
+      (REQUEST_SEQ,AMOUNT,NAME,BANK_NAME,BANK_NUM,TIMES,FAILED)
+  VALUES 
+    (#{requestSeq,jdbcType=VARCHAR},#{amount,jdbcType=VARCHAR},#{name,jdbcType=VARCHAR},#{bankName,jdbcType=VARCHAR},#{bankNum,jdbcType=VARCHAR},#{times,jdbcType=VARCHAR},#{failed,jdbcType=VARCHAR})
+  </insert>
+</mapper>

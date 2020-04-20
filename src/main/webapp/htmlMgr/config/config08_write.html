@@ -1,0 +1,149 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link href="/css/master.css" rel="stylesheet" type="text/css" />
+<link href="/js/jquery-ui.css" rel="stylesheet" type="text/css" />
+<link href="/css/SimpleLightBox.css" rel="stylesheet" type="text/css" />
+<link href="/css/tree.css" rel="stylesheet" type="text/css" />
+<script type="text/javascript" language="Javascript" src="/js/external/jquery/jquery.js"></script>
+<script type="text/javascript" language="Javascript" src="/js/jquery-ui.js"></script>
+<script type="text/javascript" language="Javascript" src="/js/jquery.form.min.js"></script>
+<script type="text/javascript" language="Javascript" src="/js/jquery.ui.datepicker-ko.js"></script>
+<script type="text/javascript" language="Javascript" src="/js/LightBox/SimpleLightBox.js"></script>
+<script type="text/javascript" language="Javascript" src="/js/tree.js"></script>
+<script type="text/javascript" language="Javascript" src="/js/Common.js"></script>
+<script type="text/javascript" language="Javascript" src="/js/page_function.js"></script>
+<script type="text/javascript" language="Javascript" src="/js/jquery.scrollbox.js"></script>
+<script type="text/javascript" language="Javascript" src="/js/jquery.flexisel.js"></script>
+<script type="text/javascript" language="Javascript" src="/js/jquery.easing.1.3.js"></script>
+<title>관리시스템</title>
+</head>
+
+<body>
+<div id="wrap">
+	<!--header S-->
+	<div id="wrap_header">
+		<ul class="gnb" id="gnb_link">
+			<li link="/config/config01.html">환경설정</li>
+			<li link="/basic/basic01.html">기본설정</li>
+			<li link="/bbs/bbs01.html">게시판관리</li>
+			<li link="/member/member01.html">회원관리</li>
+			<li link="/form/form01.html">폼메일관리</li>
+			<li link="/poll/poll01.html">설문관리</li>
+			<li link="/schedule/sch01.html">일정관리</li>
+			<li link="/page/page01.html">페이지관리</li>
+			<li link="/banner/banner01.html">배너관리</li>
+			<li link="/connect/connect01.html">접속통계</li>
+		</ul>
+		<script type="text/javascript" language="Javascript">
+		<!--
+
+			$(document).ready(function(){
+				
+				$('#gnb_link li').on("click", function(){
+
+					var link_info = $(this).attr("link");
+					//alert(link_info+'로 이동합니다.');
+					location.href=link_info;
+
+				});
+
+			});
+		-->
+		</script>
+		<p id="LogoutBtn">로그아웃</p>
+	</div>
+	<!--header E-->
+
+	<!--lnb S-->
+	<div id="wrap_lnb">
+		<h2 class="mg_logo">사이트관리자<br/><a href="" class="bt_gohome">내홈페이지바로가기→</a></h2>
+		<h2 class="lnb_title"><span class="title1">환경설정</span></h2>
+		<ul class="lnb">
+			<li class="lnb_depth1"><a href="/config/config01.html">기본설정</a></li>
+			<li class="lnb_depth1"><a href="/config/config02.html">로그분석 설정</a></li>
+			<li class="lnb_depth1"><a href="/config/config03.html">게시판</a></li>
+			<li class="lnb_depth1"><a href="/config/config04.html">메인게시물</a></li>
+			<li class="lnb_depth1"><a href="/config/config05.html">회원 관리</a></li>
+			<li class="lnb_depth1"><a href="/config/config06.html">폼메일</a></li>
+			<li class="lnb_depth1"><a href="/config/config07.html">상품 관리</a></li>
+			<li class="lnb_depth1"><a href="/config/config08.html" class="depth1_on">메인상품</a></li>
+			<li class="lnb_depth1"><a href="/config/config09.html">설문조사</a></li>
+			<li class="lnb_depth1"><a href="/config/config10.html">메인 설문</a></li>
+			<li class="lnb_depth1"><a href="/config/config11.html">일정 관리</a></li>
+			<li class="lnb_depth1"><a href="/config/config12.html">배너관리</a></li>
+			<li class="lnb_depth1"><a href="/config/config13.html">페이지 관리</a></li>
+			<li class="lnb_depth1"><a href="/config/config14.html">페이지 접근 권한</a></li>
+			<li class="lnb_depth1"><a href="/config/config15.html">전체 검색</a></li>
+			<li class="lnb_depth1"><a href="/config/config16.html">카운터</a></li>
+		</ul>
+		<div id="copyright">
+			<p>2016 LCDNS<br/>All rights reserved.</p>
+		</div>
+	</div>
+	<!--lnb E-->
+
+	<!--wrap_scon S-->
+	<div id="wrap_scon">
+		<div class="scon_title">
+			<h2>메인상품</h2>
+			<p>홈 > 게시판관리 > 메인상품</p>
+		</div>
+		<div class="scon">
+			
+			<div class="check_conbox">
+				<h4 class="check_tit">상품스킨 입력시 체크사항</h4>
+				<ul>
+					<li>- 반복되는 부분을 [LOOP]와 [/LOOP]사이에 위치하게 합니다.</li>
+					<li>- {PRDNAME} 상품명&nbsp;&nbsp;&nbsp;{PRDPRICE} 상품가격&nbsp;&nbsp;&nbsp;{PRDCODE} 상품코드&nbsp;&nbsp;&nbsp;{PRDIMG} 상품사진&nbsp;&nbsp;&nbsp;{PRDLINK} 상품링크&nbsp;&nbsp;&nbsp;{SPIMG} 상품아이콘&nbsp;&nbsp;&nbsp;{COUPON} 쿠폰</li>
+					<li>- {PRDIMG} : &lt;img src="{PRDIMG}" width="100" height="100"&gt; 태그를 이용해 이미지 사이즈 조정</li>
+					<li>- {PRDLINK} : &lt;a href="{PRDLINK}"&gt;&lt;img src="{PRDIMG}" width="100" height="100"&gt;&lt;/a&gt; 해당 상품으로 이동</li>
+				</ul>
+			</div>
+			<table class="table_style1">
+				<caption></caption>
+				<colgroup>
+					<col width="20%" />
+					<col width="" />
+					<col width="20%" />
+					<col width="" />
+				</colgroup>
+				<tbody>
+					<tr>
+						<th class="left"><strong>추출상품</strong></th>
+						<td class="left" colspan="3"><input type="checkbox" class="input_type_radio01" /> 최근등록상품&nbsp;&nbsp;&nbsp;<input type="checkbox" class="input_type_radio01" /> 추천상품&nbsp;&nbsp;&nbsp;<input type="checkbox" class="input_type_radio01" /> 인기상품&nbsp;&nbsp;&nbsp;<input type="checkbox" class="input_type_radio01" /> 베스트상품&nbsp;&nbsp;&nbsp;<input type="checkbox" class="input_type_radio01" /> 세일상품&nbsp;&nbsp;&nbsp;<input type="checkbox" class="input_type_radio01" /> 신상품</td>
+					</tr>
+					<tr>
+						<th class="left"><strong>상품명 글자수</strong></th>
+						<td class="left"><input name="" class="table_input1" value="" maxlength="" type="text" style="width:100px;"/></td>
+						<th class="left"><strong>상품수</strong></th>
+						<td class="left"><input name="" class="table_input1" value="" maxlength="" type="text" style="width:100px;"/></td>
+					</tr>
+					<tr>
+						<th class="left"><strong>줄바꿈 상품수</strong></th>
+						<td class="left"><input name="" class="table_input1" value="" maxlength="" type="text" style="width:100px;"/></td>
+						<th class="left"><strong>예제소스적용</strong></th>
+						<td class="left"><input type="checkbox" class="input_type_radio01" /> 기존스킨&nbsp;&nbsp;&nbsp;<input type="checkbox" class="input_type_radio01" /> 일반스킨</td>
+					</tr>
+
+					
+					<tr>
+						<th class="left"><strong>상품스킨</strong></th>
+						<td class="left" colspan="3"><textarea rows="" cols="" style="height:150px;"></textarea></td>
+					</tr>
+					
+					
+				</tbody>
+			</table>
+
+			<div class="page_bbt"><input type="button" value="확인" class="bt_bsubmit"/> <input type="button" value="취소" class="bt_bcancle"/> <input type="button" value="리스트" class="bt_blist"/></div>
+
+
+			
+		</div>
+	</div>
+	<!--wrap_scon E-->
+</div>
+</body>
+</html>

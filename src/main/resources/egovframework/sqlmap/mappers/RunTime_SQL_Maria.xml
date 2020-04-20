@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="runTime">
+  <resultMap id="BaseResultMap" type="com.tagosolution.service.model.RunTimeVO">
+  	<id column="RUN_TIME" jdbcType="INTEGER" property="runTime" />
+  	<id column="BREAK_START" jdbcType="INTEGER" property="breakStart" />
+  	<id column="BREAK_END" jdbcType="INTEGER" property="breakEnd" />
+  	<id column="STOP_LIMIT" jdbcType="INTEGER" property="stopLimit" />
+  	<id column="AUTO_CLOSE1" jdbcType="INTEGER" property="autoClose1" />
+  	<id column="AUTO_CLOSE2" jdbcType="INTEGER" property="autoClose2" />
+  	<id column="AUTO_CLOSE3" jdbcType="INTEGER" property="autoClose3" />
+  	<id column="AUTO_CLOSE4" jdbcType="INTEGER" property="autoClose4" />
+  	<id column="AUTO_CLOSE5" jdbcType="INTEGER" property="autoClose5" />
+  	<id column="AUTO_CLOSE_ALL" jdbcType="INTEGER" property="autoCloseAll" />
+  	<id column="MAX_BUY_CNT1" jdbcType="INTEGER" property="maxBuyCnt1" />
+  	<id column="MAX_BUY_CNT2" jdbcType="INTEGER" property="maxBuyCnt2" />
+  	<id column="MAX_BUY_CNT3" jdbcType="INTEGER" property="maxBuyCnt3" />
+  	<id column="MAX_BUY_CNT4" jdbcType="INTEGER" property="maxBuyCnt4" />
+  	<id column="MAX_BUY_CNT5" jdbcType="INTEGER" property="maxBuyCnt5" />
+  	<id column="MAX_BUY_PRICE" jdbcType="INTEGER" property="maxBuyPrice" />
+  	<id column="RANDOM_TIME1" jdbcType="INTEGER" property="randomTime1" />
+  	<id column="RANDOM_TIME2" jdbcType="INTEGER" property="randomTime2" />
+  	<id column="RANDOM_TIME3" jdbcType="INTEGER" property="randomTime3" />
+  	<id column="RANDOM_TIME4" jdbcType="INTEGER" property="randomTime4" />
+  	<id column="RANDOM_TIME5" jdbcType="INTEGER" property="randomTime5" />
+  	<id column="RUN_TYPE" jdbcType="VARCHAR" property="runType" />
+  	<id column="API_STATE" jdbcType="VARCHAR" property="apiState" />
+
+ </resultMap>
+  
+  
+   <sql id="Base_Column_List">
+	RUN_TIME, BREAK_START, BREAK_END, STOP_LIMIT, AUTO_CLOSE1, 
+	AUTO_CLOSE2, AUTO_CLOSE3, AUTO_CLOSE4, AUTO_CLOSE5, AUTO_CLOSE_ALL, 
+	MAX_BUY_CNT1, MAX_BUY_CNT2, MAX_BUY_CNT3, MAX_BUY_CNT4, MAX_BUY_CNT5, MAX_BUY_PRICE,
+	RANDOM_TIME1, RANDOM_TIME2, RANDOM_TIME3, RANDOM_TIME4, RANDOM_TIME5, RUN_TYPE, API_STATE
+  </sql>
+  
+  <select id="getTimeSet" parameterType="search" resultMap="BaseResultMap">
+		SELECT
+			<include refid="Base_Column_List" />
+		FROM FX_TIME_SET
+		ORDER BY RUN_TIME DESC
+	</select>
+	 <select id="selectRuntime" parameterType="search" resultMap="BaseResultMap">
+		SELECT
+			<include refid="Base_Column_List" />
+		FROM FX_TIME_SET
+		WHERE RUN_TIME=#{runTime}
+	</select>
+
+	<select id="selectByRunTime" parameterType="java.lang.Byte" resultMap="BaseResultMap">
+        SELECT
+        *
+        FROM	fx_time_set;
+    </select>
+
+
+
+</mapper>

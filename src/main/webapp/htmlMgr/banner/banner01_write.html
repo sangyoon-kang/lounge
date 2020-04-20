@@ -1,0 +1,132 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link href="/css/master.css" rel="stylesheet" type="text/css" />
+<link href="/js/jquery-ui.css" rel="stylesheet" type="text/css" />
+<link href="/css/SimpleLightBox.css" rel="stylesheet" type="text/css" />
+<link href="/css/tree.css" rel="stylesheet" type="text/css" />
+<script type="text/javascript" language="Javascript" src="/js/external/jquery/jquery.js"></script>
+<script type="text/javascript" language="Javascript" src="/js/jquery-ui.js"></script>
+<script type="text/javascript" language="Javascript" src="/js/jquery.form.min.js"></script>
+<script type="text/javascript" language="Javascript" src="/js/jquery.ui.datepicker-ko.js"></script>
+<script type="text/javascript" language="Javascript" src="/js/LightBox/SimpleLightBox.js"></script>
+<script type="text/javascript" language="Javascript" src="/js/tree.js"></script>
+<script type="text/javascript" language="Javascript" src="/js/Common.js"></script>
+<script type="text/javascript" language="Javascript" src="/js/page_function.js"></script>
+<script type="text/javascript" language="Javascript" src="/js/jquery.scrollbox.js"></script>
+<script type="text/javascript" language="Javascript" src="/js/jquery.flexisel.js"></script>
+<script type="text/javascript" language="Javascript" src="/js/jquery.easing.1.3.js"></script>
+<title>관리시스템</title>
+</head>
+
+<body>
+<div id="wrap">
+	<!--header S-->
+	<div id="wrap_header">
+		<ul class="gnb" id="gnb_link">
+			<li link="/config/config01.html">환경설정</li>
+			<li link="/basic/basic01.html">기본설정</li>
+			<li link="/bbs/bbs01.html">게시판관리</li>
+			<li link="/member/member01.html">회원관리</li>
+			<li link="/poll/poll01.html">설문관리</li>
+			<li link="/schedule/sch01.html">일정관리</li>
+			<li link="/product/pro01.html">상품관리</li>
+			<li link="/banner/banner01.html">배너관리</li>
+			<li link="/connect/connect01.html">통계관리</li>
+		</ul>
+		<script type="text/javascript"  language="Javascript">
+		<!--
+
+			$(document).ready(function(){
+				
+				$('#gnb_link li').on("click", function(){
+
+					var link_info = $(this).attr("link");
+					//alert(link_info+'로 이동합니다.');
+					location.href=link_info;
+
+				});
+
+			});
+		-->
+		</script>
+		<p id="LogoutBtn">로그아웃</p>
+	</div>
+	<!--header E-->
+
+	<!--lnb S-->
+	<div id="wrap_lnb">
+		<h2 class="mg_logo">사이트관리자<br/><a href="" class="bt_gohome">내홈페이지바로가기→</a></h2>
+		<h2 class="lnb_title"><span class="title1">배너 관리</span></h2>
+		<ul class="lnb">
+			<li class="lnb_depth1"><a href="/banner/banner01.html" class="depth1_on">배너 관리</a></li>
+			<li class="lnb_depth1"><a href="/banner/banner02.html">배너 그룹</a></li>
+			<li class="lnb_depth2" style="display:none;"><a href="/banner/banner02.html">고객센터</a></li>
+		</ul>
+		<div id="copyright">
+			<p>2016 LCDNS<br/>All rights reserved.</p>
+		</div>
+	</div>
+	<!--lnb E-->
+
+	<!--wrap_scon S-->
+	<div id="wrap_scon">
+		<div class="scon_title">
+			<h2>배너 관리</h2>
+			<p>홈 > 설문관리 > 배너 관리</p>
+		</div>
+		<div class="scon">
+			
+			<div class="check_conbox">
+				<h4 class="check_tit">체크사항</h4>
+				<ul>
+					<li>- 코드(영문)는 반드시 영문으로 작성하고 변경이 불가합니다.</li>
+					<li>- 배너간격은 배너와 배너 사이의 간격을 조절합니다.</li>
+					<li>-  배너형태가 가로형인 경우 배너개수만큼 가로로 배너가 나오고 줄바꿈이 됩니다. </li>
+				</ul>
+			</div>
+			<p class="tit_blank"></p>
+			
+			<h3>배너그룹관리</h3>
+			
+			<table class="table_style1">
+				<caption></caption>
+				<colgroup>
+					<col width="20%" />
+					<col width="" />
+					<col width="20%" />
+					<col width="" />
+				</colgroup>
+				<tbody>
+					<tr>
+						<th class="left"><strong>코드(영문) <span class="txt_red">*</span></strong></th>
+						<td class="left"><input name="" class="table_input1" value="" maxlength="" type="text" style="width:90%;"/></td>
+						<th class="left"><strong>그룹이름 <span class="txt_red">*</span></strong></th>
+						<td class="left"><input name="" class="table_input1" value="" maxlength="" type="text" style="width:90%;"/></td>
+					</tr>
+					
+					<tr>
+						<th class=""><strong>배너형태</strong></th>
+						<td class="left"><input class="input_type_radio01" type="radio"/> 세로형&nbsp;&nbsp;&nbsp;<input class="input_type_radio01" type="radio"/> 가로형</td>
+						<th class=""><strong>배너간격</strong></th>
+						<td class="left"><input name="" class="table_input1" value="" maxlength="" type="text" style="width:100px;"/></td>
+					</tr>
+					
+					<tr>
+						<th class=""><strong>사용여부</strong></th>
+						<td class="left"><input class="input_type_radio01" type="radio"/> 사용함&nbsp;&nbsp;&nbsp;<input class="input_type_radio01" type="radio"/> 사용안함</td>
+						<th class=""><strong>배너개수</strong></th>
+						<td class="left"><select><option>10</option></select></td>
+					</tr>
+					
+				</tbody>
+			</table>
+			
+			<div class="page_bbt"><input type="button" value="확인" class="bt_bsubmit"/> <input type="button" value="취소" class="bt_bcancle"/></div>
+		</div>
+	</div>
+	<!--wrap_scon E-->
+</div>
+</body>
+</html>

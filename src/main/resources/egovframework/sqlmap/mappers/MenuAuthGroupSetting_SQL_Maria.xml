@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="menuAuthGroup">
+
+	<resultMap id="BaseResultMap" type="com.tagosolution.service.model.MenuAuthGroupSettingVO">
+		<id column="IDX" jdbcType="INTEGER" property="idX" />
+		<result column="AUTHO_TITLE" jdbcType="VARCHAR" property="authoTitle" />
+		<result column="AUTHO_CONTENTS" jdbcType="VARCHAR" property="authoContents" />
+		<result column="USE_FLAG" jdbcType="CHAR" property="useFlag" />
+		<result column="REG_USER" jdbcType="VARCHAR" property="regUser" />
+		<result column="REG_DATE" jdbcType="DATE" property="regDate" />
+		<result column="MOD_USER" jdbcType="VARCHAR" property="modUser" />
+		<result column="MOD_DATE" jdbcType="DATE" property="modDate" />
+		
+		<collection property="menuAuthList" column="IDX" select="menuAutho.selectByGroup"></collection>
+	</resultMap>
+	<sql id="select">
+		IDX, AUTHO_TITLE, AUTHO_CONTENTS, USE_FLAG, REG_USER,  REG_DATE, MOD_USER, MOD_DATE
+	</sql>
+	<sql id="whereClause">
+		<trim prefix="where" prefixOverrides="and">
+			<choose>
+			 	<when test="flag != null and flag != ''">
+			      AND USE_FLAG = #{flag}
+			    </when>
+			    <otherwise>
+			      AND USE_FLAG != 'D'
+			    </otherwise>
+		  	</choose>
+		</trim>
+	</sql>
+	
+	<select id="selectForAdmin" parameterType="search" resultMap="BaseResultMap">
+		SELECT 
+			IDX, AUTHO_TITLE
+		FROM 
+			TS_MENU_AUTH_GROUP
+		WHERE 
+			USE_FLAG = 'U'
+	</select>
+	
+	<select id="selectList" parameterType="search" resultMap="BaseResultMap">
+		SELECT
+		<include refid="select" />
+		FROM TS_MENU_AUTH_GROUP
+		<include refid="whereClause" />
+		<choose>
+			<when test="orderBy != ''">
+				order by ${orderBy }
+			</when>
+			<otherwise>
+				ORDER BY REG_DATE DESC
+			</otherwise>					
+		</choose>
+		<include refid="paging.limit"/>
+	</select>
+
+	<select id="totalCount" parameterType="search" resultType="int">
+		SELECT COUNT(*)
+		FROM TS_MENU_AUTH_GROUP
+		<include refid="whereClause" />
+	</select>
+	
+	<select id="selectByKey" parameterType="Integer" resultMap="BaseResultMap">
+		select
+		<include refid="select" />
+		FROM TS_MENU_AUTH_GROUP
+		WHERE IDX = #{idX,jdbcType=INTEGER}
+		AND USE_FLAG != 'D'
+	</select>
+	
+	
+	<insert id="merge" useGeneratedKeys="true" keyProperty="idX" parameterType="com.tagosolution.service.model.MenuAuthGroupSettingVO">
+		INSERT INTO TS_MENU_AUTH_GROUP (
+			IDX,
+			AUTHO_TITLE, 
+			AUTHO_CONTENTS, 
+			USE_FLAG, 
+			REG_USER
+		)
+		VALUES (
+			#{idX,jdbcType=INTEGER},
+			#{authoTitle,jdbcType=VARCHAR},
+			#{authoContents,jdbcType=VARCHAR},
+			#{useFlag,jdbcType=CHAR},
+			#{regUser,jdbcType=VARCHAR}
+		)
+		ON DUPLICATE KEY UPDATE
+		<trim suffix="" suffixOverrides=",">
+			<if test="authoTitle != null">
+				AUTHO_TITLE = #{authoTitle,jdbcType=VARCHAR},
+			</if>
+			<if test="authoContents != null">
+				AUTHO_CONTENTS = #{authoContents,jdbcType=VARCHAR},
+			</if>
+			<if test="useFlag != null">
+				USE_FLAG = #{useFlag,jdbcType=CHAR},
+			</if>
+			<if test="modUser != null">
+				MOD_USER = #{modUser,jdbcType=VARCHAR},
+			</if>
+		</trim>
+	</insert>
+	
+	<delete id="delete" parameterType="search">
+		UPDATE TS_MENU_AUTH_GROUP
+		SET USE_FLAG = 'D'
+		WHERE IDX = #{xD,jdbcType=BIGINT}
+	</delete>
+</mapper>

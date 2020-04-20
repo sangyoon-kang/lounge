@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<taglib xmlns="http://java.sun.com/xml/ns/j2ee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee http://java.sun.com/xml/ns/j2ee/web-jsptaglibrary_2_0.xsd"
+    version="2.0">
+	
+	<description>JSTL 1.1 custom functions library</description>
+    <display-name>JSTL Custom Function</display-name>
+    <tlib-version>1.1</tlib-version>
+    <short-name>cfn</short-name>
+    <uri>http://dev.tagoplus.co.kr/taglib/cfn</uri>
+
+	<function>
+		<name>padLeft</name>
+		<function-class>com.tagoplus.util.StringUtil</function-class>
+		<function-signature>
+			java.lang.String padLeft(java.lang.Object, int, char)
+		</function-signature>
+		<example>${cfn:padLeft(string, 4, '0')}</example>
+	</function>
+	
+	<function>
+		<name>padRight</name>
+		<function-class>com.tagoplus.util.StringUtil</function-class>
+		<function-signature>
+			java.lang.String padRight(java.lang.Object, int, char)
+		</function-signature>
+	</function>
+	<function>
+		<name>unescapeHtml</name>
+		<function-class>org.apache.commons.lang.StringEscapeUtils</function-class>
+		<function-signature>
+			java.lang.String unescapeHtml(java.lang.String)
+		</function-signature>
+	</function>
+</taglib>

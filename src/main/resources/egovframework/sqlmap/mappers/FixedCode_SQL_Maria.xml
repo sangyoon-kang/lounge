@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="fixedCode">
+	<resultMap id="BaseResultMap" type="com.tagosolution.service.model.FixedCodeVO">
+		<id column="CODE_CODE" jdbcType="VARCHAR" property="codeCode" />
+		<result column="CODE_NAME" jdbcType="VARCHAR" property="codeName" />
+		<result column="CODE_DESC" jdbcType="VARCHAR" property="codeDesc" />
+		<result column="CODE_DESC2" jdbcType="VARCHAR" property="codeDesc2" />
+	</resultMap>
+	
+	<sql id="select">
+		CODE_CODE, CODE_NAME, CODE_DESC, CODE_DESC2
+	</sql>
+	
+	
+	<select id="selectByKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+		select
+		<include refid="select" />
+		from TS_FIXED_CODE
+		where CODE_CODE = #{codeCode,jdbcType=VARCHAR}
+	</select>
+	
+	<!-- 그룹별 셀렉트 -->
+	<select id="selectByGroup" parameterType="String" resultMap="BaseResultMap">
+		SELECT 
+		<include refid="select" />
+		FROM TS_FIXED_CODE
+		WHERE SUBSTR(CODE_CODE, 4, 3) != '000'
+		AND SUBSTR(CODE_CODE, 1, 3) = #{_parameter}
+		ORDER BY CODE_CODE
+	</select>
+	
+	<select id="selectByBank" resultMap="BaseResultMap">
+		SELECT 
+		<include refid="select" />
+		FROM TS_FIXED_CODE
+		WHERE 
+			SUBSTR(CODE_CODE, 4, 3) != '000'
+			AND	CODE_CODE LIKE '007%'
+		ORDER BY CODE_CODE
+	</select>
+	
+	<!-- 배열 파라미터 고정 코드 셀렉트 -->
+	<select id="selectByArray" parameterType="com.tagosolution.service.model.SiteVO" resultMap="BaseResultMap">
+		SELECT 
+		<include refid="select" />
+		FROM TS_FIXED_CODE
+		<trim prefix="where" prefixOverrides="and">
+			<if test="useMenus != null">
+				AND CODE_CODE
+				<foreach collection="useMenus" item="m" open=" in (" close=")" separator=",">
+				#{m}
+				</foreach>
+			</if>
+			<if test="useMenus == null">
+				AND 1 = 2
+			</if>
+		</trim>
+		<!-- collection이 List일 경우 #{m.value} -->
+	</select>
+	
+	
+	<delete id="deleteByKey" parameterType="java.lang.String">
+		delete from TS_FIXED_CODE
+		where CODE_CODE = #{codeCode,jdbcType=VARCHAR}
+	</delete>
+	<insert id="insert" parameterType="com.tagosolution.service.model.FixedCodeVO">
+		insert into TS_FIXED_CODE (CODE_CODE, CODE_NAME, CODE_DESC,
+		CODE_DESC2)
+		values (#{codeCode,jdbcType=VARCHAR}, #{codeName,jdbcType=VARCHAR}, #{codeDesc,jdbcType=VARCHAR},
+		#{codeDesc2,jdbcType=VARCHAR})
+	</insert>
+	<insert id="insertSelective" parameterType="com.tagosolution.service.model.FixedCodeVO">
+		insert into TS_FIXED_CODE
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="codeCode != null">
+				CODE_CODE,
+			</if>
+			<if test="codeName != null">
+				CODE_NAME,
+			</if>
+			<if test="codeDesc != null">
+				CODE_DESC,
+			</if>
+			<if test="codeDesc2 != null">
+				CODE_DESC2,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="codeCode != null">
+				#{codeCode,jdbcType=VARCHAR},
+			</if>
+			<if test="codeName != null">
+				#{codeName,jdbcType=VARCHAR},
+			</if>
+			<if test="codeDesc != null">
+				#{codeDesc,jdbcType=VARCHAR},
+			</if>
+			<if test="codeDesc2 != null">
+				#{codeDesc2,jdbcType=VARCHAR},
+			</if>
+		</trim>
+	</insert>
+	<update id="updateKeySelective" parameterType="com.tagosolution.service.model.FixedCodeVO">
+		update TS_FIXED_CODE
+		<set>
+			<if test="codeName != null">
+				CODE_NAME = #{codeName,jdbcType=VARCHAR},
+			</if>
+			<if test="codeDesc != null">
+				CODE_DESC = #{codeDesc,jdbcType=VARCHAR},
+			</if>
+			<if test="codeDesc2 != null">
+				CODE_DESC2 = #{codeDesc2,jdbcType=VARCHAR},
+			</if>
+		</set>
+		where CODE_CODE = #{codeCode,jdbcType=VARCHAR}
+	</update>
+	<update id="updateByKey" parameterType="com.tagosolution.service.model.FixedCodeVO">
+		update TS_FIXED_CODE
+		set CODE_NAME = #{codeName,jdbcType=VARCHAR},
+		CODE_DESC = #{codeDesc,jdbcType=VARCHAR},
+		CODE_DESC2 = #{codeDesc2,jdbcType=VARCHAR}
+		where CODE_CODE = #{codeCode,jdbcType=VARCHAR}
+	</update>
+</mapper>

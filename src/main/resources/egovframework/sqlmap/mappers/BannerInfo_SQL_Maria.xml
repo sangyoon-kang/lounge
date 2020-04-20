@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="bannerInfo">
+
+	<resultMap id="BaseResultMap" type="com.tagosolution.service.model.BannerInfoVO">
+		<id column="BANNER_SEQ" jdbcType="SMALLINT" property="bannerSeq" />
+		<result column="BM_SEQ" jdbcType="SMALLINT" property="bmSeq" />
+		<result column="ORDERING" jdbcType="SMALLINT" property="ordering" />
+		<result column="USE_FLAG" jdbcType="VARCHAR" property="useYn" />
+		<result column="LINK_URL" jdbcType="VARCHAR" property="linkUrl" />
+		<result column="LINK_TARGET" jdbcType="VARCHAR" property="linkTarget" />
+		<result column="BANNER_TYPE" jdbcType="VARCHAR" property="bannerType" />
+		<result column="BODY" jdbcType="LONGVARCHAR" property="body" />
+		
+		<association property="file" column="BANNER_SEQ" select="file.selectByAsso"></association>
+		
+	</resultMap>
+
+	<sql id="select">
+		BANNER_SEQ, BM_SEQ, ORDERING, USE_FLAG, LINK_URL, LINK_TARGET, BANNER_TYPE, BODY
+	</sql>
+
+	<select id="selectByKey" parameterType="java.lang.Short" resultMap="BaseResultMap">
+		SELECT
+		<include refid="select" />
+		FROM TS_BANNER_INFO
+		WHERE BANNER_SEQ = #{bannerSeq,jdbcType=SMALLINT}
+	</select>
+
+	<select id="selectByBanner" parameterType="java.lang.Short" resultMap="BaseResultMap">
+		SELECT
+		<include refid="select" />
+		FROM TS_BANNER_INFO
+		WHERE BM_SEQ = #{bseq}
+	</select>
+
+	<sql id="whereClause">
+		<trim prefix="where" prefixOverrides="and">
+			<if test="bseq != null and bseq !=''">
+				AND BM_SEQ = #{bseq}
+			</if>
+		</trim>
+	</sql>
+
+	<select id="selectList" parameterType="search" resultMap="BaseResultMap">
+		SELECT
+		<include refid="select" />
+		FROM TS_BANNER_INFO
+		<include refid="whereClause" />
+		<choose>
+			<when test="orderBy != ''">
+				ORDER BY ${orderBy }
+			</when>
+			<otherwise>
+				ORDER BY BANNER_SEQ
+			</otherwise>
+		</choose>
+		<include refid="paging.limit" />
+	</select>
+
+	<select id="totalCount" parameterType="search" resultType="int">
+		SELECT COUNT(*)
+		FROM TS_BANNER_INFO
+		<include refid="whereClause" />
+	</select>
+
+	<insert id="merge" useGeneratedKeys="true" keyProperty="bannerSeq" parameterType="com.tagosolution.service.model.BannerInfoVO">
+		INSERT INTO TS_BANNER_INFO (
+		BANNER_SEQ, BM_SEQ, ORDERING,
+		USE_FLAG, LINK_URL, LINK_TARGET,
+		BANNER_TYPE, BODY
+		)
+		VALUES (
+		#{bannerSeq,jdbcType=SMALLINT}, #{bmSeq,jdbcType=SMALLINT}, #{ordering,jdbcType=SMALLINT},
+		#{useYn,jdbcType=VARCHAR}, #{linkUrl,jdbcType=VARCHAR}, #{linkTarget,jdbcType=VARCHAR},
+		#{bannerType,jdbcType=VARCHAR}, #{body,jdbcType=LONGVARCHAR}
+		)
+		ON DUPLICATE KEY UPDATE
+		<trim suffix="" suffixOverrides=",">
+			<if test="bmSeq != null">
+				BM_SEQ = #{bmSeq,jdbcType=SMALLINT},
+			</if>
+			<if test="ordering != null">
+				ORDERING = #{ordering,jdbcType=SMALLINT},
+			</if>
+			<if test="useYn != null">
+				USE_FLAG = #{useYn,jdbcType=VARCHAR},
+			</if>
+			<if test="linkUrl != null">
+				LINK_URL = #{linkUrl,jdbcType=VARCHAR},
+			</if>
+			<if test="linkTarget != null">
+				LINK_TARGET = #{linkTarget,jdbcType=VARCHAR},
+			</if>
+			<if test="bannerType != null">
+				BANNER_TYPE = #{bannerType,jdbcType=VARCHAR},
+			</if>
+			<if test="body != null">
+				BODY = #{body,jdbcType=LONGVARCHAR},
+			</if>
+		</trim>
+
+	</insert>
+
+	<delete id="deleteByKey" parameterType="java.lang.Short">
+		DELETE FROM TS_BANNER_INFO
+		WHERE BANNER_SEQ = #{biseq,jdbcType=SMALLINT}
+	</delete>
+
+	<delete id="deleteByMaster" parameterType="java.lang.Short">
+		DELETE FROM TS_BANNER_INFO
+		WHERE BM_SEQ = #{bmseq,jdbcType=SMALLINT}
+	</delete>
+
+</mapper>

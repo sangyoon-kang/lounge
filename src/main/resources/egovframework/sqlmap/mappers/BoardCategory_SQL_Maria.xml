@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="boardCategory">
+
+	<resultMap id="BaseResultMap" type="com.tagosolution.service.model.BoardCategoryVO">
+		<id column="BC_SEQ" jdbcType="INTEGER" property="bcSeq" />
+		<result column="BOARD_CODE" jdbcType="VARCHAR" property="boardCode" />
+		<result column="CATE_NAME" jdbcType="VARCHAR" property="cateName" />
+		<result column="MOUSEOVER_IMAGE" jdbcType="VARCHAR" property="mouseoverImage" />
+		<result column="MOUSEOUT_IMAGE" jdbcType="VARCHAR" property="mouseoutImage" />
+		<result column="ORDERING" jdbcType="SMALLINT" property="ordering" />
+		
+		<result column="BOARD_NAME" jdbcType="VARCHAR" property="boardName" />
+	</resultMap>
+	
+	<sql id="select">
+		BC_SEQ, BOARD_CODE, CATE_NAME, MOUSEOVER_IMAGE, MOUSEOUT_IMAGE, ORDERING
+		, (SELECT E.BOARD_NAME FROM TS_BOARD_MASTER E WHERE E.BOARD_CODE = TS_BOARD_CATEGORY.BOARD_CODE) AS BOARD_NAME
+	</sql>
+	
+	<select id="selectByKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+		SELECT
+		<include refid="select" />
+		FROM TS_BOARD_CATEGORY
+		WHERE BC_SEQ = #{bcSeq,jdbcType=INTEGER}
+	</select>
+	
+	<select id="selectListByBoardCode" parameterType="String" resultMap="BaseResultMap">
+		SELECT 
+		<include refid="select" />
+		FROM TS_BOARD_CATEGORY
+		WHERE BOARD_CODE = #{_parameter}
+		ORDER BY ORDERING, BC_SEQ
+	</select>
+	
+	<delete id="deleteByKey" parameterType="java.lang.Integer">
+		DELETE FROM TS_BOARD_CATEGORY
+		WHERE BC_SEQ = #{bcSeq,jdbcType=INTEGER}
+	</delete>
+	
+	
+	
+	<insert id="merge" useGeneratedKeys="true" keyProperty="bcSeq" parameterType="com.tagosolution.service.model.BoardCategoryVO">
+		INSERT INTO TS_BOARD_CATEGORY (
+			BC_SEQ, BOARD_CODE, CATE_NAME,
+			MOUSEOVER_IMAGE, MOUSEOUT_IMAGE
+		)
+		VALUES (
+			#{bcSeq,jdbcType=INTEGER}, #{boardCode,jdbcType=VARCHAR}, #{cateName,jdbcType=VARCHAR},
+			#{mouseoverImage,jdbcType=VARCHAR}, #{mouseoutImage,jdbcType=VARCHAR}
+		)
+		ON DUPLICATE KEY UPDATE
+		<trim suffix=" " suffixOverrides=",">
+			<if test="cateName != null and cateName != ''">
+				CATE_NAME = #{cateName,jdbcType=VARCHAR},
+			</if>
+			<if test="ordering != null">
+				ORDERING = #{"ordering != null",jdbcType=VARCHAR},
+			</if>
+			<if test="mouseoverImage != null">
+				MOUSEOVER_IMAGE = #{mouseoverImage,jdbcType=VARCHAR},
+			</if>
+			<if test="mouseoutImage != null">
+				MOUSEOUT_IMAGE = #{mouseoutImage,jdbcType=VARCHAR},
+			</if>
+		</trim>
+	</insert>
+
+</mapper>

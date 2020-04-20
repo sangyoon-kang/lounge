@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="bannerMaster">
+
+	<resultMap id="BaseResultMap" type="com.tagosolution.service.model.BannerMasterVO">
+		<id column="BM_SEQ" jdbcType="SMALLINT" property="bmSeq" />
+		<result column="MASTER_CODE" jdbcType="VARCHAR" property="masterCode" />
+		<result column="MASTER_NAME" jdbcType="VARCHAR" property="masterName" />
+		<result column="DIRECTION" jdbcType="VARCHAR" property="direction" />
+		<result column="LF_COUNT" jdbcType="SMALLINT" property="lfCount" />
+		<result column="MARGIN" jdbcType="VARCHAR" property="margin" />
+		<result column="USE_FLAG" jdbcType="VARCHAR" property="useYn" />
+
+		<result column="IMG_COUNT" jdbcType="INTEGER" property="imgCount" />
+
+	</resultMap>
+
+	<sql id="select">
+		BM_SEQ, MASTER_CODE, MASTER_NAME, DIRECTION, LF_COUNT, MARGIN, USE_FLAG,
+		(SELECT COUNT(*) FROM TS_FILE B WHERE B.MASTER_SEQ = TS_BANNER_MASTER.BM_SEQ) AS IMG_COUNT
+	</sql>
+	<select id="selectByKey" parameterType="java.lang.Short" resultMap="BaseResultMap">
+		SELECT
+		<include refid="select" />
+		FROM TS_BANNER_MASTER
+		WHERE BM_SEQ = #{bmSeq,jdbcType=SMALLINT}
+	</select>
+
+	<select id="selectByCode" parameterType="String" resultMap="BaseResultMap">
+		SELECT
+		<include refid="select" />
+		FROM TS_BANNER_MASTER
+		WHERE MASTER_CODE = #{_parameter}
+	</select>
+
+	<select id="selectListForLNB" parameterType="search" resultMap="BaseResultMap">
+		SELECT
+		<include refid="select" />
+		FROM TS_BANNER_MASTER
+		ORDER BY BM_SEQ
+	</select>
+
+	<sql id="whereClause">
+		<trim prefix="where" prefixOverrides="and">
+		</trim>
+	</sql>
+
+	<select id="selectList" parameterType="search" resultMap="BaseResultMap">
+		SELECT
+		<include refid="select" />
+		FROM TS_BANNER_MASTER
+		<!-- <include refid="whereClause" /> -->
+		<choose>
+			<when test="orderBy != ''">
+				ORDER BY ${orderBy }
+			</when>
+			<otherwise>
+				ORDER BY BM_SEQ
+			</otherwise>
+		</choose>
+		<include refid="paging.limit" />
+	</select>
+
+	<select id="totalCount" parameterType="search" resultType="int">
+		SELECT COUNT(*)
+		FROM TS_BANNER_MASTER
+		<!-- <include refid="whereClause" /> -->
+	</select>
+
+	<insert id="merge" useGeneratedKeys="true" keyProperty="bmSeq" parameterType="com.tagosolution.service.model.BannerMasterVO">
+		INSERT INTO TS_BANNER_MASTER (
+		MASTER_CODE, MASTER_NAME, DIRECTION,
+		LF_COUNT, MARGIN, USE_FLAG,
+		BM_SEQ
+		)
+		VALUES (
+		#{masterCode,jdbcType=VARCHAR}, #{masterName,jdbcType=VARCHAR}, #{direction,jdbcType=VARCHAR},
+		#{lfCount,jdbcType=SMALLINT}, #{margin,jdbcType=VARCHAR}, #{useYn,jdbcType=VARCHAR},
+		#{bmSeq,jdbcType=SMALLINT}
+		)
+		ON DUPLICATE KEY UPDATE
+		<trim suffix="" suffixOverrides=",">
+			<if test="masterCode != null">
+				MASTER_CODE = #{masterCode,jdbcType=VARCHAR},
+			</if>
+			<if test="masterName != null">
+				MASTER_NAME = #{masterName,jdbcType=VARCHAR},
+			</if>
+			<if test="direction != null">
+				DIRECTION = #{direction,jdbcType=VARCHAR},
+			</if>
+			<if test="lfCount != null">
+				LF_COUNT = #{lfCount,jdbcType=SMALLINT},
+			</if>
+			<if test="margin != null">
+				MARGIN = #{margin,jdbcType=VARCHAR},
+			</if>
+			<if test="useYn != null">
+				USE_FLAG = #{useYn,jdbcType=VARCHAR},
+			</if>
+		</trim>
+	</insert>
+
+	<delete id="deleteByKey" parameterType="search">
+		DELETE FROM TS_BANNER_MASTER
+		WHERE BM_SEQ = #{bseq,jdbcType=SMALLINT}
+	</delete>
+	
+</mapper>

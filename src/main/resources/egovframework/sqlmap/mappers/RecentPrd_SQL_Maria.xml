@@ -1,0 +1,225 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="recentPrd">
+
+	<resultMap id="BaseResultMap" type="com.tagosolution.service.model.RecentPrdVO">
+		<id column="RP_SEQ" jdbcType="INTEGER" property="rpSeq" />
+		<result column="LIST_TYPE" jdbcType="VARCHAR" property="listType" />
+		<result column="LINK_URL" jdbcType="VARCHAR" property="linkUrl" />
+		<result column="PRD_COUNT" jdbcType="SMALLINT" property="prdCount" />
+		<result column="SUBJECT_CHAR_COUNT" jdbcType="SMALLINT" property="subjectCharCount" />
+		<result column="SUMMARY_CHAR_COUNT" jdbcType="SMALLINT" property="summaryCharCount" />
+		<result column="LF_COUNT" jdbcType="SMALLINT" property="lfCount" />
+		<result column="CODING_START" jdbcType="LONGVARCHAR" property="codingStart" />
+		<result column="CODING_LOOP" jdbcType="LONGVARCHAR" property="codingLoop" />
+		<result column="CODING_END" jdbcType="LONGVARCHAR" property="codingEnd" />
+	</resultMap>
+
+	<sql id="select">
+		RP_SEQ, LIST_TYPE, LINK_URL, PRD_COUNT, SUBJECT_CHAR_COUNT, SUMMARY_CHAR_COUNT, LF_COUNT
+		, CODING_START, CODING_LOOP, CODING_END
+	</sql>
+	
+	<select id="selectList" parameterType="search" resultMap="BaseResultMap">
+		SELECT
+		<include refid="select" />
+		FROM TS_RECENT_PRD
+		ORDER BY RP_SEQ DESC
+	</select>
+	
+	<select id="totalCount" parameterType="search" resultType="int">
+		SELECT COUNT(*)
+		FROM TS_RECENT_PRD
+	</select>
+	
+	<select id="selectByKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+		select
+		<include refid="select" />
+		from TS_RECENT_PRD
+		where RP_SEQ = #{rpSeq,jdbcType=INTEGER}
+	</select>
+	
+	<delete id="deleteByKey" parameterType="java.lang.Integer">
+		delete from TS_RECENT_PRD
+		where RP_SEQ = #{rpSeq,jdbcType=INTEGER}
+	</delete>
+	
+	<insert id="insert" parameterType="com.tagosolution.service.model.RecentPrdVO">
+		insert into TS_RECENT_PRD (RP_SEQ, LIST_TYPE, LINK_URL,
+		PRD_COUNT, SUBJECT_CHAR_COUNT, SUMMARY_CHAR_COUNT,
+		LF_COUNT, CODING_START, CODING_LOOP,
+		CODING_END)
+		values (#{rpSeq,jdbcType=INTEGER}, #{listType,jdbcType=VARCHAR}, #{linkUrl,jdbcType=VARCHAR},
+		#{prdCount,jdbcType=SMALLINT}, #{subjectCharCount,jdbcType=SMALLINT}, #{summaryCharCount,jdbcType=SMALLINT},
+		#{lfCount,jdbcType=SMALLINT}, #{codingStart,jdbcType=LONGVARCHAR}, #{codingLoop,jdbcType=LONGVARCHAR},
+		#{codingEnd,jdbcType=LONGVARCHAR})
+	</insert>
+	
+	<insert id="merge" useGeneratedKeys="true" keyProperty="recentPrdSeq" parameterType="com.tagosolution.service.model.RecentPrdVO">
+		insert into TS_RECENT_PRD (RP_SEQ, LIST_TYPE, LINK_URL,
+		PRD_COUNT, SUBJECT_CHAR_COUNT, SUMMARY_CHAR_COUNT,
+		LF_COUNT, CODING_START, CODING_LOOP,
+		CODING_END)
+		values (#{rpSeq,jdbcType=INTEGER}, #{listType,jdbcType=VARCHAR}, #{linkUrl,jdbcType=VARCHAR},
+		#{prdCount,jdbcType=SMALLINT}, #{subjectCharCount,jdbcType=SMALLINT}, #{summaryCharCount,jdbcType=SMALLINT},
+		#{lfCount,jdbcType=SMALLINT}, #{codingStart,jdbcType=LONGVARCHAR}, #{codingLoop,jdbcType=LONGVARCHAR},
+		#{codingEnd,jdbcType=LONGVARCHAR})
+		ON DUPLICATE KEY UPDATE
+		<trim suffix=" " suffixOverrides=",">
+			<if test="listType != null">
+				LIST_TYPE = #{listType,jdbcType=VARCHAR},
+			</if>
+			<if test="linkUrl != null">
+				LINK_URL = #{linkUrl,jdbcType=VARCHAR},
+			</if>
+			<if test="prdCount != null">
+				PRD_COUNT = #{prdCount,jdbcType=SMALLINT},
+			</if>
+			<if test="subjectCharCount != null">
+				SUBJECT_CHAR_COUNT = #{subjectCharCount,jdbcType=SMALLINT},
+			</if>
+			<if test="summaryCharCount != null">
+				SUMMARY_CHAR_COUNT = #{summaryCharCount,jdbcType=SMALLINT},
+			</if>
+			<if test="lfCount != null">
+				LF_COUNT = #{lfCount,jdbcType=SMALLINT},
+			</if>
+			<if test="codingStart != null">
+				CODING_START = #{codingStart,jdbcType=LONGVARCHAR},
+			</if>
+			<if test="codingLoop != null">
+				CODING_LOOP = #{codingLoop,jdbcType=LONGVARCHAR},
+			</if>
+			<if test="codingEnd != null">
+				CODING_END = #{codingEnd,jdbcType=LONGVARCHAR},
+			</if>
+		</trim>		
+	</insert>
+	
+	<insert id="insertSelective" parameterType="com.tagosolution.service.model.RecentPrdVO">
+		insert into TS_RECENT_PRD
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="rpSeq != null">
+				RP_SEQ,
+			</if>
+			<if test="listType != null">
+				LIST_TYPE,
+			</if>
+			<if test="linkUrl != null">
+				LINK_URL,
+			</if>
+			<if test="prdCount != null">
+				PRD_COUNT,
+			</if>
+			<if test="subjectCharCount != null">
+				SUBJECT_CHAR_COUNT,
+			</if>
+			<if test="summaryCharCount != null">
+				SUMMARY_CHAR_COUNT,
+			</if>
+			<if test="lfCount != null">
+				LF_COUNT,
+			</if>
+			<if test="codingStart != null">
+				CODING_START,
+			</if>
+			<if test="codingLoop != null">
+				CODING_LOOP,
+			</if>
+			<if test="codingEnd != null">
+				CODING_END,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="rpSeq != null">
+				#{rpSeq,jdbcType=INTEGER},
+			</if>
+			<if test="listType != null">
+				#{listType,jdbcType=VARCHAR},
+			</if>
+			<if test="linkUrl != null">
+				#{linkUrl,jdbcType=VARCHAR},
+			</if>
+			<if test="prdCount != null">
+				#{prdCount,jdbcType=SMALLINT},
+			</if>
+			<if test="subjectCharCount != null">
+				#{subjectCharCount,jdbcType=SMALLINT},
+			</if>
+			<if test="summaryCharCount != null">
+				#{summaryCharCount,jdbcType=SMALLINT},
+			</if>
+			<if test="lfCount != null">
+				#{lfCount,jdbcType=SMALLINT},
+			</if>
+			<if test="codingStart != null">
+				#{codingStart,jdbcType=LONGVARCHAR},
+			</if>
+			<if test="codingLoop != null">
+				#{codingLoop,jdbcType=LONGVARCHAR},
+			</if>
+			<if test="codingEnd != null">
+				#{codingEnd,jdbcType=LONGVARCHAR},
+			</if>
+		</trim>
+	</insert>
+	
+	<update id="updateByKeySelective" parameterType="com.tagosolution.service.model.RecentPrdVO">
+		update TS_RECENT_PRD
+		<set>
+			<if test="listType != null">
+				LIST_TYPE = #{listType,jdbcType=VARCHAR},
+			</if>
+			<if test="linkUrl != null">
+				LINK_URL = #{linkUrl,jdbcType=VARCHAR},
+			</if>
+			<if test="prdCount != null">
+				PRD_COUNT = #{prdCount,jdbcType=SMALLINT},
+			</if>
+			<if test="subjectCharCount != null">
+				SUBJECT_CHAR_COUNT = #{subjectCharCount,jdbcType=SMALLINT},
+			</if>
+			<if test="summaryCharCount != null">
+				SUMMARY_CHAR_COUNT = #{summaryCharCount,jdbcType=SMALLINT},
+			</if>
+			<if test="lfCount != null">
+				LF_COUNT = #{lfCount,jdbcType=SMALLINT},
+			</if>
+			<if test="codingStart != null">
+				CODING_START = #{codingStart,jdbcType=LONGVARCHAR},
+			</if>
+			<if test="codingLoop != null">
+				CODING_LOOP = #{codingLoop,jdbcType=LONGVARCHAR},
+			</if>
+			<if test="codingEnd != null">
+				CODING_END = #{codingEnd,jdbcType=LONGVARCHAR},
+			</if>
+		</set>
+		where RP_SEQ = #{rpSeq,jdbcType=INTEGER}
+	</update>
+	
+	<update id="updateByKeyWithBLOBs" parameterType="com.tagosolution.service.model.RecentPrdVO">
+		update TS_RECENT_PRD
+		set LIST_TYPE = #{listType,jdbcType=VARCHAR},
+		LINK_URL = #{linkUrl,jdbcType=VARCHAR},
+		PRD_COUNT = #{prdCount,jdbcType=SMALLINT},
+		SUBJECT_CHAR_COUNT = #{subjectCharCount,jdbcType=SMALLINT},
+		SUMMARY_CHAR_COUNT = #{summaryCharCount,jdbcType=SMALLINT},
+		LF_COUNT = #{lfCount,jdbcType=SMALLINT},
+		CODING_START = #{codingStart,jdbcType=LONGVARCHAR},
+		CODING_LOOP = #{codingLoop,jdbcType=LONGVARCHAR},
+		CODING_END = #{codingEnd,jdbcType=LONGVARCHAR}
+		where RP_SEQ = #{rpSeq,jdbcType=INTEGER}
+	</update>
+	
+	<update id="updateByKey" parameterType="com.tagosolution.service.model.RecentPrdVO">
+		update TS_RECENT_PRD
+		set LIST_TYPE = #{listType,jdbcType=VARCHAR},
+		LINK_URL = #{linkUrl,jdbcType=VARCHAR},
+		PRD_COUNT = #{prdCount,jdbcType=SMALLINT},
+		SUBJECT_CHAR_COUNT = #{subjectCharCount,jdbcType=SMALLINT},
+		SUMMARY_CHAR_COUNT = #{summaryCharCount,jdbcType=SMALLINT},
+		LF_COUNT = #{lfCount,jdbcType=SMALLINT}
+		where RP_SEQ = #{rpSeq,jdbcType=INTEGER}
+	</update>
+</mapper>

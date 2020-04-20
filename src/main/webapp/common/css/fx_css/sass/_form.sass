@@ -1,0 +1,336 @@
+[type="radio"],[type="checkbox"]
+     margin: 0
+     padding: 0
+     position: absolute
+     opacity: 0
+     pointer-events: none
+     +no-select
+     &+span
+          cursor: pointer
+          +no-select
+          padding-left: 35px
+          position: relative
+          display: inline-block
+          line-height: 25px
+          font-size: 1rem
+          height: 25px
+          &::before, &::after
+               cursor: pointer
+               z-index: 0
+               +transition(.28s, ease)
+          &::before
+               content: ''
+               position: absolute
+[type="radio"]
+     &:checked
+          &+span
+               &::before
+                    background-color: $primary
+               &::after
+                    background: $white
+     &+span
+          &::before
+               left: 9px
+               top: 7px
+               width: 10px
+               height: 10px
+               z-index: 1
+               +radius(12px)
+
+          &::after
+               background-color: white
+               margin-top: 2px
+               border: 1px solid #ced4da
+               +radius(20px)
+               content: ''
+               position: absolute
+               left: 0
+               top: 0
+               margin-left: 4px
+               height: 20px
+               width: 20px
+               z-index: 0
+               +transition(.28s, ease)
+[type="checkbox"]
+     &:checked
+          &+span
+               &::before
+                    +transform(rotate, 45deg)
+               &::after
+                    background: $primary
+                    border: none
+     &+span
+          &::before
+               left: 10px
+               top: 5px
+               width: 7px
+               height: 12px
+               border: solid white
+               border-width: 0 3px 3px 0
+               z-index: 1
+               +transform-origin(center)
+          &::after
+               background-color: white
+               margin-top: 2px
+               border: 1px solid #ced4da
+               +radius(20px)
+               content: ''
+               position: absolute
+               left: 0
+               top: 0
+               margin-left: 4px
+               height: 20px
+               width: 20px
+               z-index: 0
+               +transition(.28s, ease)
+
+
+
+.form-group
+     margin-bottom: 1.5rem
+     position: relative
+     &.input-required
+          &::after
+               content: "*"
+               color: $red
+               position: absolute
+               top: 6px
+               right: -20px
+               font-size: 30px
+               opacity: .4
+
+.form-label
+     text-align: left
+     margin-bottom: 8px
+     font-size: 16px
+     font-weight: 400
+     &.required
+          position: relative
+          &::after
+               color: $red
+               content: '*'
+               padding: 5px
+.input-group
+     position: relative
+     +flexbox
+     +flex-wrap
+     align-items: stretch
+     width: 100%
+     .form-control
+          height: auto
+          position: relative
+          flex: 1 
+          width: 1%
+          margin-bottom: 0
+     .input-group-append
+          text-shadow: none
+          display: inline-block
+          text-decoration: none
+          font-size: 16px
+          text-transform: uppercase
+          +px(1rem)
+          +py(0.4rem)
+          +noborder
+          font-weight: 400
+          outline: none
+          +ease-in-out(.1s)
+          +respond-to-down(small)
+               +px(0.5rem)
+     a
+          display: inline-flex
+     svg
+          vertical-align: middle
+          margin: auto
+// .down-100
+//      +respond-to-down(small)
+//           width: 100% !important
+.form-title
+     border-bottom: 3px solid $primary
+     +py(0.5rem)
+.form-control.inline
+     display: inline-block
+     width: auto
+.form-control
+     position: relative
+     display: block
+     width: 100%
+     height: calc(1.5em + .75rem + 2px)
+     font-size: 1rem
+     font-weight: 400
+     line-height: 1.5
+     color: #495057
+     background-color: #fff
+     background-clip: padding-box
+     border: 1px solid #ced4da
+     padding-left: 1rem
+     +radius(0)
+     outline: none
+     transition: border-color .15s ease-in-out,box-shadow .15s ease-in-out
+     &:not(:read-only)
+          &:focus
+               color: #495057
+               background-color: #fff
+               border-color: $blue
+               outline: 0
+               box-shadow: 0 0 0 0.2rem rgba($blue,.25)
+     &+label.active
+          font-weight: bold
+          color: lighten($blue,30%)
+          -webkit-transform: translateY(-14px) scale(0.8)
+          transform: translateY(-14px) scale(0.8)
+          -webkit-transform-origin: 0 0
+          transform-origin: 0 0
+          // box-shadow: 0 0 0 .2rem rgba(0,123,255,.25)
+     &+label
+          color: #9e9e9e
+          position: absolute
+          top: 0
+          font-size: 1rem
+          cursor: text
+          -webkit-transition: color .2s ease-out, -webkit-transform .2s ease-out
+          transition: color .2s ease-out, -webkit-transform .2s ease-out
+          transition: transform .2s ease-out, color .2s ease-out
+          transition: transform .2s ease-out, color .2s ease-out, -webkit-transform .2s ease-out
+          -webkit-transform-origin: 0% 100%
+          transform-origin: 0% 100%
+          text-align: initial
+          -webkit-transform: translateY(12px)
+          transform: translateY(12px)
+     &::-webkit-input-placeholder
+          opacity: .5
+     &.xl
+          height: calc(2.5em + .75rem + 2px)
+     &:required
+
+          &:invalid
+
+          &:valid
+
+
+.label
+     font-size: .8rem
+     font-weight: bold
+     color: lighten($primary,30%)
+label
+     display: inline-block
+textarea.form-control
+     height: auto
+textarea
+     overflow: auto
+     resize: vertical
+.form-control.invalid
+     border-color: $red
+.form-control[type=file]
+     padding-left: 0 !important
+input[type=range]
+     +py(0)
+#duplicate input:not(:first-child)
+     margin-top: 1rem
+fieldset
+     margin: 0
+     border: none
+     outline: none
+     padding: 0
+     position: relative
+     &+fieldset
+          margin-top: 20px
+.show-pass
+     position: absolute
+     right: 10px
+     top: 0
+     bottom: 0
+     margin: auto
+     +bg-center
+     &.show
+          width: 16px
+          height: 16px
+          background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round' class='feather feather-eye'%3E%3Cpath d='M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z'/%3E%3Ccircle cx='12' cy='12' r='3'/%3E%3C/svg%3E")
+     &.hide
+          width: 16px
+          height: 16px
+          background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round' class='feather feather-eye-off'%3E%3Cpath d='M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24'/%3E%3Cline x1='1' y1='1' x2='23' y2='23'/%3E%3C/svg%3E")
+#register-agree
+     textarea
+          font-size: 14px
+          display: block
+          padding: 20px
+          width: 100%
+          height: 250px
+          background: #fff
+          border: 0
+          line-height: 1.6em
+          border: 1px solid $border-color
+          resize: none
+input:read-only
+     background-color: $light-grey
+// .chips
+//      border: none
+//      border-bottom-color: currentcolor
+//      border-bottom-style: none
+//      border-bottom-width: medium
+//      border-bottom: 1px solid #9e9e9e
+//      -webkit-box-shadow: none
+//      box-shadow: none
+//      margin-bottom: 20px
+//      min-height: 45px
+//      outline: none
+//      -webkit-transition: all .3s
+//      transition: all .3s
+//      input
+//           background: none
+//           border: 0
+//           color: rgba(0,0,0,0.6)
+//           display: inline-block
+//           font-size: 1rem
+//           height: 3rem
+//           line-height: 32px
+//           outline: 0
+//           margin: 0
+//           padding: 0 !important
+//           width: 100%
+// .chip
+//      display: inline-block
+//      height: 32px
+//      font-size: 13px
+//      font-weight: 500
+//      color: rgba(0,0,0,0.6)
+//      line-height: 32px
+//      padding: 0 12px
+//      border-radius: 16px
+//      background-color: #e4e4e4
+//      margin-bottom: 5px
+//      margin-right: 5px
+//      .close
+//           cursor: pointer
+//           float: right
+//           font-size: 16px
+//           line-height: 32px
+//           padding-left: 8px
+// .select
+//      width: 100%
+//      color: inherit
+//      padding-right: 2rem
+//      display: block
+//      line-height: 1.25
+//      +appearance-none
+//
+// .arrow
+//      position: absolute
+//      +flexbox
+//      top: 0
+//      right: 0
+//      bottom: 0
+//      pointer-events: none
+//      +px(.5rem)
+//      align-items: center
+//      border: 0 solid #dae1e7
+//      svg
+//           fill: currentcolor
+//           height: 1rem
+//           width: 1rem
+//
+// #phone_number
+//      position: relative
+//      top: -50px
+//      opacity: 0
+//      z-index: -100

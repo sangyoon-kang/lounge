@@ -1,0 +1,799 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="goods">
+  <resultMap id="BaseResultMap" type="com.tagosolution.service.model.GoodsVO">
+  	<id column="RUN_TIME" jdbcType="INTEGER" property="runTime" />
+	<id column="GOODS_DATE" jdbcType="DATE" property="goodsDate" />
+	<id column="GOODS_TIME" jdbcType="VARCHAR" property="goodsTime" />
+	<result column="GOODS_RESULT" jdbcType="VARCHAR" property="goodsResult" />
+	<result column="BUY_LOT1_TOTAL" jdbcType="INTEGER" property="buyLot1Total" />
+	<result column="BUY_LOT2_TOTAL" jdbcType="INTEGER" property="buyLot2Total" />
+	<result column="BUY_LOT10_TOTAL" jdbcType="INTEGER" property="buyLot10Total" />
+	<result column="BUY_LOT20_TOTAL" jdbcType="INTEGER" property="buyLot20Total" />
+	<result column="BUY_LOT40_TOTAL" jdbcType="INTEGER" property="buyLot40Total" />
+	<result column="SELL_LOT1_TOTAL" jdbcType="INTEGER" property="sellLot1Total" />
+	<result column="SELL_LOT2_TOTAL" jdbcType="INTEGER" property="sellLot2Total" />
+	<result column="SELL_LOT10_TOTAL" jdbcType="INTEGER" property="sellLot10Total" />
+	<result column="SELL_LOT20_TOTAL" jdbcType="INTEGER" property="sellLot20Total" />
+	<result column="SELL_LOT40_TOTAL" jdbcType="INTEGER" property="sellLot40Total" />
+	<result column="BUY_LOT1_STATE" jdbcType="VARCHAR" property="buyLot1State" />
+	<result column="BUY_LOT2_STATE" jdbcType="VARCHAR" property="buyLot2State" />
+	<result column="BUY_LOT10_STATE" jdbcType="VARCHAR" property="buyLot10State" />
+	<result column="BUY_LOT20_STATE" jdbcType="VARCHAR" property="buyLot20State" />
+	<result column="BUY_LOT40_STATE" jdbcType="VARCHAR" property="buyLot40State" />
+	<result column="SELL_LOT1_STATE" jdbcType="VARCHAR" property="sellLot1State" />
+	<result column="SELL_LOT2_STATE" jdbcType="VARCHAR" property="sellLot2State" />
+	<result column="SELL_LOT10_STATE" jdbcType="VARCHAR" property="sellLot10State" />
+	<result column="SELL_LOT20_STATE" jdbcType="VARCHAR" property="sellLot20State" />
+	<result column="SELL_LOT40_STATE" jdbcType="VARCHAR" property="sellLot40State" />
+	<result column="BUY_LOT1" jdbcType="INTEGER" property="buyLot1" />
+	<result column="BUY_LOT2" jdbcType="INTEGER" property="buyLot2" />
+	<result column="BUY_LOT10" jdbcType="INTEGER" property="buyLot10" />
+	<result column="BUY_LOT20" jdbcType="INTEGER" property="buyLot20" />
+	<result column="BUY_LOT40" jdbcType="INTEGER" property="buyLot40" />
+	<result column="SELL_LOT1" jdbcType="INTEGER" property="sellLot1" />
+	<result column="SELL_LOT2" jdbcType="INTEGER" property="sellLot2" />
+	<result column="SELL_LOT10" jdbcType="INTEGER" property="sellLot10" />
+	<result column="SELL_LOT20" jdbcType="INTEGER" property="sellLot20" />
+	<result column="SELL_LOT40" jdbcType="INTEGER" property="sellLot40" />
+	<result column="AUTO_CLOSE1" jdbcType="INTEGER" property="autoClose1" />
+	<result column="AUTO_CLOSE2" jdbcType="INTEGER" property="autoClose2" />
+	<result column="AUTO_CLOSE10" jdbcType="INTEGER" property="autoClose10" />
+	<result column="AUTO_CLOSE20" jdbcType="INTEGER" property="autoClose20" />
+	<result column="AUTO_CLOSE40" jdbcType="INTEGER" property="autoClose40" />
+
+	<result column="GOODS_RESULT_TEXT" jdbcType="INTEGER" property="goodsResultText" />
+	
+	<result column="BUY_LOT1_REMAIN" jdbcType="VARCHAR" property="buyLot1Remain" />
+  <result column="BUY_LOT2_REMAIN" jdbcType="VARCHAR" property="buyLot2Remain" />
+  <result column="BUY_LOT10_REMAIN" jdbcType="VARCHAR" property="buyLot10Remain" />
+  <result column="BUY_LOT20_REMAIN" jdbcType="VARCHAR" property="buyLot20Remain" />
+  <result column="BUY_LOT40_REMAIN" jdbcType="VARCHAR" property="buyLot40Remain" />
+  <result column="SELL_LOT1_REMAIN" jdbcType="VARCHAR" property="sellLot1Remain" />
+  <result column="SELL_LOT2_REMAIN" jdbcType="VARCHAR" property="sellLot2Remain" />
+  <result column="SELL_LOT10_REMAIN" jdbcType="VARCHAR" property="sellLot10Remain" />
+  <result column="SELL_LOT20_REMAIN" jdbcType="VARCHAR" property="sellLot20Remain" />
+  <result column="SELL_LOT40_REMAIN" jdbcType="VARCHAR" property="sellLot40Remain" />
+  
+  <result column="RUN_TYPE" jdbcType="VARCHAR" property="runType" />
+  <result column="API_STATE" jdbcType="VARCHAR" property="apiState" />
+  <result column="BUY_LOT1_CHECK" jdbcType="VARCHAR" property="buyLot1Check" />
+  <result column="BUY_LOT2_CHECK" jdbcType="VARCHAR" property="buyLot2Check" />
+  <result column="BUY_LOT10_CHECK" jdbcType="VARCHAR" property="buyLot10Check" />
+  <result column="BUY_LOT20_CHECK" jdbcType="VARCHAR" property="buyLot20Check" />
+  <result column="BUY_LOT40_CHECK" jdbcType="VARCHAR" property="buyLot40Check" />
+  
+  <result column="SELL_LOT1_CHECK" jdbcType="VARCHAR" property="sellLot1Check" />
+  <result column="SELL_LOT2_CHECK" jdbcType="VARCHAR" property="sellLot2Check" />
+  <result column="SELL_LOT10_CHECK" jdbcType="VARCHAR" property="sellLot10Check" />
+  <result column="SELL_LOT20_CHECK" jdbcType="VARCHAR" property="sellLot20Check" />
+  <result column="SELL_LOT40_CHECK" jdbcType="VARCHAR" property="sellLot40Check" />
+</resultMap>
+  
+  <sql id="Base_Column_List">
+	RUN_TIME, GOODS_DATE, GOODS_TIME, GOODS_RESULT
+	, BUY_LOT1_TOTAL, BUY_LOT2_TOTAL, BUY_LOT10_TOTAL, BUY_LOT20_TOTAL, BUY_LOT40_TOTAL
+	, SELL_LOT1_TOTAL, SELL_LOT2_TOTAL, SELL_LOT10_TOTAL, SELL_LOT20_TOTAL, SELL_LOT40_TOTAL
+	, BUY_LOT1_STATE, BUY_LOT2_STATE, BUY_LOT10_STATE, BUY_LOT20_STATE, BUY_LOT40_STATE
+	, SELL_LOT1_STATE,	SELL_LOT2_STATE, SELL_LOT10_STATE, SELL_LOT20_STATE, SELL_LOT40_STATE
+	, BUY_LOT1, BUY_LOT2, BUY_LOT10,	BUY_LOT20,	BUY_LOT40
+	, SELL_LOT1, SELL_LOT2, SELL_LOT10, SELL_LOT20, SELL_LOT40
+	, AUTO_CLOSE1, AUTO_CLOSE2, AUTO_CLOSE10, AUTO_CLOSE20, AUTO_CLOSE40
+  </sql>
+  
+  <sql id="whereClause">
+	<trim prefix="where" prefixOverrides="and">
+		<if test="runTime != null">
+			AND RUN_TIME = #{runTime}
+		</if>
+		<if test="goodsDate != null and goodsDate != ''">
+			AND GOODS_DATE = #{goodsDate}
+		</if>
+		<if test="goodsTime != null">
+			AND TIME_FORMAT(GOODS_TIME, '%H') = CAST(#{goodsTime} AS UNSIGNED)
+		</if>
+	</trim>
+  </sql>
+  
+  <select id="selectList" parameterType="search" resultMap="BaseResultMap">
+	select
+	<include refid="Base_Column_List" />
+	from fx_goods
+	<include refid="whereClause" />
+  </select>
+  
+  <select id="selectMngList" parameterType="search" resultMap="BaseResultMap">
+	SELECT	RUN_TIME, GOODS_TIME, GOODS_RESULT
+	, BUY_LOT1_TOTAL, BUY_LOT2_TOTAL, BUY_LOT10_TOTAL, BUY_LOT20_TOTAL, BUY_LOT40_TOTAL
+	, SELL_LOT1_TOTAL, SELL_LOT2_TOTAL, SELL_LOT10_TOTAL, SELL_LOT20_TOTAL, SELL_LOT40_TOTAL
+	, BUY_LOT1_STATE, BUY_LOT2_STATE, BUY_LOT10_STATE, BUY_LOT20_STATE, BUY_LOT40_STATE
+	, SELL_LOT1_STATE, SELL_LOT2_STATE, SELL_LOT10_STATE, SELL_LOT20_STATE, SELL_LOT40_STATE
+	, BUY_LOT1, BUY_LOT2, BUY_LOT10, BUY_LOT20, BUY_LOT40
+	, SELL_LOT1, SELL_LOT2, SELL_LOT10, SELL_LOT20, SELL_LOT40
+	, AUTO_CLOSE1, AUTO_CLOSE2, AUTO_CLOSE10, AUTO_CLOSE20, AUTO_CLOSE40,
+	(CASE WHEN GOODS_RESULT = 'U' THEN '상승'
+		  WHEN GOODS_RESULT = 'D' THEN '하락'
+		  WHEN GOODS_RESULT = 'T' THEN '틱차트'
+		  WHEN GOODS_RESULT = 'N' THEN '미거래' END) AS GOODS_RESULT_TEXT
+	FROM	fx_goods
+	WHERE	RUN_TIME = #{runTime}
+		AND GOODS_DATE = #{searchDate}
+	  	AND TIME_FORMAT(GOODS_TIME, '%H') = #{searchTime}
+		-- AND CAST(TIME_FORMAT(GOODS_TIME, '%H') as INTEGER) = #{searchTime}
+	<!-- AND	LEFT(GOODS_TIME, LENGTH(CONVERT(#{searchTime}, INT))) = CONVERT(#{searchTime}, INT) -->
+	ORDER BY GOODS_TIME ASC;
+  </select>
+
+  <select id="selectForDeal" parameterType="search" resultMap="BaseResultMap">
+	SELECT
+	   <include refid="Base_Column_List" />
+	FROM   fx_goods
+	WHERE   RUN_TIME = #{runTime}
+		AND	CONCAT(GOODS_DATE , ' ', GOODS_TIME, ':00') &lt; SYSDATE()
+	ORDER BY GOODS_DATE DESC, GOODS_TIME DESC
+	LIMIT 1;
+  </select>
+  
+  <select id="selectForDeal1" parameterType="search" resultMap="BaseResultMap">
+	SELECT	FTS.RUN_TYPE, FTS.API_STATE, FG.RUN_TIME, FG.GOODS_DATE, FG.GOODS_TIME
+			, CASE 	WHEN #{buyLot1, jdbcType=INTEGER} = 0 THEN 'OK'
+					WHEN FG.BUY_LOT1_TOTAL - FG.BUY_LOT1 - #{buyLot1, jdbcType=INTEGER} &lt; 0 THEN 'NF'
+					WHEN FG.BUY_LOT1_STATE != 'U' THEN 'SF'
+					WHEN TIMESTAMPDIFF(SECOND, SYSDATE(), DATE_ADD(DATE_ADD(CONCAT(FG.GOODS_DATE, ' ', FG.GOODS_TIME), INTERVAL FG.RUN_TIME MINUTE), INTERVAL -1 * FG.AUTO_CLOSE1 SECOND)) &lt; 0 THEN 'TF'
+					ELSE 'OK'
+					END BUY_LOT1_CHECK
+			, CASE 	WHEN #{buyLot2, jdbcType=INTEGER} = 0 THEN 'OK'
+					WHEN FG.BUY_LOT2_TOTAL - FG.BUY_LOT2 - #{buyLot2, jdbcType=INTEGER} &lt; 0 THEN 'NF'
+					WHEN FG.BUY_LOT2_STATE != 'U' THEN 'SF'
+					WHEN TIMESTAMPDIFF(SECOND, SYSDATE(), DATE_ADD(DATE_ADD(CONCAT(FG.GOODS_DATE, ' ', FG.GOODS_TIME), INTERVAL FG.RUN_TIME MINUTE), INTERVAL -1 * FG.AUTO_CLOSE2 SECOND)) &lt; 0 THEN 'TF'
+					ELSE 'OK'
+					END BUY_LOT2_CHECK
+			, CASE 	WHEN #{buyLot10, jdbcType=INTEGER} = 0 THEN 'OK'
+					WHEN FG.BUY_LOT10_TOTAL - FG.BUY_LOT10 - #{buyLot10, jdbcType=INTEGER} &lt; 0 THEN 'NF'
+					WHEN FG.BUY_LOT10_STATE != 'U' THEN 'SF'
+					WHEN TIMESTAMPDIFF(SECOND, SYSDATE(), DATE_ADD(DATE_ADD(CONCAT(FG.GOODS_DATE, ' ', FG.GOODS_TIME), INTERVAL FG.RUN_TIME MINUTE), INTERVAL -1 * FG.AUTO_CLOSE10 SECOND)) &lt; 0 THEN 'TF'
+					ELSE 'OK'
+					END BUY_LOT10_CHECK
+			, CASE 	WHEN #{buyLot20, jdbcType=INTEGER} = 0 THEN 'OK'
+					WHEN FG.BUY_LOT20_TOTAL - FG.BUY_LOT20 - #{buyLot20, jdbcType=INTEGER} &lt; 0 THEN 'NF'
+					WHEN FG.BUY_LOT20_STATE != 'U' THEN 'SF'
+					WHEN TIMESTAMPDIFF(SECOND, SYSDATE(), DATE_ADD(DATE_ADD(CONCAT(FG.GOODS_DATE, ' ', FG.GOODS_TIME), INTERVAL FG.RUN_TIME MINUTE), INTERVAL -1 * FG.AUTO_CLOSE20 SECOND)) &lt; 0 THEN 'TF'
+					ELSE 'OK'
+					END BUY_LOT20_CHECK
+			, CASE 	WHEN #{buyLot40, jdbcType=INTEGER} = 0 THEN 'OK'
+					WHEN FG.BUY_LOT40_TOTAL - FG.BUY_LOT40 - #{buyLot40, jdbcType=INTEGER} &lt; 0 THEN 'NF'
+					WHEN FG.BUY_LOT40_STATE != 'U' THEN 'SF'
+					WHEN TIMESTAMPDIFF(SECOND, SYSDATE(), DATE_ADD(DATE_ADD(CONCAT(FG.GOODS_DATE, ' ', FG.GOODS_TIME), INTERVAL FG.RUN_TIME MINUTE), INTERVAL -1 * FG.AUTO_CLOSE40 SECOND)) &lt; 0 THEN 'TF'
+					ELSE 'OK'
+					END BUY_LOT40_CHECK
+			, CASE 	WHEN #{sellLot1, jdbcType=INTEGER} = 0 THEN 'OK'
+					WHEN FG.SELL_LOT1_TOTAL - FG.SELL_LOT1 - #{sellLot1, jdbcType=INTEGER} &lt; 0 THEN 'NF'
+					WHEN FG.SELL_LOT1_STATE != 'U' THEN 'SF'
+					WHEN TIMESTAMPDIFF(SECOND, SYSDATE(), DATE_ADD(DATE_ADD(CONCAT(FG.GOODS_DATE, ' ', FG.GOODS_TIME), INTERVAL FG.RUN_TIME MINUTE), INTERVAL -1 * FG.AUTO_CLOSE1 SECOND)) &lt; 0 THEN 'TF'
+					ELSE 'OK'
+					END SELL_LOT1_CHECK
+			, CASE 	WHEN #{sellLot2, jdbcType=INTEGER} = 0 THEN 'OK'
+					WHEN FG.SELL_LOT2_TOTAL - FG.SELL_LOT2 - #{sellLot2, jdbcType=INTEGER} &lt; 0 THEN 'NF'
+					WHEN FG.SELL_LOT2_STATE != 'U' THEN 'SF'
+					WHEN TIMESTAMPDIFF(SECOND, SYSDATE(), DATE_ADD(DATE_ADD(CONCAT(FG.GOODS_DATE, ' ', FG.GOODS_TIME), INTERVAL FG.RUN_TIME MINUTE), INTERVAL -1 * FG.AUTO_CLOSE2 SECOND)) &lt; 0 THEN 'TF'
+					ELSE 'OK'
+					END SELL_LOT2_CHECK
+			, CASE 	WHEN #{sellLot10, jdbcType=INTEGER} = 0 THEN 'OK'
+					WHEN FG.SELL_LOT10_TOTAL - FG.SELL_LOT10 - #{sellLot10, jdbcType=INTEGER} &lt; 0 THEN 'NF'
+					WHEN FG.SELL_LOT10_STATE != 'U' THEN 'SF'
+					WHEN TIMESTAMPDIFF(SECOND, SYSDATE(), DATE_ADD(DATE_ADD(CONCAT(FG.GOODS_DATE, ' ', FG.GOODS_TIME), INTERVAL FG.RUN_TIME MINUTE), INTERVAL -1 * FG.AUTO_CLOSE10 SECOND)) &lt; 0 THEN 'TF'
+					ELSE 'OK'
+					END SELL_LOT10_CHECK
+			, CASE 	WHEN #{sellLot20, jdbcType=INTEGER} = 0 THEN 'OK'
+					WHEN FG.SELL_LOT20_TOTAL - FG.SELL_LOT20 - #{sellLot20, jdbcType=INTEGER} &lt; 0 THEN 'NF'
+					WHEN FG.SELL_LOT20_STATE != 'U' THEN 'SF'
+					WHEN TIMESTAMPDIFF(SECOND, SYSDATE(), DATE_ADD(DATE_ADD(CONCAT(FG.GOODS_DATE, ' ', FG.GOODS_TIME), INTERVAL FG.RUN_TIME MINUTE), INTERVAL -1 * FG.AUTO_CLOSE20 SECOND)) &lt; 0 THEN 'TF'
+					ELSE 'OK'
+					END SELL_LOT20_CHECK
+			, CASE 	WHEN #{sellLot40, jdbcType=INTEGER} = 0 THEN 'OK'
+					WHEN FG.SELL_LOT40_TOTAL - FG.SELL_LOT40 - #{sellLot40, jdbcType=INTEGER} &lt; 0 THEN 'NF'
+					WHEN FG.SELL_LOT40_STATE != 'U' THEN 'SF'
+					WHEN TIMESTAMPDIFF(SECOND, SYSDATE(), DATE_ADD(DATE_ADD(CONCAT(FG.GOODS_DATE, ' ', FG.GOODS_TIME), INTERVAL FG.RUN_TIME MINUTE), INTERVAL -1 * FG.AUTO_CLOSE40 SECOND)) &lt; 0 THEN 'TF'
+					ELSE 'OK'
+					END SELL_LOT40_CHECK
+FROM	fx_goods FG
+	INNER JOIN fx_time_set FTS
+		ON FTS.RUN_TIME = FG.RUN_TIME
+WHERE	FG.RUN_TIME = #{runTime, jdbcType=INTEGER}
+		AND	FG.GOODS_DATE = #{goodsDate,jdbcType=VARCHAR}
+	AND	FG.GOODS_TIME = #{goodsTime,jdbcType=VARCHAR}
+  </select>
+  
+  <select id="selectByKey" parameterType="search" resultMap="BaseResultMap">
+	select 
+	<include refid="Base_Column_List" />
+	from fx_goods
+	where RUN_TIME = #{runTime,jdbcType=INTEGER}
+	  and GOODS_DATE = #{goodsDate,jdbcType=DATE}
+	  and GOODS_TIME = #{goodsTime,jdbcType=VARCHAR}
+  </select>
+  
+  <insert id="merge" parameterType="com.tagosolution.service.model.GoodsVO">
+	insert into fx_goods (RUN_TIME, GOODS_DATE, GOODS_TIME, GOODS_RESULT, 
+	  BUY_LOT1_TOTAL, BUY_LOT2_TOTAL, BUY_LOT10_TOTAL, BUY_LOT20_TOTAL, BUY_LOT40_TOTAL, 
+	  SELL_LOT1_TOTAL, SELL_LOT2_TOTAL, SELL_LOT10_TOTAL, SELL_LOT20_TOTAL, SELL_LOT40_TOTAL, 
+	  BUY_LOT1_STATE, BUY_LOT2_STATE, BUY_LOT10_STATE, BUY_LOT20_STATE, BUY_LOT40_STATE, 
+	  SELL_LOT1_STATE, SELL_LOT2_STATE, SELL_LOT10_STATE, SELL_LOT20_STATE, SELL_LOT40_STATE,
+	  AUTO_CLOSE1, AUTO_CLOSE2, AUTO_CLOSE10, AUTO_CLOSE20, AUTO_CLOSE40)
+	values (#{runTime,jdbcType=INTEGER}, #{goodsDate,jdbcType=DATE}, #{goodsTime,jdbcType=VARCHAR}, #{goodsResult,jdbcType=VARCHAR}, 
+	  #{buyLot1Total,jdbcType=INTEGER}, #{buyLot2Total,jdbcType=INTEGER}, #{buyLot10Total,jdbcType=INTEGER}, #{buyLot20Total,jdbcType=INTEGER}, #{buyLot40Total,jdbcType=INTEGER},
+	  #{sellLot1Total,jdbcType=INTEGER}, #{sellLot2Total,jdbcType=INTEGER}, #{sellLot10Total,jdbcType=INTEGER}, #{sellLot20Total,jdbcType=INTEGER}, #{sellLot40Total,jdbcType=INTEGER},
+	  #{buyLot1State,jdbcType=VARCHAR}, #{buyLot2State,jdbcType=VARCHAR}, #{buyLot10State,jdbcType=VARCHAR}, #{buyLot20State,jdbcType=VARCHAR},  #{buyLot40State,jdbcType=VARCHAR}, 
+	  #{sellLot1State,jdbcType=VARCHAR}, #{sellLot2State,jdbcType=VARCHAR}, #{sellLot10State,jdbcType=VARCHAR}, #{sellLot20State,jdbcType=VARCHAR}, #{sellLot40State,jdbcType=VARCHAR},
+	  #{autoClose1,jdbcType=INTEGER}, #{autoClose2,jdbcType=INTEGER}, #{autoClose10,jdbcType=INTEGER}, #{autoClose20,jdbcType=INTEGER}, #{autoClose40,jdbcType=INTEGER})
+	  ON DUPLICATE KEY UPDATE
+		<trim suffix=" " suffixOverrides=",">
+		  <if test="goodsDate != null">
+			RUN_TIME = #{runTime,jdbcType=INTEGER},
+		  </if>
+		  <if test="goodsDate != null">
+			GOODS_DATE = #{goodsDate,jdbcType=VARCHAR},
+		  </if>
+		  <if test="goodsTime != null">
+			GOODS_TIME = #{goodsTime,jdbcType=VARCHAR},
+		  </if>
+		  <if test="goodsResult != null">
+			GOODS_RESULT = #{goodsResult,jdbcType=VARCHAR},
+		  </if>
+		  <if test="buyLot1Total != null">
+			BUY_LOT1_TOTAL = #{buyLot1Total,jdbcType=INTEGER},
+		  </if>
+		  <if test="buyLot2Total != null">
+			BUY_LOT2_TOTAL = #{buyLot2Total,jdbcType=INTEGER},
+		  </if>
+		  <if test="buyLot10Total != null">
+			BUY_LOT10_TOTAL = #{buyLot10Total,jdbcType=INTEGER},
+		  </if>
+		  <if test="buyLot20Total != null">
+			BUY_LOT20_TOTAL = #{buyLot20Total,jdbcType=INTEGER},
+		  </if>
+		  <if test="buyLot40Total != null">
+			BUY_LOT40_TOTAL = #{buyLot40Total,jdbcType=INTEGER},
+		  </if>
+		  <if test="sellLot1Total != null">
+			SELL_LOT1_TOTAL = #{sellLot1Total,jdbcType=INTEGER},
+		  </if>
+		  <if test="sellLot2Total != null">
+			SELL_LOT2_TOTAL = #{sellLot2Total,jdbcType=INTEGER},
+		  </if>
+		  <if test="sellLot10Total != null">
+			SELL_LOT10_TOTAL = #{sellLot10Total,jdbcType=INTEGER},
+		  </if>
+		  <if test="sellLot20Total != null">
+			SELL_LOT20_TOTAL = #{sellLot20Total,jdbcType=INTEGER},
+		  </if>
+		  <if test="sellLot40Total != null">
+			SELL_LOT40_TOTAL = #{sellLot40Total,jdbcType=INTEGER},
+		  </if>
+		  <if test="buyLot1State != null">
+			BUY_LOT1_STATE = #{buyLot1State,jdbcType=VARCHAR},
+		  </if>
+		  <if test="buyLot2State != null">
+			BUY_LOT2_STATE = #{buyLot2State,jdbcType=VARCHAR},
+		  </if>
+		  <if test="buyLot10State != null">
+			BUY_LOT10_STATE = #{buyLot10State,jdbcType=VARCHAR},
+		  </if>
+		  <if test="buyLot20State != null">
+			BUY_LOT20_STATE = #{buyLot20State,jdbcType=VARCHAR},
+		  </if>
+		  <if test="buyLot40State != null">
+			BUY_LOT40_STATE = #{buyLot40State,jdbcType=VARCHAR},
+		  </if>
+		  <if test="sellLot1State != null">
+			SELL_LOT1_STATE = #{sellLot1State,jdbcType=VARCHAR},
+		  </if>
+		  <if test="sellLot2State != null">
+			SELL_LOT2_STATE = #{sellLot2State,jdbcType=VARCHAR},
+		  </if>
+		  <if test="sellLot10State != null">
+			SELL_LOT10_STATE = #{sellLot10State,jdbcType=VARCHAR},
+		  </if>
+		  <if test="sellLot20State != null">
+			SELL_LOT20_STATE = #{sellLot20State,jdbcType=VARCHAR},
+		  </if>
+		  <if test="sellLot40State != null">
+			SELL_LOT40_STATE = #{sellLot40State,jdbcType=VARCHAR},
+		  </if>
+	      <if test="autoClose1 != null">
+			AUTO_CLOSE1 = #{autoClose1,jdbcType=INTEGER},
+		  </if>
+		  <if test="autoClose2 != null">
+		  	AUTO_CLOSE2 = #{autoClose2,jdbcType=INTEGER},
+		  </if>
+		  <if test="autoClose10 != null">
+		  	AUTO_CLOSE10 = #{autoClose10,jdbcType=INTEGER},
+		  </if>
+		  <if test="autoClose20 != null">
+		  	AUTO_CLOSE20 = #{autoClose20,jdbcType=INTEGER},
+		  </if>
+		  <if test="autoClose40 != null">
+		  	AUTO_CLOSE40 = #{autoClose40,jdbcType=INTEGER}
+		  </if>
+		</trim>
+  </insert>
+  <insert id="insertSelective" parameterType="com.tagosolution.service.model.GoodsVO">
+	insert into fx_goods
+	<trim prefix="(" suffix=")" suffixOverrides=",">
+	  <if test="runTime != null">
+		RUN_TIME,
+	  </if>
+	  <if test="goodsDate != null">
+		GOODS_DATE,
+	  </if>
+	  <if test="goodsTime != null">
+		GOODS_TIME,
+	  </if>
+	  <if test="goodsResult != null">
+		GOODS_RESULT,
+	  </if>
+	  <if test="buyLot1Total != null">
+		BUY_LOT1_TOTAL,
+	  </if>
+	  <if test="buyLot2Total != null">
+		BUY_LOT2_TOTAL,
+	  </if>
+	  <if test="buyLot10Total != null">
+		BUY_LOT10_TOTAL,
+	  </if>
+	  <if test="buyLot20Total != null">
+		BUY_LOT20_TOTAL,
+	  </if>
+	  <if test="buyLot40Total != null">
+		BUY_LOT40_TOTAL,
+	  </if>
+	  <if test="sellLot1Total != null">
+		SELL_LOT1_TOTAL,
+	  </if>
+	  <if test="sellLot2Total != null">
+		SELL_LOT2_TOTAL,
+	  </if>
+	  <if test="sellLot10Total != null">
+		SELL_LOT10_TOTAL,
+	  </if>
+	  <if test="sellLot20Total != null">
+		SELL_LOT20_TOTAL,
+	  </if>
+	  <if test="sellLot40Total != null">
+		SELL_LOT40_TOTAL,
+	  </if>
+	  <if test="buyLot1State != null">
+		BUY_LOT1_STATE,
+	  </if>
+	  <if test="buyLot2State != null">
+		BUY_LOT2_STATE,
+	  </if>
+	  <if test="buyLot10State != null">
+		BUY_LOT10_STATE,
+	  </if>
+	  <if test="buyLot20State != null">
+		BUY_LOT20_STATE,
+	  </if>
+	  <if test="buyLot40State != null">
+		BUY_LOT40_STATE,
+	  </if>
+	  <if test="sellLot1State != null">
+		SELL_LOT1_STATE,
+	  </if>
+	  <if test="sellLot2State != null">
+		SELL_LOT2_STATE,
+	  </if>
+	  <if test="sellLot10State != null">
+		SELL_LOT10_STATE,
+	  </if>
+	  <if test="sellLot20State != null">
+		SELL_LOT20_STATE,
+	  </if>
+	  <if test="sellLot40State != null">
+		SELL_LOT40_STATE,
+	  </if>
+	  <if test="buyLot1 != null">
+		BUY_LOT1,
+	  </if>
+	  <if test="buyLot2 != null">
+		BUY_LOT2,
+	  </if>
+	  <if test="buyLot10 != null">
+		BUY_LOT10,
+	  </if>
+	  <if test="buyLot20 != null">
+		BUY_LOT20,
+	  </if>
+	  <if test="buyLot40 != null">
+		BUY_LOT40,
+	  </if>
+	  <if test="sellLot1 != null">
+		SELL_LOT1,
+	  </if>
+	  <if test="sellLot2 != null">
+		SELL_LOT2,
+	  </if>
+	  <if test="sellLot10 != null">
+		SELL_LOT10,
+	  </if>
+	  <if test="sellLot20 != null">
+		SELL_LOT20,
+	  </if>
+	  <if test="sellLot40 != null">
+		SELL_LOT40,
+	  </if>
+	  <if test="autoClose1 != null">
+	  	AUTO_CLOSE1,
+	  </if>
+	  <if test="autoClose2 != null">
+	  	AUTO_CLOSE2,
+	  </if>
+	  <if test="autoClose10 != null">
+	  	AUTO_CLOSE10,
+	  </if>
+	  <if test="autoClose20 != null">
+	 	AUTO_CLOSE20,
+	  </if>
+	  <if test="autoClose40 != null">
+	  	AUTO_CLOSE40,
+	  </if>
+	</trim>
+	<trim prefix="values (" suffix=")" suffixOverrides=",">
+	  <if test="runTime != null">
+		#{runTime,jdbcType=INTEGER},
+	  </if>
+	  <if test="goodsDate != null">
+		#{goodsDate,jdbcType=DATE},
+	  </if>
+	  <if test="goodsTime != null">
+		#{goodsTime,jdbcType=VARCHAR},
+	  </if>
+	  <if test="goodsResult != null">
+		#{goodsResult,jdbcType=VARCHAR},
+	  </if>
+	  <if test="buyLot1Total != null">
+		#{buyLot1Total,jdbcType=INTEGER},
+	  </if>
+	  <if test="buyLot2Total != null">
+		#{buyLot2Total,jdbcType=INTEGER},
+	  </if>
+	  <if test="buyLot10Total != null">
+		#{buyLot10Total,jdbcType=INTEGER},
+	  </if>
+	  <if test="buyLot20Total != null">
+		#{buyLot20Total,jdbcType=INTEGER},
+	  </if>
+	  <if test="buyLot40Total != null">
+		#{buyLot40Total,jdbcType=INTEGER},
+	  </if>
+	  <if test="sellLot1Total != null">
+		#{sellLot1Total,jdbcType=INTEGER},
+	  </if>
+	  <if test="sellLot2Total != null">
+		#{sellLot2Total,jdbcType=INTEGER},
+	  </if>
+	  <if test="sellLot10Total != null">
+		#{sellLot10Total,jdbcType=INTEGER},
+	  </if>
+	  <if test="sellLot20Total != null">
+		#{sellLot20Total,jdbcType=INTEGER},
+	  </if>
+	  <if test="sellLot40Total != null">
+		#{sellLot40Total,jdbcType=INTEGER},
+	  </if>
+	  <if test="buyLot1State != null">
+		#{buyLot1State,jdbcType=VARCHAR},
+	  </if>
+	  <if test="buyLot2State != null">
+		#{buyLot2State,jdbcType=VARCHAR},
+	  </if>
+	  <if test="buyLot10State != null">
+		#{buyLot10State,jdbcType=VARCHAR},
+	  </if>
+	  <if test="buyLot20State != null">
+		#{buyLot20State,jdbcType=VARCHAR},
+	  </if>
+	  <if test="buyLot40State != null">
+		#{buyLot40State,jdbcType=VARCHAR},
+	  </if>
+	  <if test="sellLot1State != null">
+		#{sellLot1State,jdbcType=VARCHAR},
+	  </if>
+	  <if test="sellLot2State != null">
+		#{sellLot2State,jdbcType=VARCHAR},
+	  </if>
+	  <if test="sellLot10State != null">
+		#{sellLot10State,jdbcType=VARCHAR},
+	  </if>
+	  <if test="sellLot20State != null">
+		#{sellLot20State,jdbcType=VARCHAR},
+	  </if>
+	  <if test="sellLot40State != null">
+		#{sellLot40State,jdbcType=VARCHAR},
+	  </if>
+	  <if test="buyLot1 != null">
+		#{buyLot1,jdbcType=INTEGER},
+	  </if>
+	  <if test="buyLot2 != null">
+		#{buyLot2,jdbcType=INTEGER},
+	  </if>
+	  <if test="buyLot10 != null">
+		#{buyLot10,jdbcType=INTEGER},
+	  </if>
+	  <if test="buyLot20 != null">
+		#{buyLot20,jdbcType=INTEGER},
+	  </if>
+	  <if test="buyLot40 != null">
+		#{buyLot40,jdbcType=INTEGER},
+	  </if>
+	  <if test="sellLot1 != null">
+		#{sellLot1,jdbcType=INTEGER},
+	  </if>
+	  <if test="sellLot2 != null">
+		#{sellLot2,jdbcType=INTEGER},
+	  </if>
+	  <if test="sellLot10 != null">
+		#{sellLot10,jdbcType=INTEGER},
+	  </if>
+	  <if test="sellLot20 != null">
+		#{sellLot20,jdbcType=INTEGER},
+	  </if>
+	  <if test="sellLot40 != null">
+		#{sellLot40,jdbcType=INTEGER},
+	  </if>
+		<if test="autoClose1 != null">
+			#{autoClose1,jdbcType=INTEGER},
+		</if>
+		<if test="autoClose2 != null">
+			#{autoClose2,jdbcType=INTEGER},
+		</if>
+		<if test="autoClose10 != null">
+			#{autoClose10,jdbcType=INTEGER},
+		</if>
+		<if test="autoClose20 != null">
+			#{autoClose20,jdbcType=INTEGER},
+		</if>
+		<if test="autoClose40 != null">
+			#{autoClose40,jdbcType=INTEGER},
+		</if>
+	</trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.tagosolution.service.model.GoodsVO">
+	update fx_goods
+	<set>
+	  <if test="goodsResult != null">
+		GOODS_RESULT = #{goodsResult,jdbcType=VARCHAR},
+	  </if>
+	  <if test="buyLot1Total != null">
+		BUY_LOT1_TOTAL = #{buyLot1Total,jdbcType=INTEGER},
+	  </if>
+	  <if test="buyLot2Total != null">
+		BUY_LOT2_TOTAL = #{buyLot2Total,jdbcType=INTEGER},
+	  </if>
+	  <if test="buyLot10Total != null">
+		BUY_LOT10_TOTAL = #{buyLot10Total,jdbcType=INTEGER},
+	  </if>
+	  <if test="buyLot20Total != null">
+		BUY_LOT20_TOTAL = #{buyLot20Total,jdbcType=INTEGER},
+	  </if>
+	  <if test="buyLot40Total != null">
+		BUY_LOT40_TOTAL = #{buyLot40Total,jdbcType=INTEGER},
+	  </if>
+	  <if test="sellLot1Total != null">
+		SELL_LOT1_TOTAL = #{sellLot1Total,jdbcType=INTEGER},
+	  </if>
+	  <if test="sellLot2Total != null">
+		SELL_LOT2_TOTAL = #{sellLot2Total,jdbcType=INTEGER},
+	  </if>
+	  <if test="sellLot10Total != null">
+		SELL_LOT10_TOTAL = #{sellLot10Total,jdbcType=INTEGER},
+	  </if>
+	  <if test="sellLot20Total != null">
+		SELL_LOT20_TOTAL = #{sellLot20Total,jdbcType=INTEGER},
+	  </if>
+	  <if test="sellLot40Total != null">
+		SELL_LOT40_TOTAL = #{sellLot40Total,jdbcType=INTEGER},
+	  </if>
+	  <if test="buyLot1State != null">
+		BUY_LOT1_STATE = #{buyLot1State,jdbcType=VARCHAR},
+	  </if>
+	  <if test="buyLot2State != null">
+		BUY_LOT2_STATE = #{buyLot2State,jdbcType=VARCHAR},
+	  </if>
+	  <if test="buyLot10State != null">
+		BUY_LOT10_STATE = #{buyLot10State,jdbcType=VARCHAR},
+	  </if>
+	  <if test="buyLot20State != null">
+		BUY_LOT20_STATE = #{buyLot20State,jdbcType=VARCHAR},
+	  </if>
+	  <if test="buyLot40State != null">
+		BUY_LOT40_STATE = #{buyLot40State,jdbcType=VARCHAR},
+	  </if>
+	  <if test="sellLot1State != null">
+		SELL_LOT1_STATE = #{sellLot1State,jdbcType=VARCHAR},
+	  </if>
+	  <if test="sellLot2State != null">
+		SELL_LOT2_STATE = #{sellLot2State,jdbcType=VARCHAR},
+	  </if>
+	  <if test="sellLot10State != null">
+		SELL_LOT10_STATE = #{sellLot10State,jdbcType=VARCHAR},
+	  </if>
+	  <if test="sellLot20State != null">
+		SELL_LOT20_STATE = #{sellLot20State,jdbcType=VARCHAR},
+	  </if>
+	  <if test="sellLot40State != null">
+		SELL_LOT40_STATE = #{sellLot40State,jdbcType=VARCHAR},
+	  </if>
+	  <if test="buyLot1 != null">
+		BUY_LOT1 = #{buyLot1,jdbcType=INTEGER},
+	  </if>
+	  <if test="buyLot2 != null">
+		BUY_LOT2 = #{buyLot2,jdbcType=INTEGER},
+	  </if>
+	  <if test="buyLot10 != null">
+		BUY_LOT10 = #{buyLot10,jdbcType=INTEGER},
+	  </if>
+	  <if test="buyLot20 != null">
+		BUY_LOT20 = #{buyLot20,jdbcType=INTEGER},
+	  </if>
+	  <if test="buyLot40 != null">
+		BUY_LOT40 = #{buyLot40,jdbcType=INTEGER},
+	  </if>
+	  <if test="sellLot1 != null">
+		SELL_LOT1 = #{sellLot1,jdbcType=INTEGER},
+	  </if>
+	  <if test="sellLot2 != null">
+		SELL_LOT2 = #{sellLot2,jdbcType=INTEGER},
+	  </if>
+	  <if test="sellLot10 != null">
+		SELL_LOT10 = #{sellLot10,jdbcType=INTEGER},
+	  </if>
+	  <if test="sellLot20 != null">
+		SELL_LOT20 = #{sellLot20,jdbcType=INTEGER},
+	  </if>
+	  <if test="sellLot40 != null">
+		SELL_LOT40 = #{sellLot40,jdbcType=INTEGER},
+	  </if>
+		<if test="autoClose1 != null">
+			#{autoClose1,jdbcType=INTEGER},
+		</if>
+		<if test="autoClose2 != null">
+			#{autoClose2,jdbcType=INTEGER},
+		</if>
+		<if test="autoClose10 != null">
+			#{autoClose10,jdbcType=INTEGER},
+		</if>
+		<if test="autoClose20 != null">
+			#{autoClose20,jdbcType=INTEGER},
+		</if>
+		<if test="autoClose40 != null">
+			#{autoClose40,jdbcType=INTEGER},
+		</if>
+	</set>
+	where RUN_TIME = #{runTime,jdbcType=INTEGER}
+	  AND GOODS_DATE = #{goodsDate,jdbcType=DATE}
+	  AND GOODS_TIME = #{goodsTime,jdbcType=VARCHAR}
+  </update>
+  
+  <update id="updateFront" parameterType="search">
+	UPDATE	fx_goods
+		SET	BUY_LOT1 = BUY_LOT1 + #{buyLot1,jdbcType=INTEGER}
+			, BUY_LOT2 = BUY_LOT2 + #{buyLot2,jdbcType=INTEGER}
+			, BUY_LOT10 = BUY_LOT10 + #{buyLot10,jdbcType=INTEGER}
+			, BUY_LOT20 = BUY_LOT20 + #{buyLot20,jdbcType=INTEGER}
+			, BUY_LOT40 = BUY_LOT40 + #{buyLot40,jdbcType=INTEGER}
+			, SELL_LOT1 = SELL_LOT1 + #{sellLot1,jdbcType=INTEGER}
+			, SELL_LOT2 = SELL_LOT2 + #{sellLot2,jdbcType=INTEGER}
+			, SELL_LOT10 = SELL_LOT10 + #{sellLot10,jdbcType=INTEGER}
+			, SELL_LOT20 = SELL_LOT20 + #{sellLot20,jdbcType=INTEGER}
+			, SELL_LOT40 = SELL_LOT40 + #{sellLot40,jdbcType=INTEGER}
+	WHERE	RUN_TIME = #{runTime,jdbcType=INTEGER}
+	  	AND	GOODS_DATE = DATE_FORMAT(SYSDATE(), '%Y-%m-%d')
+		AND	GOODS_TIME = #{goodsTime,jdbcType=VARCHAR};
+  </update>
+  
+  <update id="updateStatus" parameterType="com.tagosolution.service.model.GoodsVO">
+	UPDATE	fx_goods
+	<set>	
+		<trim suffix=" " suffixOverrides=",">
+		  <if test="buyLot1State != null">
+			BUY_LOT1_STATE = #{buyLot1State,jdbcType=VARCHAR},
+		  </if>
+		  <if test="buyLot2State != null">
+			BUY_LOT2_STATE = #{buyLot2State,jdbcType=VARCHAR},
+		  </if>
+		  <if test="buyLot10State != null">
+			BUY_LOT10_STATE = #{buyLot10State,jdbcType=VARCHAR},
+		  </if>
+		  <if test="buyLot20State != null">
+			BUY_LOT20_STATE = #{buyLot20State,jdbcType=VARCHAR},
+		  </if>
+		  <if test="buyLot40State != null">
+			BUY_LOT40_STATE = #{buyLot40State,jdbcType=VARCHAR},
+		  </if>
+		  <if test="sellLot1State != null">
+			SELL_LOT1_STATE = #{sellLot1State,jdbcType=VARCHAR},
+		  </if>
+		  <if test="sellLot2State != null">
+			SELL_LOT2_STATE = #{sellLot2State,jdbcType=VARCHAR},
+		  </if>
+		  <if test="sellLot10State != null">
+			SELL_LOT10_STATE = #{sellLot10State,jdbcType=VARCHAR},
+		  </if>
+		  <if test="sellLot20State != null">
+			SELL_LOT20_STATE = #{sellLot20State,jdbcType=VARCHAR},
+		  </if>
+		  <if test="sellLot40State != null">
+			SELL_LOT40_STATE = #{sellLot40State,jdbcType=VARCHAR},
+		  </if>
+		</trim>
+	</set>
+	WHERE	RUN_TIME = #{runTime}
+		AND	GOODS_DATE = #{goodsDate}
+		AND	GOODS_TIME = #{goodsTime}
+  </update>
+  
+   <update id="updateGoodsStatus" parameterType="com.tagosolution.service.model.GoodsVO">
+	UPDATE	fx_goods
+		SET	GOODS_RESULT = #{goodsResult,jdbcType=VARCHAR}
+	WHERE	RUN_TIME = #{runTime,jdbcType=INTEGER}
+		AND	GOODS_DATE = #{goodsDate,jdbcType=VARCHAR}
+		AND	GOODS_TIME = #{goodsTime,jdbcType=VARCHAR}
+	</update>
+
+   <update id="updateGoodsCancle" parameterType="com.tagosolution.service.model.GoodsVO">
+		UPDATE	fx_goods
+			SET	GOODS_RESULT = null
+		WHERE	RUN_TIME = #{runTime,jdbcType=INTEGER}
+			AND	GOODS_DATE = #{goodsDate,jdbcType=VARCHAR}
+			AND	GOODS_TIME = #{goodsTime,jdbcType=VARCHAR};
+	</update>
+	
+	<select id="selectCount" parameterType="search" resultType="java.lang.Integer">
+		select COUNT(GOODS_DATE)
+		from fx_goods
+		WHERE GOODS_DATE = #{goodsDate}
+	  </select>
+	<insert id="insertLastDate" parameterType="com.tagosolution.service.model.GoodsVO">
+		INSERT INTO fx_goods   (RUN_TIME, GOODS_DATE, GOODS_TIME
+		         , BUY_LOT1_TOTAL, BUY_LOT2_TOTAL, BUY_LOT10_TOTAL, BUY_LOT20_TOTAL, BUY_LOT40_TOTAL
+		         , SELL_LOT1_TOTAL, SELL_LOT2_TOTAL, SELL_LOT10_TOTAL, SELL_LOT20_TOTAL, SELL_LOT40_TOTAL
+		         , BUY_LOT1_STATE, BUY_LOT2_STATE, BUY_LOT10_STATE, BUY_LOT20_STATE, BUY_LOT40_STATE
+		         , SELL_LOT1_STATE, SELL_LOT2_STATE, SELL_LOT10_STATE, SELL_LOT20_STATE, SELL_LOT40_STATE
+		         , AUTO_CLOSE1, AUTO_CLOSE2, AUTO_CLOSE10, AUTO_CLOSE20, AUTO_CLOSE40)
+		SELECT   RUN_TIME, #{goodsDate}, GOODS_TIME
+		         , BUY_LOT1_TOTAL, BUY_LOT2_TOTAL, BUY_LOT10_TOTAL, BUY_LOT20_TOTAL, BUY_LOT40_TOTAL
+		         , SELL_LOT1_TOTAL, SELL_LOT2_TOTAL, SELL_LOT10_TOTAL, SELL_LOT20_TOTAL, SELL_LOT40_TOTAL
+		         , BUY_LOT1_STATE, BUY_LOT2_STATE, BUY_LOT10_STATE, BUY_LOT20_STATE, BUY_LOT40_STATE
+		         , SELL_LOT1_STATE, SELL_LOT2_STATE, SELL_LOT10_STATE, SELL_LOT20_STATE, SELL_LOT40_STATE
+		         , AUTO_CLOSE1, AUTO_CLOSE2, AUTO_CLOSE10, AUTO_CLOSE20, AUTO_CLOSE40
+		FROM   fx_goods
+		WHERE   GOODS_DATE = (SELECT MAX(GOODS_DATE) FROM fx_goods WHERE GOODS_DATE &lt; #{goodsDate});
+
+  	</insert>
+  <select id="checkRemainingLots" parameterType="search" resultMap="BaseResultMap">
+       SELECT case RUN_TYPE when 'S' then 0 else (BUY_LOT1_TOTAL - BUY_LOT1) end AS BUY_LOT1_REMAIN,
+							case RUN_TYPE when 'S' then 0 else (BUY_LOT2_TOTAL - BUY_LOT2) end AS BUY_LOT2_REMAIN,
+							case RUN_TYPE when 'S' then 0 else (BUY_LOT10_TOTAL - BUY_LOT10) end AS BUY_LOT10_REMAIN,
+							case RUN_TYPE when 'S' then 0 else (BUY_LOT20_TOTAL - BUY_LOT20) end AS BUY_LOT20_REMAIN,
+							case RUN_TYPE when 'S' then 0 else (BUY_LOT40_TOTAL - BUY_LOT40) end AS BUY_LOT40_REMAIN,
+							case RUN_TYPE when 'S' then 0 else (SELL_LOT1_TOTAL - SELL_LOT1) end AS SELL_LOT1_REMAIN,
+							case RUN_TYPE when 'S' then 0 else (SELL_LOT2_TOTAL - SELL_LOT2) end AS SELL_LOT2_REMAIN,
+							case RUN_TYPE when 'S' then 0 else (SELL_LOT10_TOTAL - SELL_LOT10) end AS SELL_LOT10_REMAIN,
+							case RUN_TYPE when 'S' then 0 else (SELL_LOT20_TOTAL - SELL_LOT20) end AS SELL_LOT20_REMAIN,
+							case RUN_TYPE when 'S' then 0 else (SELL_LOT40_TOTAL - SELL_LOT40) end AS SELL_LOT40_REMAIN
+      FROM (
+        SELECT    BUY_LOT1_TOTAL, BUY_LOT2_TOTAL, BUY_LOT10_TOTAL, BUY_LOT20_TOTAL, BUY_LOT40_TOTAL
+        , BUY_LOT1, BUY_LOT2, BUY_LOT10, BUY_LOT20, BUY_LOT40
+        , SELL_LOT1_TOTAL, SELL_LOT2_TOTAL, SELL_LOT10_TOTAL, SELL_LOT20_TOTAL, SELL_LOT40_TOTAL
+        , SELL_LOT1, SELL_LOT2, SELL_LOT10, SELL_LOT20, SELL_LOT40
+        ,ft.RUN_TYPE FROM fx_goods FG, fx_time_set FT
+        WHERE FG.run_time =    #{runTime}
+        AND   CONCAT(GOODS_DATE,' ', GOODS_TIME) = (select str_to_date(concat(date(now()), ' ', hour(now()),':',floor(minute(NOW())/#{runTime})*#{runTime}),'%Y-%m-%d %H:%i'))
+        AND fg.RUN_TIME = ft.RUN_TIME) AS remainders;
+        <!--  WHERE    GOODS_DATE = CURDATE()
+        AND     run_time =    1
+        AND     GOODS_TIME = DATE_FORMAT(NOW(), "%H:%i")) AS remainders; -->
+  </select>
+  
+</mapper>

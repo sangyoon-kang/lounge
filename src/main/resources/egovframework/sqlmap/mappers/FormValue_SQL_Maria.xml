@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="formValue">
+
+	<resultMap id="BaseResultMap" type="com.tagosolution.service.model.FormValueVO">
+		<id column="FORM_VALUE_SEQ" jdbcType="INTEGER" property="formValueSeq" />
+		<result column="FORM_INFO_NAME" jdbcType="VARCHAR" property="formInfoName" />
+		<result column="FORM_INFO_VALUE" jdbcType="LONGVARCHAR" property="formInfoValue" />
+		<result column="FORM_WRITING_SEQ" jdbcType="INTEGER" property="formWritingSeq" />
+		<result column="PROPERTY" jdbcType="VARCHAR" property="property" />
+
+	</resultMap>
+
+	<sql id="select">
+		FORM_VALUE_SEQ, FORM_INFO_NAME, FORM_WRITING_SEQ, FORM_INFO_VALUE, PROPERTY
+	</sql>
+	
+	<select id="selectForValue" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+		SELECT
+		<include refid="select" />
+		FROM TS_FORM_VALUE
+		WHERE FORM_WRITING_SEQ = #{formWritingSeq}
+	</select>
+
+
+	<select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+		SELECT
+		<include refid="select" />
+		FROM TS_FORM_VALUE
+		WHERE FORM_VALUE_SEQ = #{formValueSeq,jdbcType=INTEGER}
+	</select>
+
+	<insert id="merge" useGeneratedKeys="true" keyProperty="formValueSeq" parameterType="com.tagosolution.service.model.FormValueVO">
+		insert INTO TS_FORM_VALUE (
+			FORM_VALUE_SEQ, FORM_INFO_NAME, 
+			FORM_INFO_VALUE, FORM_WRITING_SEQ,
+			PROPERTY
+		)
+		values (
+			#{formValueSeq,jdbcType=INTEGER}, #{formInfoName,jdbcType=VARCHAR}, 
+			#{formInfoValue,jdbcType=LONGVARCHAR}, #{formWritingSeq, jdbcType=INTEGER},
+			#{property, jdbcType=VARCHAR}
+		)
+		ON DUPLICATE KEY UPDATE
+		<trim suffix="" suffixOverrides=",">
+			<if test="formInfoName != null">
+				FORM_INFO_NAME = #{formInfoName,jdbcType=VARCHAR},
+			</if>
+			<if test="formInfoValue != null">
+				FORM_INFO_VALUE = #{formInfoValue,jdbcType=LONGVARCHAR},
+			</if>
+			<if test="formWritingSeq != null">
+				FORM_WRITING_SEQ = #{formWritingSeq, jdbcType=INTEGER},
+			</if>
+			<if test="property != null">
+				PROPERTY = #{property, jdbcType=VARCHAR},
+			</if>
+		</trim>
+	</insert>
+
+	<delete id="deleteByWriting" parameterType="java.lang.Integer">
+		DELETE FROM TS_FORM_VALUE
+		WHERE FORM_WRITING_SEQ = #{formWritingSeq,jdbcType=INTEGER}
+	</delete>
+
+	<insert id="insertSelective" parameterType="com.tagosolution.service.model.FormValueVO">
+		insert INTO TS_FORM_VALUE
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="formWritingSeq != null">
+				FORM_WRITING_SEQ,
+			</if>
+			<if test="formInfoName != null">
+				FORM_INFO_NAME,
+			</if>
+			<if test="formInfoValue != null">
+				FORM_INFO_VALUE,
+			</if>
+			<if test="property != null">
+				PROPERTY,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="formWritingSeq != null">
+				#{formWritingSeq,jdbcType=INTEGER},
+			</if>
+			<if test="formInfoName != null">
+				#{formInfoName,jdbcType=VARCHAR},
+			</if>
+			<if test="formInfoValue != null">
+				#{formInfoValue,jdbcType=LONGVARCHAR},
+			</if>
+			<if test="property != null">
+				#{property,jdbcType=LONGVARCHAR},
+			</if>
+		</trim>
+	</insert>
+
+	
+</mapper>

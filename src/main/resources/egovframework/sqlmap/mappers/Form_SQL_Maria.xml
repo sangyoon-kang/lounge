@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="form">
+
+	<resultMap id="BaseResultMap" type="com.tagosolution.service.model.FormVO">
+		<id column="FORM_SEQ" jdbcType="INTEGER" property="formSeq" />
+		<result column="FORM_CODE" jdbcType="VARCHAR" property="formCode" />
+		<result column="FORM_NAME" jdbcType="VARCHAR" property="formName" />
+		<result column="TERMS_YN" jdbcType="VARCHAR" property="termsYn" />
+		<result column="TERMS_BODY" jdbcType="VARCHAR" property="termsBody" />
+		<result column="CSS_PREFIX" jdbcType="VARCHAR" property="cssPrefix" />
+		<result column="BOARD_RECEIVE_YN" jdbcType="VARCHAR" property="boardReceiveYn" />
+		<result column="EMAIL_RECEIVE_YN" jdbcType="VARCHAR" property="emailReceiveYn" />
+		<result column="SMS_RECEIVE_YN" jdbcType="VARCHAR" property="smsReceiveYn" />
+		<result column="EMAIL_RECEIVE" jdbcType="VARCHAR" property="emailReceive" />
+		<result column="SMS_RECEIVE" jdbcType="VARCHAR" property="smsReceive" />
+		<result column="REG_USER" jdbcType="VARCHAR" property="regUser" />
+		<result column="REG_DATE" jdbcType="TIMESTAMP" property="regDate" />
+
+	</resultMap>
+
+	<sql id="select">
+		FORM_SEQ, FORM_CODE, FORM_NAME, TERMS_YN, TERMS_BODY, CSS_PREFIX, BOARD_RECEIVE_YN,
+		EMAIL_RECEIVE_YN, SMS_RECEIVE_YN, EMAIL_RECEIVE, SMS_RECEIVE, REG_USER, REG_DATE
+	</sql>
+
+	<select id="selectByKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+		SELECT
+		<include refid="select" />
+		FROM TS_FORM
+		WHERE FORM_SEQ = #{formSeq,jdbcType=INTEGER}
+	</select>
+	
+	<!-- <sql id="whereClause">
+		<trim prefix="where" prefixOverrides="and">
+			<if test="type1 != null and type1 != ''">
+				AND PROCESS = #{type1}
+			</if>
+		</trim>
+	</sql> -->
+	
+	<select id="selectListForm" parameterType="search" resultMap="BaseResultMap">
+		SELECT
+		<include refid="select" />
+		FROM TS_FORM
+		ORDER BY FORM_SEQ
+	</select>
+	
+	<select id="totalCount" parameterType="search" resultType="int">
+		SELECT COUNT(*)
+		FROM TS_FORM
+		<!-- <include refid="whereClause" /> -->
+	</select>
+	
+	
+	<insert id="merge" useGeneratedKeys="true" keyProperty="formSeq" parameterType="com.tagosolution.service.model.FormVO">
+		INSERT INTO TS_FORM (
+		FORM_SEQ, FORM_NAME, TERMS_YN,
+		TERMS_BODY, CSS_PREFIX, REG_USER,
+		EMAIL_RECEIVE_YN, SMS_RECEIVE_YN, EMAIL_RECEIVE,
+		SMS_RECEIVE
+		)
+		VALUES (
+		#{formSeq,jdbcType=INTEGER}, #{formName,jdbcType=VARCHAR}, #{termsYn,jdbcType=VARCHAR},
+		#{termsBody,jdbcType=VARCHAR}, #{cssPrefix,jdbcType=VARCHAR}, #{regUser,jdbcType=VARCHAR},
+		#{emailReceiveYn,jdbcType=VARCHAR}, #{smsReceiveYn,jdbcType=VARCHAR}, #{emailReceive,jdbcType=VARCHAR},
+		#{smsReceive,jdbcType=VARCHAR}
+		)
+		ON DUPLICATE KEY UPDATE
+		<trim suffix="" suffixOverrides=",">
+			<if test="formCode != null">
+				FORM_CODE = #{formCode,jdbcType=VARCHAR},
+			</if>
+			<if test="formName != null">
+				FORM_NAME = #{formName,jdbcType=VARCHAR},
+			</if>
+			<if test="termsYn != null">
+				TERMS_YN = #{termsYn,jdbcType=VARCHAR},
+			</if>
+			<if test="termsBody != null">
+				TERMS_BODY = #{termsBody,jdbcType=VARCHAR},
+			</if>
+			<if test="cssPrefix != null">
+				CSS_PREFIX = #{cssPrefix,jdbcType=VARCHAR},
+			</if>
+			<if test="boardReceiveYn != null">
+				BOARD_RECEIVE_YN = #{boardReceiveYn,jdbcType=VARCHAR},
+			</if>
+			<if test="emailReceiveYn != null">
+				EMAIL_RECEIVE_YN = #{emailReceiveYn,jdbcType=VARCHAR},
+			</if>
+			<if test="smsReceiveYn != null">
+				SMS_RECEIVE_YN = #{smsReceiveYn,jdbcType=VARCHAR},
+			</if>
+			<if test="emailReceive != null">
+				EMAIL_RECEIVE = #{emailReceive,jdbcType=VARCHAR},
+			</if>
+			<if test="smsReceive != null">
+				SMS_RECEIVE = #{smsReceive,jdbcType=VARCHAR},
+			</if>
+		</trim>
+	</insert>
+
+	<delete id="deleteByKey" parameterType="java.lang.Integer">
+		delete FROM TS_FORM
+		where FORM_SEQ = #{formSeq,jdbcType=INTEGER}
+	</delete>
+	
+</mapper>

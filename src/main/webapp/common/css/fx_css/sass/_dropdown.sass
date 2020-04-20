@@ -1,0 +1,37 @@
+.dropdown
+     &::after
+          top: 9px
+          right: 0
+          display: inline-block
+          content: "\2c5"
+          width: 20px
+          height: 20px
+          text-align: center
+          margin-left: 3px
+          line-height: 20px
+          transform: scaleX(1.5)
+.dropdown-content
+     +ease-in-out(.1s)
+     margin-top: 10px
+     min-width: 160px
+     position: absolute
+     left: 50px
+     +respond-to(small)
+          left: 0
+     background-color: white
+     color: black
+     +py(.5rem)
+     padding-left: .8rem !important
+     padding-right: .8rem !important
+     &::before
+          position: absolute
+          height: 10px
+          width: 10px
+          background-color: white
+          content: ""
+          top: -5px
+          +transform(rotate,45deg)
+     li
+          width: 100%
+          +py(.5rem)
+          +px(.2rem)

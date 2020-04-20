@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="memberMail">
+
+	<resultMap id="BaseResultMap" type="com.tagosolution.service.model.MailTmplVO">
+		<id column="MAIL_SEQ" jdbcType="INTEGER" property="mailSeq" />
+		<result column="MAIL_NAME" jdbcType="VARCHAR" property="mailName" />
+		<result column="ADMIN_SEND_YN" jdbcType="VARCHAR" property="adminSendYn" />
+		<result column="USER_SEND_YN" jdbcType="VARCHAR" property="userSendYn" />
+		<result column="BODY" jdbcType="LONGVARCHAR" property="body" />
+		<result column="SUBJECT" jdbcType="VARCHAR" property="subject" />
+		
+	</resultMap>
+
+
+	<sql id="select">
+		MAIL_SEQ, MAIL_NAME, BODY, ADMIN_SEND_YN, USER_SEND_YN, SUBJECT
+	</sql>
+
+	<select id="selectByKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+		SELECT
+		<include refid="select" />
+		FROM TS_MAIL_TMPL
+		WHERE MAIL_SEQ = #{mailSeq,jdbcType=INTEGER}
+	</select>
+	
+	<select id="selectByList" parameterType="search" resultMap="BaseResultMap">
+		SELECT
+		<include refid="select" />
+		FROM TS_MAIL_TMPL
+		<choose>
+			<when test="orderBy != ''">
+				ORDER BY ${orderBy }
+			</when>
+			<otherwise>
+				ORDER BY MAIL_SEQ
+			</otherwise>					
+		</choose>
+	</select>
+	
+	<insert id="merge" useGeneratedKeys="true" keyProperty="mailSeq" parameterType="com.tagosolution.service.model.MailTmplVO">
+		INSERT INTO TS_MAIL_TMPL (
+			MAIL_SEQ, MAIL_NAME, BODY, SUBJECT,
+			ADMIN_SEND_YN, USER_SEND_YN
+		)
+		VALUES (
+			#{mailSeq,jdbcType=INTEGER}, #{mailName,jdbcType=VARCHAR}, #{body,jdbcType=LONGVARCHAR}, #{subject,jdbcType=VARCHAR},
+			#{adminSendYn,jdbcType=VARCHAR}, #{userSendYn,jdbcType=VARCHAR}
+		)
+		ON DUPLICATE KEY UPDATE
+		<trim suffix="" suffixOverrides=",">
+			<if test="mailName != null">
+				MAIL_NAME = #{mailName,jdbcType=VARCHAR},
+			</if>
+			<if test="adminSendYn != null">
+				ADMIN_SEND_YN = #{adminSendYn,jdbcType=VARCHAR},
+			</if>
+			<if test="userSendYn != null">
+				USER_SEND_YN = #{userSendYn,jdbcType=VARCHAR},
+			</if>
+			<if test="body != null">
+				BODY = #{body,jdbcType=LONGVARCHAR},
+			</if>
+			<if test="subject != null">
+				SUBJECT = #{subject,jdbcType=VARCHAR},
+			</if>
+		</trim>
+	</insert>
+	
+	<delete id="deleteByKey" parameterType="java.lang.Integer">
+		DELETE FROM TS_MAIL_TMPL
+		WHERE MAIL_SEQ = #{mailSeq,jdbcType=INTEGER}
+	</delete>
+
+</mapper>

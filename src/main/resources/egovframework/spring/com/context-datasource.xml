@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+        <bean class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+        <property name="locations">
+            <list>
+                <value>classpath:/egovframework/egovProps/db.properties</value>
+            </list>
+        </property>
+    </bean>
+
+	<bean id="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+		<property name="driverClassName" value="${jdbc.driverClassName}" />
+		<property name="url" value="${jdbc.url}" />
+		<property name="username" value="${jdbc.username}" />
+		<property name="password" value="${jdbc.password}" />
+	</bean>
+    
+	     
+    <bean id="log4dataSource" class="net.sf.log4jdbc.Log4jdbcProxyDataSource">		 <constructor-arg ref="dataSource" />		 <property name="logFormatter">		 	<bean class="net.sf.log4jdbc.tools.Log4JdbcCustomFormatter">
+		 		<property name="loggingType" value="MULTI_LINE" />
+		   		<property name="sqlPrefix" value="SQL >>>>> " />		  	</bean>		 </property>	</bean>	 
+	<!--	<bean id="lobHandler" class="org.springframework.jdbc.support.lob.DefaultLobHandler" lazy-init="true" />	-->
+	
+	<!-- 
+	   sqlMapClient를 선언해야 합니다.
+	   SqlSessionTemplate 의존 주입 버그가 있는 관계로 GeneralDAOImpl에서 코드 주입 
+	-->	<bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">    	<property name="dataSource" ref="log4dataSource" />    	    	<property name="mapperLocations">
+    		<list>
+    			<value>classpath:/egovframework/sqlmap/mappers/*_SQL_Maria.xml</value>
+    			<value>classpath:/egovframework/sqlmap/mappers/common/*_SQL_Maria.xml</value>
+    		</list>
+    	</property>
+    	
+    	<property name="configLocation" value="classpath:/egovframework/sqlmap/config/maria/mybatis-www-config.xml" />
+  	</bean>
+  	
+	<bean id="sqlSessionTemplate" class="org.mybatis.spring.SqlSessionTemplate">
+		<constructor-arg index="0" ref="sqlSessionFactory" />
+	</bean>
+
+  	<!-- SqlMap setup for iBATIS Database Layer 
+	<bean id="egov.sqlMapClient" class="egovframework.rte.psl.orm.ibatis.SqlMapClientFactoryBean">
+		<property name="configLocation" value="classpath:/egovframework/sqlmap/config/mysql/mybatis-www-config.xml" />
+		<property name="dataSource" ref="dataSource"/>
+	</bean>
+	-->
+	
+	
+	
+	<!-- 다중 DB 연결시 사용 - 새로운 DAO 클래스를 구성하여 세션 팩토리를 매핑해야 함
+		트랜잭션 매니저 확인
+	 
+	<bean id="dataSource2" class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">
+		<property name="driverClassName" value="com.microsoft.sqlserver.jdbc.SQLServerDriver" />
+		<property name="url" value="jdbc:sqlserver://116.33.171.166:1433;databaseName=SECOND_DB" />
+		<property name="username" value="dba" />
+		<property name="password" value="eluo0904" />        
+	</bean>
+	
+	<bean id="log4dataSource2" class="net.sf.log4jdbc.Log4jdbcProxyDataSource">
+		 <constructor-arg ref="dataSource2" />
+		 <property name="logFormatter">
+		 	<bean class="net.sf.log4jdbc.tools.Log4JdbcCustomFormatter">
+		   		<property name="loggingType" value="MULTI_LINE" />
+		   		<property name="sqlPrefix" value="SQL >>> " />
+		  	</bean>
+		 </property>
+	</bean>
+	
+	<bean id="sqlSessionFactory2" class="org.mybatis.spring.SqlSessionFactoryBean">
+    	<property name="dataSource" ref="log4dataSource2" />    	
+    	<property name="configLocation" value="classpath:/egovframework/sqlmap/config/mybatis-www-config.xml" />
+  	</bean>
+  	
+  	<bean id="sqlSessionTemplate2" class="org.mybatis.spring.SqlSessionTemplate">
+		<constructor-arg index="0" ref="sqlSessionFactory2" />
+	</bean>
+  	 -->
+</beans>

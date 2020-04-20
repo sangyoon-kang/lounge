@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="baseCMomey">
+
+	<resultMap id="BaseResultMap" type="com.tagosolution.service.model.BaseCMomeyVO">
+		<id column="SITE_SEQ" jdbcType="TINYINT" property="siteSeq" />
+		<result column="JOIN_CMOMEY" jdbcType="INTEGER" property="joinCMomey" />
+		<result column="BOARD_CMOMEY" jdbcType="INTEGER" property="boardCMomey" />
+		<result column="COMMENT_CMOMEY" jdbcType="INTEGER" property="commentCMomey" />
+		<result column="POLICY_TYPE" jdbcType="VARCHAR" property="policyType" />
+		<result column="POLICY_VALUE" jdbcType="INTEGER" property="policyValue" />
+		<result column="USE_MIN" jdbcType="INTEGER" property="useMin" />
+		<result column="USE_MAX" jdbcType="INTEGER" property="useMax" />
+	</resultMap>
+	
+	
+	<sql id="select">
+		SITE_SEQ, JOIN_CMOMEY, BOARD_CMOMEY, COMMENT_CMOMEY, POLICY_TYPE, POLICY_VALUE, USE_MIN, USE_MAX
+	</sql>
+	
+	<sql id="whereClause">
+		<trim prefix="where" prefixOverrides="and">
+				AND SITE_SEQ = #{siteSeq}
+		</trim>
+	</sql>
+	
+	<select id="selectByKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+		SELECT 
+		<include refid="select" />
+		FROM TS_BASE_CMOMEY
+		<include refid="whereClause" />
+	</select>
+	
+	<select id="totalCount" parameterType="java.lang.Integer" resultType="int">
+		SELECT COUNT(*)
+		FROM TS_BASE_CMOMEY
+		<include refid="whereClause" />
+	</select>
+
+	<insert id="merge" parameterType="com.tagosolution.service.model.BaseCMomeyVO">
+		INSERT INTO TS_BASE_CMOMEY (
+			SITE_SEQ, JOIN_CMOMEY, BOARD_CMOMEY, COMMENT_CMOMEY,
+			POLICY_TYPE, POLICY_VALUE, USE_MIN, USE_MAX
+		)
+		values (
+			#{siteSeq,jdbcType=TINYINT}, #{joinCMomey,jdbcType=INTEGER}, #{boardCMomey,jdbcType=INTEGER}, #{commentCMomey,jdbcType=INTEGER},
+			#{policyType,jdbcType=VARCHAR}, #{policyValue,jdbcType=INTEGER}, #{useMin,jdbcType=INTEGER}, #{useMax,jdbcType=INTEGER}
+		)
+		ON DUPLICATE KEY UPDATE
+		<trim suffix=" " suffixOverrides=",">
+			<if test="siteSeq != null">
+				SITE_SEQ = #{siteSeq,jdbcType=TINYINT},
+			</if>
+			<if test="joinCMomey != null">
+				JOIN_CMOMEY = #{joinCMomey,jdbcType=INTEGER},
+			</if>
+			<if test="boardCMomey != null">
+				BOARD_CMOMEY = #{boardCMomey,jdbcType=INTEGER},
+			</if>
+			<if test="commentCMomey != null">
+				COMMENT_CMOMEY = #{commentCMomey,jdbcType=INTEGER},
+			</if>
+			<if test="policyType != null">
+				POLICY_TYPE = #{policyType,jdbcType=VARCHAR},
+			</if>
+			<if test="policyValue != null">
+				POLICY_VALUE = #{policyValue,jdbcType=INTEGER},
+			</if>
+			<if test="useMin != null">
+				USE_MIN = #{useMin,jdbcType=INTEGER},
+			</if>
+			<if test="useMax != null">
+				USE_MAX = #{useMax,jdbcType=INTEGER},
+			</if>
+		</trim>
+	</insert>	
+</mapper>

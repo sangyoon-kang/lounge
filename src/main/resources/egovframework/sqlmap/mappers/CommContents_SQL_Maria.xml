@@ -1,0 +1,176 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="policies">
+
+	<resultMap id="BaseResultMap" type="com.tagosolution.service.model.CommContentsVO">
+		
+		<id column="IDX" jdbcType="INTEGER" property="iDx" />
+		<result column="CONTENTS_TYPE" jdbcType="INTEGER" property="contentsType" />
+		<result column="VERSION" jdbcType="SMALLINT" property="version" />
+		<result column="TITLE" jdbcType="VARCHAR" property="title" />
+		<result column="SUB_TITLE" jdbcType="VARCHAR" property="subtitle" />
+		<result column="LINK_URL" jdbcType="VARCHAR" property="linkURL" />
+		<result column="CONTENTS" jdbcType="VARCHAR" property="contents" />
+		<result column="VIEW_CNT" jdbcType="INTEGER" property="viewCount" />
+		<result column="USE_FLAG" jdbcType="VARCHAR" property="useFlag" />
+		<result column="REG_USER" jdbcType="VARCHAR" property="regUser" />
+		<result column="REG_DATE" jdbcType="DATE" property="regDate" />
+		<result column="MOD_USER" jdbcType="VARCHAR" property="modUser" />
+		<result column="MOD_DATE" jdbcType="DATE" property="modDate" />
+	</resultMap>
+	
+	<sql id="select">
+			IDX, CONTENTS_TYPE, VERSION, TITLE, SUB_TITLE, LINK_URL, CONTENTS, VIEW_CNT, USE_FLAG , REG_USER, REG_DATE,  MOD_USER, MOD_DATE
+	</sql>
+	
+	<sql id="whereClause">
+		<trim prefix="where" prefixOverrides="and">
+			 USE_FLAG = "U"
+		</trim>
+	</sql>
+	
+	<select id="selectList" parameterType="search" resultMap="BaseResultMap">
+		SELECT
+		<include refid="select" />
+		FROM TS_COMM_CONTENTS
+		<include refid="whereClause" />
+	 	AND VERSION = 0
+		<include refid="paging.limit"/>
+	</select>
+	<select id="selectAll" parameterType="search" resultMap="BaseResultMap">
+		SELECT
+		<include refid="select" />
+		FROM TS_COMM_CONTENTS
+		<include refid="whereClause" />
+		ORDER BY TITLE
+	</select>
+	<select id="selectlastversion" parameterType="search" resultMap="BaseResultMap">
+		SELECT
+		<include refid="select" />
+		FROM TS_COMM_CONTENTS
+		WHERE 
+			VERSION = 0 AND USE_FLAG = 'U'
+	</select>
+	<select id="selectSameName" parameterType="search" resultMap="BaseResultMap">
+		SELECT
+		<include refid="select" />
+		FROM 
+			TS_COMM_CONTENTS
+		WHERE
+	 		USE_FLAG = 'U' AND CONTENTS_TYPE = #{contentsType}
+ 		ORDER BY VERSION ASC
+	</select>
+	
+	<select id="totalCount" parameterType="search" resultType="int">
+		SELECT COUNT(*)
+		FROM TS_COMM_CONTENTS
+		<include refid="whereClause" />
+		AND VERSION = 0
+	</select>
+	
+	<select id="checkIsChanged" parameterType="search" resultType="int">
+		SELECT
+			COUNT(*)
+		FROM 
+			TS_COMM_CONTENTS
+		WHERE 
+			CONTENTS_TYPE = #{contentsType}
+			AND TITLE = #{title}
+			AND CONTENTS = #{contents}
+			AND VERSION = #{version}
+			<if test="idx != null">
+				AND IDX=#{idx}
+			</if>
+	</select>
+	
+	<select id="selectbyKey" parameterType="search" resultMap="BaseResultMap">
+		SELECT
+		<include refid="select" />
+		FROM TS_COMM_CONTENTS
+		<include refid="whereClause" />
+		<if test="iDx != null">
+				AND IDX=#{iDx}
+		</if>
+		<if test="version != null">
+			 AND VERSION=#{version}
+		</if>
+		<if test="title != null">
+				AND TITLE=#{title}
+		</if>
+		<if test="contentsType != null">
+				AND CONTENTS_TYPE=#{contentsType}
+		</if>
+		LIMIT 0,1
+	</select>
+	
+	<insert id="merge" useGeneratedKeys="true" keyProperty="iDx" parameterType="com.tagosolution.service.model.CommContentsVO">
+		INSERT INTO TS_COMM_CONTENTS (
+		IDX, CONTENTS_TYPE, VERSION, TITLE, SUB_TITLE, LINK_URL, CONTENTS, VIEW_CNT, USE_FLAG , REG_USER
+		)
+		VALUES (
+		#{iDx,jdbcType=INTEGER},
+		#{contentsType,jdbcType=VARCHAR},
+		#{version,jdbcType=SMALLINT},
+		#{title,jdbcType=VARCHAR},
+		#{subtitle,jdbcType=VARCHAR},
+		#{linkURL,jdbcType=VARCHAR},
+		#{contents,jdbcType=VARCHAR},
+		#{viewCount,jdbcType=INTEGER},
+		#{useFlag,jdbcType=VARCHAR},
+		#{regUser,jdbcType=VARCHAR}
+		)
+		ON DUPLICATE KEY UPDATE
+		<trim suffix="" suffixOverrides=",">
+			<if test="contentsType != null">
+				CONTENTS_TYPE = #{contentsType,jdbcType=VARCHAR},
+			</if>
+			<if test="title != null">
+				TITLE = #{title,jdbcType=VARCHAR},
+			</if>
+			<if test="subtitle != null">
+				SUB_TITLE = #{subtitle,jdbcType=VARCHAR},
+			</if>
+			<if test="useFlag != null">
+				USE_FLAG = #{useFlag,jdbcType=VARCHAR},
+			</if>
+			<if test="modUser != null">
+				MOD_USER = #{modUser,jdbcType=VARCHAR},
+			</if>
+			<if test="regUser != null">
+				REG_USER = #{regUser,jdbcType=VARCHAR}
+			</if>
+		</trim>
+	</insert>
+	<update id="delete"  parameterType="com.tagosolution.service.model.CommContentsVO">
+		update TS_COMM_CONTENTS
+		set USE_FLAG = #{useFlag,jdbcType=VARCHAR}
+		where IDX = #{iDx,jdbcType=INTEGER}
+	</update>
+	
+	<update id="updateVersion"  parameterType="com.tagosolution.service.model.CommContentsVO">
+		UPDATE TS_COMM_CONTENTS
+		SET 
+			VERSION = (SELECT IFNULL(MAX(VERSION)+1, 1) FROM TS_COMM_CONTENTS WHERE CONTENTS_TYPE = #{contentsType,jdbcType=VARCHAR} AND USE_FLAG = 'U') 
+		WHERE 
+			VERSION = 0 AND CONTENTS_TYPE = #{contentsType,jdbcType=VARCHAR} 
+	</update>
+	
+	<select id="selectMemberRule" parameterType="search" resultMap="BaseResultMap">
+		SELECT
+			<include refid="select" />
+		FROM 
+			TS_COMM_CONTENTS
+		WHERE	
+			USE_FLAG = 'U'
+			AND CONTENTS_TYPE IN <foreach item="item" index="index" collection="listContentsType"
+			             open="(" separator="," close=")">
+					        #{item}
+					    </foreach>
+			AND VERSION = 0
+			ORDER BY FIELD(TITLE, <foreach item="item" index="index" collection="listContentsType"
+                      open="" separator="," close="">
+                       #{index}
+                   </foreach>)
+	</select>
+	
+</mapper>

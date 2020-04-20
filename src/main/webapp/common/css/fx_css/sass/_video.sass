@@ -1,0 +1,23 @@
+.player-wrapper
+     width: 100%
+     position: relative
+     padding-top: 9/16*100%
+     margin-bottom: $gap
+     .player
+          background-color: rgba(black,.8)
+          border: none
+          width: 100%
+          position: absolute
+          +size(100%)
+          top: 0
+          left: 0
+          bottom: 0
+.thumb
+     cursor: pointer
+.card.video:hover
+     .img-wrapper::before
+          content: ''
+          position: absolute
+          top: 0
+          +size(100%)
+          background-color: rgba($primary,0.7)

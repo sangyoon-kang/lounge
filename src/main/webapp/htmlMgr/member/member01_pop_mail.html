@@ -1,0 +1,67 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link href="/css/master.css" rel="stylesheet" type="text/css" />
+<link href="/js/jquery-ui.css" rel="stylesheet" type="text/css" />
+<link href="/css/SimpleLightBox.css" rel="stylesheet" type="text/css" />
+<link href="/css/tree.css" rel="stylesheet" type="text/css" />
+<script type="text/javascript" language="Javascript" src="/js/external/jquery/jquery.js"></script>
+<script type="text/javascript" language="Javascript" src="/js/jquery-ui.js"></script>
+<script type="text/javascript" language="Javascript" src="/js/jquery.form.min.js"></script>
+<script type="text/javascript" language="Javascript" src="/js/jquery.ui.datepicker-ko.js"></script>
+<script type="text/javascript" language="Javascript" src="/js/LightBox/SimpleLightBox.js"></script>
+<script type="text/javascript" language="Javascript" src="/js/tree.js"></script>
+<script type="text/javascript" language="Javascript" src="/js/Common.js"></script>
+<script type="text/javascript" language="Javascript" src="/js/page_function.js"></script>
+<script type="text/javascript" language="Javascript" src="/js/jquery.scrollbox.js"></script>
+<script type="text/javascript" language="Javascript" src="/js/jquery.flexisel.js"></script>
+<script type="text/javascript" language="Javascript" src="/js/jquery.easing.1.3.js"></script>
+<title>팝업</title>
+</head>
+
+<body class="admin_pop">
+<div id="wrap_pop">
+		
+	<div class="pop_scon">
+		
+		<h3>메일발송</h3>
+		<p class="tit_blank"></p>
+		<div class="check_conbox">
+			<h4 class="check_tit">체크사항</h4>
+			<ul>
+				<li>- <strong>{DATE}</strong> 오늘날짜, <strong>{MEM_ID}</strong> 회원아이디, <strong>{MEM_NAME}</strong> 회원이름, <strong>{SITE_NAME}</strong> 사이트명, <strong>{SITE_EMAIL}</strong> 사이트 이메일, <strong>{SITE_TEL}</strong> 사이트 전화번호, <strong>{SITE_URL}</strong> 사이트 주소로 변경되어 발송됩니다. </li>
+			</ul>
+		</div>
+		<table class="table_style1">
+			<caption>메일발송</caption>
+			<colgroup>
+				<col width="" />
+				<col width="" />
+			</colgroup>
+			
+			<tbody>
+				<tr>
+					<th class="left"><strong>보내는이</strong></th>
+					<td class="left">홈페이지(test@test.com)</td>
+				</tr>
+				<tr>
+					<th class="left"><strong>받는이</strong></th>
+					<td class="left"><textarea rows="" cols="" style="height:50px; width:94%;"></textarea><br/>형식) 홍길동:test@test.com,</td>
+				</tr>
+				<tr>
+					<th><strong>제목</strong></th>
+					<td class="left"><input name="" class="table_input1" value="" maxlength="" type="text" style="width:94%;"/></td>
+				</tr>
+				<tr>
+					<th class="left"><strong>내용</strong></th>
+					<td class="left">에디터</td>
+				</tr>
+				
+			</tbody>
+		</table>
+		<div class="page_bbt"><input type="button" value="발송하기" class="bt_bsubmit"/> <input type="button" value="취소" class="bt_bcancle"/></div>
+	</div>
+</div>
+</body>
+</html>
