@@ -17,7 +17,7 @@
 			<div class="about_us">
 				<h2>
 					미래를 위한 새로운 투자기준
-					<strong><span>FXLOUNGE</span>가 여러분과 함께 하겠습니다.<strong>
+					<strong><span>FX라운지</span>가 여러분과 함께 하겠습니다.<strong>
 				</h2>
 				<div class="content_wrapper">
 					<div class="content">

@@ -59,7 +59,7 @@
 <div class="snb_bg" style="display: none;"></div>
 <div class="header">
 
-          <h1 class="logo"><a href="/"><img src="/images/common/logo.png" alt="FX렌트솔루션"></a></h1>
+          <h1 class="logo"><a href="/"><img src="/images/common/logo.png" alt="FX라운지"></a></h1>
          
 <nav class="gnb">
 
