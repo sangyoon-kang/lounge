@@ -118,6 +118,8 @@
 		<form id="deposit" action="./dep_proc.do" method="POST">
 			<input type="hidden" name="status" value="I" />
 			<input type="hidden" name="moneySeq" value=""/>
+			<input type="hidden" name="currentPageNo" value=""/>
+			<input type="hidden" name="ioType" value=""/>
 			<table class="board_st1">
 				<colgroup>
 					<col width="7%" />
@@ -237,6 +239,9 @@ function doConfirm(seq, type, dep, name, agent, grade, userId, cash) {
 	
 	$('input[name="status"]').val(type);
 	$('input[name="moneySeq"]').val(seq);
+	$('input[name="currentPageNo"]').val("${search.paging.currentPageNo}");
+	$('input[name="ioType"]').val("${search.ioType}");
+
 	$('#deposit').submit();
 }
 
