@@ -2,6 +2,7 @@ package com.tagosolution.controller.admin.fxprd;
 
 
 import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.tagoplus.model.common.AlertModel;
 import com.tagosolution.controller.BaseController;
 import com.tagosolution.service.dao.GeneralDAOImpl;
@@ -11,6 +12,7 @@ import com.tagosolution.service.impl.PaymentServiceImpl;
 import com.tagosolution.service.model.MoneyVO;
 import com.tagosolution.service.model.search.DepositSearchVO;
 import com.tagosolution.service.util.ListUtil;
+import org.apache.commons.lang.StringEscapeUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
@@ -24,6 +26,7 @@ import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -57,7 +60,6 @@ public class DepositController extends BaseController {
      * @param search
      * @param result
      * @param model
-     * @param request
      * @return
      * @throws Exception
      */
@@ -147,8 +149,6 @@ public class DepositController extends BaseController {
      * CheckUserCash
      *
      * @param body
-     * @param idType
-     * @param id
      * @param result
      * @param model
      * @return
