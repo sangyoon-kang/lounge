@@ -2,6 +2,7 @@ package com.tagosolution.controller.admin.fxprd;
 
 
 import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.tagoplus.model.common.AlertModel;
 import com.tagosolution.controller.BaseController;
 import com.tagosolution.service.dao.GeneralDAOImpl;
@@ -11,6 +12,7 @@ import com.tagosolution.service.impl.PaymentServiceImpl;
 import com.tagosolution.service.model.MoneyVO;
 import com.tagosolution.service.model.search.DepositSearchVO;
 import com.tagosolution.service.util.ListUtil;
+import org.apache.commons.lang.StringEscapeUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
@@ -18,12 +20,15 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
+import java.net.URLDecoder;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -113,6 +118,30 @@ public class DepositController extends BaseController {
             logger.error(e.getMessage(), e);
             am.setMessage("처리 중 오류가 발생했습니다.\\n" + e.getMessage());
         }
+        am.setScript("$.Nav('go', './list.do?ioType="+ioType+"&cpage=" + currentPageNo + "');");
+        model.addAttribute("alert", am);
+        return super.getConfig().getViewAlert();
+    }
+
+    @RequestMapping(value = "/api/dep_proc_list.do")
+    public String basicPopupProcList(BindingResult result, Model model, int currentPageNo, String ioType,String checkList) throws Exception {
+        if (result.hasErrors())
+            return super.setBindingResult(result, model);
+
+        AlertModel am = new AlertModel();
+
+        // checkList 는 화면에서 JSON.stringify 로 변환한 객체리스트 배열
+        Gson gson = new Gson();
+
+        String list = StringEscapeUtils.unescapeHtml(checkList);
+        ArrayList<Map> mapArrayList = gson.fromJson(list, new TypeToken<ArrayList<Map>>(){}.getType());
+
+
+        //mapArrayList 로 처리
+
+        am.setMessage("구현중");
+
+
         am.setScript("$.Nav('go', './list.do?ioType="+ioType+"&cpage=" + currentPageNo + "');");
         model.addAttribute("alert", am);
         return super.getConfig().getViewAlert();
