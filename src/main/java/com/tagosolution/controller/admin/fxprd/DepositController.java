@@ -115,13 +115,13 @@ public class DepositController extends BaseController {
             logger.error(e.getMessage(), e);
             am.setMessage("처리 중 오류가 발생했습니다.\\n" + e.getMessage());
         }
-        am.setScript("$.Nav('go', './list.do?ioType="+ioType+"&cpage=" + currentPageNo + "');");
+        am.setScript("$.Nav('go', './list.do?ioType=" + ioType + "&cpage=" + currentPageNo + "');");
         model.addAttribute("alert", am);
         return super.getConfig().getViewAlert();
     }
 
     @RequestMapping(value = "/api/dep_proc_list.do")
-    public String basicPopupProcList(MoneyVO vo, DepositSearchVO search, BindingResult result, Model model, int currentPageNo, String ioType,String checkList) throws Exception {
+    public String basicPopupProcList(BindingResult result, Model model, int currentPageNo, String ioType, String checkList) throws Exception {
         if (result.hasErrors())
             return super.setBindingResult(result, model);
 
@@ -131,15 +131,62 @@ public class DepositController extends BaseController {
         Gson gson = new Gson();
 
         String list = StringEscapeUtils.unescapeHtml(checkList);
-        ArrayList<Map> mapArrayList = gson.fromJson(list, new TypeToken<ArrayList<Map>>(){}.getType());
-
+        ArrayList<Map> mapArrayList = gson.fromJson(list, new TypeToken<ArrayList<Map>>() {
+        }.getType());
 
         //mapArrayList 로 처리
+        MoneyVO vo = null;
 
-        am.setMessage("구현중");
+        int acceptCnt = 0;
+        int cancelCnt = 0;
+        int alreadyProc = 0;
+        String tmpMessage = "";
 
+        try {
 
-        am.setScript("$.Nav('go', './../list.do?ioType="+ioType+"&cpage=" + currentPageNo + "');");
+            if (mapArrayList == null || mapArrayList.size() == 0) {
+                am.setMessage("처리할 입금/출금 내역이 없습니다.");
+            } else {
+                for (int i = 0; i < mapArrayList.size(); i++) {
+                    vo = new MoneyVO();
+                    vo.setUserId(super.getAdminSession().getUserID());
+
+                    Map<String, String> mapObject = (Map) mapArrayList.get(i);
+                    vo.setMoneySeq(Integer.parseInt(mapObject.get("moneySeq"))); // moneySeq 저장
+                    String status = mapObject.get("status");
+
+                    MoneyVO mo = (MoneyVO) _gDao.selectByKey("money.selectByKey", vo.getMoneySeq());
+
+                    if (status.equalsIgnoreCase("A") && mo.getState().equalsIgnoreCase("R")) {
+                        _paymentService.updateDepositAccept(vo);
+                        _paymentService.insertCashByDeposit(vo);
+                        _memberService.updateByDeposit(vo.getMoneySeq());
+                        acceptCnt++;
+
+                        if (i == 0) {
+                            tmpMessage = "승인처리가 되었습니다.";
+                        }
+
+                    } else if (status.equalsIgnoreCase("C") && mo.getState().equalsIgnoreCase("R")) {
+                        _paymentService.updateDepositCancel(vo);
+                        _memberService.updateByDepositCancel(vo.getMoneySeq());
+                        cancelCnt++;
+                    }
+
+                    if (!mo.getState().equalsIgnoreCase("R")) {
+                        alreadyProc++;
+                    }
+                }
+
+                tmpMessage = "승인 : " + acceptCnt + "건\n취소 : " + cancelCnt + "건\n이미 승인된 처리 :" + alreadyProc + "건";
+                am.setMessage(tmpMessage);
+            }
+        } catch (Exception e) {
+            logger.error(e.getMessage(), e);
+            am.setMessage("처리 중 오류가 발생했습니다.\\n" + e.getMessage());
+        }
+
+        am.setScript("$.Nav('go', './list.do?ioType=" + ioType + "&cpage=" + currentPageNo + "');");
         model.addAttribute("alert", am);
         return super.getConfig().getViewAlert();
     }
