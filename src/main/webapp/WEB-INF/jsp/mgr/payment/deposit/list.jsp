@@ -117,6 +117,7 @@
 		</form>
 		<div class="all_io_exec" style="padding-bottom: 10px">
 			<a class="btn bg_sky">일괄 처리</a>
+			<a class="btn bg_gray">일괄 취소</a>
 			<label style="float: right"><input class="reloadBox" style="padding: 0 5px" type="checkbox" >자동 새로고침</label>
 		</div>
 		<form id="deposit" action="./dep_proc.do" method="POST">
@@ -209,7 +210,6 @@
 			<input type="hidden" name="currentPageNo" value="${search.paging.currentPageNo}"/>
 			<input type="hidden" name="checkList" value=""/>
 			<input type="hidden" name="ioType" value="${search.ioType}"/>
-			<input type="hidden" name="currentPageNo" value=""/>
 		</form>
 	</div>
 </div>
@@ -221,7 +221,7 @@
 			$("tbody .ck_td input").prop("checked",$(e.target).is(":checked"));
 		});
 
-		$(".all_io_exec a.bg_sky").click(function(){//출금
+		$(".all_io_exec a.bg_sky").click(function(){//입출금
 
 			if (!confirm("일괄 처리 하시겠습니까?"))return;
 			var checkBoxList = $("tbody .ck_td input:checkbox:checked");
@@ -237,8 +237,29 @@
 				arr_val.push({status : "A", moneySeq : seq});
 			});
 
-			$('input[name="ioType"]').val("${search.ioType}");
-			$('input[name="currentPageNo"]').val("${search.paging.currentPageNo}");
+			// json 포맷으로 변환
+			$('input[name="checkList"]').val(JSON.stringify(arr_val));
+			$('#depositList').submit();
+
+		});
+
+		$(".all_io_exec a.bg_gray").click(function(){//일괄취소
+
+			if (!confirm("일괄 처리 하시겠습니까?"))return;
+			var checkBoxList = $("tbody .ck_td input:checkbox:checked");
+
+			if(checkBoxList.length < 1){
+				alert("선택된 항목이 없습니다.");
+				return;
+			}
+
+			var arr_val = new Array();
+			checkBoxList.each(function(idx,ele){
+				var seq = $($(ele).parent()).data("money-seq").toString();
+				arr_val.push({status : "C", moneySeq : seq});
+			});
+
+			// json 포맷으로 변환
 			$('input[name="checkList"]').val(JSON.stringify(arr_val));
 			$('#depositList').submit();
 
