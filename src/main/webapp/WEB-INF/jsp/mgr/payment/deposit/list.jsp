@@ -209,6 +209,7 @@
 			<input type="hidden" name="currentPageNo" value="${search.paging.currentPageNo}"/>
 			<input type="hidden" name="checkList" value=""/>
 			<input type="hidden" name="ioType" value="${search.ioType}"/>
+			<input type="hidden" name="currentPageNo" value=""/>
 		</form>
 	</div>
 </div>
@@ -236,6 +237,8 @@
 				arr_val.push({status : "A", moneySeq : seq});
 			});
 
+			$('input[name="ioType"]').val("${search.ioType}");
+			$('input[name="currentPageNo"]').val("${search.paging.currentPageNo}");
 			$('input[name="checkList"]').val(JSON.stringify(arr_val));
 			$('#depositList').submit();
 
@@ -283,6 +286,7 @@
 		$('input[name="status"]').val(type);
 		$('input[name="moneySeq"]').val(seq);
 		$('input[name="ioType"]').val("${search.ioType}");
+		$('input[name="currentPageNo"]').val("${search.paging.currentPageNo}");
 
 		$('#deposit').submit();
 	}
