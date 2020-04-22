@@ -121,7 +121,7 @@ public class DepositController extends BaseController {
     }
 
     @RequestMapping(value = "/api/dep_proc_list.do")
-    public String basicPopupProcList(BindingResult result, Model model, int currentPageNo, String ioType,String checkList) throws Exception {
+    public String basicPopupProcList(MoneyVO vo, DepositSearchVO search, BindingResult result, Model model, int currentPageNo, String ioType,String checkList) throws Exception {
         if (result.hasErrors())
             return super.setBindingResult(result, model);
 
@@ -139,7 +139,7 @@ public class DepositController extends BaseController {
         am.setMessage("구현중");
 
 
-        am.setScript("$.Nav('go', './list.do?ioType="+ioType+"&cpage=" + currentPageNo + "');");
+        am.setScript("$.Nav('go', './../list.do?ioType="+ioType+"&cpage=" + currentPageNo + "');");
         model.addAttribute("alert", am);
         return super.getConfig().getViewAlert();
     }
