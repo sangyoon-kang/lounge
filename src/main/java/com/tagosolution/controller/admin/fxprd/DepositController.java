@@ -2,7 +2,6 @@ package com.tagosolution.controller.admin.fxprd;
 
 
 import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
 import com.tagoplus.model.common.AlertModel;
 import com.tagosolution.controller.BaseController;
 import com.tagosolution.service.dao.GeneralDAOImpl;
@@ -12,7 +11,6 @@ import com.tagosolution.service.impl.PaymentServiceImpl;
 import com.tagosolution.service.model.MoneyVO;
 import com.tagosolution.service.model.search.DepositSearchVO;
 import com.tagosolution.service.util.ListUtil;
-import org.apache.commons.lang.StringEscapeUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
@@ -20,15 +18,12 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
-import java.net.URLDecoder;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
