@@ -2,6 +2,8 @@ package com.tagosolution.controller.admin.fxprd;
 
 
 import com.google.gson.Gson;
+import com.google.gson.JsonParser;
+import com.google.gson.reflect.TypeToken;
 import com.tagoplus.model.common.AlertModel;
 import com.tagosolution.controller.BaseController;
 import com.tagosolution.service.dao.GeneralDAOImpl;
@@ -11,6 +13,7 @@ import com.tagosolution.service.impl.PaymentServiceImpl;
 import com.tagosolution.service.model.MoneyVO;
 import com.tagosolution.service.model.search.DepositSearchVO;
 import com.tagosolution.service.util.ListUtil;
+import org.apache.commons.lang.StringEscapeUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
@@ -22,8 +25,11 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
+import java.lang.reflect.Array;
+import java.net.URLDecoder;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -89,11 +95,18 @@ public class DepositController extends BaseController {
      * @throws Exception
      */
     @RequestMapping(value = "/dep_proc.do")
-    public String basicPopupProc(MoneyVO vo, DepositSearchVO search, BindingResult result, Model model, int currentPageNo, String ioType) throws Exception {
+    public String basicPopupProc(MoneyVO vo, DepositSearchVO search, BindingResult result, Model model, int currentPageNo, String ioType, String checkList) throws Exception {
         if (result.hasErrors())
             return super.setBindingResult(result, model);
 
+        // 체크리스트 Gson으로 JSON파싱
+        Gson gson = new Gson();
+
+        checkList = StringEscapeUtils.unescapeHtml(checkList);
+        ArrayList<Map> mapArrayList = gson.fromJson(checkList, new TypeToken<ArrayList<Map>>(){}.getType());
+
         AlertModel am = new AlertModel();
+
         try {
             vo.setUserId(super.getAdminSession().getUserID());
             MoneyVO mo = (MoneyVO) _gDao.selectByKey("money.selectByKey", vo.getMoneySeq());
