@@ -59,7 +59,7 @@ a.bt_gohome {display:inline-block; font-weight:normal; padding:3px 10px 5px 10px
 .scon_title p {float:right; font-size:12px; margin:25px 40px 0 0; color:#323232;}
 
 /*.scon {*position:absolute; top:95px; left:40px; right:40px; padding:20 0 50px 0;*float:left; width:1024px; margin:20px 40px;}*/
-.scon {float: left; width: auto; margin: 20px 40px; position: fixed;  margin-left: 280px;}
+.scon {float: left; width: auto; margin: 20px 40px; position: absolute;  margin-left: 280px;}
 .scon h3.scon_tit {float:left; color:#166098; margin-bottom:20px;}
 .scon h3.scon_tit2 {color:#166098; margin:10px 0;}
 .scon_stit {font-weight:normal;}
