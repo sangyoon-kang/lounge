@@ -17,7 +17,7 @@ body{background:url(/images/mgr/lng_bg.jpg) repeat-y;}
 .login_txt{width:360px; margin:0 auto; padding:20px 0; font-size:13px; color:#444; line-height:20px;}
 
 /*header*/
-#wrap_header {/*position:absolute; top:0; left:240px; right:0;*/ float:left; width:100%; background:#134576; height:80px; z-index:100; min-width:1344px;}
+#wrap_header {/*position:absolute; top:0; left:240px; right:0;*/float:left;width:100%;background:#134576;height:80px;z-index:100;min-width:1344px;position: fixed;}
 #wrap_header .gnb {display:block; float:left; /*width:100%;*/ margin:30px 0 0 0; }
 /*#wrap_header .gnb li {float:left; padding:0 25px 0 26px; font-weight:bold; color:#fff; background:url(../../../images/mgr/gnb_bar.gif) no-repeat left 4px; cursor:pointer;} 181112 test */
 #wrap_header .gnb li {float:left; padding:0 25px 0 26px; font-weight:bold; color:#fff; background:url(/images/mgr/gnb_bar.gif) no-repeat left 4px; cursor:pointer;}
@@ -30,11 +30,11 @@ body{background:url(/images/mgr/lng_bg.jpg) repeat-y;}
 
 
 /*scon*/
-#wrap_scon {/*position:absolute; top:80px; left:240px; right:0; bottom:0; z-index:99;*/ float:left; width:100%; min-height: 600px;}
+#wrap_scon {/*position:absolute; top:80px; left:240px; right:0; bottom:0; z-index:99;*/float:left;width:100%;min-height: 600px;margin-top: 80px;}
 
 
 /*lnb*/
-#wrap_lnb {float:left; /*position:absolute; top:0; left:0; bottom:0; height:100%;*/ width:240px; background:#1a2738; z-index:99;}
+#wrap_lnb {float:left;/*position:absolute; top:0; left:0; bottom:0; height:100%;*/width:240px;background:#1a2738;z-index:99;position: fixed;}
 .mg_logo {float:left; height:69px; background:#134f89; width:209px;  padding:11px 0 0 31px; color:#d2eefe;  font-size:18px;}
 .lnb_title {float:left; height:65px; width:210px; padding:0 0 0 30px; border-bottom:1px solid #374454; font-size:18px; color:#fff; font-weight:normal;  background:#1a2738;}
 /*.lnb_title span.title1 {display:block; background:url(../../../images/mgr/ico_lnb_title1.png) no-repeat 0 1px; margin:18px 0 0 0; padding:0 0 5px 41px; vertical-align:top;} 181112 test */
@@ -54,12 +54,12 @@ a.bt_gohome {display:inline-block; font-weight:normal; padding:3px 10px 5px 10px
 
 
 /*tit*/
-.scon_title {/*float:left;*/ width:100%; border-bottom:1px solid #ddd; height:65px;}
+.scon_title {/*float:left;*/width:initial;border-bottom:1px solid #ddd;height:65px;margin-left: 240px;}
 .scon_title h2 {float:left; margin:19px 0 0 40px; font-size:18px; color:#333333; font-weight:normal;}
 .scon_title p {float:right; font-size:12px; margin:25px 40px 0 0; color:#323232;}
 
 /*.scon {*position:absolute; top:95px; left:40px; right:40px; padding:20 0 50px 0;*float:left; width:1024px; margin:20px 40px;}*/
-.scon {float: left; width: auto; margin: 20px 40px; position: absolute;  margin-left: 280px;}
+.scon {float: left;width: auto;min-width: 1024px;margin: 20px 40px;margin-left: 280px;}
 .scon h3.scon_tit {float:left; color:#166098; margin-bottom:20px;}
 .scon h3.scon_tit2 {color:#166098; margin:10px 0;}
 .scon_stit {font-weight:normal;}
