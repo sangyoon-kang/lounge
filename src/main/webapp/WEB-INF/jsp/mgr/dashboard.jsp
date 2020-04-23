@@ -3,7 +3,7 @@
 <%@ include file="/WEB-INF/jsp/common/tags.jsp"%>
 
 	<!-- 대쉬보드용 css 추가 -->
-	<div class="scon"    >
+	<div class="scon" style="width: 1024px">
 	
 	<div class="dashboard"  >
 		

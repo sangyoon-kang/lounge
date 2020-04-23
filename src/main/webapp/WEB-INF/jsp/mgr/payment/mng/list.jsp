@@ -38,7 +38,7 @@
 		<p>홈 &gt; 상품 /정산관리  &gt; 상품관리</p>
 	</div>
 
-	<div class="scon" style="width: 1024px">
+	<div class="scon">
 		<div class="check_conbox mb10">
 			<ul>
 				<li>시간대별 Time의 Lot을 관리합니다.</li>
