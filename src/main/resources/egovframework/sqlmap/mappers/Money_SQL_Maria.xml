@@ -134,7 +134,7 @@
 		FROM fx_money
 		WHERE USER_ID = #{userId}
 		AND IO_TYPE = 'O'
-		AND CONVERT (REG_DATE, DATE) = CONVERT(SYSDATE(), DATE)
+		AND CONVERT (REG_DATE, DATE) = CONVERT(now(), DATE)
 		AND STATE IN ('A', 'R')
 	</select>
   
@@ -270,7 +270,7 @@
   	UPDATE	
   		fx_money
 	SET	STATE = 'C'
-		, ACCEPT_DATE = SYSDATE()
+		, ACCEPT_DATE = now()
 		, ACCEPT_ID = #{userId,jdbcType=VARCHAR}
 		, BALANCE = (SELECT M.CASH FROM TS_MEMBER_INFO M WHERE M.USER_ID = fx_money.USER_ID) + (CASE WHEN IO_TYPE = 'O' THEN CASH ELSE 0 END)
 	WHERE 
@@ -281,10 +281,31 @@
   	UPDATE	
   		fx_money
 	SET	STATE = 'A'
-		, ACCEPT_DATE = SYSDATE()
+		, ACCEPT_DATE = now()
 		, ACCEPT_ID = #{userId,jdbcType=VARCHAR}
 		, BALANCE = (SELECT M.CASH FROM TS_MEMBER_INFO M WHERE M.USER_ID = fx_money.USER_ID) + (CASE WHEN IO_TYPE = 'I' THEN CASH ELSE 0 END)
 	WHERE	
+		MONEY_SEQ = #{moneySeq,jdbcType=INTEGER}
+  </update>
+    <!--// TODO 수정중-->
+  <update id="updateDepositAcceptUndo" parameterType="com.tagosolution.service.model.MoneyVO">
+  	UPDATE
+  		fx_money
+	SET	STATE = 'R'
+		, ACCEPT_DATE = null
+		, ACCEPT_ID = null
+		, BALANCE = (SELECT M.CASH FROM TS_MEMBER_INFO M WHERE M.USER_ID = fx_money.USER_ID) - (CASE WHEN IO_TYPE = 'I' THEN CASH ELSE 0 END)
+	WHERE
+		MONEY_SEQ = #{moneySeq,jdbcType=INTEGER}
+  </update>
+  <update id="updateDepositCancelUndo" parameterType="com.tagosolution.service.model.MoneyVO">
+  	UPDATE
+  		fx_money
+	SET	STATE = 'R'
+		, ACCEPT_DATE = null
+		, ACCEPT_ID = null
+		, BALANCE = (SELECT M.CASH FROM TS_MEMBER_INFO M WHERE M.USER_ID = fx_money.USER_ID) - (CASE WHEN IO_TYPE = 'O' THEN CASH ELSE 0 END)
+	WHERE
 		MONEY_SEQ = #{moneySeq,jdbcType=INTEGER}
   </update>
   

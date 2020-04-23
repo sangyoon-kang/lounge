@@ -105,6 +105,26 @@ public class PaymentServiceImpl extends BaseServiceImpl {
 	public void updateDepositCancel(MoneyVO vo) throws Exception {
 		getDAO().update("money.updateDepositCancel", vo);
 	}
+
+	/**
+	 *
+	 * Fx Deposit Request Undo (tyrus-k added 2020-04-23)
+	 * @param vo
+	 * @throws Exception
+	 */
+	public void updateDepositAcceptUndo(MoneyVO vo) throws Exception {
+		getDAO().update("money.updateDepositAcceptUndo", vo);
+	}
+
+	/**
+	 *
+	 * Fx Deposit Request Undo (tyrus-k added 2020-04-23)
+	 * @param vo
+	 * @throws Exception
+	 */
+	public void updateDepositCancelUndo(MoneyVO vo) throws Exception {
+		getDAO().update("money.updateDepositCancelUndo", vo);
+	}
 	
 	/**
 	 * Fx Cash Update
@@ -113,6 +133,17 @@ public class PaymentServiceImpl extends BaseServiceImpl {
 	 */
 	public void insertCashByDeposit(MoneyVO vo) throws Exception {
 		getDAO().update("cash.insertByDeposit", vo);
+	}
+
+	/**
+	 * Fx Cash Delete(tyrus-k added)
+	 * 승인처리 원복시 해당 건 삭제
+	 *
+	 * @param vo
+	 * @throws Exception
+	 */
+	public void deleteByDeposit(MoneyVO vo) throws Exception {
+		getDAO().update("cash.deleteByDeposit", vo);
 	}
 
 	public String saveTransaction(OrderVO vo, PaymentSearchVO search) throws Exception {

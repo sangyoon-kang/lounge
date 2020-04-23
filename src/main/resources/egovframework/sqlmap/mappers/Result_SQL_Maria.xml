@@ -93,7 +93,7 @@
 		FROM   	fx_goods FG
 	   	LEFT OUTER JOIN fx_result FR
 	      		ON DATE_ADD(STR_TO_DATE(CONCAT(FG.GOODS_DATE, ' ', FG.GOODS_TIME), '%Y-%m-%d %H:%i'), INTERVAL #{runTime} - 1 MINUTE) = FR.RT
-		WHERE   	DATE_ADD(STR_TO_DATE(CONCAT(FG.GOODS_DATE, ' ', FG.GOODS_TIME), '%Y-%m-%d %H:%i'), INTERVAL #{runTime} MINUTE) &lt;= DATE_FORMAT(SYSDATE(), '%Y-%m-%d %H:%i:00')
+		WHERE   	DATE_ADD(STR_TO_DATE(CONCAT(FG.GOODS_DATE, ' ', FG.GOODS_TIME), '%Y-%m-%d %H:%i'), INTERVAL #{runTime} MINUTE) &lt;= DATE_FORMAT(now(), '%Y-%m-%d %H:%i:00')
 	   	AND   	FG.RUN_TIME = #{runTime}
 		ORDER BY CONCAT(FG.GOODS_DATE, ' ', FG.GOODS_TIME) DESC
 		LIMIT 0, 10;

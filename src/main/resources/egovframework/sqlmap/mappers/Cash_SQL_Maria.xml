@@ -70,13 +70,13 @@
 	</select>
 	
 	<select id="selectByCurDay" parameterType="search" resultMap="BaseResultMap">
-		SELECT DATE_FORMAT(SYSDATE(), '%Y-%m-%d') AS DATE_TODAY 
+		SELECT DATE_FORMAT(now(), '%Y-%m-%d') AS DATE_TODAY
 				, ( SELECT	CONVERT(IFNULL(SUM(FO.LOT), 0) * 50000, INT)
 					FROM	fx_order FO
 						INNER JOIN v_member_line_rate TML
 							ON TML.USER_ID = FO.USER_ID
 								AND	TML.RUN_TIME = FO.RUN_TIME
-					WHERE	FO.GOODS_DATE = DATE_FORMAT(SYSDATE(), '%Y-%m-%d')
+					WHERE	FO.GOODS_DATE = DATE_FORMAT(now(), '%Y-%m-%d')
 						AND	(TML.LINE_ID1 = #{userId} OR TML.LINE_ID2 = #{userId} OR TML.LINE_ID3 = #{userId} OR TML.LINE_ID4 = #{userId} OR TML.LINE_ID5 = #{userId})) AS TRANS_TOTAL
 				, SUM(IFNULL(ORI_PRICE, 0)) AS SETTLE_TOTAL
 				, CONVERT(IFNULL(SUM(TC.CASH), 0), INT) AS FEE_FOR
@@ -85,7 +85,7 @@
 				ON FO.ORDER_SEQ = TC.MAIN_SEQ
 		WHERE 	TC.CASH_TYPE = 'C'
 			AND	TC.USER_ID = #{userId}
-			AND	FO.GOODS_DATE = DATE_FORMAT(SYSDATE(), '%Y-%m-%d')
+			AND	FO.GOODS_DATE = DATE_FORMAT(now(), '%Y-%m-%d')
 	</select>
 	
 	<select id="selectListForUser" parameterType="search" resultMap="BaseResultMap">
@@ -418,7 +418,7 @@
 					,USER_ID
 					, CASE WHEN IO_TYPE = 'I' THEN CASH ELSE -1 * CASH END
 					, #{userId}
-					, SYSDATE()
+					, now()
 					, CONCAT(CASH, CASE WHEN IO_TYPE = 'I' THEN '원 입금' ELSE '원 출금' END)
 					, MONEY_SEQ
 					, CASE WHEN IO_TYPE = 'I' THEN CASH ELSE -1 * CASH END
@@ -426,6 +426,11 @@
 		WHERE 	MONEY_SEQ = #{moneySeq,jdbcType=INTEGER};
 	</insert>
 
+	<delete id="deleteByDeposit" parameterType="com.tagosolution.service.model.MoneyVO">
+		DELETE FROM ts_cash
+		WHERE MAIN_SEQ = #{moneySeq,jdbcType=INTEGER}
+		  AND CASH_TYPE = 'M';
+	</delete>
 	<insert id="insertFront" useGeneratedKeys="true" keyProperty="cashSeq"
 		parameterType="search">
 		INSERT INTO 	ts_cash (CASH_TYPE, USER_ID, CASH, REG_USER, REG_DATE, MEMO1, MAIN_SEQ, ORI_PRICE)
@@ -433,8 +438,8 @@
 					, #{userId,jdbcType=VARCHAR}
 					, (-1 * #{totalLot} * 50000)
 					, #{userId,jdbcType=VARCHAR}
-					, SYSDATE()
-					, CONCAT(DATE_FORMAT(SYSDATE(), '%Y-%m-%d'), ' ', #{goodsTime}, ' ', CASE #{bsType} WHEN 'B' THEN '매수' ELSE '매도' END)
+					, now()
+					, CONCAT(DATE_FORMAT(now(), '%Y-%m-%d'), ' ', #{goodsTime}, ' ', CASE #{bsType} WHEN 'B' THEN '매수' ELSE '매도' END)
 					, #{orderSeq,jdbcType=BIGINT}
 					, (-1 * #{totalLot} * 50000))
 	</insert>
@@ -445,7 +450,7 @@
 					USER_ID, 
 					(LOT * 50000 * (SELECT 1 + ((100 - FLR.LINE_RATET) / 100) FROM fx_line_rate FLR WHERE FLR.RUN_TIME = #{runTime,jdbcType=INTEGER} AND FLR.LR_VER = 0)), 
 					#{userId,jdbcType=VARCHAR},
-					SYSDATE(), 
+					now(),
 					CONCAT(GOODS_DATE, ' ', GOODS_TIME, ' ', CASE BS_TYPE WHEN 'B' THEN '매수' ELSE '매도' END, ' 실현'), 
 					ORDER_SEQ,
 					LOT * 50000
@@ -459,7 +464,7 @@
 		INSERT INTO ts_cash (CASH_TYPE, USER_ID, CASH, REG_USER, REG_DATE, MEMO1, MAIN_SEQ, ORI_PRICE)
 		SELECT	'C', LINE_ID
 					, CASE WHEN TMI.ADDITIONAL_ITEM1 = 'Y' THEN CONVERT(LOT * 50000 * LINE_RATE * 0.01, INT) ELSE CONVERT(LOT * 50000 * LINE_RATE * 0.01 * 0.967, INT) END PRICE
-					, #{userId,jdbcType=VARCHAR}, SYSDATE()
+					, #{userId,jdbcType=VARCHAR}, now()
 					, CONCAT(GOODS_DATE, ' ', GOODS_TIME, ' ', USER_ID, ' 실현 수수료')
 					, ORDER_SEQ
 					, CONVERT(LOT * 50000 * LINE_RATE * 0.01, INT) AS ORI_PRICE
@@ -524,7 +529,7 @@
 					USER_ID, 
 					LOT * 50000, 
 					'', 
-					SYSDATE(), 
+					now(),
 					CONCAT(#{goodsDate,jdbcType=VARCHAR}, ' ', #{goodsTime,jdbcType=VARCHAR}, ' ', CASE WHEN BS_TYPE = 'B' THEN '매수' ELSE '매도' END, ' 틱차트 반환'), 
 					ORDER_SEQ,
 					LOT * 50000
@@ -550,7 +555,7 @@
 					, #{userId,jdbcType=VARCHAR}
 					, (#{cash})
 					, #{userId,jdbcType=VARCHAR}
-					, SYSDATE()
+					, now()
 					, '관리자 지급'
 					, null)
 	</insert>

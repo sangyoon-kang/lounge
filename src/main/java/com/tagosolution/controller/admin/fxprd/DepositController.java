@@ -108,9 +108,19 @@ public class DepositController extends BaseController {
                 _paymentService.updateDepositCancel(vo);
                 _memberService.updateByDepositCancel(vo.getMoneySeq());
                 am.setMessage("저장되었습니다.");
+            } else if(search.getStatus().equalsIgnoreCase("R") && mo.getState().equalsIgnoreCase("A")){
+                // 승인상태 원복
+                _paymentService.updateDepositAcceptUndo(vo);
+                _paymentService.deleteByDeposit(vo);
+                _memberService.updateByDepositUndo(vo.getMoneySeq());
+            } else if(search.getStatus().equalsIgnoreCase("R") && mo.getState().equalsIgnoreCase("C")){
+                // 취소상태 원복
+                _paymentService.updateDepositCancelUndo(vo);
+                _memberService.updateByDepositCancelUndo(vo.getMoneySeq());
             }
-            if (!mo.getState().equalsIgnoreCase("R"))
-                am.setMessage("이미 승인된 처리입니다.");
+
+           /* if (!mo.getState().equalsIgnoreCase("R"))
+                am.setMessage("이미 승인된 처리입니다.");*/
         } catch (Exception e) {
             logger.error(e.getMessage(), e);
             am.setMessage("처리 중 오류가 발생했습니다.\\n" + e.getMessage());
@@ -121,7 +131,7 @@ public class DepositController extends BaseController {
     }
 
     @RequestMapping(value = "/api/dep_proc_list.do")
-    public String basicPopupProcList(BindingResult result, Model model, int currentPageNo, String ioType, String checkList) throws Exception {
+    public String basicPopupProcList(MoneyVO vo, DepositSearchVO search, BindingResult result, Model model, int currentPageNo, String ioType, String checkList) throws Exception {
         if (result.hasErrors())
             return super.setBindingResult(result, model);
 
@@ -135,7 +145,7 @@ public class DepositController extends BaseController {
         }.getType());
 
         //mapArrayList 로 처리
-        MoneyVO vo = null;
+        MoneyVO vo1 = null;
 
         int acceptCnt = 0;
         int cancelCnt = 0;
@@ -148,19 +158,19 @@ public class DepositController extends BaseController {
                 am.setMessage("처리할 입금/출금 내역이 없습니다.");
             } else {
                 for (int i = 0; i < mapArrayList.size(); i++) {
-                    vo = new MoneyVO();
-                    vo.setUserId(super.getAdminSession().getUserID());
+                    vo1 = new MoneyVO();
+                    vo1.setUserId(super.getAdminSession().getUserID());
 
                     Map<String, String> mapObject = (Map) mapArrayList.get(i);
-                    vo.setMoneySeq(Integer.parseInt(mapObject.get("moneySeq"))); // moneySeq 저장
+                    vo1.setMoneySeq(Integer.parseInt(mapObject.get("moneySeq"))); // moneySeq 저장
                     String status = mapObject.get("status");
 
-                    MoneyVO mo = (MoneyVO) _gDao.selectByKey("money.selectByKey", vo.getMoneySeq());
+                    MoneyVO mo = (MoneyVO) _gDao.selectByKey("money.selectByKey", vo1.getMoneySeq());
 
                     if (status.equalsIgnoreCase("A") && mo.getState().equalsIgnoreCase("R")) {
-                        _paymentService.updateDepositAccept(vo);
-                        _paymentService.insertCashByDeposit(vo);
-                        _memberService.updateByDeposit(vo.getMoneySeq());
+                        _paymentService.updateDepositAccept(vo1);
+                        _paymentService.insertCashByDeposit(vo1);
+                        _memberService.updateByDeposit(vo1.getMoneySeq());
                         acceptCnt++;
 
                         if (i == 0) {
@@ -168,8 +178,8 @@ public class DepositController extends BaseController {
                         }
 
                     } else if (status.equalsIgnoreCase("C") && mo.getState().equalsIgnoreCase("R")) {
-                        _paymentService.updateDepositCancel(vo);
-                        _memberService.updateByDepositCancel(vo.getMoneySeq());
+                        _paymentService.updateDepositCancel(vo1);
+                        _memberService.updateByDepositCancel(vo1.getMoneySeq());
                         cancelCnt++;
                     }
 
@@ -178,7 +188,7 @@ public class DepositController extends BaseController {
                     }
                 }
 
-                tmpMessage = "승인 : " + acceptCnt + "건\n취소 : " + cancelCnt + "건\n이미 승인된 처리 :" + alreadyProc + "건";
+                tmpMessage = "승인 : " + acceptCnt + "건 , 취소 : " + cancelCnt + "건 , 이미 승인된 처리 :" + alreadyProc + "건";
                 am.setMessage(tmpMessage);
             }
         } catch (Exception e) {
@@ -186,7 +196,7 @@ public class DepositController extends BaseController {
             am.setMessage("처리 중 오류가 발생했습니다.\\n" + e.getMessage());
         }
 
-        am.setScript("$.Nav('go', './list.do?ioType=" + ioType + "&cpage=" + currentPageNo + "');");
+        am.setScript("$.Nav('go', './../list.do?ioType=" + ioType + "&cpage=" + currentPageNo + "');");
         model.addAttribute("alert", am);
         return super.getConfig().getViewAlert();
     }

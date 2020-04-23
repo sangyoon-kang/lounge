@@ -317,6 +317,11 @@ public class MemberServiceImpl extends BaseServiceImpl implements MemberService 
 	public void updateByDeposit(Integer moneySeq) throws Exception {
 		super.getDAO().update("memberInfo.updateByDeposit", moneySeq);
 	}
+
+	// tyrus-k added
+	public void updateByDepositUndo(Integer moneySeq) throws Exception {
+		super.getDAO().update("memberInfo.updateByDepositUndo", moneySeq);
+	}
 	
 	public void updateByWithdraw(Integer moneySeq) throws Exception {
 		super.getDAO().update("memberInfo.updateByWithdraw", moneySeq);
@@ -324,6 +329,11 @@ public class MemberServiceImpl extends BaseServiceImpl implements MemberService 
 	
 	public void updateByDepositCancel(Integer moneySeq) throws Exception {
 		super.getDAO().update("memberInfo.updateByDepositCancel", moneySeq);
+	}
+
+	// tyrus-k added
+	public void updateByDepositCancelUndo(Integer moneySeq) throws Exception {
+		super.getDAO().update("memberInfo.updateByDepositCancelUndo", moneySeq);
 	}
 
 	public void updateUserPwd(MemberSearchVO search, MemberInfoVO vo) throws Exception {

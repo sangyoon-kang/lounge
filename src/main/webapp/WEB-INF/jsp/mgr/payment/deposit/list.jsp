@@ -101,8 +101,9 @@
 							</td>
 							<th>일자</th>
 							<td>
-								<input type="text" name="startDate" class="input_type2 w40 datepicker" value="${search.startDate}" /> <a class="datepicker ml5"><img src="/images/ic_calender.png" /></a>
-								<input type="text" name="endDate" class="input_type2 w40 datepicker" value="${search.endDate }" /> <a class="datepicker ml5"><img src="/images/ic_calender.png" /></a>
+								<input type="text" name="startDate" class="input_type2 w30 datepicker" value="${search.startDate}" /> <a class="datepicker ml5"><img src="/images/ic_calender.png" /></a>
+								~
+								<input type="text" name="endDate" class="input_type2 w30 datepicker" value="${search.endDate }" /> <a class="datepicker ml5"><img src="/images/ic_calender.png" /></a>
 							</td>
 							<th>이름</th>
 							<td>
@@ -127,20 +128,21 @@
 			<input type="hidden" name="ioType" value=""/>
 			<table class="board_st1">
 				<colgroup>
-					<col width="4%" />
-					<col width="7%" />
-					<col width="7%" />
-					<col width="10%" />
-					<col width="7%" />
-					<col width="7%" />
-					<col width="7%" />
-					<col width="7%" />
-					<col width="6%" />
-					<col width="8%" />
-					<col width="8%" />
-					<col width="8%" />
-					<col width="6%" />
-					<col width="10%" />
+					<col width="34px" />
+					<col width="60px" />
+					<col width="60px" />
+					<col width="70px" />
+					<col width="60px" />
+					<col width="70px" />
+					<col width="70px" />
+					<col width="70px" />
+					<col width="70px" />
+					<col width="80px" />
+					<col width="70px" />
+					<col width="80px" />
+					<col width="70px" />
+					<col width="80px" />
+					<col width="80px" />
 				</colgroup>
 				<thead>
 				<tr>
@@ -155,9 +157,10 @@
 					<th>은행</th>
 					<th>계좌</th>
 					<th>예금주</th>
-					<th>입금자명</th>
+					<th>입금자</th>
 					<th>메모</th>
 					<th>구분</th>
+					<th>원복</th>
 				</tr>
 				</thead>
 				<tbody>
@@ -193,6 +196,16 @@
 							<c:if test="${m.state eq 'C'}">
 								취소
 							</c:if>
+						</td>
+						<td>
+							<c:choose>
+								<c:when test="${m.state eq 'A' or m.state eq 'C'}">
+									<a onclick="javascript:doConfirm('${m.moneySeq}', 'R', '${m.ioType}', '${m.userName}', '${m.nickName}', '${m.gradeName}', '${m.userId}', '${m.cash}');" class="btn bg_sky">원복</a>
+								</c:when>
+								<c:otherwise>
+									-
+								</c:otherwise>
+							</c:choose>
 						</td>
 					</tr>
 				</c:forEach>
@@ -245,7 +258,7 @@
 
 		$(".all_io_exec a.bg_gray").click(function(){//일괄취소
 
-			if (!confirm("일괄 처리 하시겠습니까?"))return;
+			if (!confirm("일괄 취소 하시겠습니까?"))return;
 			var checkBoxList = $("tbody .ck_td input:checkbox:checked");
 
 			if(checkBoxList.length < 1){
@@ -292,13 +305,28 @@
 
 		switch(dep){
 			case'I':
-				msg = name + stragent + grade + '의\n입금을 승인 하시겠습니까?';
+				if(type == 'R'){
+					msg = name + stragent + grade + '의\n입금 승인을 원복하시겠습니까?';
+				}else{
+					msg = name + stragent + grade + '의\n입금을 승인 하시겠습니까?';
+				}
+
 				break;
 			case'O':
-				msg = name + stragent + grade + '의\n출금을 승인 하시겠습니까?';
+				if(type == 'R'){
+					msg = name + stragent + grade + '의\n출금 승인을 원복하시겠습니까?';
+				}else{
+					msg = name + stragent + grade + '의\n출금을 승인 하시겠습니까?';
+				}
+
 				break;
 			case'C':
-				msg = name + stragent + grade + '의\n신청을 취소 하시겠습니까?';
+				if(type == 'R'){
+					msg = name + stragent + grade + '의\n취소를 원복하시겠습니까?';
+				}else{
+					msg = name + stragent + grade + '의\n신청을 취소 하시겠습니까?';
+				}
+
 				break;
 		}
 		if (!confirm(msg))

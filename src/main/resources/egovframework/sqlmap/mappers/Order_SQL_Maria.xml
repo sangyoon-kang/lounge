@@ -210,9 +210,9 @@
    	INSERT INTO fx_order (USER_ID, RUN_TIME, GOODS_DATE, GOODS_TIME, RESULT_TIME, BS_TYPE, LOT)
 	VALUES (#{userId,jdbcType=VARCHAR}
 		, #{runTime,jdbcType=INTEGER}
-		, DATE_FORMAT(SYSDATE(), '%Y-%m-%d')
+		, DATE_FORMAT(now(), '%Y-%m-%d')
 		, #{goodsTime,jdbcType=VARCHAR}
-		, CONCAT(DATE_FORMAT(SYSDATE(), '%Y-%m-%d'), ' ', #{goodsTime})
+		, CONCAT(DATE_FORMAT(now(), '%Y-%m-%d'), ' ', #{goodsTime})
 		, #{bsType,jdbcType=VARCHAR}
 		, #{lot,jdbcType=DECIMAL});
   </insert>
