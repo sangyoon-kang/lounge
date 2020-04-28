@@ -128,7 +128,7 @@
 			<input type="hidden" name="ioType" value=""/>
 			<table class="board_st1">
 				<colgroup>
-					<col width="34px" />
+					<%--<col width="34px" />
 					<col width="60px" />
 					<col width="60px" />
 					<col width="70px" />
@@ -142,7 +142,24 @@
 					<col width="80px" />
 					<col width="70px" />
 					<col width="80px" />
-					<col width="80px" />
+					<col width="80px" />--%>
+
+					<col width="4%" />
+					<col width="5%" />
+					<col width="5%" />
+					<col width="6%" />
+					<col width="7%" />
+					<col width="9%" />
+					<col width="5%" />
+					<col width="8%" />
+					<col width="8%" />
+					<col width="8%" />
+					<col width="6%" />
+					<col width="6%" />
+					<col width="8%" />
+					<col width="7%" />
+					<col width="7%" />
+
 				</colgroup>
 				<thead>
 				<tr>

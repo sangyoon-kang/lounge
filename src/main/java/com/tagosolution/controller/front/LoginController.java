@@ -268,6 +268,8 @@ public class LoginController extends BaseController{
 		// 개발테스트.. 유효성검사 패스
 		recomm_code = URLDecoder.decode(URLDecoder.decode(recomm_code ,"utf-8"), "utf-8");
 		// 유효성 안맞는게 있으면 step1으로 리다이렉트
+
+		//TODO 아이핀 체크 (나중에 주석 풀어야함)
 		Ipin checkplus = new Ipin();
 		checkplus = _ipinService.getDatas2();
 		model.addAttribute("checkplus", checkplus);
