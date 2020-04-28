@@ -270,8 +270,6 @@ public class LoginController extends BaseController{
 
 		//TODO 개발계 구성시에는 아래 주석 블록처리 필요
 		// 유효성 안맞는게 있으면 step1으로 리다이렉트
-
-		//TODO 아이핀 체크 (나중에 주석 풀어야함)
 		Ipin checkplus = new Ipin();
 		checkplus = _ipinService.getDatas2();
 		model.addAttribute("checkplus", checkplus);
