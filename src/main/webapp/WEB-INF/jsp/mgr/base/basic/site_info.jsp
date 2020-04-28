@@ -119,6 +119,18 @@
 								<input type="text" name="withdrawalTime" class="w40" value="${tagoplusSolution1_session_site.withdrawalTime }" />
 							</td>
 						</tr>
+							<tr>
+							<th>일일 출금 가능 횟수</th>
+							<td>
+								<input type="text" name="withdrawalCountLimit" class="w40" value="${tagoplusSolution1_session_site.withdrawalCountLimit }" />
+							</td>
+						</tr>
+						<tr>
+							<th>최대 출금 가능 금액</th>
+							<td>
+								<input type="text" name="withdrawalValueLimit" class="w40" value="${tagoplusSolution1_session_site.withdrawalValueLimit }" />
+							</td>
+						</tr>
 					</tbody>
 				</table>
 				<br class="clear mb5" />

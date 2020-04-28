@@ -1,7 +1,6 @@
 package com.tagosolution.controller.ajax;
 
 import java.text.DecimalFormat;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -9,21 +8,15 @@ import java.util.Map;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
 import org.apache.commons.lang.StringEscapeUtils;
-import org.json.simple.JSONObject;
-import org.json.simple.parser.JSONParser;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -39,30 +32,22 @@ import com.tagosolution.service.impl.RunTimeServiceImpl;
 import com.tagosolution.service.model.AdminVO;
 import com.tagosolution.service.model.BoardInfoVO;
 import com.tagosolution.service.model.CashVO;
-import com.tagosolution.service.model.FormInfoVO;
 import com.tagosolution.service.model.MemberGradeVO;
 import com.tagosolution.service.model.MemberInfoVO;
 import com.tagosolution.service.model.MoneyVO;
 import com.tagosolution.service.model.PopupVO;
-import com.tagosolution.service.model.PrdCategoryVO;
 import com.tagosolution.service.model.PrdVO;
 import com.tagosolution.service.model.QuickConsultVO;
 import com.tagosolution.service.model.RecentBoardVO;
 import com.tagosolution.service.model.RecentPrdVO;
 import com.tagosolution.service.model.RunTimeVO;
-import com.tagosolution.service.model.SiteVO;
 import com.tagosolution.service.model.CommContentsVO;
 import com.tagosolution.service.model.CommonMdlVO;
-import com.tagosolution.service.model.json.jsTree;
-import com.tagosolution.service.model.json.zTree;
 import com.tagosolution.service.model.search.BoardSearchVO;
 import com.tagosolution.service.model.search.DepositSearchVO;
-import com.tagosolution.service.model.search.FormmailSearchVO;
 import com.tagosolution.service.model.search.MemberSearchVO;
-import com.tagosolution.service.model.search.PaymentSearchVO;
 import com.tagosolution.service.model.search.PrdSearchVO;
 import com.tagoplus.model.common.SearchVO;
-import com.tagoplus.util.Encrypt;
 import com.tagoplus.util.StringUtil;
 import com.tagosolution.controller.BaseController;
 
@@ -101,7 +86,6 @@ public class AjaxController extends BaseController {
 	
 	@Resource
 	MemberServiceImpl _memberService;
-	
 	
 	/**
 	 * ajax - 아이디 중복 검사
@@ -207,16 +191,35 @@ public class AjaxController extends BaseController {
 	 */
 	@RequestMapping(value = "/ajax/limitToday")
 	@ResponseBody
-	public Object limitToday(@RequestBody(required = false)String body,  BindingResult result, Model model) throws Exception {
+	public Object limitToday(@RequestBody(required = false)String body, BindingResult result, Model model) throws Exception {
 		if (result.hasErrors())
 			return super.setBindingResult(result, model);
 		
 		DepositSearchVO search = new DepositSearchVO();
+		search.setStatus("O");
 		search.setUserId(super.getUserSession().getUserId());
 		int count = (int) _gDao.getCountBySearch("money.limitToday", search);
-		
-		return new Gson().toJson(count);
+		int requestCount = (int) _gDao.getCountBySearch("money.requestCount", search);
+		Map<String, Object> map = new HashMap<String, Object>();
+		map.put("count", count);
+		map.put("requestCount", requestCount);
+		return map;
 	}
+	@RequestMapping(value = "/ajax/limitTodaydeposit")
+	@ResponseBody
+	public Object limitTodaydeposit(@RequestBody(required = false)String body, BindingResult result, Model model) throws Exception {
+		if (result.hasErrors())
+			return super.setBindingResult(result, model);
+		DepositSearchVO search = new DepositSearchVO();
+		search.setStatus("I");
+		search.setUserId(super.getUserSession().getUserId());
+		int requestCount = (int) _gDao.getCountBySearch("money.requestCount", search);
+		Map<String, Object> map = new HashMap<String, Object>();
+		map.put("requestCount", requestCount);
+		return map;
+	}
+	
+	
 	
 	/**
 	 * 
@@ -593,7 +596,18 @@ public class AjaxController extends BaseController {
 		String retVal = "error";
 
 		try {
-
+			String[] acptIpAddr = this.getConfig().getAcptIpAddr();
+			boolean hasAcpted = false;
+			String clientIp = request.getHeader("X-FORWARDED-FOR");
+			logger.error("CLIENT IP::" + clientIp);
+			for (String ip : acptIpAddr) {
+				if (ip.equals(clientIp)){
+					hasAcpted = true;
+					break;
+				}
+			}
+			if(!hasAcpted)
+				return retVal;
 			MoneyVO vo = new MoneyVO();
 			CommonMdlVO cvo = new CommonMdlVO();
 //			String DEFAULT_PATTERN = "yyyy-MM-dd HH:mm:ss";
@@ -602,28 +616,27 @@ public class AjaxController extends BaseController {
 //			vo.setAcceptDate(formatter.parse(request.getParameter("times")));
 			vo.setCash(Integer.parseInt(request.getParameter("amount")));
 			vo.setAccountNo(request.getParameter("banknum"));
+			vo.setBankName(StringEscapeUtils.unescapeJava(request.getParameter("bankname")));
 			vo.setUserName(StringEscapeUtils.unescapeJava(request.getParameter("name")));
 			
 			Integer moneySeq = (Integer) _gDao.selectOne("money.selectByAccountName", vo);
-			
+
 			cvo.setAmount(request.getParameter("amount"));
-			cvo.setTimes(request.getParameter("times"));
-			cvo.setBankName(request.getParameter("bankname"));
+			//cvo.setTimes(request.getParameter("times"));
+			cvo.setBankName(StringEscapeUtils.unescapeJava(request.getParameter("bankname")));
 			cvo.setBankNum(request.getParameter("banknum"));
 			cvo.setName(StringEscapeUtils.unescapeJava(request.getParameter("name")));
-			if (moneySeq == 0){
+			if (moneySeq == null || moneySeq == 0){
 				cvo.setFailed("1");
 			} else {
 				cvo.setFailed("0");
 			}
 			_depService.insertDepositRequest(cvo);
-			_paymentService.insertCashByDeposit(vo);
-			
-			if (moneySeq != 0) {
+			if (moneySeq != null && moneySeq != 0) {
 				vo.setMoneySeq(moneySeq);
+				_paymentService.insertCashByDeposit(vo);
 				_depService.updateBigdb(vo);
 				_paymentService.updateDepositAccept(vo);
-
 				_memberService.updateByDeposit(vo.getMoneySeq());
 				retVal = "ok";
 			}

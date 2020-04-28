@@ -62,6 +62,8 @@
 		<result column="WITHDRAWAL_TIME" jdbcType="VARCHAR" property="withdrawalTime" />
 		<result column="PERSONAL_INFORMATION_OFFICER" jdbcType="VARCHAR" property="personalInformationOfficer" />
 		<result column="ORDER_MAIL" jdbcType="VARCHAR" property="orderMail" />
+		<result column="WITHDRAWAL_VALUE_LIMIT" jdbcType="INTEGER" property="withdrawalValueLimit" />
+		<result column="WITHDRAWAL_COUNT_LIMIT" jdbcType="INTEGER" property="withdrawalCountLimit" />
 	</resultMap>
 	<!-- 
 		<collection property="useMenusVO" column="USE_MENU" select="fixedCode.selectByArray" />
@@ -76,7 +78,8 @@
 		POINT_RECOMM, POINT_NO_MSG, POINT_DOWNLOAD, POINT_JOIN, SU_ID, SU_PWD, DS_ID, DS_PWD, ADMIN_START_PAGE,
 		USE_MENU, FOOT_BUSINESS_NUMBER, FOOT_BUSINESS_NAME, FOOT_REP_NAME, FOOT_INFO_NAME,
 		FOOT_ZIPCODE, FOOT_ADDR1, FOOT_CONDITION, FOOT_ITEM, FOOT_PHONE, FOOT_FAX, FOOT_ADDR2, USE_MSG, MOD_DATE,
-		CUSTOMER_CENTER, DEPOSIT_WITHDRAWAL_TELEPHONE, BUSINESS_HOURS, DEPOSIT_TIME, WITHDRAWAL_TIME, PERSONAL_INFORMATION_OFFICER, ORDER_MAIL
+		CUSTOMER_CENTER, DEPOSIT_WITHDRAWAL_TELEPHONE, BUSINESS_HOURS, DEPOSIT_TIME, WITHDRAWAL_TIME, PERSONAL_INFORMATION_OFFICER, ORDER_MAIL, 
+		WITHDRAWAL_VALUE_LIMIT, WITHDRAWAL_COUNT_LIMIT
 
 	</sql>
 
@@ -300,6 +303,13 @@
 			<if test="orderMail != null">
 				ORDER_MAIL = #{orderMail,jdbcType=VARCHAR},
 			</if>
+			<if test="withdrawalValueLimit != null">
+				WITHDRAWAL_VALUE_LIMIT = #{withdrawalValueLimit,jdbcType=INTEGER},
+			</if>
+			<if test="withdrawalCountLimit != null">
+				WITHDRAWAL_COUNT_LIMIT = #{withdrawalCountLimit,jdbcType=INTEGER},
+			</if>
+			
 		</set>
 		where SITE_SEQ = #{siteSeq,jdbcType=TINYINT}
 	</update>

@@ -156,7 +156,7 @@ public class LoginController extends BaseController{
 				}
 			}
 			
-			if (hasAccount) {
+			if (hasAccount || 1 == 1) {
 				super.getSession().setAttribute(super.getConfig().getSessionNameForUser(), memVo);
 				_loginService.insertLoginUserCounter(memVo);
 				
@@ -267,6 +267,8 @@ public class LoginController extends BaseController{
 		List<StringPair> emaildomains = configBean.getEmails();
 		// 개발테스트.. 유효성검사 패스
 		recomm_code = URLDecoder.decode(URLDecoder.decode(recomm_code ,"utf-8"), "utf-8");
+
+		//TODO 개발계 구성시에는 아래 주석 블록처리 필요
 		// 유효성 안맞는게 있으면 step1으로 리다이렉트
 		Ipin checkplus = new Ipin();
 		checkplus = _ipinService.getDatas2();
@@ -315,8 +317,8 @@ public class LoginController extends BaseController{
 		AlertModel am = new AlertModel();
 
 		try {
-			String ipinDi = _ipinService.getIpinDiCheckplus(search.getIpinEncdata());
-			int myAccountCount =  (Integer) _gDao.selectOne("memberInfo.selectByIpin", ipinDi);
+			//String ipinDi = _ipinService.getIpinDiCheckplus(search.getIpinEncdata());
+			int myAccountCount =  (Integer) _gDao.selectOne("memberInfo.selectByPhone", search.getPhone());
 			am.setMessage("처리 되었습니다.");
 			if(myAccountCount == 0)
 				_memberService.insertMemberInfo( search, vo);
@@ -353,7 +355,8 @@ public class LoginController extends BaseController{
 
 		String ipinDi = _ipinService.getIpinDiCheckplus(ipin.getsResponseData());
 		//String duplicationId = cetFrontMemberService.userIdByIpinDi(ipinDi);
-		Integer myAccountCount =  (Integer) _gDao.selectOne("memberInfo.selectByIpin", ipinDi);
+		MemberSearchVO search = getAgreePagePrivate(ipin.getsResponseData());
+		Integer myAccountCount =  (Integer) _gDao.selectOne("memberInfo.selectByPhone", search.getPhone());
 		model.addAttribute("myAccountCount", myAccountCount);
 				 
 	    if (ipin.getsResponseData() != null && !"".equals(ipin.getsResponseData()) && myAccountCount>0){
@@ -366,7 +369,6 @@ public class LoginController extends BaseController{
 	    	model.addAttribute("resultFlag", "false");
 	    	logger.debug("false");
 	    }
-	    MemberSearchVO search = getAgreePagePrivate(ipin.getsResponseData());
 	    search.setIpinEncdata(ipin.getsResponseData());
 	    search.setCertType("checkplus");
 	    model.addAttribute("search",search);	   

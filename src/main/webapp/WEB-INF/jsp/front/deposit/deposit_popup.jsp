@@ -25,19 +25,23 @@
 					<tbody>
 						<tr>
 							<th>STEP 01</th>
-							<td>입금하실 때에는 인터넷뱅킹, 폰뱅킹, 무통장 입금, ATM이체 등의 방법을 이용하여 입금이 가능 합니다.<strong>아래의 입금 계좌는 수시로 변경될 수 있습니다. 입금하시기 전에 다시한번 입금계좌 확인을 해주시기 바랍니다.</strong></td>
-						</tr>
-						<tr>
-							<th>STEP 02</th>
 							<td>입금하실 금액은 금액버튼을 클릭하시거나 직접 입력하실 수 있습니다.<strong>입금 최소 금액은 10,000원 부터이며 입력이 잘못된 경우에는 정정버튼을 클릭하여 재입력 하시면 됩니다.</strong></td>
 						</tr>
 						<tr>
-							<th>STEP 03</th>
+							<th>STEP 02</th>
 							<td>입금자 이름 란에는 송금하시는 통장의 입금주(통장명의자) 성함을 넣어주셔야 하며, <strong>닉네임 또는 통장명의자와 다른 이름을 넣으실 경우 입금확인이 불가하여 입금이 되지 않거나 지연될 수 있습니다.</strong></td>
 						</tr>
 						<tr>
-							<th>STEP 04</th>
+							<th>STEP 03</th>
 							<td>입금신청 버튼을 클릭하시면 신청이 완료 됩니다.</td>
+						</tr>
+						<tr>
+							<th>STEP 04</th>
+							<td>입금신청을 하신 이후에 입금을 하셔야 합니다.</td>
+						</tr>
+						<tr>
+							<th>STEP 05</th>
+							<td>입금하실 때에는 인터넷뱅킹, 폰뱅킹, 무통장 입금, ATM이체 등의 방법을 이용하여 입금이 가능 합니다.<strong>아래의 입금 계좌는 수시로 변경될 수 있습니다. 입금하시기 전에 다시한번 입금계좌 확인을 해주시기 바랍니다.</strong></td>
 						</tr>
 					</tbody>
 				</table>
@@ -48,12 +52,11 @@
 			<h2 class="con_tit03 mt50">주의사항</h2>
 			<div class="inout_box">
 				<ul>
+					<li>입금신청을 하신 후 실제 입금을 하셔야 자동입금처리가 됩니다.</li>
 					<li>입금하시기 전에 항상 계좌확인을 부탁드리며, 계좌확인을 안하시면 입금신청을 하실 수 없습니다.</li>
-					<li>입금신청 후 5분 이내에 실제 입금이 되지 않는 경우에는 신청하신 내용이 자동 삭제(취소) 됩니다.<strong>입금신청후 5분이 초과 되신 분들께서는 다시 한번 입금 신청을 해주시기 바랍니다.</strong></li>
 					<li>입금자명(입금통장명의자) / 입금신청금액 / 실제입금금액이 일치하시면 입금 후 빠르게 처리가됩니다.</li>
 					<li>입금신청은 신청하신 내용이 완료되지 않거나 삭제(취소)되지 않은 상태에서는 중복신청 또는 추가신청이 불가 합니다.</li>
 					<li>수표입금 시 입금 처리가 되지 않습니다.</li>
-					<li>입금 완료 5분 내에 추가 신청할 수 없습니다.</li>
 				</ul>
 			</div>
 			<ul class="inout_list_form inout_list_form_fir">
@@ -107,6 +110,12 @@
 			$('input[name=cash]').val('0');
 			return;
 		}
+		if($('input[name=cash]').val() < 10000){
+			alert('최소 입금금액은 10,000원 이상이어야 합니다.');
+			$('input[name=cash]').val('0');
+			return;
+		}
+		
 		if(!$('input[name=bankSeq]').val()){
 			alert('입금계좌를 선택하세요.');
 			return;
@@ -114,9 +123,25 @@
 		if(checkNull($('input[name="cash"]'), '입금하실 금액을 입력해 주세요.'))
 			return;
 		
-		if (!confirm('${MSG_COMM_SAVE}'))
-			return;
-		$('#form1').submit();
+		$.ajax({
+			type : 'post',
+			url : '/ajax/limitTodaydeposit.do',
+			dataType : 'json',
+			success : function(data) {
+				if(data.requestCount >= 1){
+					alert('기존 입금 신청의 처리가 완료되어야 신규 신청이 가능합니다.')
+					return;
+				}else {
+					if (!confirm('${MSG_COMM_SAVE}'))
+						return;
+							
+					$('#form1').submit();
+				}
+			}
+		});
+		
+		
+		
 	}
 </script>
 <%@ include file="/WEB-INF/include/fx_include/front_footer.jsp"%>

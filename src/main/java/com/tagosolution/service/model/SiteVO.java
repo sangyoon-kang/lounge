@@ -133,6 +133,27 @@ public class SiteVO implements GeneralModel {
 	private String personalInformationOfficer;
 
 	private String orderMail;
+	
+	private Integer withdrawalCountLimit;
+	
+	private Integer withdrawalValueLimit;
+	
+
+	public Integer getWithdrawalCountLimit() {
+		return withdrawalCountLimit;
+	}
+
+	public void setWithdrawalCountLimit(Integer withdrawalCountLimit) {
+		this.withdrawalCountLimit = withdrawalCountLimit;
+	}
+
+	public Integer getWithdrawalValueLimit() {
+		return withdrawalValueLimit;
+	}
+
+	public void setWithdrawalValueLimit(Integer withdrawalValueLimit) {
+		this.withdrawalValueLimit = withdrawalValueLimit;
+	}
 
 	public String getPersonalInformationOfficer() {
 		return personalInformationOfficer;

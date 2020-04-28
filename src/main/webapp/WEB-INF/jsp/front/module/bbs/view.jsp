@@ -25,7 +25,7 @@
 					
 					<h2>${vo.subject }</h2>
 					<ul>
-						<li>${vo.userName }</li>
+						<li>${vo.regUser }</li>
 						<li>조회: ${vo.readCount }건</li>
 						<li><em class="italic text-light float-right"> <fmt:formatDate value="${vo.regDate }" pattern="${bm.dateFormatView }"/></em></li>
 					</ul>
@@ -194,7 +194,7 @@
 					
 					<h2>${vo.subject }</h2>
 					<ul>
-						<li>${vo.userName }</li>
+						<li>${vo.regUser }</li>
 						<li>${vo.cateName }</li>
 						<li><fmt:formatDate value="${vo.regDate }" pattern="${bm.dateFormatView }"/></li>
 					</ul>

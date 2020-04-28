@@ -70,8 +70,14 @@
 
 <script type="text/javascript">
 	function doSubmit(){
-		if($('input[name=cash]').val() > 10000000){
-			alert('출금신청금액은 최대 10,000,000원 까지만 신청 가능합니다.');
+		if($('input[name=cash]').val() < 10000){
+			alert('최소 출금금액은 10,000원 이상이어야 합니다.')
+			$('input[name=cash]').val('0');
+			return;
+		}
+		if($('input[name=cash]').val() > ${withdrawalValueLimit}){
+			var limitwithcomma=addComma(${withdrawalValueLimit });
+			alert('출금신청금액은 최대 '+limitwithcomma+'원 까지만 신청 가능합니다.');
 			$('input[name=cash]').val('0');
 			return;
 		}
@@ -88,8 +94,12 @@
 			url : '/ajax/limitToday.do',
 			dataType : 'json',
 			success : function(data) {
-				if(data >= 2){
-					alert('출금은 1일 2회까지만 가능합니다.');
+				if(data.requestCount >= 1){
+					alert('기존 출금 신청의 처리가 완료되어야 신규 신청이 가능합니다.')
+					return;
+				}				
+				if(data.count >= ${withdrawalCountLimit }){
+					alert('출금은 1일 ${withdrawalCountLimit }회까지만 가능합니다.');
 					return;
 				}else {
 					if (!confirm('${MSG_COMM_SAVE}'))

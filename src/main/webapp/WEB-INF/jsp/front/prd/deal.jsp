@@ -525,7 +525,7 @@ td.disabled .price::after {
 					</div>
 
 					<div class="pop_agree_down">
-						<p>공동투자 및 MOU금융투자상품 FX마진거래 (GBP/AUD) 포지션에서 실시간 발생되는 ± 5pip 실현시
+						<p>공동투자 및 MOU금융투자상품 FX마진거래 (GBP/AUD) 포지션에서 실시간 발생되는 ± ${runTimeList.stopLimit}pip 실현시
 							(손 익분배율 ${rateVo.lineRateT }%) 차익지급종료 실격시 차손소멸종료 되는 약정입니다.</p>
 						<!--list_basic_type01-->
 						<div class="board_basic_type01">
@@ -617,6 +617,7 @@ setInterval(function() {
 	});
 	getCurrentResultState();
 	getRemaining($runtime);
+	getUserCash();
 }, 1000);	
 
 function submit_contract(el) {	 
@@ -792,7 +793,7 @@ function validateAjaxMaxCount(sync){
 	            $('#submitBtnP').removeClass('red');
 	        	}
 
-	        	$("#vDate").html(moment(Math.floor(time/(1000*$runtime*60))*(1000*$runtime*60)).format('YYYY년 MM월 DD일 HH시 mm분'));
+	        	$("#vDate").html(moment(Math.floor(time/(1000*$runtime*60))*(1000*$runtime*60)).add($runtime, 'minutes').format('YYYY년 MM월 DD일 HH시 mm분'));
 	        	if(valueHidden!= null && valueHidden!=0)
 	                $(".pop_agreement").show();
 	        	
@@ -978,6 +979,7 @@ function getUserCash(){
 	$.ajax({
 		url: '/ajax/getUserCash',
 		datatype: 'json',
+		cache:false,
 		data: {
 			uid: '${tagoplusSolution1_session_user.userId}'
 		},

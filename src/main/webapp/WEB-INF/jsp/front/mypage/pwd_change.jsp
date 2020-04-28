@@ -38,7 +38,7 @@ margin:10px 0 10px 20px;
     	
     <div class="scon">
         <div class="mem_pwdchange">
-            	<h3 class="con_tit">비밀번호는 주기적으로 변경하는 것이 좋습니다 최근 비밀버호 변경일</h3>
+            	<h3 class="con_tit">비밀번호는 주기적으로 변경하는 것이 좋습니다 최근 비밀번호 변경일</h3>
 				
 				<form id="formPwd" method="post" action="/pwd_change_proc.do">
 					<input type="hidden" name="id" value="${search.id}">
@@ -68,7 +68,7 @@ margin:10px 0 10px 20px;
 				</form>
         </div><!-- mem_search -->
 				<div class="join_agree_bt_set">
-					<a onClick="javascript:doSubmit();" class="bt_blue">회원가입</a><a href="javascript:$.Nav('go', '/')">취소</a>
+					<a onClick="javascript:doSubmit();" class="bt_blue">수정하기</a><a href="javascript:$.Nav('go', '/')">취소</a>
 				</div>
     </div><!--content -->        
 </div><!-- container -->

@@ -97,15 +97,15 @@ public class AuthenticInterceptor extends HandlerInterceptorAdapter {
 		//not인증 14일 이후 관리자 기능 제한
 		if (request.getSession().getAttribute(getConfig().getSessionNameForSite()) != null) {
 			site = (SiteVO) request.getSession().getAttribute(getConfig().getSessionNameForSite());
-			//TODO 관리자 라이센스 체크
-//			if (!site.isCertified()) {
-//				long interval = StringUtil.compareTwoDate(new Date(), site.getInstallDate());
-//				if (interval >= 14) {
-//					logger.warn(" 사이트 관리자 이용불가 도메인 : {}, 설치일 : {}", site.getSiteDomain(), site.getInstallDate());
-//					response.sendRedirect(getConfig().getAdminRoot() + "/common/cannotUseAdmin");
-//					return false;
-//				}
-//			}
+			//TODO 사이트 관리자 라이센스 체크 로직 필요시 주석해제
+			/*if (!site.isCertified()) {
+				long interval = StringUtil.compareTwoDate(new Date(), site.getInstallDate());
+				if (interval >= 14) {
+					logger.warn(" 사이트 관리자 이용불가 도메인 : {}, 설치일 : {}", site.getSiteDomain(), site.getInstallDate());
+					response.sendRedirect(getConfig().getAdminRoot() + "/common/cannotUseAdmin");
+					return false;
+				}
+			}*/
 		}
 		else {
 			response.sendRedirect(getConfig().getAdminRoot() + "/common/error/503?str=" + URLEncoder.encode("사이트정보가 없습니다. 프로그램을 사용할 수 없습니다.", Charset.defaultCharset().displayName()));

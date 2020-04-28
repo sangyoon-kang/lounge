@@ -103,6 +103,8 @@ public class FxDepositController extends BaseController{
 		if(result.hasErrors())
 			return super.setBindingResult(result, model);
 		
+
+		SiteVO site = (SiteVO) _gDao.selectOne("site.selectByServerName", request.getServerName());
 		
 		List<FixedCodeVO> bankList = (List<FixedCodeVO>) _gDao.selectList("fixedCode.selectByBank", null);
 		MemberInfoVO memberVO = (MemberInfoVO) _gDao.selectByKey("memberInfo.selectByKey", super.getUserSession().getMemberSeq());
@@ -110,6 +112,9 @@ public class FxDepositController extends BaseController{
 		model.addAttribute("bankList", bankList);
 		model.addAttribute("search", search);
 		model.addAttribute("memberVO", memberVO);
+		model.addAttribute("withdrawalValueLimit", site.getWithdrawalValueLimit());
+		model.addAttribute("withdrawalCountLimit", site.getWithdrawalCountLimit());
+
 		return "/front/deposit/withdraw_popup";
 	}
 	

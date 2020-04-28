@@ -92,10 +92,10 @@
 		limit 1
 	</select>
 	
-	<select id="selectByIpin" parameterType="String" resultType="java.lang.Integer">
+	<select id="selectByPhone" parameterType="String" resultType="java.lang.Integer">
 		SELECT	COUNT(*)
 		FROM 	TS_MEMBER_INFO
-		WHERE 	IPIN_DI = #{ipinDi}
+		WHERE 	PHONE = concat(left(#{phone},3) , "-" , mid(#{phone},4,4) , "-", right(#{phone},4)) 
 			AND 	USE_FLAG = 'Y'
 			AND 	WITHDRAWAL_YN = 'N'
 	</select>

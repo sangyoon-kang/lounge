@@ -377,7 +377,7 @@ public class MyPageController extends BaseController{
 		if(search.getEndDate() == null || (search.getEndDate() != null && search.getEndDate().isEmpty())) search.setEndDate(StringUtil.getDateToString("yyyy-MM-dd"));;
 		
 		List<CashVO> list = (List<CashVO>)_cashService.selectUserLine(search); 
-				
+
 		model.addAttribute("list", list);
 		model.addAttribute("vo", vo);
 		model.addAttribute("search", search);

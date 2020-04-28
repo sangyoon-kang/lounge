@@ -803,7 +803,7 @@ $(document).ready(function() {
 	} else if (recomm == maxs-1 && grade == maxs+1 || recomm == maxs && grade == low_member ){
 		var empty = '<tr id="nickn"></tr>'
 		$('#nickn').replaceWith(empty);
-	}else if(compare > 2){
+	}else if(compare > 1){
 		$("<a onclick='javascript:doChangeGrade("+recomm+");' id='change_grade_btn' class='btn btn_round bg_darkgray ml20'>대리점으로 변경</a>").insertAfter($('#changeG'));
 	}
 }); 

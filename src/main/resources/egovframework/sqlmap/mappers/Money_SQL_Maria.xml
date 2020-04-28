@@ -49,6 +49,7 @@
     <result column="BANK_NUM" jdbcType="VARCHAR" property="bankNum" />
     <result column="TIMES" jdbcType="VARCHAR" property="times" />
     <result column="FAILED" jdbcType="VARCHAR" property="failed" />
+    
   </resultMap>
   
   <sql id="Base_Column_List">
@@ -136,6 +137,14 @@
 		AND IO_TYPE = 'O'
 		AND CONVERT (REG_DATE, DATE) = CONVERT(now(), DATE)
 		AND STATE IN ('A', 'R')
+	</select>
+		<select id="requestCount" parameterType="search" resultType="int">
+		SELECT COUNT(MONEY_SEQ) AS today_count
+		FROM fx_money
+		WHERE USER_ID = #{userId}
+		AND IO_TYPE =  #{status}
+		AND CONVERT (REG_DATE, DATE) = CONVERT(SYSDATE(), DATE)
+		AND STATE = 'R'
 	</select>
   
   <select id="selectListAdmin" parameterType="search" resultMap="BaseResultMap">
@@ -333,6 +342,7 @@
     INSERT INTO fx_money_request 
       (REQUEST_SEQ,AMOUNT,NAME,BANK_NAME,BANK_NUM,TIMES,FAILED)
   VALUES 
-    (#{requestSeq,jdbcType=VARCHAR},#{amount,jdbcType=VARCHAR},#{name,jdbcType=VARCHAR},#{bankName,jdbcType=VARCHAR},#{bankNum,jdbcType=VARCHAR},#{times,jdbcType=VARCHAR},#{failed,jdbcType=VARCHAR})
+    (#{requestSeq,jdbcType=VARCHAR},#{amount,jdbcType=VARCHAR},#{name,jdbcType=VARCHAR},#{bankName,jdbcType=VARCHAR},#{bankNum,jdbcType=VARCHAR},SYSDATE(),#{failed,jdbcType=VARCHAR})
   </insert>
+  
 </mapper>

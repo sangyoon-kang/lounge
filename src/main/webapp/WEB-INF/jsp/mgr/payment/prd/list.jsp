@@ -272,7 +272,7 @@ function doReset(){
 }
 function doCopyLastDate(){
 	$.ajax({
-	    url : "./lastDate.do"
+	    url : "./ajaxlastDate.do"
 		, type : "post"
 		, data : {date: $('input[name=goodsDate]').val()}
 		, async : false

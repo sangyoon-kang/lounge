@@ -211,6 +211,13 @@ public class ConfigBean {
 
 	@Value("#{globals['site.name.u']}")
 	String _sSiteNameL;
+	
+	@Value("#{globals['accept.ip.addresses']}")
+	String _acptIpAddr;
+	
+	public String[] getAcptIpAddr() {
+		return _acptIpAddr.split(",");
+	}
 
 	public String get_sSiteNameU() {
 		return _sSiteNameU;

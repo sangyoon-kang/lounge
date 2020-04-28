@@ -183,7 +183,7 @@
 									<c:choose>
 										<c:when test="${bm.writerFormatFixedCode eq '002001'}">
 												<!-- 이름 --> 
-												${m.userName }
+												${m.regUser }
 										</c:when>
 										<c:when test="${bm.writerFormatFixedCode eq '002002'}">
 												<!-- 닉네임 --> 
