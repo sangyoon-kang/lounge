@@ -44,8 +44,9 @@
                		<input type="hidden" name="transEmailYn" value="N">	
                		<input type="hidden" name="recommUserId" value="${recommUserId}">	
                		<input type="hidden" name="certType" value="">	
-					<input type="hidden" name="ipinEncdata" value="">	
-			<div class="join_con">
+					<input type="hidden" name="ipinEncdata" value="">
+				    <input type="hidden" name="isAdult" value="">
+				<div class="join_con">
 			
 					
 			<ul class="join_list">
@@ -483,7 +484,7 @@ function doSubmit() {
 		}
 		
 		if($('#userNameChk').is(':visible') && $('#userMobileChk').is(':visible')){
-			alert('이미 등록되어 있습니다.');
+			alert($('#userNameChk').text());
 			return;
 		}
 		
@@ -547,6 +548,11 @@ function doSubmit() {
 	if (isNull($('input[name=phone]').val())){
 		$('input[name=phone]').focus();
 		alert('휴대폰번호 입력하세요.');
+		return;
+	}
+
+	if (isNull($('input[name=isAdult]').val()) || $('input[name=isAdult]').val() == false){
+		alert('만 19세 미만의 미성년자는 회원 가입이 불가합니다.');
 		return;
 	}
 	

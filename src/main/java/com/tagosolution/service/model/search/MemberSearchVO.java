@@ -59,6 +59,12 @@ public class MemberSearchVO extends SearchVO {
 	
 	private short gradeLevel;
 
+	private String birthDate;
+
+	private String gender;
+
+	private Boolean isAdult = false; // 성인 체크 tyrus-k added
+
 	public short getGradeLevel() {
 		return gradeLevel;
 	}
@@ -323,6 +329,31 @@ public class MemberSearchVO extends SearchVO {
 	public void setBody(String body) {
 		this.body = body;
 	}
-	
-	
+
+	public void setAdult(Boolean isAdult){
+		this.isAdult = isAdult;
+	}
+
+	public Boolean getAdult(){
+		return this.isAdult;
+	}
+
+	public String getBirthDate() {
+		return birthDate;
+	}
+
+	public void setBirthDate(String birthDate) {
+		this.birthDate = birthDate;
+	}
+
+	public String getGender() {
+		return gender;
+	}
+
+	public void setGender(String gender) {
+		this.gender = gender;
+	}
+
+
+
 }

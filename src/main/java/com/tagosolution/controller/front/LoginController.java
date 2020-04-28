@@ -3,6 +3,7 @@ package com.tagosolution.controller.front;
 import java.net.URLDecoder;
 import java.net.URLEncoder;
 import java.security.PrivateKey;
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -274,7 +275,6 @@ public class LoginController extends BaseController{
 		checkplus = _ipinService.getDatas2();
 		model.addAttribute("checkplus", checkplus);
 
-		
 		MemberInfoVO memVo = (MemberInfoVO) _gDao.selectByKey("memberInfo.selectById", recomm_code);
 		if(memVo != null)
 		model.addAttribute("recommUserId", memVo.getNickname());
@@ -300,8 +300,24 @@ public class LoginController extends BaseController{
 			
 		// 정보가있다면?
 		if(ipinMember.getiRtn()>=0){
+
 			search.setUserName(ipinMember.getsName());
 			search.setPhone(ipinMember.getsMobileNo());
+
+			// 미성년자 체크로직 추가  tyrus-k added
+			String birthDate  = ipinMember.getsBirthDate();
+
+			//String birthDate  = "20200429";
+
+			if(getAge(birthDate.substring(0,4) , birthDate.substring(4,6) , birthDate.substring(6,8)) >= 19){
+				search.setAdult(true);
+			}else{
+				search.setAdult(false);
+			}
+
+			search.setBirthDate(ipinMember.getsBirthDate());
+			search.setGender(ipinMember.getsGenderCode());
+
 			String retVal = ipinMember.getsName() + ":" + ipinMember.getsMobileNo();
 			logger.error("USERINFO ::: " + retVal);
 		}
@@ -546,7 +562,21 @@ public class LoginController extends BaseController{
 			return "/front/mypage/auth_modify";
 		}
 	}
-			
+
+	public int getAge(String birthYear, String birthMonth, String birthDay)
+	{
+		Calendar current = Calendar.getInstance();
+		int currentYear  = current.get(Calendar.YEAR);
+		int currentMonth = current.get(Calendar.MONTH) + 1;
+		int currentDay   = current.get(Calendar.DAY_OF_MONTH);
+
+		int age = currentYear - Integer.parseInt(birthYear);
+		// 생일 안 지난 경우 -1
+		if (Integer.parseInt(birthMonth) * 100 + Integer.parseInt(birthDay) > currentMonth * 100 + currentDay)
+			age--;
+
+		return age;
+	}
 	
 	
 }
