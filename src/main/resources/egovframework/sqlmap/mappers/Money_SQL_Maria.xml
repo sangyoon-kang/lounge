@@ -143,7 +143,7 @@
 		FROM fx_money
 		WHERE USER_ID = #{userId}
 		AND IO_TYPE =  #{status}
-		AND CONVERT (REG_DATE, DATE) = CONVERT(SYSDATE(), DATE)
+		AND CONVERT (REG_DATE, DATE) = CONVERT(now(), DATE)
 		AND STATE = 'R'
 	</select>
   
@@ -342,7 +342,7 @@
     INSERT INTO fx_money_request 
       (REQUEST_SEQ,AMOUNT,NAME,BANK_NAME,BANK_NUM,TIMES,FAILED)
   VALUES 
-    (#{requestSeq,jdbcType=VARCHAR},#{amount,jdbcType=VARCHAR},#{name,jdbcType=VARCHAR},#{bankName,jdbcType=VARCHAR},#{bankNum,jdbcType=VARCHAR},SYSDATE(),#{failed,jdbcType=VARCHAR})
+    (#{requestSeq,jdbcType=VARCHAR},#{amount,jdbcType=VARCHAR},#{name,jdbcType=VARCHAR},#{bankName,jdbcType=VARCHAR},#{bankNum,jdbcType=VARCHAR},now(),#{failed,jdbcType=VARCHAR})
   </insert>
   
 </mapper>
