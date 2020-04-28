@@ -136,9 +136,14 @@
 	<div class="row">
 		<div class="col-sm-3">
 			<h4>고객센터</h4>
+			<%--
 			<p>${tagoplusSolution1_session_site.customerCenter }<br>
 			   ${tagoplusSolution1_session_site.businessHours }</p>
 			<a href="/pages/fx_pages/consulting.jsp">1:1문의</a>
+			--%>
+			<p>카카오톡 1:1<br>
+				월~금 09:00~18:00 (토/일/공휴일 휴무)</p>
+			<a href="http://pf.kakao.com/_lEUaxb">1:1문의</a>
 		</div>
 		<div class="col-sm-3">
 			<h4>이용안내</h4>

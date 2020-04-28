@@ -269,6 +269,7 @@ display: -ms-flexbox;
 /*대리점관리*/
 .con_tit03 {font-size:25px; color:#212121; font-weight:500; position:relative; float:left;}
 .con_tit03::before {content:''; display:inline-block; width:6px; margin-right:8px; vertical-align:middle; margin-top:-5px; height:22px; background:#0088ee;}
+.con_title03_alert {color:#ef5350; font-size:20px; padding-left:5px}
 
 .wrap_tsty02 {width:100%; overflow-X:auto; margin-top:15px; float:left;}
 .wrap_tsty02 table {float:left;width:100%; border-top:1px solid #0088ee;}
@@ -803,9 +804,10 @@ board_tab01
 .inout_box ul li:nth-child(7)::after {content:'07';}
 .inout_box ul li:nth-child(8)::after {content:'08';}
 .inout_box ul li:nth-child(9)::after {content:'09';}
+.inout_box ul li:nth-child(1)::after {content:'01';}
 
 .inout_box ul li strong {display:block; color:#0088ee; font-weight:400;}
-
+.inout_box ul li .alert { color:#ef5350;}
 
 .inout_list_form {display:flex; width:100%;}
 .inout_list_form_fir {border-top:1px solid #0088ee; margin-top:10px;}
