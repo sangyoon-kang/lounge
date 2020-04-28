@@ -274,7 +274,15 @@
                          $('#phone1').val(phonenumber.substring(0, 3));
                          $('#phone2').val(phonenumber.substring(3, 7));
                          $('#phone3').val(phonenumber.substring(7, 11));
-                         
+
+
+                        // 한글입력막기 스크립트
+                        $("#userId").keyup(function(e) {
+                            if (!(e.keyCode >=37 && e.keyCode<=40)) {
+                                var v = $(this).val();
+                                $(this).val(v.replace(/[^a-z0-9]/gi,''));
+                            }
+                        });
                     });
 
                    
