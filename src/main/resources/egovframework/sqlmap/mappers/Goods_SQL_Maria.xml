@@ -129,7 +129,8 @@
 	   <include refid="Base_Column_List" />
 	FROM   fx_goods
 	WHERE   RUN_TIME = #{runTime}
-		AND	CONCAT(GOODS_DATE , ' ', GOODS_TIME, ':00') &lt; now()
+	  AND GOODS_DATE = date_format(now(), '%Y-%c-%d' )
+	  AND GOODS_TIME &lt;= date_format(now(), '%H:%i' )
 	ORDER BY GOODS_DATE DESC, GOODS_TIME DESC
 	LIMIT 1;
   </select>
@@ -789,7 +790,8 @@ WHERE	FG.RUN_TIME = #{runTime, jdbcType=INTEGER}
         , SELL_LOT1, SELL_LOT2, SELL_LOT10, SELL_LOT20, SELL_LOT40
         ,ft.RUN_TYPE FROM fx_goods FG, fx_time_set FT
         WHERE FG.run_time =    #{runTime}
-        AND   CONCAT(GOODS_DATE,' ', GOODS_TIME) = (select str_to_date(concat(date(now()), ' ', hour(now()),':',floor(minute(NOW())/#{runTime})*#{runTime}),'%Y-%m-%d %H:%i'))
+	    AND GOODS_DATE = date_format(sysdate(), '%Y-%c-%d' )
+	    AND GOODS_TIME = concat(hour( now() ),':',floor(minute(NOW())/#{runTime})*#{runTime})
         AND fg.RUN_TIME = ft.RUN_TIME) AS remainders;
         <!--  WHERE    GOODS_DATE = CURDATE()
         AND     run_time =    1
