@@ -119,7 +119,8 @@
 		<div class="all_io_exec" style="padding-bottom: 10px">
 			<a class="btn bg_sky">일괄 처리</a>
 			<a class="btn bg_gray">일괄 취소</a>
-			<label style="float: right"><input class="reloadBox" style="padding: 0 5px" type="checkbox" >자동 새로고침</label>
+			<label style="padding-left: 15px"><input class="reloadBox" style="margin: 0 5px 3px 0;" type="checkbox" checked>자동 새로고침</label>
+			<a onclick="javascript:$.Nav('go', './api/deposite_excel.do', {})" class="btn bg_green" style="float:right;">출금엑셀다운</a>
 		</div>
 		<form id="deposit" action="./dep_proc.do" method="POST">
 			<input type="hidden" name="status" value="I" />

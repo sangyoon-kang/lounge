@@ -4,13 +4,16 @@ package com.tagosolution.controller.admin.fxprd;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.tagoplus.model.common.AlertModel;
+import com.tagoplus.util.ExcelDownloadUtil;
 import com.tagosolution.controller.BaseController;
 import com.tagosolution.service.dao.GeneralDAOImpl;
 import com.tagosolution.service.impl.DepositServiceImpl;
 import com.tagosolution.service.impl.MemberServiceImpl;
 import com.tagosolution.service.impl.PaymentServiceImpl;
+import com.tagosolution.service.model.CashVO;
 import com.tagosolution.service.model.MoneyVO;
 import com.tagosolution.service.model.search.DepositSearchVO;
+import com.tagosolution.service.model.search.PaymentSearchVO;
 import com.tagosolution.service.util.ListUtil;
 import org.apache.commons.lang.StringEscapeUtils;
 import org.slf4j.Logger;
@@ -18,12 +21,15 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.servlet.View;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -39,15 +45,15 @@ import java.util.Map;
 @Controller
 @RequestMapping(value = "#{globals['url.admin.root']}/payment/deposit")
 public class DepositController extends BaseController {
-	
+
 	private static final Logger logger = LoggerFactory.getLogger(DepositController.class);
-	
+
 	@Resource
 	GeneralDAOImpl _gDao;
-	
+
 	@Resource
 	PaymentServiceImpl _paymentService;
-	
+
 	@Resource
 	MemberServiceImpl _memberService;
 	@Resource
@@ -66,20 +72,20 @@ public class DepositController extends BaseController {
 	@RequestMapping(value = "/list.do")
 	public String siteInfo(DepositSearchVO search, BindingResult result, Model model) throws Exception {
 		super.setPageSubTitle("상품 /정산관리  &gt; 기본수량설정 ", model);
-		
-		if(result.hasErrors())
+
+		if (result.hasErrors())
 			return super.setBindingResult(result, model);
 		search.setRecordCount(20);
-		List<MoneyVO> list = (List<MoneyVO>)_gDao.selectBySearch("money.selectListAdmin", search, "totalCountAdmin");
+		List<MoneyVO> list = (List<MoneyVO>) _gDao.selectBySearch("money.selectListAdmin", search, "totalCountAdmin");
 		List<MoneyVO> totalSum = (List<MoneyVO>) _gDao.selectList("money.selectTotalSum", search);
-		
+
 		model.addAttribute("list", list);
 		model.addAttribute("totalSum", totalSum);
 		model.addAttribute("search", search);
 		model.addAttribute("listIoType", ListUtil.listIoType());
 		return super.getConfig().getAdminRoot() + "/payment/deposit/list";
 	}
-	
+
 	/**
 	 * 상품 /정산관리 >입출금관리
 	 *
@@ -90,31 +96,30 @@ public class DepositController extends BaseController {
 	 * @return
 	 * @throws Exception
 	 */
-	@RequestMapping(value="/dep_proc.do")
+	@RequestMapping(value = "/dep_proc.do")
 	public String basicPopupProc(MoneyVO vo, DepositSearchVO search, BindingResult result, Model model) throws Exception {
-		if(result.hasErrors())
+		if (result.hasErrors())
 			return super.setBindingResult(result, model);
-		
+
 		AlertModel am = new AlertModel();
 		try {
 			vo.setUserId(super.getAdminSession().getUserID());
 			MoneyVO mo = (MoneyVO) _gDao.selectByKey("money.selectByKey", vo.getMoneySeq());
-			if(search.getStatus().equalsIgnoreCase("A") && mo.getState().equalsIgnoreCase("R")){
+			if (search.getStatus().equalsIgnoreCase("A") && mo.getState().equalsIgnoreCase("R")) {
 				_paymentService.updateDepositAccept(vo);
 				_paymentService.insertCashByDeposit(vo);
 				_memberService.updateByDeposit(vo.getMoneySeq());
 				am.setMessage("저장되었습니다.");
-			} else if(search.getStatus().equalsIgnoreCase("C") && mo.getState().equalsIgnoreCase("R")){
+			} else if (search.getStatus().equalsIgnoreCase("C") && mo.getState().equalsIgnoreCase("R")) {
 				_paymentService.updateDepositCancel(vo);
 				_memberService.updateByDepositCancel(vo.getMoneySeq());
 				am.setMessage("저장되었습니다.");
-			}
-			else if(search.getStatus().equalsIgnoreCase("R") && mo.getState().equalsIgnoreCase("A")){
+			} else if (search.getStatus().equalsIgnoreCase("R") && mo.getState().equalsIgnoreCase("A")) {
 				// 승인상태 원복
 				_paymentService.updateDepositAcceptUndo(vo);
 				_paymentService.deleteByDeposit(vo);
 				_memberService.updateByDepositUndo(vo.getMoneySeq());
-			} else if(search.getStatus().equalsIgnoreCase("R") && mo.getState().equalsIgnoreCase("C")){
+			} else if (search.getStatus().equalsIgnoreCase("R") && mo.getState().equalsIgnoreCase("C")) {
 				// 취소상태 원복
 				_paymentService.updateDepositCancelUndo(vo);
 				_memberService.updateByDepositCancelUndo(vo.getMoneySeq());
@@ -216,10 +221,42 @@ public class DepositController extends BaseController {
 	public Object ajaxCheckId(@RequestBody(required = false) String body, String userId, Integer cash, BindingResult result, Model model) throws Exception {
 		if (result.hasErrors())
 			return super.setBindingResult(result, model);
-		
+
 		Map<String, Object> map = new HashMap<String, Object>();
 		Integer userCash = (Integer) _gDao.selectOne("memberInfo.selectByCash", userId);
 		map.put("result", (userCash >= cash));
 		return new Gson().toJson(map);
+	}
+
+
+	/**
+	 * 출금 리스트 엑셀 다운로드
+	 *
+	 * @param vo
+	 * @param search
+	 * @param result
+	 * @param model
+	 * @return
+	 * @throws Exception
+	 */
+	@RequestMapping(value = "/api/deposite_excel.do")
+	public String ListExcel(DepositSearchVO search, BindingResult result, HttpServletRequest request, HttpServletResponse response, Model model) throws Exception {
+		if (result.hasErrors()) return super.setBindingResult(result, model);
+
+
+		if (result.hasErrors())
+			return super.setBindingResult(result, model);
+		search.setRecordCount(20);
+
+		List<MoneyVO> list = (List<MoneyVO>) _gDao.selectBySearch("money.selectAdminDepositList", search);
+
+		Map<String, Object> map = new HashMap<String, Object>();
+
+		map.put("list", list);
+		map.put("search", search);
+
+		ExcelDownloadUtil.downloadExcel(request, response, map, "", "deposit_list.xlsx");
+
+		return null;
 	}
 }

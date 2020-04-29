@@ -344,5 +344,25 @@
   VALUES 
     (#{requestSeq,jdbcType=VARCHAR},#{amount,jdbcType=VARCHAR},#{name,jdbcType=VARCHAR},#{bankName,jdbcType=VARCHAR},#{bankNum,jdbcType=VARCHAR},now(),#{failed,jdbcType=VARCHAR})
   </insert>
-  
+
+
+
+	<select id="selectAdminDepositList" parameterType="search" resultMap="BaseResultMap">
+		SELECT
+			   TFC.CODE_DESC2 AS BANK_NAME
+			 , FM.ACCOUNT_NO
+			 , FM.ACCOUNT_NAME
+			 , FM.CASH
+		FROM
+			fx_money FM JOIN ts_fixed_code TFC ON FM.BANK_NAME = TFC.CODE_NAME
+		WHERE
+				FM.IO_TYPE = 'O'
+		  	AND FM.STATE = 'R'
+		ORDER BY
+			MONEY_SEQ DESC
+	</select>
+
+
+
+
 </mapper>
