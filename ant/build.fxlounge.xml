@@ -90,6 +90,19 @@
 <!--		</delete>-->
 	</target>
 	
-	<target name="default" depends="build" />			
+	<target name="default" depends="build" />
+
+	<target name="copyResource">
+
+		<copy todir="${dir.dist}">
+			<fileset dir="${dir.www}">
+				<exclude name="**/html/**"/>
+				<exclude name="**/htmlMgr/**"/>
+				<exclude name="**/WEB-INF/classes/**" />
+				<exclude name="**/WEB-INF/web.*.xml" />
+			</fileset>
+		</copy>
+
+	</target>
 
 </project>
