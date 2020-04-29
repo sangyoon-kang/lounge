@@ -23,11 +23,6 @@
 	<link href="/common/css/bootstrap/bootstrap.min.css" rel="stylesheet" type="text/css" />
 	
 	<link href="/common/css/optional/style.css" rel="stylesheet" type="text/css" />
-	<link href="/common/css/user/default/common.css" rel="stylesheet" type="text/css" />
-	<link href="/common/css/user/default/layout.css" rel="stylesheet" type="text/css" />
-	<link href="/common/css/user/default/main.css" rel="stylesheet" type="text/css" />
-	<link href="/common/css/user/default/sub.css" rel="stylesheet" type="text/css" />
-	
 	<script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
 	<script type="text/javascript" src="/common/js/jquery/jquery-migrate-1.4.1.min.js"></script>
 	<script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>

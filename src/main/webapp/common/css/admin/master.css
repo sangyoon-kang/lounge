@@ -5,7 +5,7 @@
 @import "global.css";
 @import "layout.css";
 @import "login.css";
-@import "layout_latest.css";
+@import "layout_latest.css?version=1.2";
 @import "../optional/style.css";
 
 @import "../etc.css";

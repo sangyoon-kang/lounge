@@ -16,9 +16,7 @@
    	<meta http-equiv="Pragma" content="no-cache" />
 	
 	<title>${tagoplusSolution1_session_site.siteName } ${!empty pageTitle ? ' - ' : ''} ${pageTitle }</title>
-	<link href="/common/css/admin/master.css" rel="stylesheet" type="text/css" />
-	<link href="/common/css/user/default/main.css" rel="stylesheet" type="text/css">
-	
+	<link href="/common/css/admin/master.css?version=1.2" rel="stylesheet" type="text/css" />
 	<link href="//ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/themes/redmond/jquery-ui.min.css" rel="stylesheet" type="text/css" />
 	<link href="/common/css/jquery/colorbox_2/colorbox.css" rel="stylesheet" type="text/css" />
 	<link href="/common/css/jquery/fakeLoader/fakeLoader.css" rel="stylesheet" type="text/css" />
