@@ -551,10 +551,10 @@ function doSubmit() {
 		return;
 	}
 
-	if (isNull($('input[name=isAdult]').val()) || $('input[name=isAdult]').val() == false){
+	/*if (isNull($('input[name=isAdult]').val()) || $('input[name=isAdult]').val() == false){
 		alert('만 19세 미만의 미성년자는 회원 가입이 불가합니다.');
 		return;
-	}
+	}*/
 	
 	if (!confirm('등록 하시겠습니까?')) {
 		return;
