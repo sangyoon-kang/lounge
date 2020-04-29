@@ -326,8 +326,12 @@ public class FxProductController extends BaseController{
 	  search.setRunTime(runtime);
 	  Map<String, Object> map = new HashMap<String, Object>();
       GoodsVO maxBuyMdl = (GoodsVO) _gDao.selectOne("goods.checkRemainingLots", search);
-      maxBuyMdl.setRunTime(runtime);
-      map.put("GS", maxBuyMdl);
+
+      if(maxBuyMdl != null){
+		  maxBuyMdl.setRunTime(runtime);
+		  map.put("GS", maxBuyMdl);
+	  }
+
 	  return map;
 	}
 	
