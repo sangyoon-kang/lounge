@@ -194,15 +194,36 @@ public class AjaxController extends BaseController {
 	public Object limitToday(@RequestBody(required = false)String body, BindingResult result, Model model) throws Exception {
 		if (result.hasErrors())
 			return super.setBindingResult(result, model);
-		
+
 		DepositSearchVO search = new DepositSearchVO();
 		search.setStatus("O");
 		search.setUserId(super.getUserSession().getUserId());
+
+		Map<String, Object> map = new HashMap<String, Object>();
+
+		// 꽁머니 출금제한 로직 tyrus-k added
+		List<Map> freeIncomeLimitList = (List<Map>)_gDao.selectList("money.selectLimitFreeIncome" ,search);
+
+		// 꽁머니
+		//int freeIncomeCnt = (int)freeIncomeLimitList.get(0).get("cnt");
+		// 실제 입금 내역
+		int incomeCnt = (int)(long)freeIncomeLimitList.get(1).get("cnt"); // null 걱정 없음
+		// 실제 거래내역
+		int orderCnt = (int)(long)freeIncomeLimitList.get(2).get("cnt"); // null 걱정 없음
+
+		if(incomeCnt > 0 || orderCnt >= 4){
+			map.put("freeIncomeCount", 0);
+		}else{
+			map.put("freeIncomeCount", -1);
+		}
+
+		// 이런 경우는 실제 입금된 경우라서 바로 출금가능해야함
 		int count = (int) _gDao.getCountBySearch("money.limitToday", search);
 		int requestCount = (int) _gDao.getCountBySearch("money.requestCount", search);
-		Map<String, Object> map = new HashMap<String, Object>();
+
 		map.put("count", count);
 		map.put("requestCount", requestCount);
+
 		return map;
 	}
 	@RequestMapping(value = "/ajax/limitTodaydeposit")

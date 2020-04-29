@@ -138,7 +138,7 @@
 		AND CONVERT (REG_DATE, DATE) = CONVERT(now(), DATE)
 		AND STATE IN ('A', 'R')
 	</select>
-		<select id="requestCount" parameterType="search" resultType="int">
+	<select id="requestCount" parameterType="search" resultType="int">
 		SELECT COUNT(MONEY_SEQ) AS today_count
 		FROM fx_money
 		WHERE USER_ID = #{userId}
@@ -344,5 +344,36 @@
   VALUES 
     (#{requestSeq,jdbcType=VARCHAR},#{amount,jdbcType=VARCHAR},#{name,jdbcType=VARCHAR},#{bankName,jdbcType=VARCHAR},#{bankNum,jdbcType=VARCHAR},now(),#{failed,jdbcType=VARCHAR})
   </insert>
+
+  <select id="selectLimitFreeIncome" parameterType="search" resultType="java.util.Map">
+	SELECT Z1.cnt as cnt FROM (
+		-- 거래내역(꽁머니 지급 카운트)
+		SELECT
+			count( * ) AS cnt
+		FROM
+			ts_cash
+		WHERE
+			USER_ID = #{userId}
+			AND CASH_TYPE = 'M'
+			AND MAIN_SEQ IS NULL UNION ALL
+		-- 실제 입금내역
+		SELECT
+			count( * ) AS cnt
+		FROM
+			fx_money
+		WHERE
+			USER_ID = #{userId}
+			AND IO_TYPE = 'I'
+			AND STATE = 'A'
+		-- 거래 카운트
+		UNION ALL
+		SELECT
+			count( * ) AS cnt
+		FROM
+			fx_order
+		WHERE
+			USER_ID = #{userId}
+	 ) Z1
+ </select>
   
 </mapper>
