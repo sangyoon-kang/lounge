@@ -1,7 +1,5 @@
 package com.tagosolution.service.model.search;
 
-import java.util.List;
-
 import com.tagoplus.model.common.SearchVO;
 
 /**
@@ -23,6 +21,8 @@ public class DepositSearchVO extends SearchVO {
 	private String endDate;
 	
 	private String ioType;
+
+	private String[] moneySeqList;
 
 	public String getIoType() {
 		return ioType;
@@ -55,5 +55,15 @@ public class DepositSearchVO extends SearchVO {
 	public void setEndDate(String endDate) {
 		this.endDate = endDate;
 	}
+	public String[] getMoneySeqList() {
+		return moneySeqList;
+	}
+
+	public void setMoneySeqList(String[] moneySeqList) {
+		this.moneySeqList = moneySeqList;
+	}
+
+
+
 
 }

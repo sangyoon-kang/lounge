@@ -358,6 +358,13 @@
 		WHERE
 				FM.IO_TYPE = 'O'
 		  	AND FM.STATE = 'R'
+			<if test="moneySeqList != null">
+				AND FM.MONEY_SEQ IN
+				<foreach item="item" index="index" collection="moneySeqList"
+						 open="(" separator="," close=")">
+					#{item}
+				</foreach>
+			</if>
 		ORDER BY
 			MONEY_SEQ DESC
 	</select>

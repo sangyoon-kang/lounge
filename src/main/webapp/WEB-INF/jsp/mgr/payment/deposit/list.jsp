@@ -119,8 +119,8 @@
 		<div class="all_io_exec" style="padding-bottom: 10px">
 			<a class="btn bg_sky">일괄 처리</a>
 			<a class="btn bg_gray">일괄 취소</a>
-			<label style="padding-left: 15px"><input class="reloadBox" style="margin: 0 5px 3px 0;" type="checkbox" checked>자동 새로고침</label>
-			<a onclick="javascript:$.Nav('go', './api/deposite_excel.do', {})" class="btn bg_green" style="float:right;">출금엑셀다운</a>
+			<a class="btn bg_green" style="margin-left: 30px">출금엑셀다운</a>
+			<label style="float: right"><input class="reloadBox" style="margin: 0 5px 3px 0;" type="checkbox" >자동 새로고침</label>
 		</div>
 		<form id="deposit" action="./dep_proc.do" method="POST">
 			<input type="hidden" name="status" value="I" />
@@ -272,6 +272,23 @@
 			$('input[name="checkList"]').val(JSON.stringify(arr_val));
 			$('#depositList').submit();
 
+		});
+
+		$(".all_io_exec a.bg_green").click(function() {
+
+
+			if (!confirm("선택 항목을 엑셀로 다운로드 하시겠습니까? \n체크된 임금내역은 자동 제외 됩니다."))return;
+			var checkBoxList = $("tbody .ck_td input:checkbox:checked");
+
+			if(checkBoxList.length < 1){
+				alert("선택된 항목이 없습니다.");
+				return;
+			}
+			var list = [];
+			checkBoxList.each(function(idx,ele){
+				list.push($($(ele).parent()).data("money-seq").toString());
+			});
+			$.Nav('go', './api/deposite_excel.do', {moneySeqList:list});
 		});
 
 		$(".all_io_exec a.bg_gray").click(function(){//일괄취소
