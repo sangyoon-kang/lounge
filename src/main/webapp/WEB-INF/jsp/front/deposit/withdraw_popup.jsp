@@ -107,10 +107,16 @@
 			url : '/ajax/limitToday.do',
 			dataType : 'json',
 			success : function(data) {
+				if(data.freeIncomeCount < 0){
+					alert('이벤트로 지급된 보유금은 거래 4회 미만 시 출금이 불가능합니다.')
+					return;
+				}
+
 				if(data.requestCount >= 1){
 					alert('기존 출금 신청의 처리가 완료되어야 신규 신청이 가능합니다.')
 					return;
-				}				
+				}
+
 				if(data.count >= ${withdrawalCountLimit }){
 					alert('출금은 1일 ${withdrawalCountLimit }회까지만 가능합니다.');
 					return;

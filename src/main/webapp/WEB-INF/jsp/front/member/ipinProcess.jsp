@@ -31,8 +31,8 @@
 						chk.style.display = "block";
 						mbck.style.display = "block";
 
-						chk.innerHTML = "미성년자는 가입이 불가합니다.";
-						mbck.innerHTML = "미성년자는 가입이 불가합니다.";
+						chk.innerHTML = "미성년자(만 19세미만)는 가입이 불가능합니다.";
+						mbck.innerHTML = "미성년자(만 19세미만)는 가입이 불가능합니다.";
 
 						opener.document.formJoin.isAdult.value = isAdult;
 					}else{
