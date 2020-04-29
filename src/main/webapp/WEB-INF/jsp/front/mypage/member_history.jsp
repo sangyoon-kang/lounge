@@ -233,6 +233,11 @@
 <%@ include file="/WEB-INF/include/fx_include/front_footer.jsp"%>
 <script>
 
+history.pushState(null, null, location.href);
+window.onpopstate = function () {
+	history.go(1);
+};
+
 if($.urlParam('deal')){
 	$('.toDeal').show();
 	var url = '/prd/deal.do?runTime='+$.urlParam('deal');

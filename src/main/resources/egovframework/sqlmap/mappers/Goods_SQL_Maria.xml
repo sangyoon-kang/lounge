@@ -134,7 +134,7 @@
 	ORDER BY GOODS_DATE DESC, GOODS_TIME DESC
 	LIMIT 1;
   </select>
-  
+
   <select id="selectForDeal1" parameterType="search" resultMap="BaseResultMap">
 	SELECT	FTS.RUN_TYPE, FTS.API_STATE, FG.RUN_TIME, FG.GOODS_DATE, FG.GOODS_TIME
 			, CASE 	WHEN #{buyLot1, jdbcType=INTEGER} = 0 THEN 'OK'
@@ -204,27 +204,27 @@ WHERE	FG.RUN_TIME = #{runTime, jdbcType=INTEGER}
 		AND	FG.GOODS_DATE = #{goodsDate,jdbcType=VARCHAR}
 	AND	FG.GOODS_TIME = #{goodsTime,jdbcType=VARCHAR}
   </select>
-  
+
   <select id="selectByKey" parameterType="search" resultMap="BaseResultMap">
-	select 
+	select
 	<include refid="Base_Column_List" />
 	from fx_goods
 	where RUN_TIME = #{runTime,jdbcType=INTEGER}
 	  and GOODS_DATE = #{goodsDate,jdbcType=DATE}
 	  and GOODS_TIME = #{goodsTime,jdbcType=VARCHAR}
   </select>
-  
+
   <insert id="merge" parameterType="com.tagosolution.service.model.GoodsVO">
-	insert into fx_goods (RUN_TIME, GOODS_DATE, GOODS_TIME, GOODS_RESULT, 
-	  BUY_LOT1_TOTAL, BUY_LOT2_TOTAL, BUY_LOT10_TOTAL, BUY_LOT20_TOTAL, BUY_LOT40_TOTAL, 
-	  SELL_LOT1_TOTAL, SELL_LOT2_TOTAL, SELL_LOT10_TOTAL, SELL_LOT20_TOTAL, SELL_LOT40_TOTAL, 
-	  BUY_LOT1_STATE, BUY_LOT2_STATE, BUY_LOT10_STATE, BUY_LOT20_STATE, BUY_LOT40_STATE, 
+	insert into fx_goods (RUN_TIME, GOODS_DATE, GOODS_TIME, GOODS_RESULT,
+	  BUY_LOT1_TOTAL, BUY_LOT2_TOTAL, BUY_LOT10_TOTAL, BUY_LOT20_TOTAL, BUY_LOT40_TOTAL,
+	  SELL_LOT1_TOTAL, SELL_LOT2_TOTAL, SELL_LOT10_TOTAL, SELL_LOT20_TOTAL, SELL_LOT40_TOTAL,
+	  BUY_LOT1_STATE, BUY_LOT2_STATE, BUY_LOT10_STATE, BUY_LOT20_STATE, BUY_LOT40_STATE,
 	  SELL_LOT1_STATE, SELL_LOT2_STATE, SELL_LOT10_STATE, SELL_LOT20_STATE, SELL_LOT40_STATE,
 	  AUTO_CLOSE1, AUTO_CLOSE2, AUTO_CLOSE10, AUTO_CLOSE20, AUTO_CLOSE40)
-	values (#{runTime,jdbcType=INTEGER}, #{goodsDate,jdbcType=DATE}, #{goodsTime,jdbcType=VARCHAR}, #{goodsResult,jdbcType=VARCHAR}, 
+	values (#{runTime,jdbcType=INTEGER}, #{goodsDate,jdbcType=DATE}, #{goodsTime,jdbcType=VARCHAR}, #{goodsResult,jdbcType=VARCHAR},
 	  #{buyLot1Total,jdbcType=INTEGER}, #{buyLot2Total,jdbcType=INTEGER}, #{buyLot10Total,jdbcType=INTEGER}, #{buyLot20Total,jdbcType=INTEGER}, #{buyLot40Total,jdbcType=INTEGER},
 	  #{sellLot1Total,jdbcType=INTEGER}, #{sellLot2Total,jdbcType=INTEGER}, #{sellLot10Total,jdbcType=INTEGER}, #{sellLot20Total,jdbcType=INTEGER}, #{sellLot40Total,jdbcType=INTEGER},
-	  #{buyLot1State,jdbcType=VARCHAR}, #{buyLot2State,jdbcType=VARCHAR}, #{buyLot10State,jdbcType=VARCHAR}, #{buyLot20State,jdbcType=VARCHAR},  #{buyLot40State,jdbcType=VARCHAR}, 
+	  #{buyLot1State,jdbcType=VARCHAR}, #{buyLot2State,jdbcType=VARCHAR}, #{buyLot10State,jdbcType=VARCHAR}, #{buyLot20State,jdbcType=VARCHAR},  #{buyLot40State,jdbcType=VARCHAR},
 	  #{sellLot1State,jdbcType=VARCHAR}, #{sellLot2State,jdbcType=VARCHAR}, #{sellLot10State,jdbcType=VARCHAR}, #{sellLot20State,jdbcType=VARCHAR}, #{sellLot40State,jdbcType=VARCHAR},
 	  #{autoClose1,jdbcType=INTEGER}, #{autoClose2,jdbcType=INTEGER}, #{autoClose10,jdbcType=INTEGER}, #{autoClose20,jdbcType=INTEGER}, #{autoClose40,jdbcType=INTEGER})
 	  ON DUPLICATE KEY UPDATE
@@ -675,7 +675,7 @@ WHERE	FG.RUN_TIME = #{runTime, jdbcType=INTEGER}
 	  AND GOODS_DATE = #{goodsDate,jdbcType=DATE}
 	  AND GOODS_TIME = #{goodsTime,jdbcType=VARCHAR}
   </update>
-  
+
   <update id="updateFront" parameterType="search">
 	UPDATE	fx_goods
 		SET	BUY_LOT1 = BUY_LOT1 + #{buyLot1,jdbcType=INTEGER}
@@ -692,10 +692,10 @@ WHERE	FG.RUN_TIME = #{runTime, jdbcType=INTEGER}
 	  	AND	GOODS_DATE = DATE_FORMAT(now(), '%Y-%m-%d')
 		AND	GOODS_TIME = #{goodsTime,jdbcType=VARCHAR};
   </update>
-  
+
   <update id="updateStatus" parameterType="com.tagosolution.service.model.GoodsVO">
 	UPDATE	fx_goods
-	<set>	
+	<set>
 		<trim suffix=" " suffixOverrides=",">
 		  <if test="buyLot1State != null">
 			BUY_LOT1_STATE = #{buyLot1State,jdbcType=VARCHAR},
@@ -733,7 +733,7 @@ WHERE	FG.RUN_TIME = #{runTime, jdbcType=INTEGER}
 		AND	GOODS_DATE = #{goodsDate}
 		AND	GOODS_TIME = #{goodsTime}
   </update>
-  
+
    <update id="updateGoodsStatus" parameterType="com.tagosolution.service.model.GoodsVO">
 	UPDATE	fx_goods
 		SET	GOODS_RESULT = #{goodsResult,jdbcType=VARCHAR}
@@ -749,7 +749,7 @@ WHERE	FG.RUN_TIME = #{runTime, jdbcType=INTEGER}
 			AND	GOODS_DATE = #{goodsDate,jdbcType=VARCHAR}
 			AND	GOODS_TIME = #{goodsTime,jdbcType=VARCHAR};
 	</update>
-	
+
 	<select id="selectCount" parameterType="search" resultType="java.lang.Integer">
 		select COUNT(GOODS_DATE)
 		from fx_goods
@@ -790,9 +790,9 @@ WHERE	FG.RUN_TIME = #{runTime, jdbcType=INTEGER}
         , SELL_LOT1, SELL_LOT2, SELL_LOT10, SELL_LOT20, SELL_LOT40
         ,ft.RUN_TYPE FROM fx_goods FG, fx_time_set FT
         WHERE FG.run_time =    #{runTime}
-	    AND GOODS_DATE = date_format(sysdate(), '%Y-%c-%d' )
-	    AND GOODS_TIME = concat(hour( now() ),':',floor(minute(NOW())/#{runTime})*#{runTime})
-        AND fg.RUN_TIME = ft.RUN_TIME) AS remainders;
+	     AND GOODS_DATE = date_format(now(), '%Y-%m-%d' )
+	     AND GOODS_TIME = concat(date_format(now(), '%H' ),':',floor(minute(now())/#{runTime})*#{runTime})
+         AND fg.RUN_TIME = ft.RUN_TIME) AS remainders;
         <!--  WHERE    GOODS_DATE = CURDATE()
         AND     run_time =    1
         AND     GOODS_TIME = DATE_FORMAT(NOW(), "%H:%i")) AS remainders; -->
