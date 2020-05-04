@@ -157,7 +157,7 @@ public class LoginController extends BaseController{
 				}
 			}
 			
-			if (hasAccount || 1 == 1) {
+			if (hasAccount) {
 				super.getSession().setAttribute(super.getConfig().getSessionNameForUser(), memVo);
 				_loginService.insertLoginUserCounter(memVo);
 				
@@ -275,7 +275,7 @@ public class LoginController extends BaseController{
 		checkplus = _ipinService.getDatas2();
 		model.addAttribute("checkplus", checkplus);
 
-		MemberInfoVO memVo = (MemberInfoVO) _gDao.selectByKey("memberInfo.selectById", recomm_code);
+		MemberInfoVO memVo = (MemberInfoVO) _gDao.selectByKey("memberInfo.selectByIdTrim", recomm_code.replaceAll("(\r\n|\r|\n|\n\r|\\p{Z}|\\t)", ""));
 		if(memVo != null)
 		model.addAttribute("recommUserId", memVo.getNickname());
 		else
