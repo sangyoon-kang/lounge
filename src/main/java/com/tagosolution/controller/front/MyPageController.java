@@ -381,6 +381,9 @@ public class MyPageController extends BaseController{
 		model.addAttribute("list", list);
 		model.addAttribute("vo", vo);
 		model.addAttribute("search", search);
+
+		model.addAttribute("trimUserId", search.getUserId().replaceAll("(\r\n|\r|\n|\n\r|\\p{Z}|\\t)", ""));
+
 		return "/front/mypage/ms_shop";
 	}
 	

@@ -108,6 +108,15 @@
 			AND 	USE_FLAG = 'Y'
 			AND 	WITHDRAWAL_YN = 'N'
 	</select>
+
+	<select id="selectByIdTrim" parameterType="String" resultMap="BaseResultMap">
+		SELECT
+		<include refid="select" />
+		FROM 	TS_MEMBER_INFO
+		WHERE 	replace(USER_ID,' ','')  = #{userId,jdbcType=VARCHAR}
+		AND 	USE_FLAG = 'Y'
+		AND 	WITHDRAWAL_YN = 'N'
+	</select>
 	
 	<select id="selectForEmail" parameterType="java.lang.Integer" resultType="java.lang.String">
 		SELECT 	EMAIL
