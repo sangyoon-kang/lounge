@@ -74,7 +74,7 @@
 				</li>
 			</ul>
 			<div class="board_bt_set01">
-				<a onclick="javascript:doSubmit();" class="bt_list">출금신청</a>
+				<a onclick="javascript:doSubmit(event);" class="bt_list">출금신청</a>
 			</div>
 			
 			</form>
@@ -82,7 +82,7 @@
 	</section>
 
 <script type="text/javascript">
-	function doSubmit(){
+	function doSubmit(event){
 		if($('input[name=cash]').val() < 10000){
 			alert('최소 출금금액은 10,000원 이상이어야 합니다.')
 			$('input[name=cash]').val('0');
@@ -101,29 +101,36 @@
 		}
 		if(checkNull($('input[name="cash"]'), '출금하실 금액을 입력해 주세요.'))
 			return;
-		
+
+		// 출금버튼 disabled 처리
+		$(event.target).hide();
 		$.ajax({
 			type : 'post',
 			url : '/ajax/limitToday.do',
 			dataType : 'json',
 			success : function(data) {
 				if(data.freeIncomeCount < 0){
-					alert('이벤트로 지급된 보유금은 거래 4회 미만 시 출금이 불가능합니다.')
+					alert('이벤트로 지급된 보유금은 거래 4회 미만 시 출금이 불가능합니다.');
+                    $(event.target).show();
 					return;
 				}
 
 				if(data.requestCount >= 1){
-					alert('기존 출금 신청의 처리가 완료되어야 신규 신청이 가능합니다.')
+					alert('기존 출금 신청의 처리가 완료되어야 신규 신청이 가능합니다.');
+                    $(event.target).show();
 					return;
 				}
 
 				if(data.count >= ${withdrawalCountLimit }){
 					alert('출금은 1일 ${withdrawalCountLimit }회까지만 가능합니다.');
+                    $(event.target).show();
 					return;
 				}else {
-					if (!confirm('${MSG_COMM_SAVE}'))
-						return;
-					
+					if (!confirm('${MSG_COMM_SAVE}')){
+                        $(event.target).show();
+					    return;
+                    }
+
 					$('#form1').submit();
 				}
 			}

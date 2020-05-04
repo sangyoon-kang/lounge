@@ -94,7 +94,7 @@
 				
 						
 			<div class="board_bt_set01">
-				<a onclick="javascript:doSubmit();" class="bt_list">입금신청</a>
+				<a onclick="javascript:doSubmit(event);" class="bt_list">입금신청</a>
 			</div>
 			</form>
 		</div>
@@ -109,44 +109,47 @@
 	$('input[name=bankList]').on('change',function(){
 		$('input[name=bankSeq]').val($(this).val());
 	})
-	function doSubmit(){
-		if($('input[name=cash]').val() < 0){
-			alert('입금신청금액은 0원보다 커야합니다.');
-			$('input[name=cash]').val('0');
-			return;
-		}
-		if($('input[name=cash]').val() < 10000){
-			alert('최소 입금금액은 10,000원 이상이어야 합니다.');
-			$('input[name=cash]').val('0');
-			return;
-		}
-		
-		if(!$('input[name=bankSeq]').val()){
-			alert('입금계좌를 선택하세요.');
-			return;
-		}
-		if(checkNull($('input[name="cash"]'), '입금하실 금액을 입력해 주세요.'))
-			return;
-		
-		$.ajax({
-			type : 'post',
-			url : '/ajax/limitTodaydeposit.do',
-			dataType : 'json',
-			success : function(data) {
-				if(data.requestCount >= 1){
-					alert('기존 입금 신청의 처리가 완료되어야 신규 신청이 가능합니다.')
-					return;
-				}else {
-					if (!confirm('${MSG_COMM_SAVE}'))
-						return;
-							
-					$('#form1').submit();
-				}
-			}
-		});
-		
-		
-		
-	}
+    function doSubmit(event){
+        if($('input[name=cash]').val() < 0){
+            alert('입금신청금액은 0원보다 커야합니다.');
+            $('input[name=cash]').val('0');
+            return;
+        }
+        if($('input[name=cash]').val() < 10000){
+            alert('최소 입금금액은 10,000원 이상이어야 합니다.');
+            $('input[name=cash]').val('0');
+            return;
+        }
+
+        if(!$('input[name=bankSeq]').val()){
+            alert('입금계좌를 선택하세요.');
+            return;
+        }
+        if(checkNull($('input[name="cash"]'), '입금하실 금액을 입력해 주세요.'))
+            return;
+
+        // 출금버튼 disabled 처리
+        $(event.target).hide();
+        $.ajax({
+            type : 'post',
+            url : '/ajax/limitTodaydeposit.do',
+            dataType : 'json',
+            success : function(data) {
+                if(data.requestCount >= 1){
+                    alert('기존 입금 신청의 처리가 완료되어야 신규 신청이 가능합니다.');
+                    $(event.target).show();
+                    return;
+                }else {
+                    if (!confirm('${MSG_COMM_SAVE}')) {
+                        $(event.target).show();
+                        return;
+                    }
+
+                    $('#form1').submit();
+                }
+            }
+        });
+
+    }
 </script>
 <%@ include file="/WEB-INF/include/fx_include/front_footer.jsp"%>
