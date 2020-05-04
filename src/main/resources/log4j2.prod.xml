@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration status="WARN" name="fxlounge">
+    <properties>
+        <property name="projectName">fxlounge-prod</property>
+    </properties>
+
+    <!-- Appender, Layout 설정 -->
+    <Appenders>
+        <Console name="console" target="SYSTEM_OUT">
+            <!--  [%t] -->
+            <PatternLayout pattern="%d{yyyy/MM/dd HH:mm:ss} [%-5level] %logger{36}::%M - %msg%n"/>
+        </Console>
+    </Appenders>
+
+    <!-- Logger 설정 -->
+    <Loggers>
+        <Logger name="com.tagoplus" level="ERROR" additivity="false">
+            <AppenderRef ref="console"/>
+        </Logger>
+        <Logger name="com.tagosolution" level="ERROR" additivity="false">
+            <AppenderRef ref="console"/>
+        </Logger>
+        <Logger name="org.springframework" level="ERROR" additivity="false">
+            <AppenderRef ref="console"/>
+        </Logger>
+        <Logger name="egovframework" level="ERROR" additivity="false">
+            <AppenderRef ref="console"/>
+        </Logger>
+        <Logger name="org.mybatis" level="ERROR" additivity="false">
+            <AppenderRef ref="console"/>
+        </Logger>
+        <Logger name="org.hibernate" level="ERROR" additivity="false">
+            <AppenderRef ref="console"/>
+        </Logger>
+        <Logger name="jdbc" level="ERROR" additivity="false">
+            <AppenderRef ref="console"/>
+        </Logger>
+        <Logger name="jdbc.resultset" level="WARN" additivity="false">
+            <AppenderRef ref="console"/>
+        </Logger>
+        <Root level="ERROR">
+            <AppenderRef ref="console"/>
+        </Root>
+    </Loggers>
+</Configuration>
