@@ -5,15 +5,15 @@
   <resultMap id="BaseResultMap" type="com.tagosolution.service.model.MemberLineVO">
     <id column="USER_ID" jdbcType="VARCHAR" property="userId" />
     <result column="LINE_ID1" jdbcType="VARCHAR" property="lineId1" />
-    <result column="LINE_RATE1" jdbcType="INTEGER" property="lineRate1" />
+    <result column="LINE_RATE1" jdbcType="FLOAT" property="lineRate1" />
     <result column="LINE_ID2" jdbcType="VARCHAR" property="lineId2" />
-    <result column="LINE_RATE2" jdbcType="INTEGER" property="lineRate2" />
+    <result column="LINE_RATE2" jdbcType="FLOAT" property="lineRate2" />
     <result column="LINE_ID3" jdbcType="VARCHAR" property="lineId3" />
-    <result column="LINE_RATE3" jdbcType="INTEGER" property="lineRate3" />
+    <result column="LINE_RATE3" jdbcType="FLOAT" property="lineRate3" />
     <result column="LINE_ID4" jdbcType="VARCHAR" property="lineId4" />
-    <result column="LINE_RATE4" jdbcType="INTEGER" property="lineRate4" />
+    <result column="LINE_RATE4" jdbcType="FLOAT" property="lineRate4" />
 	<result column="LINE_ID5" jdbcType="VARCHAR" property="lineId5" />
-    <result column="LINE_RATE5" jdbcType="INTEGER" property="lineRate5" />
+    <result column="LINE_RATE5" jdbcType="FLOAT" property="lineRate5" />
   </resultMap>
   
   <sql id="select">

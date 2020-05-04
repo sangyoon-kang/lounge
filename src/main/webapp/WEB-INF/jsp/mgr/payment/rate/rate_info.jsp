@@ -51,12 +51,12 @@
 									<tr class="col">
 										<td><b>${v.runTime} 분</b> 수수료</td>
 										<input type="hidden" name="prr[${s.index }].runTime" value="${v.runTime}">
-										<td><input type="text" maxlength="2" name="prr[${s.index }].lineRate1" value="${!empty v.lineRate1 ? v.lineRate1 : 0}" class="useVal input_type1 w60" onkeyup="this.value=this.value.replace(/[^0-9]/g,'')" onfocus="if(this.value == 0) this.value='';" onblur="if(this.value=='') this.value = 0;" />%</td>
-										<td><input type="text" maxlength="2" name="prr[${s.index }].lineRate2" value="${!empty v.lineRate2 ? v.lineRate2 : 0}" class="useVal input_type1 w60" onkeyup="this.value=this.value.replace(/[^0-9]/g,'')" onfocus="if(this.value == 0) this.value='';" onblur="if(this.value=='') this.value = 0;" />%</td>
-										<td><input type="text" maxlength="2" name="prr[${s.index }].lineRate3" value="${!empty v.lineRate3 ? v.lineRate3 : 0}" class="useVal input_type1 w60" onkeyup="this.value=this.value.replace(/[^0-9]/g,'')" onfocus="if(this.value == 0) this.value='';" onblur="if(this.value=='') this.value = 0;" />%</td>
-										<td><input type="text" maxlength="2" name="prr[${s.index }].lineRate4" value="${!empty v.lineRate4 ? v.lineRate4 : 0}" class="useVal input_type1 w60" onkeyup="this.value=this.value.replace(/[^0-9]/g,'')" onfocus="if(this.value == 0) this.value='';" onblur="if(this.value=='') this.value = 0;" />%</td>
-										<td><input type="text" maxlength="2" name="prr[${s.index }].lineRate5" value="${!empty v.lineRate5 ? v.lineRate5 : 0}" class="useVal input_type1 w60" onkeyup="this.value=this.value.replace(/[^0-9]/g,'')" onfocus="if(this.value == 0) this.value='';" onblur="if(this.value=='') this.value = 0;" />%</td>
-										<td><input type="text" maxlength="2" name="prr[${s.index }].lineRateT" value="${!empty v.lineRateT ? v.lineRateT : 0}" class="sum input_type1 w60" readonly />%</td>
+										<td><input type="text" maxlength="5" name="prr[${s.index }].lineRate1" value="${!empty v.lineRate1 ? v.lineRate1 : 0}" class="useVal input_type1 w60" onfocus="if(this.value == 0) this.value='';" onblur="if(this.value=='') this.value = 0;" />%</td>
+										<td><input type="text" maxlength="5" name="prr[${s.index }].lineRate2" value="${!empty v.lineRate2 ? v.lineRate2 : 0}" class="useVal input_type1 w60" onfocus="if(this.value == 0) this.value='';" onblur="if(this.value=='') this.value = 0;" />%</td>
+										<td><input type="text" maxlength="5" name="prr[${s.index }].lineRate3" value="${!empty v.lineRate3 ? v.lineRate3 : 0}" class="useVal input_type1 w60" onfocus="if(this.value == 0) this.value='';" onblur="if(this.value=='') this.value = 0;" />%</td>
+										<td><input type="text" maxlength="5" name="prr[${s.index }].lineRate4" value="${!empty v.lineRate4 ? v.lineRate4 : 0}" class="useVal input_type1 w60" onfocus="if(this.value == 0) this.value='';" onblur="if(this.value=='') this.value = 0;" />%</td>
+										<td><input type="text" maxlength="5" name="prr[${s.index }].lineRate5" value="${!empty v.lineRate5 ? v.lineRate5 : 0}" class="useVal input_type1 w60" onfocus="if(this.value == 0) this.value='';" onblur="if(this.value=='') this.value = 0;" />%</td>
+										<td><input type="text" maxlength="5" name="prr[${s.index }].lineRateT" value="${!empty v.lineRateT ? v.lineRateT : 0}" class="sum input_type1 w60" readonly />%</td>
 									</tr>
 							</c:forEach>
 						</tbody>
@@ -76,11 +76,46 @@
 			$this = $(this)
 			$row = $this.parents('.col');
 			var ttl = 0;
-			$row.find('.useVal').each(function(idx,input){
-				ttl += parseInt( $(input).val() );
-			});
-			$row.find('.sum').val(ttl);
-		});
+            var addVal = 0;
+            $row.find('.useVal').each(function(idx,input){
+
+                addVal = parseFloat($(input).val());
+                if(isNaN(addVal)){
+                    addVal = 0;
+                    $(input).val("");
+                }
+
+                ttl += addVal;
+            });
+            $row.find('.sum').val(ttl);
+        });
+
+
+        $('.useVal').on("keyup", function(evt){
+            var charCode = (evt.which) ? evt.which : event.keyCode;
+            var _value = this.value;
+            var isValid = true;
+
+            if(evt.ctrlKey){
+                return;
+			}
+
+            if (charCode != 190 && charCode != 46 && charCode > 31 && (charCode < 48 || charCode > 57)){
+                isValid = false;
+            }
+
+            if(isNaN(_value)){
+                isValid = false;
+            }
+
+            if(!isValid){
+                this.value = trim(_value.substring(evt.key, _value.length-1));
+
+                if(isNaN(this.value)){
+                    this.value = '';
+				}
+			}
+        });
 
 		var seen = {};
 		$('.col').each(function() {
