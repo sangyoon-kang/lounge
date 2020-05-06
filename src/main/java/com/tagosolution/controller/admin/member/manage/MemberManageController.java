@@ -216,6 +216,27 @@ public class MemberManageController extends BaseController {
 		
 		return super.getConfig().getAdminRoot() + "/member/manage/history_view_popup";
 	}
+
+	/**
+	 * @param search
+	 * @param result
+	 * @param model
+	 * @return
+	 * @throws Exception
+	 */
+	@RequestMapping(value="/member_deposit_history_pop")
+	public String depositHistoryView(MemberSearchVO search, BindingResult result, Model model) throws Exception {
+		super.setPageSubTitle("입출금내역", model);
+		if(result.hasErrors())
+			return super.setBindingResult(result, model);
+
+		List<MoneyVO> list = (List<MoneyVO>)_gDao.selectBySearch("order.selectDepositHistoryList", search,"totalDepositHistoryList");
+
+		model.addAttribute("list", list);
+		model.addAttribute("search", search);
+
+		return super.getConfig().getAdminRoot() + "/member/manage/deposit_history_view_popup";
+	}
 	
 	/**
 	 * 회원관리 - 엑셀 저장

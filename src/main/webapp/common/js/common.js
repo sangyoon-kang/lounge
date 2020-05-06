@@ -68,6 +68,13 @@ function openPop(param, gubun, formObj) {
 		case "memCashPop_17":
 			popUpWin('/mgr/payment/cash/mem_cash17_pop.do' + param, gubun, 800, 650, 0, 0, "yes", "yes", true);
 			break;
+
+		case "memberDepositHistory":
+			popUpWin('/mgr/member/manage/member_deposit_history_pop' + param, gubun, 1000, 600, 0, 0, "yes", "yes", true);
+			break;
+
+
+
 		// 상관관계 매트릭스 팝업 - 공분산 매트릭스
 		// case "correlation2":
 		// popUpWin("/front/solution/correlation2.do" + param, gubun, 830, 630,
