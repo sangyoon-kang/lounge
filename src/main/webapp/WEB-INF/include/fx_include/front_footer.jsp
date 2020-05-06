@@ -15,7 +15,7 @@
 				<li>대표:${tagoplusSolution1_session_site.footRepName }</li>        
 				<li>사업자등록번호:${tagoplusSolution1_session_site.footBusinessNumber }</li>         
 				<li>통신판매업 신고번호: ${tagoplusSolution1_session_site.orderMail }</li>
-				<li>대표전화 : ${tagoplusSolution1_session_site.footPhone }</li>        
+				<%--<li>대표전화 : ${tagoplusSolution1_session_site.footPhone }</li>   --%>
 				<li>${tagoplusSolution1_session_site.footAddr1 } ${tagoplusSolution1_session_site.footAddr2 }</li>        
 				<li>개인정보처리담당자:${tagoplusSolution1_session_site.personalInformationOfficer }</li>
 				<li>${tagoplusSolution1_session_site.adminCopyright }</li></li>
