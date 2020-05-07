@@ -68,7 +68,7 @@
 				<li><p>출금</p></li>
 				<li>
 					<div class="inout_input_area">
-						<div class="inout_input"><input type="text"   class="equipCatValidation" maxlength="10" name="cash" value="0"/>원</div>
+						<div class="inout_input"><input type="text"   class="onlyNumber equipCatValidation" maxlength="10" name="cash" value="0"/>원</div>
 						<strong>보유금액 <fmt:formatNumber pattern="#,##0" var="memCash" value="${memberVO.cash}" />${memCash}원</strong>
 					</div>
 				</li>

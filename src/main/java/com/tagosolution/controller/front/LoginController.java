@@ -62,52 +62,56 @@ import com.tagosolution.service.model.search.AdminLoginSearchVO;
 import com.tagosolution.service.model.search.MemberSearchVO;
 import com.tagosolution.service.util.ListUtil;
 
+/**
+ * The type Login controller.
+ */
 @Controller
 public class LoginController extends BaseController{
-	
+
 	private static final Logger logger = LoggerFactory.getLogger(LoginController.class);
-	
+
 	private String _RSA_KEY_ATTR = "_RSA_PK_FRONT";
 
 	@Autowired
 	GeneralDAOImpl _gDao;
-	
+
 	@Autowired
 	@Qualifier("configBean")
 	private ConfigBean configBean;
-	
+
 	@Resource
 	MemberServiceImpl _memberService;
-	
-	@Resource 
+
+	@Resource
 	LoginServiceImpl _loginService;
-	
-	@Resource 
+
+	@Resource
 	IpinImpl _ipinService;
-	
+
 	@Resource
 	private SiteServiceImpl _siteService;
-	
+
 	@Resource
 	private SiteApiServiceImpl _siteServiceApi;
-	
+
+
 	/**
-	 * 로그인 페이지
-	 * 	- RSA 암호화 처리
-	 * @param site
-	 * @param result
-	 * @param model
-	 * @param request
-	 * @return
-	 * @throws Exception
+	 * Login string.
+	 *
+	 * @param search  the search
+	 * @param result  the result
+	 * @param model   the model
+	 * @param request the request
+	 * @return the string
+	 * @throws Exception the exception
 	 */
 	@RequestMapping(value = "/login")
 	public String login(SearchVO search, BindingResult result, Model model, HttpServletRequest request) throws Exception {
 		super.setPageSubTitle("로그인", model);
-		
+
 		if(result.hasErrors())
 			return super.setBindingResult(result, model);
-		
+
 		try {
 			RSAUtil rsa = new RSAUtil();
 			rsa.generateRSA(request, model, _RSA_KEY_ATTR);
@@ -119,12 +123,12 @@ public class LoginController extends BaseController{
 			model.addAttribute("alert", am);
 			return super.getConfig().getViewAlert();
 		}
-		
+
 		model.addAttribute("search", search);
 		return "/front/member/login";
 	}
-	
-	
+
+
 	/**
 	 * 로그인 처리
 	 * 	- RSA 암호화 처리
@@ -137,18 +141,18 @@ public class LoginController extends BaseController{
 	 */
 	@RequestMapping(value = "/request_secure_login")
 	public String requestSecureLogin(AdminLoginSearchVO search, BindingResult result, Model model, HttpServletRequest request) {
-		
+
 		if(result.hasErrors())
 			return super.setBindingResult(result, model);
-		
+
 		try {
 			PrivateKey privateKey = (PrivateKey)request.getSession().getAttribute(_RSA_KEY_ATTR);
 			request.getSession().removeAttribute(_RSA_KEY_ATTR);
 			RSAUtil rsa = new RSAUtil();
-			
+
 			String userId = rsa.decryptRsa(privateKey, search.getSecureId());
 			String userPassword = rsa.decryptRsa(privateKey, search.getSecurePwd());
-			
+
 			boolean hasAccount =  false;
 			MemberInfoVO memVo= (MemberInfoVO) _gDao.selectByKey("memberInfo.selectById", userId);
 			if (memVo != null) {
@@ -156,11 +160,11 @@ public class LoginController extends BaseController{
 					hasAccount = true;
 				}
 			}
-			
+
 			if (hasAccount) {
 				super.getSession().setAttribute(super.getConfig().getSessionNameForUser(), memVo);
 				_loginService.insertLoginUserCounter(memVo);
-				
+
 				if(search.getRedirectURL() != null && !search.getRedirectURL().isEmpty()){
 					String returnUrl = search.getRedirectURL().replaceAll("&amp;","&");
 					return "redirect:" + returnUrl;
@@ -175,12 +179,12 @@ public class LoginController extends BaseController{
 				}else{
 					am.setScript(("$.Nav('go', '"+super.getConfig().getFrontLoginURL()+"', null);"));
 				}
-				
+
 				model.addAttribute("alert", am);
 				return super.getConfig().getViewAlert();
-				
+
 			}
-			
+
 		}
 		catch (Exception e) {
 			logger.error(e.getMessage(), e);
@@ -189,13 +193,13 @@ public class LoginController extends BaseController{
 			return super.getConfig().getViewAlert();
 		}
 	}
-	
+
 	@RequestMapping(value = "/request_sns_login/{sns_type}")
 	public String requestSnsApiLogin(MemberSearchVO search, @PathVariable("sns_type") String sns_type, BindingResult result, Model model, HttpServletRequest request, HttpServletResponse response) {
-		
+
 		if(result.hasErrors())
 			return super.setBindingResult(result, model);
-		
+
 		try {
 			MemberInfoVO mem = new MemberInfoVO();
 			String accessToken = request.getParameter("access_token");
@@ -214,7 +218,7 @@ public class LoginController extends BaseController{
 					break;
 				default:
 					break;
-				
+
 			}
 			boolean snsFirstLogin = false;
 			MemberInfoVO memVo = (MemberInfoVO) _gDao.selectByKey("memberInfo.selectById", mem.getUserId());
@@ -254,12 +258,12 @@ public class LoginController extends BaseController{
 		super.getSession().invalidate();
 		return "redirect:" + LogoutURL;
 	}
-	
+
 	@RequestMapping(value="/join")
 	public String getAgreePage(MemberSearchVO search,HttpServletRequest request, BindingResult result, Model model) throws Exception {
 		if (result.hasErrors())
 			return super.setBindingResult(result, model);
-		
+
 		String[] list = ListUtil.listContentsType().keySet().toArray(new String[ListUtil.listContentsType().size()]);
 		search.setListContentsType(list);
 		List<CommContentsVO> term = (List<CommContentsVO>) _gDao.selectList("policies.selectMemberRule", search);
@@ -283,7 +287,7 @@ public class LoginController extends BaseController{
 		model.addAttribute("recommUserId", memVo.getNickname());
 		else
 		model.addAttribute("recommUserId", "");
-		
+
 		List<FixedCodeVO> bankList =(List<FixedCodeVO>)_gDao.selectList("fixedCode.selectByBank", null);
 		logger.debug("회원정보 입력 세팅");
 		model.addAttribute("bankList", bankList);
@@ -295,13 +299,13 @@ public class LoginController extends BaseController{
 
 		return "/front/member/register";
 	}
-	
+
 	private MemberSearchVO getAgreePagePrivate(String enc_data) throws Exception {
 		MemberSearchVO search = new MemberSearchVO();
 		Ipin ipin1 = _ipinService.getDatas2();
 		// 아이핀 회원정보 가져옴
 		IpinMember ipinMember = _ipinService.getDataMemberCheckPlus(enc_data, ipin1);
-			
+
 		// 정보가있다면?
 		if(ipinMember.getiRtn()>=0){
 
@@ -319,7 +323,7 @@ public class LoginController extends BaseController{
 				search.setAdult(false);
 			}
 
-			search.setBirthDate(ipinMember.getsBirthDate());
+			search.setBirthDate(ipinMember.getsBirthDate().substring(2));
 			search.setGender(ipinMember.getsGenderCode());
 
 			String retVal = ipinMember.getsName() + ":" + ipinMember.getsMobileNo();

@@ -138,12 +138,12 @@
                                 </ul> -->
                 <ul class="join_list">
                     <li>은행</li>
-                    <li><select class="join_select join_select02" name="bank">
+                    <li><select class="join_select join_select02" name="selectBank">
                         <option>선택</option>
 
                         <c:forEach items="${bankList}" var="m" varStatus="s">
                             <option ${vo.bank eq m.codeName ? 'selected' : ''}
-                                    value="${m.codeName }">${m.codeName }</option>
+                                    value="${m.codeDesc2 }">${m.codeName }</option>
                         </c:forEach>
                     </select></li>
                 </ul>
@@ -639,6 +639,7 @@
         }
 
         if (isNull($('input[name=isAccountCheck]').val()) || $('input[name=isAccountCheck]').val() == "0") {
+            $('input[name=bankAccount]').focus();
             alert('계좌번호 인증이 필요합니다.');
             return;
         }

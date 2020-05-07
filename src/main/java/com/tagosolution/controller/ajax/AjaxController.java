@@ -21,7 +21,9 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
+import java.nio.charset.Charset;
 import java.text.DecimalFormat;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -62,6 +64,9 @@ public class AjaxController extends BaseController {
 
     @Resource
     MemberServiceImpl _memberService;
+
+    @Resource
+    BankServiceImpl _bankService;
 
     /**
      * ajax - 아이디 중복 검사
@@ -133,11 +138,12 @@ public class AjaxController extends BaseController {
     /**
      * ajax - 아이디 중복 검사
      *
-     * @param nickname
-     * @param result
-     * @param model
+     * @param body       the body
+     * @param gradeLevel the grade level
+     * @param result     the result
+     * @param model      the model
      * @return 중복되었을 경우 중복된 아이디 유형, 아이디 리턴
-     * @throws Exception
+     * @throws Exception the exception
      */
     @RequestMapping(value = "/ajax/grade")
     @ResponseBody
@@ -254,16 +260,14 @@ public class AjaxController extends BaseController {
 
 
     /**
-     * ajax - 메인 - 간편 상담 요청 처리
-     * TODO : 개발중
+     * Ajax quick ask proc object.
      *
-     * @param body
-     * @param idType
-     * @param id
-     * @param result
-     * @param model
-     * @return
-     * @throws Exception
+     * @param body   the body
+     * @param vo     the vo
+     * @param result the result
+     * @param model  the model
+     * @return the object
+     * @throws Exception the exception
      */
     @RequestMapping(value = "/ajax/quickAskProc", method = RequestMethod.POST)
     @ResponseBody
@@ -523,13 +527,12 @@ public class AjaxController extends BaseController {
     /**
      * Quick Ask Request
      *
-     * @param body
-     * @param request
-     * @param response
-     * @param result
-     * @param model
-     * @return
-     * @throws Exception
+     * @param body   the body
+     * @param type   the type
+     * @param result the result
+     * @param model  the model
+     * @return object
+     * @throws Exception the exception
      */
     @RequestMapping(value = "/ajax/term")
     @ResponseBody
@@ -651,6 +654,42 @@ public class AjaxController extends BaseController {
             logger.debug(e.getMessage(), e);
         }
         return retVal;
+    }
+
+    /**
+     * Ajax check account object.
+     *
+     * @param body           the body
+     * @param accountCheckVO the account check vo
+     * @param result         the result
+     * @param model          the model
+     * @return the object
+     * @throws Exception the exception
+     */
+    @RequestMapping(value = "/ajax/checkAccount")
+    @ResponseBody
+    public Object ajaxCheckAccount(@RequestBody(required = false) String body, AccountCheckVO accountCheckVO, BindingResult result, Model model) throws Exception {
+        if (result.hasErrors())
+            return super.setBindingResult(result, model);
+
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
+        String strOrderNo   = sdf.format(new Date()) + (Math.round(Math.random() * 10000000000L) + "");
+
+        String serviceResult = _bankService.checkAccount(accountCheckVO.getService(), accountCheckVO.getStrGbn(), accountCheckVO.getStrResId(), accountCheckVO.getStrNm(), accountCheckVO.getStrBankCode(), accountCheckVO.getStrAccountNo(), accountCheckVO.getSvcGbn(), strOrderNo, accountCheckVO.getSvcCls(), accountCheckVO.getInqRsn());
+
+        String[] results = serviceResult.split("\\|");
+        String resultOrderNo = results[0];
+        String resultCode    = results[1];
+        String resultMsg     = results[2];
+
+        // P000: 정상응답일때 송신되는 코드
+        // E999: 시스템이상
+        Map<String, Object> map = new HashMap<String, Object>();
+        map.put("resultOrderNo", resultOrderNo);
+        map.put("resultCode", resultCode);
+        map.put("resultMsg", resultMsg);
+
+        return new Gson().toJson(map);
     }
 }
 
