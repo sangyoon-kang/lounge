@@ -62,9 +62,6 @@ import com.tagosolution.service.model.search.AdminLoginSearchVO;
 import com.tagosolution.service.model.search.MemberSearchVO;
 import com.tagosolution.service.util.ListUtil;
 
-/**
- * The type Login controller.
- */
 @Controller
 public class LoginController extends BaseController{
 	
@@ -93,17 +90,16 @@ public class LoginController extends BaseController{
 	
 	@Resource
 	private SiteApiServiceImpl _siteServiceApi;
-
-
+	
 	/**
-	 * Login string.
-	 *
-	 * @param search  the search
-	 * @param result  the result
-	 * @param model   the model
-	 * @param request the request
-	 * @return the string
-	 * @throws Exception the exception
+	 * 로그인 페이지
+	 * 	- RSA 암호화 처리
+	 * @param site
+	 * @param result
+	 * @param model
+	 * @param request
+	 * @return
+	 * @throws Exception
 	 */
 	@RequestMapping(value = "/login")
 	public String login(SearchVO search, BindingResult result, Model model, HttpServletRequest request) throws Exception {
@@ -323,7 +319,7 @@ public class LoginController extends BaseController{
 				search.setAdult(false);
 			}
 
-			search.setBirthDate(ipinMember.getsBirthDate().substring(2));
+			search.setBirthDate(ipinMember.getsBirthDate());
 			search.setGender(ipinMember.getsGenderCode());
 
 			String retVal = ipinMember.getsName() + ":" + ipinMember.getsMobileNo();

@@ -63,6 +63,8 @@
             <input type="hidden" name="gender" value="">
             <input type="hidden" name="isAccountCheck" value="">
             <div class="join_con">
+
+
                 <ul class="join_list">
                     <li>아이디</li>
                     <li>
@@ -136,12 +138,12 @@
                                 </ul> -->
                 <ul class="join_list">
                     <li>은행</li>
-                    <li><select class="join_select join_select02" name="selectBank">
+                    <li><select class="join_select join_select02" name="bank">
                         <option>선택</option>
 
                         <c:forEach items="${bankList}" var="m" varStatus="s">
                             <option ${vo.bank eq m.codeName ? 'selected' : ''}
-                                    value="${m.codeDesc2 }">${m.codeName }</option>
+                                    value="${m.codeName }">${m.codeName }</option>
                         </c:forEach>
                     </select></li>
                 </ul>
@@ -175,9 +177,11 @@
                 <ul class="join_list">
                     <li>추천지점</li>
                     <li>
-                        <input type="text" class="join_input01 join_input01_01" id="user_recommended" placeholder="추천지점"
-                               value="" ${!empty recommUserId ? 'readonly' : ''} />
-
+                        <div class="ui-widget">
+                            <input type="text" class="join_input01 join_input01_01" id="user_recommended"
+                                   placeholder="추천지점" value="" ${!empty recommUserId ? 'readonly' : ''}
+                                   autocomplete="off"/>
+                        </div>
                         <span class="join_txt_red" id="recUserIdCheck">(추천지점은 대리점에 문의하세요.)</span>
                     </li>
                 </ul>
@@ -203,38 +207,6 @@
                 </div>
                 <p><label><input type="checkbox" name="checks"
                                  id="personal_information"/><span>회원가입약관의 내용에 동의합니다.</span></label></p>
-
-				<ul class="join_list">
-					<li>추천지점</li>
-					<li>
-                        <div class="ui-widget">
-                            <input type="text" class="join_input01 join_input01_01" id="user_recommended" placeholder="추천지점" value="" ${!empty recommUserId ? 'readonly' : ''}
-                                   autocomplete="off"/>
-                        </div>
-                        <span class="join_txt_red" id="recUserIdCheck">(추천지점은 대리점에 문의하세요.)</span>
-					</li>
-				</ul>
-			</div>
-			<h3 class="con_tit mt60">회원가입약관</h3>
-			<div class="join_agree_box join_agree_box_fir">
-				<p>
-				<label>
-				<input type="checkbox" name="checkbox-01" id="selectAll"  />
-				<span>전체동의</span>
-				</label>
-				<span class="join_agree_txt">회원가입약관 및 개인정보처리방침안내의 내용에 동의하셔야 회원가입 하실 수 있습니다.</span></p>
-			</div>
-			<div class="join_agree_box">
-				<h4 class="con_stit">개인정보수집 및 이용동의서 (필수)</h4>
-				<div>
-					<p>
-					<c:forEach items="${term }" var="t2">
-						<c:if test="${t2.contentsType eq 'memterms'}">
-							${t2.contents }
-						</c:if>
-					</c:forEach></p>
-				</div>
-				<p><label><input type="checkbox" name="checks"  id="personal_information" /><span>회원가입약관의 내용에 동의합니다.</span></label></p>
 
 
                 <h4 class="con_stit con_stit_line">서비스이용약관 (필수)</h4>
@@ -489,8 +461,54 @@
 
 
         });
-        $('#user_recommended').on('keyup', function () {
-            checkRecomm();
+
+
+        // 지점검색 자동완성기능 추가 dj.kim
+        var recommList = [];
+        <c:forEach var="member" items="${recommendList}">
+        recommList.push({label: "${member.nickname}", data: "${member.userID}"});
+        </c:forEach>
+
+
+        $("#user_recommended").autocomplete({
+            source: recommList,
+
+            select: function (event, ui) {
+                console.log(ui.item);
+                $('input[name=recommUserId]').val(ui.item.data);
+                $('#recUserIdCheck').show();
+                $('#recUserIdCheck').attr('class', 'join_txt_blue bold');
+                $('#recUserIdCheck').text('등록된 추천지점입니다.');
+            },
+            focus: function (event, ui) {
+                return false;
+            },
+            change: function (event, ui) {
+                return false;
+            }
+        });
+
+
+        $('#user_recommended').on('change', function () {
+            var _this = this;
+            recommList.some(function (row, idx) {
+                if (row.label == $(_this).val()) {
+                    $('input[name=recommUserId]').val(row.data);
+                    return true;
+                }
+                $('input[name=recommUserId]').val('');
+            });
+
+            if ($('input[name=recommUserId]').val() == "") {
+                $('#recUserIdCheck').show();
+                $('#recUserIdCheck').attr('class', 'join_txt_red bold');
+                $('#recUserIdCheck').text('등록되지 않은 추천지점입니다.');
+            } else {
+                $('#recUserIdCheck').show();
+                $('#recUserIdCheck').attr('class', 'join_txt_blue bold');
+                $('#recUserIdCheck').text('등록된 추천지점입니다.');
+            }
+            //checkRecomm();
         });
 
         function checkRecomm() {
@@ -522,104 +540,10 @@
                 $('#recUserIdCheck').show();
                 $('#recUserIdCheck').attr('class', 'join_txt_blue bold');
                 /* $('#recUserIdCheck').text( '(추천지점이 없는 경우
-
-
-
-
                 ${SITE_NAME_U}를 입력하세요.)'); */
             }
         }
     });
-			} else {
-				$('#userPwdCheck2').show();
-				$('#userPwdCheck2').prop('class', 'join_txt_blue bold');
-				$('#userPwdCheck2').text('비밀번호가 일치 합니다.');
-			}
-		}
-
-
-	});
-
-
-	// 지점검색 자동완성기능 추가 dj.kim
-    var recommList = [];
-    <c:forEach var="member" items="${recommendList}">
-        recommList.push({label : "${member.nickname}", data : "${member.userID}"});
-    </c:forEach>
-
-
-    $("#user_recommended").autocomplete({
-        source: recommList,
-
-        select: function(event, ui) {
-            console.log(ui.item);
-            $('input[name=recommUserId]').val(ui.item.data);
-            $('#recUserIdCheck').show();
-            $('#recUserIdCheck').attr('class', 'join_txt_blue bold');
-            $('#recUserIdCheck').text( '등록된 추천지점입니다.');
-        },
-        focus: function(event, ui) {
-            return false;
-        },
-        change: function(event, ui){
-            return false;
-        }
-    });
-
-
-	$('#user_recommended').on('change', function() {
-        var _this = this;
-        recommList.some(function (row, idx) {
-            if (row.label == $(_this).val()) {
-                $('input[name=recommUserId]').val(row.data);
-                return true;
-            }
-            $('input[name=recommUserId]').val('');
-        });
-
-        if($('input[name=recommUserId]').val() == ""){
-            $('#recUserIdCheck').show();
-            $('#recUserIdCheck').attr('class', 'join_txt_red bold');
-            $('#recUserIdCheck').text( '등록되지 않은 추천지점입니다.');
-        }else{
-            $('#recUserIdCheck').show();
-            $('#recUserIdCheck').attr('class', 'join_txt_blue bold');
-            $('#recUserIdCheck').text( '등록된 추천지점입니다.');
-        }
-		//checkRecomm();
-	});
-	function checkRecomm(){
-            var nickName = trim($('#user_recommended').val());
-            $('#user_recommended').val(nickName);
-            if (nickName != '') {
-				$.ajax({
-					type : 'post',
-					url : '/ajax/checkNickname.do',
-					data : {
-						nickname : nickName
-					},
-					dataType : 'json',
-					success : function(data) {
-						if (data.result == null) {
-							$('input[name=recommUserId]').val('');
-							$('#recUserIdCheck').show();
-							$('#recUserIdCheck').attr('class', 'join_txt_red bold');
-							$('#recUserIdCheck').text( '등록되지 않은 추천지점입니다.');
-						} else {
-							$('input[name=recommUserId]').val(data.result.userID);
-							$('#recUserIdCheck').show();
-							$('#recUserIdCheck').attr('class', 'join_txt_blue bold');
-							$('#recUserIdCheck').text( '등록된 추천지점입니다.');
-						}
-					}
-				});
-		} else if ($('#user_recommended').val() == ''){
-			$('#recUserIdCheck').show();
-			$('#recUserIdCheck').attr('class', 'join_txt_blue bold');
-			/* $('#recUserIdCheck').text( '(추천지점이 없는 경우 ${SITE_NAME_U}를 입력하세요.)'); */
-		}
-	}
-});
 
     function scrollTo(el) {
         $('html, body').animate({
