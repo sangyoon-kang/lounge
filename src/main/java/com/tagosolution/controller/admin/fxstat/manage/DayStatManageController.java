@@ -1,10 +1,16 @@
 package com.tagosolution.controller.admin.fxstat.manage;
 
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
+import com.tagoplus.util.ExcelDownloadUtil;
+import com.tagosolution.service.model.search.AccumulateSearchVO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
@@ -102,5 +108,62 @@ private static final Logger logger = LoggerFactory.getLogger(MemberManageControl
 		model.addAttribute("monthMap", ListUtil.monthMap());
 		return super.getConfig().getAdminRoot() + "/statistic/manage/day_total_bill";
 	}
+
+
+	/**
+	 * User accumulated reserves
+	 * @param search
+	 * @param result
+	 * @param model
+	 * @return
+	 * @throws Exception
+	 */
+	@RequestMapping(value = "/user_accumulated_reserves")
+	public String userAccumulatedReserves(AccumulateSearchVO search, BindingResult result, Model model) throws Exception {
+		super.setPageSubTitle("통계관리  &gt; 누적보유금현황", model);
+
+		if(result.hasErrors())
+			return super.setBindingResult(result, model);
+
+		search.setRecordCount(20);
+		List<MoneyVO> list = (List<MoneyVO>) _gDao.selectBySearch("money.getAccumulatedReservesList", search,"getAccumulatedReservesListCount");
+
+
+		model.addAttribute("list", list);
+		model.addAttribute("search", search);
+
+		return super.getConfig().getAdminRoot() + "/statistic/manage/user_accumulated_reserves";
+	}
+
+
+	/**
+	 * User accumulated reserves
+	 * @param search
+	 * @param result
+	 * @param model
+	 * @return
+	 * @throws Exception
+	 */
+	@RequestMapping(value = "/user_accumulated_reserves_excel")
+	public String userAccumulatedReserves(AccumulateSearchVO search, BindingResult result, HttpServletRequest request, HttpServletResponse response, Model model) throws Exception {
+		super.setPageSubTitle("통계관리  &gt; 누적보유금현황", model);
+
+		if(result.hasErrors())
+			return super.setBindingResult(result, model);
+
+		List<MoneyVO> list = (List<MoneyVO>) _gDao.selectBySearch("money.getAccumulatedReservesAllList", search);
+
+		Map<String, Object> map = new HashMap<String, Object>();
+
+		map.put("list", list);
+		map.put("search", search);
+
+		ExcelDownloadUtil.downloadExcel(request, response, map, "accumulated_reserves_list_"+ ListUtil.getCurrentDate() +".xlsx", "accumulated_reserves_list.xlsx");
+
+		return null;
+	}
+
+
+
 
 }
