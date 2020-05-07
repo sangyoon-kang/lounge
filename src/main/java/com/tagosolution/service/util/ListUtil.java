@@ -145,7 +145,14 @@ public class ListUtil {
 		month = month +1;
 		return year.toString().concat("-"+((month < 10 ? "0"+month : month).toString()));
 	}
-	
+
+	public static String getCurrentDate() throws Exception{
+		SimpleDateFormat format = new SimpleDateFormat ( "yyyyMMddHHmm");
+		Calendar time = Calendar.getInstance();
+		return format.format(time.getTime());
+
+	}
+
 	/**
 	 * check date equals today.
 	 * 

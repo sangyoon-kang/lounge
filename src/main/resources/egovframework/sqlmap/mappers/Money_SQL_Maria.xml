@@ -404,4 +404,95 @@
 
 
 
+
+	<select id="getAccumulatedReservesList" parameterType="search" resultMap="BaseResultMap">
+
+		select
+			tmi.user_id,
+			tmi.user_name,
+			COALESCE(tmi.cash, 0) as cash,
+			COALESCE((
+				select
+					sum(fm2.CASH) as i_cash
+				from
+					fx_money fm2
+				where
+						fm2.IO_TYPE = 'I'
+				  and tmi.USER_ID = fm2.USER_ID
+				  and fm2.STATE = 'A'
+				group by
+					fm2.USER_ID) ,0) as i_cash,
+			COALESCE((
+				select
+					sum(fm3.CASH) as o_cash
+				from
+					fx_money fm3
+				where
+						fm3.IO_TYPE = 'O'
+				  and fm3.STATE = 'A'
+				  and tmi.USER_ID = fm3.USER_ID
+				group by
+					fm3.USER_ID ),0) as o_cash
+		from
+			ts_member_info tmi
+		<where>
+			<if test="searchWord != null and searchWord != ''">
+				tmi.user_name like CONCAT('%', #{searchWord}, '%')
+			</if>
+		</where>
+		<include refid="paging.limit"/>
+	</select>
+
+
+	<select id="getAccumulatedReservesAllList" parameterType="search" resultMap="BaseResultMap">
+		select
+			tmi.user_id,
+			tmi.user_name,
+			COALESCE(tmi.cash, 0) as cash,
+			COALESCE((
+				select
+					sum(fm2.CASH) as i_cash
+				from
+					fx_money fm2
+				where
+						fm2.IO_TYPE = 'I'
+				  and tmi.USER_ID = fm2.USER_ID
+				  and fm2.STATE = 'A'
+				group by
+					fm2.USER_ID) ,0) as i_cash,
+			COALESCE((
+				select
+					sum(fm3.CASH) as o_cash
+				from
+					fx_money fm3
+				where
+						fm3.IO_TYPE = 'O'
+				  and fm3.STATE = 'A'
+				  and tmi.USER_ID = fm3.USER_ID
+				group by
+					fm3.USER_ID ),0) as o_cash
+		from
+			ts_member_info tmi
+	</select>
+
+
+
+	<select id="getAccumulatedReservesListCount" parameterType="search" resultType="int">
+		select
+			count(tmi.user_id)
+		from
+			ts_member_info tmi
+		<where>
+			<if test="searchWord != null and searchWord != ''">
+				tmi.user_name like CONCAT('%', #{searchWord}, '%')
+			</if>
+		</where>
+	</select>
+
+
+
+
+
+
+
 </mapper>
