@@ -143,9 +143,11 @@
 				<ul class="join_list">
 					<li>추천지점</li>
 					<li>
-					<input type="text" class="join_input01 join_input01_01" id="user_recommended" placeholder="추천지점" value="" ${!empty recommUserId ? 'readonly' : ''} />
-					
-                         <span class="join_txt_red" id="recUserIdCheck">(추천지점은 대리점에 문의하세요.)</span> 
+                        <div class="ui-widget">
+                            <input type="text" class="join_input01 join_input01_01" id="user_recommended" placeholder="추천지점" value="" ${!empty recommUserId ? 'readonly' : ''}
+                                   autocomplete="off"/>
+                        </div>
+                        <span class="join_txt_red" id="recUserIdCheck">(추천지점은 대리점에 문의하세요.)</span>
 					</li>
 				</ul>
 			</div>
@@ -380,13 +382,62 @@ $(function() {
 		
 		
 	});
-	$('#user_recommended').on('keyup', function() {
-		checkRecomm();
-		});
+
+
+	// 지점검색 자동완성기능 추가 dj.kim
+    var recommList = [];
+    <c:forEach var="member" items="${recommendList}">
+        recommList.push({label : "${member.nickname}", data : "${member.userID}"});
+    </c:forEach>
+
+
+    $("#user_recommended").autocomplete({
+        source: recommList,
+
+        select: function(event, ui) {
+            console.log(ui.item);
+            $('input[name=recommUserId]').val(ui.item.data);
+        },
+        focus: function(event, ui) {
+            return false;
+            //event.preventDefault();
+        },
+        close: function(event, ui){
+            var _this = this;
+            if($('input[name=recommUserId]').val() == "") {
+                recommList.forEach(function (row, idx) {
+                    if (row.label == $(_this).val()) {
+                        $('input[name=recommUserId]').val(row.data);
+                        return false;
+                    }
+                });
+            }
+
+            if($('input[name=recommUserId]').val() == ""){
+                $('#recUserIdCheck').show();
+                $('#recUserIdCheck').attr('class', 'join_txt_red bold');
+                $('#recUserIdCheck').text( '등록되지 않은 추천지점입니다.');
+            }else{
+                $('#recUserIdCheck').show();
+                $('#recUserIdCheck').attr('class', 'join_txt_blue bold');
+                $('#recUserIdCheck').text( '등록된 추천지점입니다.');
+            }
+        }
+    });
+
+
+	$('#user_recommended').on('change', function() {
+        $('input[name=recommUserId]').val('');
+        $('#recUserIdCheck').show();
+        $('#recUserIdCheck').attr('class', 'join_txt_red bold');
+        $('#recUserIdCheck').text( '등록되지 않은 추천지점입니다.');
+
+		//checkRecomm();
+	});
 	function checkRecomm(){
-		var nickName = trim($('#user_recommended').val());
-		$('#user_recommended').val(nickName);
-		if (nickName != '') {
+            var nickName = trim($('#user_recommended').val());
+            $('#user_recommended').val(nickName);
+            if (nickName != '') {
 				$.ajax({
 					type : 'post',
 					url : '/ajax/checkNickname.do',

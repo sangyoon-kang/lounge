@@ -31,8 +31,8 @@
 	<link href="/common/css/board.css" rel="stylesheet" type="text/css" />
 	<link rel='shortcut icon' type='image/png' href='/images/fx_assets/logo/favicon.png' />
 	<link rel="stylesheet" type="text/css" href="//cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.css"/>
-	
-	
+	<link rel="stylesheet" href="/common/css/jquery/jquery-ui-1.12.1/jquery-ui.css">
+
 	<script src="https://ajax.aspnetcdn.com/ajax/jQuery/jquery-1.11.0.min.js"></script>
   	<script src="https://ajax.aspnetcdn.com/ajax/jquery.ui/1.12.1/jquery-ui.min.js"></script>
     <script type="text/javascript" src="/common/js/jquery/jquery.locator.js" charset="utf-8"></script>
