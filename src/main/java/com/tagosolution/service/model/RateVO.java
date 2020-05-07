@@ -9,7 +9,7 @@ public class RateVO implements GeneralModel {
 	 */
 	private static final long serialVersionUID = -1L;
 
-	private Byte lrIdx;
+	private Integer lrIdx;
 
 	private Integer runTime;
 
@@ -25,11 +25,11 @@ public class RateVO implements GeneralModel {
 
     private Float lineRateT;
 
-    public Byte getLrIdx() {
+    public Integer getLrIdx() {
 		return lrIdx;
 	}
 
-	public void setLrIdx(Byte lrIdx) {
+	public void setLrIdx(Integer lrIdx) {
 		this.lrIdx = lrIdx;
 	}
 
