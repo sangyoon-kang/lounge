@@ -397,41 +397,38 @@ $(function() {
         select: function(event, ui) {
             console.log(ui.item);
             $('input[name=recommUserId]').val(ui.item.data);
+            $('#recUserIdCheck').show();
+            $('#recUserIdCheck').attr('class', 'join_txt_blue bold');
+            $('#recUserIdCheck').text( '등록된 추천지점입니다.');
         },
         focus: function(event, ui) {
-            return false;
-            //event.preventDefault();
+            $('input[name=recommUserId]').val(ui.item.data);
         },
         close: function(event, ui){
-            var _this = this;
-            if($('input[name=recommUserId]').val() == "") {
-                recommList.forEach(function (row, idx) {
-                    if (row.label == $(_this).val()) {
-                        $('input[name=recommUserId]').val(row.data);
-                        return false;
-                    }
-                });
-            }
-
-            if($('input[name=recommUserId]').val() == ""){
-                $('#recUserIdCheck').show();
-                $('#recUserIdCheck').attr('class', 'join_txt_red bold');
-                $('#recUserIdCheck').text( '등록되지 않은 추천지점입니다.');
-            }else{
-                $('#recUserIdCheck').show();
-                $('#recUserIdCheck').attr('class', 'join_txt_blue bold');
-                $('#recUserIdCheck').text( '등록된 추천지점입니다.');
-            }
+            return;
         }
     });
 
 
 	$('#user_recommended').on('change', function() {
-        $('input[name=recommUserId]').val('');
-        $('#recUserIdCheck').show();
-        $('#recUserIdCheck').attr('class', 'join_txt_red bold');
-        $('#recUserIdCheck').text( '등록되지 않은 추천지점입니다.');
+        var _this = this;
+        recommList.some(function (row, idx) {
+            if (row.label == $(_this).val()) {
+                $('input[name=recommUserId]').val(row.data);
+                return true;
+            }
+            $('input[name=recommUserId]').val('');
+        });
 
+        if($('input[name=recommUserId]').val() == ""){
+            $('#recUserIdCheck').show();
+            $('#recUserIdCheck').attr('class', 'join_txt_red bold');
+            $('#recUserIdCheck').text( '등록되지 않은 추천지점입니다.');
+        }else{
+            $('#recUserIdCheck').show();
+            $('#recUserIdCheck').attr('class', 'join_txt_blue bold');
+            $('#recUserIdCheck').text( '등록된 추천지점입니다.');
+        }
 		//checkRecomm();
 	});
 	function checkRecomm(){
