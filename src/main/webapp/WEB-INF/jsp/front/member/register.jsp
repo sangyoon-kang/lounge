@@ -402,10 +402,10 @@ $(function() {
             $('#recUserIdCheck').text( '등록된 추천지점입니다.');
         },
         focus: function(event, ui) {
-            $('input[name=recommUserId]').val(ui.item.data);
+            return false;
         },
-        close: function(event, ui){
-            return;
+        change: function(event, ui){
+            return false;
         }
     });
 
