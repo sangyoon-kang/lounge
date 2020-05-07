@@ -187,6 +187,8 @@ public class MemberServiceImpl extends BaseServiceImpl implements MemberService 
 				logger.debug("ipin_di : " + ipinDi);
 				vo.setIpinDi(ipinDi);
 
+				vo.setBirthDt(search.getBirthDate()); // 생년월일 저장
+
 				super.getDAO().insert("memberInfo.merge", vo);
 
 				/*if (site.getPointYn().equals("Y")) {

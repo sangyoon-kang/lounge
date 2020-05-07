@@ -52,6 +52,13 @@
 						opener.document.formJoin.phone3.value = phonenumber.substring(7, 11);
 					}
 
+					// 생년월일
+					var birthDate="<c:out value="${search.birthDate}"/>";
+					// 성별
+					var gender ="<c:out value="${search.gender}"/>";
+
+					opener.document.formJoin.birthDate.value = birthDate;
+					opener.document.formJoin.gender.value = gender;
 
 					//opener.document.joinForm.submit();
 					self.close();
@@ -93,6 +100,14 @@
 						opener.document.formJoin.phone2.value = phonenumber.substring(3, 7);
 						opener.document.formJoin.phone3.value = phonenumber.substring(7, 11);
 					}
+
+					// 생년월일
+					var birthDate="<c:out value="${search.birthDate}"/>";
+					// 성별
+					var gender ="<c:out value="${search.gender}"/>";
+
+					opener.document.formJoin.birthDate.value = birthDate;
+					opener.document.formJoin.gender.value = gender;
 
 					//opener.document.joinForm.submit();
 					self.close();
