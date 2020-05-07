@@ -315,6 +315,14 @@
 
 	});
 
+	$('input[name="searchWord"]').on("keydown",function(e){
+		if(e.keyCode == '13'){
+			e.preventDefault();
+			e.stopPropagation();
+			doSearch();
+		}
+	});
+
 
 	//Refreshing Every Minute
 	var time = new Date().getTime();

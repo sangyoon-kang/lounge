@@ -367,6 +367,39 @@
 					, RESULT_TIME = DATE_FORMAT(DATE_ADD(RESULT_TIME, INTERVAL -3 MINUTE), '%Y-%m-%d %H:%i')
 		WHERE	RESULT_TIME = DATE_FORMAT(DATE_ADD(CONCAT(#{goodsDate,jdbcType=VARCHAR}, ' ', #{goodsTime,jdbcType=VARCHAR}), INTERVAL RUN_TIME MINUTE), '%Y-%m-%d %H:%i')
 			AND	RUN_TIME = #{runTime,jdbcType=INTEGER};
-   </update>   
+   </update>
+
+
+
+    <select id="selectDepositHistoryList" parameterType="search" resultMap="money.BaseResultMap">
+        select
+            FM.USER_ID,
+            FM.STATE,
+            FM.ACCEPT_DATE,
+            FM.ACCOUNT_NAME,
+            FM.IO_TYPE,
+            FM.CASH,
+            FM.BANK_NAME,
+            FM.REG_DATE,
+            FM.BALANCE
+        from
+            fx_money FM
+        Where
+                FM.STATE = 'A'
+            AND FM.USER_ID = #{userId}
+        ORDER BY FM.ACCEPT_DATE DESC
+        <include refid="paging.limit"/>
+    </select>
+
+    <select id="totalDepositHistoryList" parameterType="search" resultType="int">
+        select
+            count(*)
+        from
+            fx_money FM
+        Where
+                FM.STATE = 'A'
+            AND FM.USER_ID = #{userId}
+    </select>
+
 
 </mapper>
