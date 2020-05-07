@@ -76,10 +76,16 @@
 			$this = $(this)
 			$row = $this.parents('.col');
 			var ttl = 0;
-            var addVal = 0;
+            var addVal = "";
             $row.find('.useVal').each(function(idx,input){
 
-                addVal = parseFloat($(input).val());
+                addVal = $(input).val();
+                if(addVal.split(".").length > 1 && addVal.split(".")[1].length > 2){
+                    addVal = trim(addVal.substring(0, addVal.length-1));
+                }
+
+                addVal = parseFloat(addVal);
+
                 if(isNaN(addVal)){
                     addVal = 0;
                     $(input).val("");
@@ -87,7 +93,8 @@
 
                 ttl += addVal;
             });
-            $row.find('.sum').val(ttl);
+
+            $row.find('.sum').val(ttl.toFixed(2));
         });
 
 
@@ -106,10 +113,12 @@
 
             if(isNaN(_value)){
                 isValid = false;
+            }else if(_value.split(".").length > 1 && _value.split(".")[1].length > 2){
+                isValid = false;
             }
 
             if(!isValid){
-                this.value = trim(_value.substring(evt.key, _value.length-1));
+                this.value = trim(_value.substring(0, _value.length-1));
 
                 if(isNaN(this.value)){
                     this.value = '';

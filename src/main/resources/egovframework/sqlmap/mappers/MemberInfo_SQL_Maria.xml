@@ -138,9 +138,17 @@
 					, REG_DATE
 		FROM 	TS_MEMBER_INFO
 		WHERE 	USE_FLAG = 'Y' 
-	</select>	
-	
-	
+	</select>
+
+	<!-- 추천인검색 리스트 -->
+	<select id="selectRecommendList" parameterType="java.lang.Short" resultMap="BaseResultMap">
+		SELECT
+		<include refid="select" />
+		FROM 	TS_MEMBER_INFO
+		WHERE 	GRADE_LEVEL IN  ('1', '2', '3', '4')
+	</select>
+
+
 	<select id="selectLeavetoday" parameterType="String" resultType="java.lang.Integer">
 		SELECT	COUNT(*) AS COUNT
 		FROM 	ts_member_info
