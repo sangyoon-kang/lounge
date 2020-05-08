@@ -151,7 +151,7 @@ private static final Logger logger = LoggerFactory.getLogger(MemberManageControl
 		if(result.hasErrors())
 			return super.setBindingResult(result, model);
 
-		List<MoneyVO> list = (List<MoneyVO>) _gDao.selectBySearch("money.getAccumulatedReservesAllList", search);
+		List<MoneyVO> list = (List<MoneyVO>) _gDao.selectList("money.getAccumulatedReservesAllList", search);
 
 		Map<String, Object> map = new HashMap<String, Object>();
 
