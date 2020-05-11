@@ -83,6 +83,16 @@ public class MoneyVO implements GeneralModel {
     private String regYears;
     
     private String regYearsText;
+
+	private String regUser;
+
+	public String getRegUser() {
+		return regUser;
+	}
+
+	public void setRegUser(String regUser) {
+		this.regUser = regUser;
+	}
     
     public String getRegYears() {
 		return regYears;

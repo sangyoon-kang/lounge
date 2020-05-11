@@ -50,7 +50,10 @@
     <result column="BANK_NUM" jdbcType="VARCHAR" property="bankNum" />
     <result column="TIMES" jdbcType="VARCHAR" property="times" />
     <result column="FAILED" jdbcType="VARCHAR" property="failed" />
-    
+
+	<result column="REG_USER" jdbcType="VARCHAR" property="regUser" />
+	<result column="MEMO1" jdbcType="VARCHAR" property="memo" />
+
   </resultMap>
   
   <sql id="Base_Column_List">

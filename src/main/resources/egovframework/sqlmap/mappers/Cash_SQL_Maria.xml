@@ -560,9 +560,9 @@
 		VALUES	('M'
 					, #{userId,jdbcType=VARCHAR}
 					, (#{cash})
-					, #{userId,jdbcType=VARCHAR}
+					, #{regUser,jdbcType=VARCHAR}
 					, now()
-					, '관리자 지급'
+					, #{memo1,jdbcType=VARCHAR}
 					, null)
 	</insert>
 	

@@ -76,6 +76,10 @@ function openPop(param, gubun, formObj) {
 			popUpWin('/mgr/member/manage/member_info_popup' + param, gubun, 800, 650, 0, 0, "yes", "yes", true);
 			break;
 
+		case "memberSupportCashHistory":
+			popUpWin('/mgr/member/manage/member_support_cash_history_pop' + param, gubun, 1000, 600, 0, 0, "yes", "yes", true);
+			break;
+
 
 
 		// 상관관계 매트릭스 팝업 - 공분산 매트릭스

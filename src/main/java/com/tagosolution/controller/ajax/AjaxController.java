@@ -567,7 +567,7 @@ public class AjaxController extends BaseController {
 
     @RequestMapping(value = "/mgr/ajax/addCash")
     @ResponseBody
-    public String addCash(@RequestBody(required = false) String userid, String uid, String cash, BindingResult result, Model model) throws Exception {
+    public String addCash(@RequestBody(required = false) String userid, String uid, String cash, String memo, BindingResult result, Model model) throws Exception {
         if (result.hasErrors())
             return super.setBindingResult(result, model);
         MemberInfoVO mmb = new MemberInfoVO();
@@ -578,6 +578,9 @@ public class AjaxController extends BaseController {
 
         cashVO.setUserId(mmb.getUserId());
         cashVO.setCash(mmb.getCash());
+        cashVO.setMemo1(memo);
+        cashVO.setRegUser(super.getAdminSession().getAdminId());
+
         try {
             _gDao.insert("cash.insertCashByUser", cashVO);
         } catch (Exception e) {

@@ -46,11 +46,11 @@
 	<script type="text/javascript" src="/common/js/swfobject.js"></script>
 	<script type="text/javascript" src="/common/js/lib.js"></script> 
     <script type="text/javascript" src="/common/js/common.jquery.util.js"></script>
-    <script type="text/javascript" src="/common/js/common.js?v1.1"></script>
+    <script type="text/javascript" src="/common/js/common.js?v1.2"></script>
     <script src="http://dmaps.daum.net/map_js_init/postcode.v2.js"></script>
     <script type="text/javascript" src="/common/js/jquery/datetimepicker/jquery.datetimepicker.full.min.js"></script>
     <script type="text/javascript" src="/common/js/custom/datetimepicker.js"></script>
     <script type="text/javascript" src="/common/js/moment/moment.js"></script>
 </head>
 <body>
-<div id="wrap">
+<div id="wrap"/>

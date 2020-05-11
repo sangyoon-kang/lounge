@@ -1056,11 +1056,17 @@ function doSubmit() {
 function rechargeCash(){
 	var cash = $('input[name=cash]').val();
 	var userid = $('input[name=userId]').val();
+	var memo = $('input[name=memo]').val();
 	
 	if(!cash){
 		alert('CASH 입력하세요');
 		return false;
 	}
+
+	if(!memo){
+		memo = "관리자 지급";
+	}
+
 	$.ajax({
 		type : 'post',
 		url : '/mgr/ajax/addCash',

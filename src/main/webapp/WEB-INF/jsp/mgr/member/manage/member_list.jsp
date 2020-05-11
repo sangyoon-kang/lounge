@@ -69,10 +69,11 @@
 					<col width="10%" />
 					<col width="10%" />
 					<col width="10%" />
-					<col width="20%" />
+					<col width="12%" />
 					<col width="6%" />
 					<col width="8%" />
 					<col width="7%" />
+					<col width="8%" />
 					<col width="8%" />
 				</colgroup>
 				<thead>
@@ -88,6 +89,7 @@
 					<th>가입일</th>
 					<th>거래조회</th>
 					<th>입출금내역</th>
+					<th>지원금내역</th>
 				</tr>
 				</thead>
 				<tbody>
@@ -105,6 +107,7 @@
 							<td><fmt:formatDate value="${m.regDate }" pattern="${DATE_FORMAT }"/></td>
 							<td><a onclick="javascript:showHistory('${m.userId }');" class="bt_modify">거래조회</a></td>
 							<td><a onclick="javascript:showDepositHistory('${m.userId }');" class="bt_modify">입출금내역</a></td>
+							<td><a onclick="javascript:showSupportCashHistory('${m.userId }');" class="bt_modify">지원금내역</a></td>
 						</tr>
 					</c:forEach>
 				</c:if>
@@ -146,6 +149,10 @@
 
 	function showDepositHistory(userId) {
 		openPop('?userId=' + userId, 'memberDepositHistory');
+	}
+
+	function showSupportCashHistory(userId) {
+		openPop('?userId=' + userId, 'memberSupportCashHistory');
 	}
 
 	function doSendPopup() {

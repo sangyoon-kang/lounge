@@ -174,7 +174,10 @@
 						<td colspan="3">
 							<span id="cash"><fmt:formatNumber pattern="#,##0" value="${vo.cash }" /> 원</span>
 							<input type="number" name="cash" class="w20">
+							<span>&nbsp;&nbsp;&nbsp;지급사유</span>
+							<input type="text" name="memo" class="w30" placeholder="지급 사유를 입력하세요(기본 : 관리자 지급)">
 							<button type="button" class="btn btn_round bg_darkgray ml5" onclick="rechargeCash()">CASH추가</button>
+							<button type="button" class="btn btn_round bg_darkgray ml5" onclick="showCashLog('${vo.userId }')">지원금내역</button>
 						</td>
 					</tr>
 					<c:if test="${setting.comPhoneFlag > 0 }"> 
@@ -1111,17 +1114,24 @@ function doSubmit() {
 function rechargeCash(){
 	var cash = $('input[name=cash]').val();
 	var userid = $('input[name=userId]').val();
+	var memo = $('input[name=memo]').val();
 	
 	if(!cash){
 		alert('CASH 입력하세요');
 		return false;
 	}
+
+	if(!memo){
+		memo = "관리자 지급";
+	}
+
 	$.ajax({
 		type : 'post',
 		url : '/mgr/ajax/addCash',
 		data : {
 			'uid':userid,
-			'cash':cash
+			'cash':cash,
+			'memo':memo
 		},
 		dataType : 'json',
 		success : function(data) {
@@ -1131,7 +1141,13 @@ function rechargeCash(){
 		}
 		});
 }
+
+function showCashLog(userId){
+	openPop('?userId=' + userId, 'memberSupportCashHistory');
+}
+
 </script>
+
 
 <%@ include file="/WEB-INF/include/admin_footer_html.jsp"%>
 <%@ include file="/WEB-INF/include/admin_end_html.jsp"%>

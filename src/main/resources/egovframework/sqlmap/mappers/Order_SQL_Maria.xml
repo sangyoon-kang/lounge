@@ -407,5 +407,32 @@
         </if>
     </select>
 
+    <select id="selectSupportCashHistoryList" parameterType="search" resultMap="money.BaseResultMap">
+        select
+        TC.USER_ID,
+        TC.CASH,
+        TC.REG_USER,
+        TC.REG_DATE,
+        TC.MEMO1
+        from
+        ts_cash TC
+        Where
+        TC.MAIN_SEQ IS NULL
+        AND TC.USER_ID = #{userId}
+        ORDER BY TC.REG_DATE DESC
+        <include refid="paging.limit"/>
+    </select>
+
+    <select id="totalSupportCashHistoryList" parameterType="search" resultType="int">
+        select
+            count(*)
+        from
+            ts_cash TC
+        Where
+                TC.MAIN_SEQ IS NULL
+            AND TC.USER_ID = #{userId}
+    </select>
+
+
 
 </mapper>
