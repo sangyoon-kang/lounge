@@ -145,12 +145,13 @@
 					<col width="80px" />
 					<col width="80px" />--%>
 
-					<col width="4%" />
+					<col width="2%" />
 					<col width="5%" />
+					<col width="4%" />
 					<col width="5%" />
 					<col width="6%" />
 					<col width="7%" />
-					<col width="9%" />
+					<col width="7%" />
 					<col width="5%" />
 					<col width="8%" />
 					<col width="8%" />
@@ -165,6 +166,7 @@
 				<thead>
 				<tr>
 					<th><input type="checkbox"></th>
+					<th>거래번호</th>
 					<th>구분</th>
 					<th>등급</th>
 					<th>이름</th>
@@ -185,6 +187,7 @@
 				<c:forEach items="${list}" var="m" varStatus="s">
 					<tr class="${m.ioType eq 'I' and m.state eq 'R' ? 'back-red' : ''} ${m.ioType eq 'O' and m.state eq 'R' ? 'back-sky' : ''}">
 						<td class="ck_td" data-money-seq="${m.moneySeq}"><input id="ck_${s.index}" type="checkbox"></td>
+						<td>${m.moneySeq}</td>
 						<td>${m.ioTypeName}</td>
 						<td>${m.gradeName}</td>
 						<td>
@@ -395,22 +398,22 @@
 	}
 
 	//회원별 거래내역조회
-    function showMemberInfo(mSeq) {
-        openPop('?mseq=' + mSeq, 'memberInfo');
-    }
+	function showMemberInfo(mSeq) {
+		openPop('?mseq=' + mSeq, 'memberInfo');
+	}
 
 	//회원별 거래내역조회
-    function showHistory(userId) {
-        openPop('?userId=' + userId, 'memberhistory');
-    }
+	function showHistory(userId) {
+		openPop('?userId=' + userId, 'memberhistory');
+	}
 
-    //입출금 내역
-    function showDepositHistory(userId) {
-        openPop('?userId=' + userId, 'memberDepositHistory');
-    }
+	//입출금 내역
+	function showDepositHistory(userId) {
+		openPop('?userId=' + userId, 'memberDepositHistory');
+	}
 
 	//For Memo Popup
- 	$(document).on('click', 'a.showPopupMemo', function(e){
+	$(document).on('click', 'a.showPopupMemo', function(e){
 		var markup = '<table class="board_write"><th>메모</th><td>' + $(this).data('memo') +'</td></table>';
 		$("<div style='white-space: pre;'></div>").dialog({
 			title:"메모",

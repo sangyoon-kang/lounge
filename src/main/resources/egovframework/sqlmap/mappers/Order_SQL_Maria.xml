@@ -373,6 +373,7 @@
 
     <select id="selectDepositHistoryList" parameterType="search" resultMap="money.BaseResultMap">
         select
+            FM.MONEY_SEQ,
             FM.USER_ID,
             FM.STATE,
             FM.ACCEPT_DATE,

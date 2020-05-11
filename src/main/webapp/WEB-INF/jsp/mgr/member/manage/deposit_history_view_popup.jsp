@@ -18,7 +18,8 @@
 	</div>
 	<table class="table board_st1" >
 		<colgroup>
-			<col width="20%" />
+			<col width="10%" />
+			<col width="10%" />
 			<col width="20%" />
 			<col width="20%" />
 			<col width="20%" />
@@ -26,6 +27,7 @@
 		</colgroup>
 		<thead>
 		<tr>
+			<th>거래번호</th>
 			<th>구분</th>
 			<th>이름</th>
 			<th>일자</th>
@@ -36,6 +38,7 @@
 		<tbody>
 		<c:forEach items="${list }" var="m" varStatus="l">
 			<tr>
+				<td>${m.moneySeq}</td>
 				<td class="${m.ioType eq 'I' ? 'back-red' : ''} ${m.ioType eq 'O' ? 'back-sky' : ''}">
 					<c:if test="${m.ioType eq 'I'}">입금</c:if>
 					<c:if test="${m.ioType eq 'O'}">출금</c:if>

@@ -64,7 +64,8 @@
 			<table class="board_st1 mb20">
 				<colgroup>
 					<col width="2%" />
-					<col width="9%" />
+					<col width="2%" />
+					<col width="7%" />
 					<col width="8%" />
 					<col width="10%" />
 					<col width="10%" />
@@ -79,6 +80,7 @@
 				<thead>
 				<tr>
 					<th><input type="checkbox" id="checkAll" /></th>
+					<th>회원번호</th>
 					<th>등급</th>
 					<th>이름</th>
 					<th>아이디</th>
@@ -97,6 +99,7 @@
 					<c:forEach var="m" items="${list }" varStatus="s">
 						<tr>
 							<td><input type="checkbox" name="chkseq" value="${m.memberSeq }" /></td>
+							<td>${m.memberSeq }</td>
 							<td>${m.gradeName }</td>
 							<td><a href="javascript:doWrite(${m.memberSeq })">${m.userName }</a></td>
 							<td><a href="javascript:doWrite(${m.memberSeq })">${m.userId }</a></td>
