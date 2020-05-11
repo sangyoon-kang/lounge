@@ -11,6 +11,11 @@
 	}
 </style>
 <div class="scroll-x w-100">
+	<div class="all_io_exec" style="padding-bottom: 10px">
+		<a class="btn bt_bwhite" onclick="showDepositHistory('${search.userId}', '')">전체</a>
+		<a class="btn bg_pink" onclick="showDepositHistory('${search.userId}', 'I')">입금</a>
+		<a class="btn bg_sky" onclick="showDepositHistory('${search.userId}', 'O')">출금</a>
+	</div>
 	<table class="table board_st1" >
 		<colgroup>
 			<col width="20%" />
@@ -50,3 +55,13 @@
 	</table>
 	<%@ include file="/WEB-INF/jsp/common/inc-paging-admin.jsp"%>
 </div>
+<script type="text/javascript">
+    $( function() {
+
+    });
+
+    //입출금 내역
+    function showDepositHistory(userId, idType) {
+        openPop('?userId=' + userId + '&ioType=' + idType, 'memberDepositHistory');
+    }
+</script>

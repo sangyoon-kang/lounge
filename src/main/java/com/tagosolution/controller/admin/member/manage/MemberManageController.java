@@ -10,6 +10,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.tagosolution.service.model.*;
+import com.tagosolution.service.model.search.DepositSearchVO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
@@ -99,26 +100,26 @@ public class MemberManageController extends BaseController {
 	@RequestMapping(value = "/member_write")
 	public String memberManageMemberWrite(MemberSearchVO search, BindingResult result, Model model) throws Exception {
 		super.setPageSubTitle("회원관리  &gt; 회원등록", model);
-		
+
 		if(result.hasErrors())
 			return super.setBindingResult(result, model);
-		
+
 		MemberInfoVO vo = (MemberInfoVO) _gDao.selectByKey("memberInfo.selectByKey", search.getMseq());
 		MemberCompanyVO voc = new MemberCompanyVO() ;
 		voc = (MemberCompanyVO) _gDao.selectByKey("memberCompany.selectByKey", vo);
 		short level = (short) _gDao.selectByKey("memberGrade.selectMaxLevel", null);
-		
+
 		List<MemberGradeVO> listGrade = (List<MemberGradeVO>) _gDao.selectList("memberGrade.selectListGrade", null);
 		List<MemberGradeVO> sameGrade = (List<MemberGradeVO>) _gDao.selectList("memberGrade.sameGrade", null);
 		List<FixedCodeVO> bankList =(List<FixedCodeVO>)_gDao.selectList("fixedCode.selectByBank", null);
-		
-		
+
+
 		MemberSettingVO setting = (MemberSettingVO) _gDao.selectByKey("memberSetting.selectByKey", super.getSiteSession().getSiteSeq());
 		//logger.debug("브이오 : {}", new Gson().toJson(vo));
-		
+
 		Map <Integer, String> gradeList = ListUtil.gradeLevelList();
-		
-		
+
+
 		model.addAttribute("vo", vo);
 		model.addAttribute("voc", voc);
 		model.addAttribute("grade", listGrade);
@@ -128,10 +129,54 @@ public class MemberManageController extends BaseController {
 		model.addAttribute("bankList", bankList);
 		model.addAttribute("listG",  new Gson().toJson(gradeList));
 		model.addAttribute("sameGrade",  new Gson().toJson(sameGrade));
-		
+
 		return super.getConfig().getAdminRoot() + "/member/manage/member_write";
 	}
-	
+
+	/**
+	 * 회원관리 > 회원 등록 - UI
+	 * @param search
+	 * @param result
+	 * @param model
+	 * @return
+	 * @throws Exception
+	 */
+	@RequestMapping(value = "/member_info_popup")
+	public String memberInfo(MemberSearchVO search, BindingResult result, Model model) throws Exception {
+		super.setPageSubTitle("회원관리  &gt; 회원등록", model);
+
+		if(result.hasErrors())
+			return super.setBindingResult(result, model);
+
+		MemberInfoVO vo = (MemberInfoVO) _gDao.selectByKey("memberInfo.selectByKey", search.getMseq());
+		MemberCompanyVO voc = new MemberCompanyVO() ;
+		voc = (MemberCompanyVO) _gDao.selectByKey("memberCompany.selectByKey", vo);
+		short level = (short) _gDao.selectByKey("memberGrade.selectMaxLevel", null);
+
+		List<MemberGradeVO> listGrade = (List<MemberGradeVO>) _gDao.selectList("memberGrade.selectListGrade", null);
+		List<MemberGradeVO> sameGrade = (List<MemberGradeVO>) _gDao.selectList("memberGrade.sameGrade", null);
+		List<FixedCodeVO> bankList =(List<FixedCodeVO>)_gDao.selectList("fixedCode.selectByBank", null);
+
+
+		MemberSettingVO setting = (MemberSettingVO) _gDao.selectByKey("memberSetting.selectByKey", super.getSiteSession().getSiteSeq());
+		//logger.debug("브이오 : {}", new Gson().toJson(vo));
+
+		Map <Integer, String> gradeList = ListUtil.gradeLevelList();
+
+
+		model.addAttribute("vo", vo);
+		model.addAttribute("voc", voc);
+		model.addAttribute("grade", listGrade);
+		model.addAttribute("search", search);
+		model.addAttribute("setting", setting);
+		model.addAttribute("lowGrade", level);
+		model.addAttribute("bankList", bankList);
+		model.addAttribute("listG",  new Gson().toJson(gradeList));
+		model.addAttribute("sameGrade",  new Gson().toJson(sameGrade));
+
+		return super.getConfig().getAdminRoot() + "/member/manage/member_info_popup";
+	}
+
 	/**
 	 * 회원관리 > 회원등록 - 등록 수정
 	 * @param search
@@ -224,8 +269,8 @@ public class MemberManageController extends BaseController {
 	 * @return
 	 * @throws Exception
 	 */
-	@RequestMapping(value="/member_deposit_history_pop")
-	public String depositHistoryView(MemberSearchVO search, BindingResult result, Model model) throws Exception {
+	@RequestMapping(value="/deposit_history_view_popup")
+	public String depositHistoryView(DepositSearchVO search, BindingResult result, Model model) throws Exception {
 		super.setPageSubTitle("입출금내역", model);
 		if(result.hasErrors())
 			return super.setBindingResult(result, model);

@@ -387,6 +387,9 @@
         Where
                 FM.STATE = 'A'
             AND FM.USER_ID = #{userId}
+        <if test="ioType != null and ioType != ''">
+            AND IO_TYPE = #{ioType}
+        </if>
         ORDER BY FM.ACCEPT_DATE DESC
         <include refid="paging.limit"/>
     </select>
@@ -399,6 +402,9 @@
         Where
                 FM.STATE = 'A'
             AND FM.USER_ID = #{userId}
+        <if test="ioType != null and ioType != ''">
+            AND IO_TYPE = #{ioType}
+        </if>
     </select>
 
 

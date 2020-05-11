@@ -57,7 +57,7 @@ function openPop(param, gubun, formObj) {
 			popUpWin('/mgr/stat/manage/stat_list' + param, gubun, 750, 550, 0, 0, "yes", "yes", true);
 			break;
 		case "memberhistory":
-			popUpWin('/mgr/member/manage/member_history_popup' + param, gubun, 1000, 500, 0, 0, "yes", "yes", true);
+			popUpWin('/mgr/member/manage/member_history_popup' + param, gubun, 1000, 600, 0, 0, "yes", "yes", true);
 			break;
 		case "historyView":
 			popUpWin('/mgr/member/manage/history_view_popup' + param, gubun, 600, 650, 0, 0, "yes", "yes", true);
@@ -68,9 +68,12 @@ function openPop(param, gubun, formObj) {
 		case "memCashPop_17":
 			popUpWin('/mgr/payment/cash/mem_cash17_pop.do' + param, gubun, 800, 650, 0, 0, "yes", "yes", true);
 			break;
-
 		case "memberDepositHistory":
-			popUpWin('/mgr/member/manage/member_deposit_history_pop' + param, gubun, 1000, 600, 0, 0, "yes", "yes", true);
+			popUpWin('/mgr/member/manage/deposit_history_view_popup' + param, gubun, 1000, 600, 0, 0, "yes", "yes", true);
+			break;
+		//입출금 내역에서 회원정보 팝업 추가
+		case "memberInfo":
+			popUpWin('/mgr/member/manage/member_info_popup' + param, gubun, 800, 650, 0, 0, "yes", "yes", true);
 			break;
 
 

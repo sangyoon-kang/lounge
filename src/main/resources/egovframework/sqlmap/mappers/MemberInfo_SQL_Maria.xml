@@ -145,7 +145,7 @@
 		SELECT
 		<include refid="select" />
 		FROM 	TS_MEMBER_INFO
-		WHERE 	GRADE_LEVEL IN  ('1', '2', '3', '4')
+		WHERE 	NICKNAME IS NOT NULL
 	</select>
 
 

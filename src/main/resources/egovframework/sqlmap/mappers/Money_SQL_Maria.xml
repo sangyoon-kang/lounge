@@ -24,6 +24,7 @@
     <result column="STATE_C" jdbcType="INTEGER" property="stateC" />
     <result column="STATE_A" jdbcType="INTEGER" property="stateA" />
     <result column="IO_TYPE_NAME" jdbcType="VARCHAR" property="ioTypeName" />
+    <result column="MEMBER_SEQ" jdbcType="INTEGER" property="memberSeq" />
     <result column="USER_NAME" jdbcType="VARCHAR" property="userName" />
     <result column="GRADE_LEVEL" jdbcType="INTEGER" property="gradeLevel" />
     <result column="NICKNAME" jdbcType="VARCHAR" property="nickName" />
@@ -151,7 +152,7 @@
 	SELECT	FM.MONEY_SEQ, FM.USER_ID, FM.IO_TYPE, FM.CASH, FM.BANK_NAME
 			, FM.ACCOUNT_NO, FM.ACCOUNT_NAME, FM.DEPOSIT_NAME, FM.MEMO, FM.BALANCE, FM.REG_DATE
 			, FM.STATE, FM.ACCEPT_DATE, FM.ACCEPT_ID
-			, TMI.USER_NAME, TMI.GRADE_LEVEL, TMI.NICKNAME, TMG.GRADE_NAME
+			, TMI.MEMBER_SEQ, TMI.USER_NAME, TMI.GRADE_LEVEL, TMI.NICKNAME, TMG.GRADE_NAME
 			, CASE WHEN STATE = 'R' THEN 1 ELSE 2 END ORDER_SEQ
 			, CASE WHEN IO_TYPE = 'I' THEN '입금' ELSE '출금' END AS IO_TYPE_NAME
 	FROM	fx_money FM
