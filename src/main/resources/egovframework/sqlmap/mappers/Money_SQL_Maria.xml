@@ -494,9 +494,44 @@
 	</select>
 
 
-
-
-
+	<!-- 회원별 캐쉬입금액총액, 거래수익총액, 꽁머니지급액총액 -->
+	<select id="getUserMoneyInfo" parameterType="java.lang.String" resultMap="BaseResultMap">
+		select
+		(
+			select
+			  	case
+					when sum(cash) is null then 0
+					else sum(cash)
+				end
+			from ts_cash
+			where user_id = #{userId,jdbcType=VARCHAR}
+			and main_seq is not null
+			and cash_type = 'M'
+			and cash > 0
+		) as CASH_R,
+		(
+			select
+				case
+					when sum(cash) is null then 0
+					else sum(cash)
+				end
+			from ts_cash
+			where user_id = #{userId,jdbcType=VARCHAR}
+			and (cash_type = 'O' or cash_type = 'W')
+			and main_seq is not null
+		) as CASH_C,
+		(
+			select
+				case
+					when sum(cash) is null then 0
+					else sum(cash)
+				end
+			from ts_cash
+			where user_id = #{userId,jdbcType=VARCHAR}
+			and cash_type = 'M'
+			and main_seq is null
+		) as CASH_A
+	</select>
 
 
 </mapper>
