@@ -172,7 +172,15 @@
 					<tr>
 						<th>잔여캐쉬</th>
 						<td colspan="3">
-							<span id="cash"><fmt:formatNumber pattern="#,##0" value="${vo.cash }" /> 원</span>
+							<span id="cash">
+                                <fmt:formatNumber pattern="#,##0" value="${vo.cash }" /> 원
+                                (
+                                캐쉬입금 : <fmt:formatNumber pattern="#,##0" value="${userMoney.cashR }" /> 원,
+                                꽁머니 : <fmt:formatNumber pattern="#,##0" value="${userMoney.cashA }" /> 원,
+                                거래수익 : <fmt:formatNumber pattern="#,##0" value="${userMoney.cashC }" /> 원
+                                )
+                            </span>
+                            <br>
 							<input type="number" name="cash" class="w20">
 							<span>&nbsp;&nbsp;&nbsp;지급사유</span>
 							<input type="text" name="memo" class="w30" placeholder="지급 사유를 입력하세요(기본 : 관리자 지급)">

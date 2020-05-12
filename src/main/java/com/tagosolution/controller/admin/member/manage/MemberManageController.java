@@ -119,6 +119,8 @@ public class MemberManageController extends BaseController {
 
 		Map <Integer, String> gradeList = ListUtil.gradeLevelList();
 
+		// 캐쉬입금액총액, 거래수익총액, 꽁머니지급액총액
+		MoneyVO moneyVO = (MoneyVO) _gDao.selectOne("money.getUserMoneyInfo", vo.getUserId());
 
 		model.addAttribute("vo", vo);
 		model.addAttribute("voc", voc);
@@ -129,6 +131,7 @@ public class MemberManageController extends BaseController {
 		model.addAttribute("bankList", bankList);
 		model.addAttribute("listG",  new Gson().toJson(gradeList));
 		model.addAttribute("sameGrade",  new Gson().toJson(sameGrade));
+		model.addAttribute("userMoney",  moneyVO);
 
 		return super.getConfig().getAdminRoot() + "/member/manage/member_write";
 	}
@@ -163,6 +166,8 @@ public class MemberManageController extends BaseController {
 
 		Map <Integer, String> gradeList = ListUtil.gradeLevelList();
 
+		// 캐쉬입금액총액, 거래수익총액, 꽁머니지급액총액
+		MoneyVO moneyVO = (MoneyVO) _gDao.selectOne("money.getUserMoneyInfo", vo.getUserId());
 
 		model.addAttribute("vo", vo);
 		model.addAttribute("voc", voc);
@@ -173,6 +178,7 @@ public class MemberManageController extends BaseController {
 		model.addAttribute("bankList", bankList);
 		model.addAttribute("listG",  new Gson().toJson(gradeList));
 		model.addAttribute("sameGrade",  new Gson().toJson(sameGrade));
+		model.addAttribute("userMoney",  moneyVO);
 
 		return super.getConfig().getAdminRoot() + "/member/manage/member_info_popup";
 	}
