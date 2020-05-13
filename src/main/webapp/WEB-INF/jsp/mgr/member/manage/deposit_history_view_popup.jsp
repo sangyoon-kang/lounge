@@ -21,9 +21,10 @@
 			<col width="10%" />
 			<col width="10%" />
 			<col width="20%" />
-			<col width="20%" />
-			<col width="20%" />
-			<col width="20%" />
+			<col width="15%" />
+			<col width="15%" />
+			<col width="15%" />
+			<col width="15%" />
 		</colgroup>
 		<thead>
 		<tr>
@@ -33,6 +34,7 @@
 			<th>일자</th>
 			<th>시간</th>
 			<th>금액</th>
+			<th>잔고</th>
 		</tr>
 		</thead>
 		<tbody>
@@ -47,6 +49,7 @@
 				<td><fmt:formatDate value="${m.acceptDate }" pattern="${DATE_FORMAT}"/></td>
 				<td><fmt:formatDate value="${m.acceptDate }" pattern="${TIME_FORMAT}"/></td>
 				<td><fmt:formatNumber pattern="#,##0" value="${m.cash}" /></td>
+				<td><fmt:formatNumber pattern="#,##0" value="${m.balance}" /></td>
 			</tr>
 		</c:forEach>
 		<c:if test="${empty list}">
@@ -59,12 +62,12 @@
 	<%@ include file="/WEB-INF/jsp/common/inc-paging-admin.jsp"%>
 </div>
 <script type="text/javascript">
-    $( function() {
+	$( function() {
 
-    });
+	});
 
-    //입출금 내역
-    function showDepositHistory(userId, idType) {
-        openPop('?userId=' + userId + '&ioType=' + idType, 'memberDepositHistory');
-    }
+	//입출금 내역
+	function showDepositHistory(userId, idType) {
+		openPop('?userId=' + userId + '&ioType=' + idType, 'memberDepositHistory');
+	}
 </script>

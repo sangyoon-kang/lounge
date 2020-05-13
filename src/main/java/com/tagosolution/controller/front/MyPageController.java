@@ -8,6 +8,7 @@ import java.util.Map;
 import javax.annotation.Resource;
 
 import com.tagosolution.service.model.*;
+import com.tagosolution.service.model.search.DepositSearchVO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
@@ -412,7 +413,71 @@ public class MyPageController extends BaseController{
 		model.addAttribute("search", search);
 		return "/front/mypage/ms_member_popup";
 	}
-	
-	
+
+
+	/**
+	 * @param search
+	 * @param result
+	 * @param model
+	 * @return
+	 * @throws Exception
+	 */
+	@RequestMapping(value="/member_history_popup")
+	public String MyMemberHistory(MemberSearchVO search, BindingResult result, Model model) throws Exception {
+		super.setPageSubTitle("나의거래내역", model);
+		if(result.hasErrors())
+			return super.setBindingResult(result, model);
+
+		List<OrderVO> list = (List<OrderVO>)_gDao.selectBySearch("order.selectUserOrder", search, "totalUserOrder");
+
+		model.addAttribute("list", list);
+		model.addAttribute("search", search);
+
+		return super.getConfig().getAdminRoot() + "/member/manage/member_history_popup";
+	}
+
+
+	/**
+	 * @param search
+	 * @param result
+	 * @param model
+	 * @return
+	 * @throws Exception
+	 */
+	@RequestMapping(value="/deposit_history_view_popup")
+	public String depositHistoryView(DepositSearchVO search, BindingResult result, Model model) throws Exception {
+		super.setPageSubTitle("입출금내역", model);
+		if(result.hasErrors())
+			return super.setBindingResult(result, model);
+
+		List<MoneyVO> list = (List<MoneyVO>)_gDao.selectBySearch("order.selectDepositHistoryList", search,"totalDepositHistoryList");
+
+		model.addAttribute("list", list);
+		model.addAttribute("search", search);
+
+		return super.getConfig().getAdminRoot() + "/member/manage/deposit_history_view_popup";
+	}
+
+	/**
+	 * @param search
+	 * @param result
+	 * @param model
+	 * @return
+	 * @throws Exception
+	 */
+	@RequestMapping(value="/member_support_cash_history_pop")
+	public String supportCashHistoryView(MemberSearchVO search, BindingResult result, Model model) throws Exception {
+		super.setPageSubTitle("지원금내역", model);
+		if(result.hasErrors())
+			return super.setBindingResult(result, model);
+
+		List<MoneyVO> list = (List<MoneyVO>)_gDao.selectBySearch("order.selectSupportCashHistoryList", search,"totalSupportCashHistoryList");
+
+		model.addAttribute("list", list);
+		model.addAttribute("search", search);
+
+		return super.getConfig().getAdminRoot() + "/member/manage/support_cash_history_view_popup";
+	}
+
 
 }
