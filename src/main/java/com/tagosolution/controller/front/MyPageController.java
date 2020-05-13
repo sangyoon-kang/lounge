@@ -454,6 +454,7 @@ public class MyPageController extends BaseController{
 
 		model.addAttribute("list", list);
 		model.addAttribute("search", search);
+		model.addAttribute("myshop", true);
 
 		return super.getConfig().getAdminRoot() + "/member/manage/deposit_history_view_popup";
 	}

@@ -68,6 +68,11 @@
 
 	//입출금 내역
 	function showDepositHistory(userId, idType) {
+		<c:if test="${!empty myshop}">
+		openPop('?userId=' + userId + '&ioType=' + idType, 'myShoopMemberDepositHistory');
+		</c:if>
+		<c:if test="${empty myshop}">
 		openPop('?userId=' + userId + '&ioType=' + idType, 'memberDepositHistory');
+		</c:if>
 	}
 </script>
