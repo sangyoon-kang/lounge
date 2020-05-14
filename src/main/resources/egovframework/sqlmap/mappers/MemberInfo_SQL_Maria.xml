@@ -143,7 +143,7 @@
 	<!-- 추천인검색 리스트 -->
 	<select id="selectRecommendList" parameterType="java.lang.Short" resultMap="BaseResultMap">
 		SELECT
-		<include refid="select" />
+			USER_ID, NICKNAME
 		FROM 	TS_MEMBER_INFO
 		WHERE 	NICKNAME IS NOT NULL
 	</select>
