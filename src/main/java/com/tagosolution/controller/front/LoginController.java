@@ -274,7 +274,7 @@ public class LoginController extends BaseController{
 		recomm_code = URLDecoder.decode(URLDecoder.decode(recomm_code ,"utf-8"), "utf-8");
 
 		// 추천인 검색용 리스트
-		List<MemberSearchVO> recommendList = (List<MemberSearchVO>) _gDao.selectList("memberInfo.selectRecommendList", null);
+		List<Map> recommendList = (List<Map>) _gDao.selectList("memberInfo.selectRecommendList", null);
 
 		//TODO 개발계 구성시에는 아래 주석 블록처리 필요
 		// 유효성 안맞는게 있으면 step1으로 리다이렉트

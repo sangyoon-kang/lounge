@@ -1,0 +1,36 @@
+.btn{display:inline-block; height:26px; line-height:26px; padding:0 12px; font-size:13px; font-weight:400; border:1px solid #ddd;}
+.btn:hover, .btn:active{font-size:13px; line-height:26px;background:#777;color:#fff; text-decoration: none;}
+.btnh_22 {height: 22px; line-height: 22px;}
+.btnh_24 {height: 24px; line-height: 24px;}
+.btnh_28 {height: 28px; line-height: 28px;}
+.btnh_30 {height: 30px; line-height: 30px;}
+
+.bg_gray{background:#999; border:1px solid #aaa; color:#fff;}
+.bg_gray:hover {background:#777;}
+
+.bg_darkgray{background:#555; border:1px solid #444; color:#fff;}
+.bg_darkgray:hover {background:#333; }
+
+.bg_green{background:#4aab8c; border:1px solid #2a8f6f; color:#fff;}
+.bg_green:hover{background:#2a8b6c; }
+
+.bg_orange{background:#db6200; border:1px solid #b55100; color:#fff;}
+.bg_orange:hover {background:#bb4200; }
+
+.bg_sky{background:#408ec9; border:1px solid #2572ac; color:#fff;}
+.bg_sky:hover {background:#206ea9;}
+
+.bg_pink{background:#ec6279; border:1px solid #d14159; color:#fff;}
+.bg_pink:hover {background:#cc5259}
+
+.bg_blue{background:#007ec6; border:1px solid #0066a1; color:#fff;}
+.bg_blue:hover {background:#005ea6; }
+
+.bg_purple{background:#da3b8d; border:1px solid #af266d; color:#fff;}
+.bg_purple:hover {background:#ba1b6d;}
+
+.bg_navy{background:#002f67; border:1px solid #002047; color:#fff;}
+.bg_navy:hover {background:#000f47;}
+
+.bg_red{background:#d70000; border:1px solid #002047; color:#fff;}
+.bg_red:hover {background:#b70000;}

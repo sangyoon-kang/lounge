@@ -64,20 +64,23 @@
 			<table class="board_st1 mb20">
 				<colgroup>
 					<col width="2%" />
-					<col width="9%" />
+					<col width="2%" />
+					<col width="7%" />
 					<col width="8%" />
 					<col width="10%" />
 					<col width="10%" />
 					<col width="10%" />
-					<col width="20%" />
+					<col width="12%" />
 					<col width="6%" />
 					<col width="8%" />
 					<col width="7%" />
+					<col width="8%" />
 					<col width="8%" />
 				</colgroup>
 				<thead>
 				<tr>
 					<th><input type="checkbox" id="checkAll" /></th>
+					<th>회원번호</th>
 					<th>등급</th>
 					<th>이름</th>
 					<th>아이디</th>
@@ -88,6 +91,7 @@
 					<th>가입일</th>
 					<th>거래조회</th>
 					<th>입출금내역</th>
+					<th>지원금내역</th>
 				</tr>
 				</thead>
 				<tbody>
@@ -95,6 +99,7 @@
 					<c:forEach var="m" items="${list }" varStatus="s">
 						<tr>
 							<td><input type="checkbox" name="chkseq" value="${m.memberSeq }" /></td>
+							<td>${m.memberSeq }</td>
 							<td>${m.gradeName }</td>
 							<td><a href="javascript:doWrite(${m.memberSeq })">${m.userName }</a></td>
 							<td><a href="javascript:doWrite(${m.memberSeq })">${m.userId }</a></td>
@@ -105,6 +110,7 @@
 							<td><fmt:formatDate value="${m.regDate }" pattern="${DATE_FORMAT }"/></td>
 							<td><a onclick="javascript:showHistory('${m.userId }');" class="bt_modify">거래조회</a></td>
 							<td><a onclick="javascript:showDepositHistory('${m.userId }');" class="bt_modify">입출금내역</a></td>
+							<td><a onclick="javascript:showSupportCashHistory('${m.userId }');" class="bt_modify">지원금내역</a></td>
 						</tr>
 					</c:forEach>
 				</c:if>
@@ -146,6 +152,10 @@
 
 	function showDepositHistory(userId) {
 		openPop('?userId=' + userId, 'memberDepositHistory');
+	}
+
+	function showSupportCashHistory(userId) {
+		openPop('?userId=' + userId, 'memberSupportCashHistory');
 	}
 
 	function doSendPopup() {

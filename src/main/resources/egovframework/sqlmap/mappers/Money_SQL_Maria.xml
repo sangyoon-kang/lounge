@@ -24,6 +24,7 @@
     <result column="STATE_C" jdbcType="INTEGER" property="stateC" />
     <result column="STATE_A" jdbcType="INTEGER" property="stateA" />
     <result column="IO_TYPE_NAME" jdbcType="VARCHAR" property="ioTypeName" />
+    <result column="MEMBER_SEQ" jdbcType="INTEGER" property="memberSeq" />
     <result column="USER_NAME" jdbcType="VARCHAR" property="userName" />
     <result column="GRADE_LEVEL" jdbcType="INTEGER" property="gradeLevel" />
     <result column="NICKNAME" jdbcType="VARCHAR" property="nickName" />
@@ -49,7 +50,10 @@
     <result column="BANK_NUM" jdbcType="VARCHAR" property="bankNum" />
     <result column="TIMES" jdbcType="VARCHAR" property="times" />
     <result column="FAILED" jdbcType="VARCHAR" property="failed" />
-    
+
+	<result column="REG_USER" jdbcType="VARCHAR" property="regUser" />
+	<result column="MEMO1" jdbcType="VARCHAR" property="memo" />
+
   </resultMap>
   
   <sql id="Base_Column_List">
@@ -151,7 +155,7 @@
 	SELECT	FM.MONEY_SEQ, FM.USER_ID, FM.IO_TYPE, FM.CASH, FM.BANK_NAME
 			, FM.ACCOUNT_NO, FM.ACCOUNT_NAME, FM.DEPOSIT_NAME, FM.MEMO, FM.BALANCE, FM.REG_DATE
 			, FM.STATE, FM.ACCEPT_DATE, FM.ACCEPT_ID
-			, TMI.USER_NAME, TMI.GRADE_LEVEL, TMI.NICKNAME, TMG.GRADE_NAME
+			, TMI.MEMBER_SEQ, TMI.USER_NAME, TMI.GRADE_LEVEL, TMI.NICKNAME, TMG.GRADE_NAME
 			, CASE WHEN STATE = 'R' THEN 1 ELSE 2 END ORDER_SEQ
 			, CASE WHEN IO_TYPE = 'I' THEN '입금' ELSE '출금' END AS IO_TYPE_NAME
 	FROM	fx_money FM
@@ -490,9 +494,44 @@
 	</select>
 
 
-
-
-
+	<!-- 회원별 캐쉬입금액총액, 거래수익총액, 꽁머니지급액총액 -->
+	<select id="getUserMoneyInfo" parameterType="java.lang.String" resultMap="BaseResultMap">
+		select
+		(
+			select
+			  	case
+					when sum(cash) is null then 0
+					else sum(cash)
+				end
+			from ts_cash
+			where user_id = #{userId,jdbcType=VARCHAR}
+			and main_seq is not null
+			and cash_type = 'M'
+			and cash > 0
+		) as CASH_R,
+		(
+			select
+				case
+					when sum(cash) is null then 0
+					else sum(cash)
+				end
+			from ts_cash
+			where user_id = #{userId,jdbcType=VARCHAR}
+			and (cash_type = 'O' or cash_type = 'W')
+			and main_seq is not null
+		) as CASH_C,
+		(
+			select
+				case
+					when sum(cash) is null then 0
+					else sum(cash)
+				end
+			from ts_cash
+			where user_id = #{userId,jdbcType=VARCHAR}
+			and cash_type = 'M'
+			and main_seq is null
+		) as CASH_A
+	</select>
 
 
 </mapper>

@@ -21,7 +21,6 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
-import java.nio.charset.Charset;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -567,7 +566,7 @@ public class AjaxController extends BaseController {
 
     @RequestMapping(value = "/mgr/ajax/addCash")
     @ResponseBody
-    public String addCash(@RequestBody(required = false) String userid, String uid, String cash, BindingResult result, Model model) throws Exception {
+    public String addCash(@RequestBody(required = false) String userid, String uid, String cash, String memo, BindingResult result, Model model) throws Exception {
         if (result.hasErrors())
             return super.setBindingResult(result, model);
         MemberInfoVO mmb = new MemberInfoVO();
@@ -578,6 +577,9 @@ public class AjaxController extends BaseController {
 
         cashVO.setUserId(mmb.getUserId());
         cashVO.setCash(mmb.getCash());
+        cashVO.setMemo1(memo);
+        cashVO.setRegUser(super.getAdminSession().getAdminId());
+
         try {
             _gDao.insert("cash.insertCashByUser", cashVO);
         } catch (Exception e) {
@@ -635,12 +637,25 @@ public class AjaxController extends BaseController {
             cvo.setBankName(StringEscapeUtils.unescapeJava(request.getParameter("bankname")));
             cvo.setBankNum(request.getParameter("banknum"));
             cvo.setName(StringEscapeUtils.unescapeJava(request.getParameter("name")));
+
             if (moneySeq == null || moneySeq == 0) {
                 cvo.setFailed("1");
             } else {
+                // 등록된 계좌 확인
+//                AccountCheckVO accountCheckVO = new AccountCheckVO();
+//
+//                // 생년월일 , 계좌소유주 , 은행, 계좌번호
+//                strResId: $('input[name=birthDate]').val(),
+//                        strNm: $('input[name=accountOwner]').val(),
+//                        strBankCode: $('select[name=selectBank]').val(),
+//                        strAccountNo: $('input[name=bankAccount]').val()
+//
+//                Map<String, Object> validMap = checkBankAccount(accountCheckVO);
+
                 cvo.setFailed("0");
             }
             _depService.insertDepositRequest(cvo);
+
             if (moneySeq != null && moneySeq != 0) {
                 vo.setMoneySeq(moneySeq);
                 _paymentService.insertCashByDeposit(vo);
@@ -672,15 +687,21 @@ public class AjaxController extends BaseController {
         if (result.hasErrors())
             return super.setBindingResult(result, model);
 
+        Map<String, Object> resultMap = checkBankAccount(accountCheckVO);
+
+        return new Gson().toJson(resultMap);
+    }
+
+    private Map<String, Object> checkBankAccount(AccountCheckVO accountCheckVO) {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
-        String strOrderNo   = sdf.format(new Date()) + (Math.round(Math.random() * 10000000000L) + "");
+        String strOrderNo = sdf.format(new Date()) + (Math.round(Math.random() * 10000000000L) + "");
 
         String serviceResult = _bankService.checkAccount(accountCheckVO.getService(), accountCheckVO.getStrGbn(), accountCheckVO.getStrResId(), accountCheckVO.getStrNm(), accountCheckVO.getStrBankCode(), accountCheckVO.getStrAccountNo(), accountCheckVO.getSvcGbn(), strOrderNo, accountCheckVO.getSvcCls(), accountCheckVO.getInqRsn());
 
         String[] results = serviceResult.split("\\|");
         String resultOrderNo = results[0];
-        String resultCode    = results[1];
-        String resultMsg     = results[2];
+        String resultCode = results[1];
+        String resultMsg = results[2];
 
         // P000: 정상응답일때 송신되는 코드
         // E999: 시스템이상
@@ -689,7 +710,7 @@ public class AjaxController extends BaseController {
         map.put("resultCode", resultCode);
         map.put("resultMsg", resultMsg);
 
-        return new Gson().toJson(map);
+        return map;
     }
 }
 

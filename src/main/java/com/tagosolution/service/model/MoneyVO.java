@@ -56,8 +56,10 @@ public class MoneyVO implements GeneralModel {
     
     private String ioTypeName;
     
+    private Integer memberSeq;
+
     private String userName;
-    
+
     private String gradeLevel;
     
     private String nickName;
@@ -81,6 +83,16 @@ public class MoneyVO implements GeneralModel {
     private String regYears;
     
     private String regYearsText;
+
+	private String regUser;
+
+	public String getRegUser() {
+		return regUser;
+	}
+
+	public void setRegUser(String regUser) {
+		this.regUser = regUser;
+	}
     
     public String getRegYears() {
 		return regYears;
@@ -154,7 +166,16 @@ public class MoneyVO implements GeneralModel {
 		this.balance = balance;
 	}
 
-    public String getUserName() {
+
+	public Integer getMemberSeq() {
+		return memberSeq;
+	}
+
+	public void setMemberSeq(Integer memberSeq) {
+		this.memberSeq = memberSeq;
+	}
+
+	public String getUserName() {
 		return userName;
 	}
 

@@ -373,6 +373,7 @@
 
     <select id="selectDepositHistoryList" parameterType="search" resultMap="money.BaseResultMap">
         select
+            FM.MONEY_SEQ,
             FM.USER_ID,
             FM.STATE,
             FM.ACCEPT_DATE,
@@ -387,6 +388,9 @@
         Where
                 FM.STATE = 'A'
             AND FM.USER_ID = #{userId}
+        <if test="ioType != null and ioType != ''">
+            AND IO_TYPE = #{ioType}
+        </if>
         ORDER BY FM.ACCEPT_DATE DESC
         <include refid="paging.limit"/>
     </select>
@@ -399,7 +403,37 @@
         Where
                 FM.STATE = 'A'
             AND FM.USER_ID = #{userId}
+        <if test="ioType != null and ioType != ''">
+            AND IO_TYPE = #{ioType}
+        </if>
     </select>
+
+    <select id="selectSupportCashHistoryList" parameterType="search" resultMap="money.BaseResultMap">
+        select
+        TC.USER_ID,
+        TC.CASH,
+        TC.REG_USER,
+        TC.REG_DATE,
+        TC.MEMO1
+        from
+        ts_cash TC
+        Where
+        TC.MAIN_SEQ IS NULL
+        AND TC.USER_ID = #{userId}
+        ORDER BY TC.REG_DATE DESC
+        <include refid="paging.limit"/>
+    </select>
+
+    <select id="totalSupportCashHistoryList" parameterType="search" resultType="int">
+        select
+            count(*)
+        from
+            ts_cash TC
+        Where
+                TC.MAIN_SEQ IS NULL
+            AND TC.USER_ID = #{userId}
+    </select>
+
 
 
 </mapper>

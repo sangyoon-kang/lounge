@@ -145,12 +145,13 @@
 					<col width="80px" />
 					<col width="80px" />--%>
 
-					<col width="4%" />
+					<col width="2%" />
 					<col width="5%" />
+					<col width="4%" />
 					<col width="5%" />
 					<col width="6%" />
 					<col width="7%" />
-					<col width="9%" />
+					<col width="7%" />
 					<col width="5%" />
 					<col width="8%" />
 					<col width="8%" />
@@ -165,6 +166,7 @@
 				<thead>
 				<tr>
 					<th><input type="checkbox"></th>
+					<th>거래번호</th>
 					<th>구분</th>
 					<th>등급</th>
 					<th>이름</th>
@@ -176,7 +178,7 @@
 					<th>계좌</th>
 					<th>예금주</th>
 					<th>입금자</th>
-					<th>메모</th>
+					<th>거래/입출금</th>
 					<th>구분</th>
 					<th>원복</th>
 				</tr>
@@ -185,12 +187,15 @@
 				<c:forEach items="${list}" var="m" varStatus="s">
 					<tr class="${m.ioType eq 'I' and m.state eq 'R' ? 'back-red' : ''} ${m.ioType eq 'O' and m.state eq 'R' ? 'back-sky' : ''}">
 						<td class="ck_td" data-money-seq="${m.moneySeq}"><input id="ck_${s.index}" type="checkbox"></td>
+						<td>${m.moneySeq}</td>
 						<td>${m.ioTypeName}</td>
 						<td>${m.gradeName}</td>
-						<td>${m.userName}
-							<c:if test="${!empty m.nickName }">(${m.nickName})</c:if>
+						<td>
+							<a onclick="javascript:showMemberInfo('${m.memberSeq }');">${m.userName}
+								<c:if test="${!empty m.nickName }">(${m.nickName})</c:if>
+							</a>
 						</td>
-						<td>${m.userId}</td>
+						<td><a onclick="javascript:showMemberInfo('${m.memberSeq }');">${m.userId}</a></td>
 						<td><fmt:formatDate value="${m.regDate }" pattern="${DATE_FORMAT}"/></td>
 						<td><fmt:formatDate value="${m.regDate }" pattern="${TIME_FORMAT}"/></td>
 						<td><fmt:formatNumber pattern="#,##0" value="${m.cash}" /></td>
@@ -198,7 +203,11 @@
 						<td>${m.accountNo}</td>
 						<td>${m.accountName}</td>
 						<td>${m.depositName}</td>
-						<td><c:if test="${!empty m.memo}"><a class="showPopupMemo" data-memo="${m.memo}">메모</a></c:if></td>
+						<!--td><c:if test="${!empty m.memo}"><a class="showPopupMemo" data-memo="${m.memo}">메모</a></c:if></td-->
+						<td>
+							<a onclick="javascript:showHistory('${m.userId }');" class="btn bt_bwhite" style="width: 60px">거래내역</a>
+							<a onclick="javascript:showDepositHistory('${m.userId }');" class="btn bt_blist" style="width: 60px">입출금내역</a>
+						</td>
 						<td>
 							<c:if test="${m.ioType eq 'I' and m.state eq 'R'}">
 								<a onclick="javascript:doConfirm('${m.moneySeq}', 'A', 'I', '${m.userName}', '${m.nickName}', '${m.gradeName}', '${m.userId}');" class="btn bg_pink">입금</a>
@@ -388,6 +397,20 @@
 		$('#form1').submit();
 	}
 
+	//회원별 거래내역조회
+	function showMemberInfo(mSeq) {
+		openPop('?mseq=' + mSeq, 'memberInfo');
+	}
+
+	//회원별 거래내역조회
+	function showHistory(userId) {
+		openPop('?userId=' + userId, 'memberhistory');
+	}
+
+	//입출금 내역
+	function showDepositHistory(userId) {
+		openPop('?userId=' + userId, 'memberDepositHistory');
+	}
 
 	//For Memo Popup
 	$(document).on('click', 'a.showPopupMemo', function(e){

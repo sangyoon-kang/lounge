@@ -491,6 +491,17 @@
 
         $('#user_recommended').on('change', function () {
             var _this = this;
+
+            // 추천지점에 값이 없을경우 초기화 시킴
+            if($(this).val().trim() == ""){
+                $('#recUserIdCheck').show();
+                $('#recUserIdCheck').attr('class', 'join_txt_blue bold');
+                $('#recUserIdCheck').text('(추천지점은 대리점에 문의하세요.)');
+
+                $('input[name=recommUserId]').val('');
+                return;
+            }
+
             recommList.some(function (row, idx) {
                 if (row.label == $(_this).val()) {
                     $('input[name=recommUserId]').val(row.data);
