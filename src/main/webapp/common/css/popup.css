@@ -4,7 +4,7 @@
 .popup .title_area h1  { font-size: 25px; color: #fff; font-weight:600;}
 .popup .title_area .btn_close {position:absolute; right:35px; top:50%; -webkit-transform:translateY(-50%); transform:translateY(-50%);  display:inline-block; width:24px; height:24px; background:url(/images/contents/btn_pop_close.png) ;}
 .popup .pop_cons {padding:25px;  max-height:55vh; line-height:1.7; overflow:auto}
-.popup .bo_area {padding:15px 25px; font-size:14px; background:#f5f5f5; border-radius: 0 0 10px 10px; overflow:hidden;}
+.popup .bo_area {border-top: 1px solid #d9d9d9;padding:15px 25px; font-size:14px; background:#f5f5f5; border-radius: 0 0 10px 10px; overflow:hidden;}
 .popup .bo_area .fleft {float:left;}
 .popup .bo_area .fright {float:right;}
 
