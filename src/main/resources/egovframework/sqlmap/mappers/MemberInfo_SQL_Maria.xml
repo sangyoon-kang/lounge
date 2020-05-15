@@ -141,12 +141,12 @@
 	</select>
 
 	<!-- 추천인검색 리스트 -->
-	<select id="selectRecommendList" parameterType="java.lang.Short" resultMap="BaseResultMap">
-		SELECT
-		<include refid="select" />
-		FROM 	TS_MEMBER_INFO
-		WHERE 	NICKNAME IS NOT NULL
-	</select>
+    <select id="selectRecommendList" parameterType="java.lang.Short" resultType="java.util.Map">
+        SELECT
+          USER_ID as userID, NICKNAME as nickname
+        FROM 	TS_MEMBER_INFO
+        WHERE 	NICKNAME IS NOT NULL
+    </select>
 
 
 	<select id="selectLeavetoday" parameterType="String" resultType="java.lang.Integer">
