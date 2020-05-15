@@ -537,11 +537,24 @@
 		WHERE	RESULT_TIME = CONCAT(#{goodsDate,jdbcType=VARCHAR}, ' ', #{goodsTime,jdbcType=VARCHAR})
 			AND	RUN_TIME = #{runTime,jdbcType=INTEGER};
 	</insert>
+
+	<insert id="insertAdminN" useGeneratedKeys="true" keyProperty="cashSeq"
+			parameterType="search">
+		INSERT INTO 	ts_cash (CASH_TYPE, USER_ID, CASH, REG_USER, REG_DATE, MEMO1, MAIN_SEQ, ORI_PRICE)
+		VALUES	('N'
+		, #{userId,jdbcType=VARCHAR}
+		, (-1 * #{totalLot} * 50000)
+		, #{userId,jdbcType=VARCHAR}
+		, now()
+		, CONCAT(DATE_FORMAT(now(), '%Y-%m-%d'), ' ', #{goodsTime}, ' ', '')
+		, #{orderSeq,jdbcType=BIGINT}
+		, (-1 * #{totalLot} * 50000))
+	</insert>
 	
 	<delete id="deleteCashCancle" parameterType="search">
 		DELETE
 		FROM	ts_cash
-		WHERE	CASH_TYPE IN ('T', 'W', 'C') 
+		WHERE	CASH_TYPE IN ('T', 'W', 'C')
 			AND	MAIN_SEQ IN (	SELECT	ORDER_SEQ
 										FROM		fx_order
 										WHERE	RESULT_TIME = CONCAT(#{goodsDate,jdbcType=VARCHAR}, ' ', #{goodsTime,jdbcType=VARCHAR})
