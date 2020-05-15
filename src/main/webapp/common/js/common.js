@@ -89,6 +89,9 @@ function openPop(param, gubun, formObj) {
 		case "myShopMemberSupportCashHistory":
 			popUpWin('/mypage/member_support_cash_history_pop' + param, gubun, 1000, 600, 0, 0, "yes", "yes", true);
 			break;
+		case "myShopMemberDetailInfo":
+			popUpWin('/mypage/member_detail_info_popup' + param, gubun, 1076, 800, 0, 0, "yes", "yes", true);
+			break;
 
 		// 상관관계 매트릭스 팝업 - 공분산 매트릭스
 		// case "correlation2":
@@ -313,3 +316,14 @@ function downloadFile(filePath, fileName, isChecked) {
 		location.href = sUrl;
 	}
 }
+
+/**
+
+ * input 숫자와 콤마만 입력되게 하기.
+ * include js : jquery.number.js
+ * input 속성에 numberOnly 추가
+ * jsp : <input type="text" id="amount" name="amount" numberOnly placeholder="0" />
+ */
+$(document).on("keyup", "input:text[numberOnly]", function() {
+	$(this).number(true);
+});

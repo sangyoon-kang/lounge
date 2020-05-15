@@ -1,5 +1,6 @@
 package com.tagosolution.controller.front;
 
+import java.security.Principal;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -9,11 +10,14 @@ import javax.annotation.Resource;
 
 import com.tagosolution.service.model.*;
 import com.tagosolution.service.model.search.DepositSearchVO;
+import com.tagosolution.service.util.ListUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
@@ -473,12 +477,145 @@ public class MyPageController extends BaseController{
 			return super.setBindingResult(result, model);
 
 		List<MoneyVO> list = (List<MoneyVO>)_gDao.selectBySearch("order.selectSupportCashHistoryList", search,"totalSupportCashHistoryList");
+		MemberInfoVO vo = (MemberInfoVO) _gDao.selectByKey("memberInfo.selectById", search.getUserId());
+		MoneyVO moneyVO = (MoneyVO) _gDao.selectOne("money.getUserMoneyInfo", search.getUserId());
 
 		model.addAttribute("list", list);
 		model.addAttribute("search", search);
+		model.addAttribute("user", vo);
+		model.addAttribute("userMoney",  moneyVO);
 
-		return super.getConfig().getAdminRoot() + "/member/manage/support_cash_history_view_popup";
+		return "/front/mypage/ms_support_cash_history_view_popup";
 	}
+
+
+	/**
+	 * @param search
+	 * @param result
+	 * @param model
+	 * @return
+	 * @throws Exception
+	 */
+	@RequestMapping(value="/member_detail_info_popup")
+	public String memberDetailInfo(MemberSearchVO search, BindingResult result, Model model) throws Exception {
+		super.setPageSubTitle("고객정보", model);
+		if(result.hasErrors())
+			return super.setBindingResult(result, model);
+
+
+		MemberInfoVO vo = (MemberInfoVO) _gDao.selectByKey("memberInfo.selectById", search.getUserId());
+		MemberCompanyVO voc = new MemberCompanyVO() ;
+		voc = (MemberCompanyVO) _gDao.selectByKey("memberCompany.selectByKey", vo);
+		short level = (short) _gDao.selectByKey("memberGrade.selectMaxLevel", null);
+
+		List<MemberGradeVO> listGrade = (List<MemberGradeVO>) _gDao.selectList("memberGrade.selectListGrade", null);
+		List<MemberGradeVO> sameGrade = (List<MemberGradeVO>) _gDao.selectList("memberGrade.sameGrade", null);
+		List<FixedCodeVO> bankList =(List<FixedCodeVO>)_gDao.selectList("fixedCode.selectByBank", null);
+
+
+		MemberSettingVO setting = (MemberSettingVO) _gDao.selectByKey("memberSetting.selectByKey", super.getSiteSession().getSiteSeq());
+		//logger.debug("브이오 : {}", new Gson().toJson(vo));
+
+		Map <Integer, String> gradeList = ListUtil.gradeLevelList();
+
+		// 캐쉬입금액총액, 거래수익총액, 꽁머니지급액총액
+		MoneyVO moneyVO = (MoneyVO) _gDao.selectOne("money.getUserMoneyInfo", vo.getUserId());
+
+		model.addAttribute("vo", vo);
+		model.addAttribute("voc", voc);
+		model.addAttribute("grade", listGrade);
+		model.addAttribute("search", search);
+		model.addAttribute("setting", setting);
+		model.addAttribute("lowGrade", level);
+		model.addAttribute("bankList", bankList);
+		model.addAttribute("listG",  new Gson().toJson(gradeList));
+		model.addAttribute("sameGrade",  new Gson().toJson(sameGrade));
+		model.addAttribute("userMoney",  moneyVO);
+
+
+		return "/front/mypage/ms_member_info_popup";
+	}
+
+
+
+	@RequestMapping(value = "/ajax/addCash")
+	@ResponseBody
+	public Object addCash(@RequestBody(required = false) String userid, String uid, String cash, String memo, boolean type, BindingResult result, Model model) throws Exception {
+		if (result.hasErrors())
+			return super.setBindingResult(result, model);
+
+		Map<String, Object> map = new HashMap<String, Object>();
+		String message = "";
+
+		MemberInfoVO loginVO = super.getUserSession();
+
+		MemberInfoVO adVO = (MemberInfoVO) _gDao.selectByKey("memberInfo.selectById", loginVO.getUserId());
+		MemberInfoVO targetVO = (MemberInfoVO) _gDao.selectByKey("memberInfo.selectById", uid);
+
+		int tCash = Integer.parseInt(cash);
+
+		//금액체크
+		if(type){
+			if(adVO.getCash() < tCash){
+				map.put("code",1);
+				map.put("message","본인의 보유금이 부족해서 지원해 줄수 없습니다.");
+				return new Gson().toJson(map);
+			}
+		}else{
+			if(targetVO.getCash() < tCash){
+				map.put("code",1);
+				map.put("message",targetVO.getUserName() +" 님의 보유금 보다 큰 금액을 회수 할수 없습니다.");
+				return new Gson().toJson(map);
+			}
+			tCash *= -1;
+		}
+
+
+		MemberInfoVO mmb = new MemberInfoVO();
+		mmb.setUserId(uid);
+		mmb.setCash(tCash);
+		_gDao.update("memberInfo.updateCashByUserId", mmb);
+
+		MemberInfoVO admb = new MemberInfoVO();
+		admb.setUserId(loginVO.getUserId());
+		admb.setCash(tCash*-1);
+		_gDao.update("memberInfo.updateCashByUserId", admb);
+
+
+		CashVO mCashVO = new CashVO();
+		mCashVO.setUserId(mmb.getUserId());
+		mCashVO.setCash(mmb.getCash());
+		mCashVO.setMemo1(memo);
+		mCashVO.setRegUser(loginVO.getUserId());
+
+		CashVO aCashVO = new CashVO();
+		aCashVO.setUserId(admb.getUserId());
+		aCashVO.setCash(admb.getCash());
+		if(type){
+			aCashVO.setMemo1("회원 지원");
+		}else{
+			aCashVO.setMemo1("회원 회수");
+		}
+		aCashVO.setRegUser(loginVO.getUserId());
+
+		try {
+			_gDao.insert("cash.insertCashByUser", mCashVO);
+			_gDao.insert("cash.insertCashByUser", aCashVO);
+		} catch (Exception e) {
+			logger.error(e.getMessage(), e);
+		}
+
+//		Integer finalCash = (Integer) _gDao.selectOne("memberInfo.selectByCash", uid);
+
+		map.put("code",0);
+		map.put("message","처리가 완료 되었습니다.");
+
+		return new Gson().toJson(map);
+
+
+	}
+
+
 
 
 }

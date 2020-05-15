@@ -40,6 +40,7 @@
     <script type="text/javascript" src="/common/js/jquery/jquery.oLoader.min.js"></script>
     <script type="text/javascript" src="/common/js/jquery/jquery.tmpl.min.js"></script>
     <script type="text/javascript" src="/common/js/jquery/jquery.cookie.js"></script>
+    <script type="text/javascript" src="/common/js/jquery/jquery.number.min.js"></script>
     <script type="text/javascript" src="/common/js/lib.js"></script>
     <script type="text/javascript" src="/common/js/common.js"></script>
 	<script type="text/javascript" src="/common/js/fx_js/datepicker/datepicker.min.js"></script>

@@ -22,6 +22,7 @@
 	<script type="text/javascript" src="/common/js/jquery/jquery.locator.js"></script>
 	<script type="text/javascript" src="/common/js/jquery/jquery.tmpl.min.js"></script>
 	<script type="text/javascript" src="/common/js/jquery/jquery.tmplPlus.js"></script>
+	<script type="text/javascript" src="/common/js/jquery/jquery.number.min.js"></script>
 	<script type="text/javascript" src="/common/js/jquery/validation/jquery.validate.min.js"></script>
 	<script type="text/javascript" src="/common/js/jquery/validation/localization/messages_kor.js"></script>
 	<script type="text/javascript" src="/common/js/jquery/colorbox/jquery.colorbox-min.js"></script>

@@ -143,7 +143,7 @@
 							<td>
 								<a onclick="javascript:openPop('?userId=${l.userId }','myShopMemberhistory');" class="btn bt_bwhite" style="width: 90px">거래내역</a>
 								<a onclick="javascript:openPop('?userId=${l.userId }','myShoopMemberDepositHistory');" class="btn bt_blist" style="width: 90px">입출금내역</a>
-								<a onclick="javascript:openPop('?userId=${l.userId }','myShopMemberSupportCashHistory');" class="btn bt_blist" style="width: 90px">지원금내역</a>
+								<a onclick="javascript:openPop('?userId=${l.userId }','myShopMemberSupportCashHistory');" class="btn bt_blist" style="width: 90px">지원금관리</a>
 							</td>
 							<fmt:formatNumber var="totalCommission" pattern="#.##" value="${totalCommission +  l.commission}" />
 							<fmt:formatNumber var="totalTaxCommission" pattern="#.##" value="${totalTaxCommission +  l.taxCommission}" />
@@ -179,5 +179,11 @@
 		$('input[name="sellUserId"]').val(gseq);
 		$('#form').submit();
 	}
+
+
+	function myShopMemberDetailInfo(userId) {
+		openPop('?userId=' + userId, 'myShopMemberDetailInfo');
+	}
+
 </script>
 <%@ include file="/WEB-INF/include/fx_include/front_footer.jsp"%>
