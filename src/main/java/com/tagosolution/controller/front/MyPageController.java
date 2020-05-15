@@ -111,6 +111,8 @@ public class MyPageController extends BaseController{
 
 		//수정시
 		if (search.getMseq() > 0 && vo.getUserId().equals(oldUserId)) {
+			super.getUserSession().setBirthDt(vo.getBirthDt());
+
 			am.setScript("$.Nav('go', '/');");
 
 		//회원가입시	

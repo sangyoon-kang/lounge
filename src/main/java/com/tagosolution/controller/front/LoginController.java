@@ -165,11 +165,20 @@ public class LoginController extends BaseController{
 				super.getSession().setAttribute(super.getConfig().getSessionNameForUser(), memVo);
 				_loginService.insertLoginUserCounter(memVo);
 
-				if(search.getRedirectURL() != null && !search.getRedirectURL().isEmpty()){
-					String returnUrl = search.getRedirectURL().replaceAll("&amp;","&");
-					return "redirect:" + returnUrl;
+				if(!StringUtil.isEmpty(memVo.getBirthDt())) {
+					if (search.getRedirectURL() != null && !search.getRedirectURL().isEmpty()) {
+						String returnUrl = search.getRedirectURL().replaceAll("&amp;", "&");
+						return "redirect:" + returnUrl;
+					}
+					return "redirect:" + super.getConfig().getFrontMain();
+				}else{
+					AlertModel am = new AlertModel();
+					am.setMessage("고객님은 계좌실명인증이 필요합니다.\\n회원정보 변경페이지로 이동합니다.\\n\\n계좌실명인증 완료 후 거래를 진행 해주시기 바랍니다.");
+					am.setScript("location.href = '"+ "/request_modify.do?id="+memVo.getUserId() +"&pageType=bank';");
+
+					model.addAttribute("alert", am);
+					return super.getConfig().getViewAlert();
 				}
-				return "redirect:" + super.getConfig().getFrontMain();
 			}
 			else {
 				AlertModel am = new AlertModel();
@@ -545,12 +554,12 @@ public class LoginController extends BaseController{
 					hasAccount = super.getUserSession().getSnsYn();
 			}
 			
-			if (hasAccount) {
+			if (hasAccount || search.getPageType().equals("bank")) {
 				
-				//MemberInfoVO vo = (MemberInfoVO) _gDao.selectByKey("memberInfo.selectById", search.getId());	
+				//MemberInfoVO vo = (MemberInfoVO) _gDao.selectByKey("memberInfo.selectById", search.getId());
 				Byte bt = 1;
 				MemberSettingVO configVO = (MemberSettingVO) _gDao.selectByKey("memberSetting.selectByKey", (super.getSiteSession() != null ) ? super.getSiteSession().getSiteSeq() : bt);
-				
+
 				List<FixedCodeVO> bankList =(List<FixedCodeVO>)_gDao.selectList("fixedCode.selectByBank", null);
 				List<StringPair> emaildomains = configBean.getEmails();
 				model.addAttribute("emaildomains", emaildomains);

@@ -27,7 +27,11 @@
 		          	<input type="hidden" name="mseq" value="${empty vo.memberSeq ? 0 : vo.memberSeq }">	
 					<input type="hidden" name="transEmailYn" value="N">	
 					<input type="hidden" name="recommUserId" value="${vo.recommUserId }">
-					<input type="hidden" name="gradeLevel" value="${vo.gradeLevel }">	
+					<input type="hidden" name="gradeLevel" value="${vo.gradeLevel }">
+
+					<input type="hidden" name="birthDt" value="${vo.birthDt }">
+					<input type="hidden" name="gender" value="">
+					<input type="hidden" name="isAccountCheck" value="">
 				<div class="join_con">
 			
 					
@@ -62,23 +66,34 @@
 				<ul class="join_list">
 					<li>은행</li>
 					<li>
-					<c:if test="${tagoplusSolution1_session_user.snsYn}">
-						<select class="join_select join_select02" name="bank">
-						<option>선택</option>
-						
-						<c:forEach items="${bankList}" var="m" varStatus="s">
-									<option ${vo.bank eq m.codeName ? 'selected' : ''} value="${m.codeName }">${m.codeName }</option>
-								</c:forEach>
+					<!--c:if test="${tagoplusSolution1_session_user.snsYn}"-->
+						<select class="join_select join_select02" name="selectBank">
+							<option>선택</option>
+							<c:forEach items="${bankList}" var="m" varStatus="s">
+								<option ${vo.bank eq m.codeName ? 'selected' : ''} value="${m.codeDesc2 }">${m.codeName }</option>
+							</c:forEach>
 						</select>
-					</c:if>
-					<c:if test="${!tagoplusSolution1_session_user.snsYn}">
+						<input type="text" readonly value="${vo.bank}" name="bank" style="display: none"/>
+					<!--/c:if-->
+					<!--c:if test="${!tagoplusSolution1_session_user.snsYn}">
 						<input type="text" readonly value="${vo.bank}" />
-					</c:if>
+					c:if-->
 					</li>
 				</ul>
+				<c:if test="${vo.birthDt eq null or vo.birthDt eq ''}">
+				<ul class="join_list">
+					<li>생년월일</li>
+					<li>
+						<input type="text" placeholder="주민번호 앞 6자리" class="join_input01 onlyNumber" maxlength="6" name="birthDate"/>
+						<span class="join_txt_blue bold">(계좌번호 인증을 위해 주민번호상 생년월일을 입력해주세요.)</span>
+					</li>
+				</ul>
+				</c:if>
 				<ul class="join_list">
 					<li>계좌번호</li>
-					<li><input type="text" ${!tagoplusSolution1_session_user.snsYn ? 'readonly' : ''} placeholder="계좌번호 입력" value="${vo.bankAccount}" class="join_input01 onlyNumber" id="user_account_number" maxlength="24" name="bankAccount"/>
+					<li>
+						<input type="text" placeholder="계좌번호 입력" value="${vo.bankAccount}" class="join_input01 onlyNumber" id="user_account_number" maxlength="24" name="bankAccount"/>
+						<a onclick="javascript:accountCheck();" class="join_bt01" id="btnBankCheck">계좌번호 인증 </a>
 					</li>
 				</ul>
 				<ul class="join_list">
@@ -166,6 +181,20 @@
 <script type="text/javascript">
 
 $(function() {
+    $(document).ready(function () {
+        $(window).on('load', function () {
+            if(!isNull($('input[name=birthDt]').val().trim())){
+                $('select[name=selectBank]').hide();
+                $('input[name=bank]').show();
+                $('input[name=bankAccount]').prop("readonly", true);
+                $('input[name=bankAccount]').css("background-color", "#dadada");
+                $('input[name=isAccountCheck]').val("1");
+                $('#btnBankCheck').hide();
+			};
+        });
+
+    });
+
 	$('input[name=userPwd], input[name=userPwd2]').on('input change', function() {
 		var sUserPwd = trim($('input[name=userPwd]').val());
 		$('input[name=userPwd]').val(trim($('input[name=userPwd]').val()));
@@ -268,12 +297,76 @@ function doSubmit() {
 		alert('예금주명을 입력하세요.');
 		return;
 	}
+
+    if (isNull($('input[name=isAccountCheck]').val()) || $('input[name=isAccountCheck]').val() == "0") {
+        $('input[name=bankAccount]').focus();
+        alert('계좌번호 인증이 필요합니다.');
+        return;
+    }
 	
 	if (!confirm('등록 하시겠습니까?')) {
 		return;
 	}
 	console.log($('#user_email').val())
 	$('#form').submit();
+}
+
+// 계좌번호 소유주 체크
+function accountCheck() {
+    if ($('select[name=selectBank]').val() == 0 || $('select[name=selectBank]').val() == '선택') {
+        $('select[name=selectBank]').focus();
+        alert('은행을 선택해주세요.');
+        return;
+    }
+
+    if (isNull($('input[name=bankAccount]').val())) {
+        $('input[name=bankAccount]').focus();
+        alert('계좌번호를 입력하세요.');
+        return;
+    }
+
+    if (isNull($('input[name=accountOwner]').val())) {
+        alert('예금주명을 입력하세요. 예금주명은 본인인증 후에 자동으로 입력됩니다.');
+        return;
+    }
+
+    if (isNull($('input[name=birthDate]').val())){
+        $('input[name=birthDate]').focus();
+        alert('계좌번호 인증을 위해 생년월일을 입력해주세요');
+        return;
+    }
+
+    $.ajax({
+        type: 'post',
+        url: '/ajax/checkAccount.do',
+        data: {
+            strResId: $('input[name=birthDate]').val(),
+            strNm: $('input[name=accountOwner]').val(),
+            strBankCode: $('select[name=selectBank]').val(),
+            strAccountNo: $('input[name=bankAccount]').val()
+        },
+        dataType: 'json',
+        success: function (data) {
+            if (data.resultCode != "0000") {
+                $('input[name=isAccountCheck]').val("0");
+                alert("계좌 인증에 실패 하였습니다.");
+            } else {
+                $('input[name=isAccountCheck]').val("1");
+
+                $('input[name=bankAccount]').css("background-color", '#dadada');
+                $('select[name=selectBank]').hide();
+                $('input[name=bank]').show();
+                $('input[name=bank]').val($('select[name=selectBank] option:checked').text());
+                $('input[name=bankAccount]').prop('readonly', true);
+                $('input[name=birthDate]').closest('ul').hide();
+                $('#btnBankCheck').hide();
+
+                $('input[name=birthDt]').val($('input[name=birthDate]').val());
+
+                alert("계좌가 확인되었습니다.");
+            }
+        }
+    });
 }
 </script>
 <%@ include file="/WEB-INF/include/fx_include/front_footer.jsp"%>

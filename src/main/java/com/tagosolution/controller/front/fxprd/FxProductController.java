@@ -58,6 +58,15 @@ public class FxProductController extends BaseController {
 
         super.setPageSubTitle("메인", model);
 
+        if(StringUtil.isEmpty(super.getUserSession().getBirthDt())){
+            AlertModel am = new AlertModel();
+            am.setMessage("고객님은 계좌실명인증이 필요합니다.\\n회원정보 변경페이지로 이동합니다.\\n\\n계좌실명인증 완료 후 거래를 진행 해주시기 바랍니다.");
+            am.setScript("location.href = '"+ "/request_modify.do?id="+super.getUserSession().getUserId() +"&pageType=bank';");
+
+            model.addAttribute("alert", am);
+            return super.getConfig().getViewAlert();
+        }
+
         if (result.hasErrors())
             return super.setBindingResult(result, model);
         if (search.getSearchRunTime() == null)
