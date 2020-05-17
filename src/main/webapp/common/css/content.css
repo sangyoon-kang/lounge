@@ -999,15 +999,15 @@ board_tab01
 	.join_list li {width:100%!important;}
 	.join_list li:first-child {padding:3.1401vw 3vw;}
 	.join_list li:last-child {padding:3.1401vw 2.4155vw;}
-	.join_bt01, .join_bt01:hover {width:22.9469vw; height:9.6618vw; line-height:9.6618vw; margin-left:1.2077vw;}
+	.join_bt01, .join_bt01:hover {width:22.2469vw; height:9.6618vw; line-height:9.6618vw; margin-left:1.2077vw;}
 	.join_list li input[type="text"] { height:9.6618vw; line-height:9.6618vw;}
-	.join_list li input.join_input01 {width: calc(100% - 24.1546vw)!important;}
+	.join_list li input.join_input01 {width: calc(100% - 24.1646vw)!important;}
 	.join_txt_red {font-size:3.6232vw; margin-top:1.2077vw;}
 
 	.join_select,.join_list li input.join_input02 {width:calc(33.3% - 2.6vw);}
 	.join_select{height: 9.6618vw; line-height: 9.6618vw;}
 	.join_bar_txt {width:3.8647vw;}
-	.join_bar_txt02 {width:6.65vw;}
+	.join_bar_txt02 {width:4.65vw;}
 	.join_select03 {margin-left:1.2077vw;}
 	.join_list li input.join_input01.join_input01_01 {width:100%!important;}
 	.join_select02 {width:100%;}
