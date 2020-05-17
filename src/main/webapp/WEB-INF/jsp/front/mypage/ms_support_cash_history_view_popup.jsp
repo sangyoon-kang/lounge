@@ -56,7 +56,7 @@
 				<span>&nbsp;&nbsp;&nbsp;지급사유</span>
 				<input type="text" name="memo" class="w30" placeholder="지급 사유를 입력하세요(기본 : 관리자 지급)">
 				<button type="button" class="btn btn_round bg_blue ml5" onclick="rechargeCash(true)">CASH추가</button>
-				<button type="button" class="btn btn_round bg_red ml5" onclick="rechargeCash(false)">CASH회수</button>
+<%--				<button type="button" class="btn btn_round bg_red ml5" onclick="rechargeCash(false)">CASH회수</button>--%>
 			</td>
 		</tr>
 		</tbody>

@@ -42,7 +42,7 @@
     <script type="text/javascript" src="/common/js/jquery/jquery.cookie.js"></script>
     <script type="text/javascript" src="/common/js/jquery/jquery.number.min.js"></script>
     <script type="text/javascript" src="/common/js/lib.js"></script>
-    <script type="text/javascript" src="/common/js/common.js"></script>
+    <script type="text/javascript" src="/common/js/common.js?v1.3"></script>
 	<script type="text/javascript" src="/common/js/fx_js/datepicker/datepicker.min.js"></script>
 	<script type="text/javascript" src="/common/js/fx_js/datepicker/i18n/datepicker.kr.js"></script>
 	<script type="text/javascript" src="/common/js/moment/moment.js"></script>
