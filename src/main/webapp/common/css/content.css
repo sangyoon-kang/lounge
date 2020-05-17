@@ -287,7 +287,8 @@ display: -ms-flexbox;
 
 .shop_search {float:right; background:#fff; height:40px; padding-left:20px;}
 .shop_search input[type="text"] {height:40px; line-height:40px; width:84px; text-align:left; border:0; vertical-align:top; padding:0; box-sizing:Border-box;}
-.shop_search a {display:inline-block; margin-left:30px; width:60px; text-align:center; line-height:40px; color:#999; font-weight:500; height:40px; border-left:1px solid #ddd;}
+.shop_search a {display:inline-block; padding-left:10px; padding-right:10px; text-align:center; line-height:40px; color:#999; font-weight:500; height:40px; border-left:1px solid #ddd;}
+.shop_search form a:nth-of-type(1) {margin-left: 30px}
 .shop_search span {display:inline-block; width:45px; height:40px; line-height:40px; text-align:center;}
 
 .wrap_tsty03 {width:100%; clear:both; overflow-x:auto;}

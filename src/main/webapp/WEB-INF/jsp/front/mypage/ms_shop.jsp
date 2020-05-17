@@ -75,12 +75,9 @@
 					<input type="text" name="startDate" class="form-control" id="startDate" value="${search.startDate }" />
 					~
 					<input type="text" name="endDate" class="form-control" id="endDate"value="${search.endDate }" />
-					<a  onclick="javascript:doSearch('${search.sellUserId}');" >검색</a>
-
+					<a onclick="javascript:doSearch('${search.sellUserId}');" >검색</a>
+					<c:if test="${!empty search.sellUserId and search.sellUserId ne search.userId}"><a onclick="javascript:doSearch('');">돌아가기</a></c:if>
 				</form>
-				<div class="col-sm-6">
-					<c:if test="${!empty search.sellUserId and search.sellUserId ne search.userId}"><a onclick="javascript:doSearch('');"class="btn float-right">돌아가기</a></c:if>
-				</div>
 			</div>
 
 
