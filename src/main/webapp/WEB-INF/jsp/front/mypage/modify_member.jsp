@@ -23,15 +23,21 @@
 	<div class="scon">
           <h3 class="con_tit">정보수정</h3>
 			<div id="register_form" class="col-sm-6 mx-auto">
-		    	<form id="form" action="/mypage/member_proc.do" method="post" class="col-sm-12 mx-auto" enctype="multipart/form-data">
+		    	<form id="formJoin" name="formJoin" action="/mypage/member_proc.do" method="post" class="col-sm-12 mx-auto" enctype="multipart/form-data">
 		          	<input type="hidden" name="mseq" value="${empty vo.memberSeq ? 0 : vo.memberSeq }">	
 					<input type="hidden" name="transEmailYn" value="N">	
 					<input type="hidden" name="recommUserId" value="${vo.recommUserId }">
 					<input type="hidden" name="gradeLevel" value="${vo.gradeLevel }">
 
+					<input type="hidden" name="certType" value="">
+					<input type="hidden" name="ipinEncdata" value="${vo.ipinDi }">
+					<input type="hidden" name="isAdult" value="">
 					<input type="hidden" name="birthDt" value="${vo.birthDt }">
+
 					<input type="hidden" name="gender" value="">
 					<input type="hidden" name="isAccountCheck" value="">
+
+					<input type="hidden" name="mode" value="modify">
 				<div class="join_con">
 			
 					
@@ -45,14 +51,20 @@
 			<ul class="join_list">
 					<li>이름</li>
 					<li>
-					<input type="text" ${!tagoplusSolution1_session_user.snsYn ? 'readonly' : ''}   id="user_name"  maxlength="100" value="${vo.userName }"  placeholder="이름" class="join_input01"/>
+						<input type="text" ${!tagoplusSolution1_session_user.snsYn ? 'readonly' : ''}   id="user_name" name="userName"  maxlength="100" value="${vo.userName }"  placeholder="이름" class="join_input01"/>
+						<a id="btnIpinCheck" onclick="javascript:ipinCheck();" class="join_bt01" style="display: none">본인인증 </a>
+						<span class="join_txt_red small bold" id="userNameChk"
+							  style="display:none;">이미 등록되어 있습니다.</span>
 					</li>
 					
 			</ul>
 			<ul class="join_list">
 					<li>휴대폰번호</li>
 					<li>
-						<input type="text"  id="user_mobile_number"  maxlength="24" name="phone" ${!tagoplusSolution1_session_user.snsYn ? 'readonly' : ''} value="${vo.phone }" placeholder="휴대폰" >
+						<input type="text" maxlength="24" name="phone1" ${!tagoplusSolution1_session_user.snsYn ? 'readonly' : ''} value="${vo.phone }" placeholder="휴대폰" >
+						<input type="hidden" id="user_mobile_number" maxlength="24" name="phone" readonly value="${vo.phone }" placeholder="휴대폰">
+						<span class="join_txt_red small bold" id="userMobileChk"
+							  style="display:none;">이미 등록되어 있습니다.</span>
 					</li>
 				</ul>
 				
@@ -80,15 +92,13 @@
 					c:if-->
 					</li>
 				</ul>
-				<c:if test="${vo.birthDt eq null or vo.birthDt eq ''}">
-				<ul class="join_list">
+				<ul class="join_list" style="display: ${vo.birthDt eq null or vo.birthDt eq '' ? 'flex' : 'none'}">
 					<li>생년월일</li>
 					<li>
 						<input type="text" placeholder="주민번호 앞 6자리" class="join_input01 onlyNumber" maxlength="6" name="birthDate"/>
-						<span class="join_txt_blue bold">(계좌번호 인증을 위해 주민번호상 생년월일을 입력해주세요.)</span>
+						<span id="lblBirthText" class="join_txt_blue bold">(계좌번호 인증을 위해 주민번호상 생년월일을 입력해주세요.)</span>
 					</li>
 				</ul>
-				</c:if>
 				<ul class="join_list">
 					<li>계좌번호</li>
 					<li>
@@ -143,6 +153,14 @@
 		      </div>
 		
 	</div>
+	<!-- 본인인증 체크 //-->
+	<form name="form_chk" method="post" style="display:none;">
+		<input type="hidden" name="param_r1">
+		<input type="hidden" name="param_r2">
+		<input type="hidden" name="param_r3" value="${recomm_code}">
+		<input type="hidden" name="m" value="checkplusSerivce">
+		<input type="hidden" name="EncodeData" value="${checkplus.sEncDataCheckPlus}">
+	</form>
 </div>
 <script src="http://dmaps.daum.net/map_js_init/postcode.v2.js"></script>
 <script>
@@ -183,6 +201,10 @@
 $(function() {
     $(document).ready(function () {
         $(window).on('load', function () {
+            if(isNull($('input[name=phone]').val().trim())){
+                $('#btnIpinCheck').show();
+            }
+
             if(!isNull($('input[name=birthDt]').val().trim())){
                 $('select[name=selectBank]').hide();
                 $('input[name=bank]').show();
@@ -190,7 +212,13 @@ $(function() {
                 $('input[name=bankAccount]').css("background-color", "#dadada");
                 $('input[name=isAccountCheck]').val("1");
                 $('#btnBankCheck').hide();
-			};
+			}
+
+            if(isNull($('input[name=phone]').val().trim()) && isNull($('input[name=birthDt]').val().trim())){
+                $('#lblBirthText').text("(본인인증 시 자동입력됩니다.)");
+                $('input[name=birthDate]').prop("readonly", true);
+                $('input[name=birthDate]').css("background-color", "#dadada");
+            }
         });
 
     });
@@ -308,7 +336,17 @@ function doSubmit() {
 		return;
 	}
 	console.log($('#user_email').val())
-	$('#form').submit();
+	$('#formJoin').submit();
+}
+
+window.name = "Parent_window";
+
+function ipinCheck() {
+    window.open('', 'popupChk', 'width=500, height=550, top=100, left=100, fullscreen=no, menubar=no, status=no, toolbar=no, titlebar=yes, location=no, scrollbar=no');
+    document.form_chk.action = "${IPIN_CHECK}";
+    //https://nice.checkplus.co.kr/CheckPlusSafeModel/checkplus.cb
+    document.form_chk.target = "popupChk";
+    document.form_chk.submit();
 }
 
 // 계좌번호 소유주 체크
@@ -349,7 +387,9 @@ function accountCheck() {
         success: function (data) {
             if (data.resultCode != "0000") {
                 $('input[name=isAccountCheck]').val("0");
-                alert("계좌 인증에 실패 하였습니다.");
+
+                $('#lblBirthText').text("계좌인증에 실패하였습니다.");
+                $('#lblBirthText').prop('class', 'join_txt_red small bold');
             } else {
                 $('input[name=isAccountCheck]').val("1");
 
@@ -358,12 +398,15 @@ function accountCheck() {
                 $('input[name=bank]').show();
                 $('input[name=bank]').val($('select[name=selectBank] option:checked').text());
                 $('input[name=bankAccount]').prop('readonly', true);
-                $('input[name=birthDate]').closest('ul').hide();
+                //$('input[name=birthDate]').closest('ul').hide();
+                $('input[name=birthDate]').prop('readonly', true);
+                $('input[name=birthDate]').css("background-color", '#dadada');
                 $('#btnBankCheck').hide();
 
                 $('input[name=birthDt]').val($('input[name=birthDate]').val());
 
-                alert("계좌가 확인되었습니다.");
+                $('#lblBirthText').text("계좌인증에 성공하였습니다.");
+                $('#lblBirthText').prop('class', 'join_txt_blue bold');
             }
         }
     });

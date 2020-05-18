@@ -16,41 +16,63 @@
 					opener.document.joinForm.ipin_param3.value = "<c:out value="${ipin.sReservedParam3}"/>";
 					opener.document.joinForm.cert_type.value = "<c:out value="${sCertType}"/>";
 					opener.document.joinForm.recomm_code.value = "<c:out value="${recomm_code}"/>"; */
-					opener.document.formJoin.userName.value = "<c:out value="${search.userName}"/>";
-					opener.document.formJoin.accountOwner.value = "<c:out value="${search.userName}"/>";
-					opener.document.formJoin.phone.value = "<c:out value="${search.phone}"/>";
-					opener.document.formJoin.certType.value = "<c:out value="${search.certType}"/>";
-					opener.document.formJoin.ipinEncdata.value = "<c:out value="${search.ipinEncdata}"/>";
 
-					// 미성년 가입은 회원가입이 불가하므로 여기에만 미성년 로직 넣기  tyrus-k added
-					var isAdult="<c:out value="${search.getAdult()}"/>";
 
-					if(isAdult=="" || isAdult =="false") {
-						var chk = opener.document.querySelector('#userNameChk');
-						var mbck = opener.document.querySelector('#userMobileChk');
-						chk.style.display = "block";
-						mbck.style.display = "block";
+                    var phonenumber="<c:out value="${search.phone}"/>";
 
-						chk.innerHTML = "미성년자(만 19세미만)는 가입이 불가능합니다.";
-						mbck.innerHTML = "미성년자(만 19세미만)는 가입이 불가능합니다.";
+                    if(opener.document.formJoin.mode.value == "join"){
+						opener.document.formJoin.userName.value = "<c:out value="${search.userName}"/>";
+						opener.document.formJoin.accountOwner.value = "<c:out value="${search.userName}"/>";
+						opener.document.formJoin.phone.value = "<c:out value="${search.phone}"/>";
+						opener.document.formJoin.certType.value = "<c:out value="${search.certType}"/>";
+						opener.document.formJoin.ipinEncdata.value = "<c:out value="${search.ipinEncdata}"/>";
 
-						opener.document.formJoin.isAdult.value = isAdult;
-					}else{
-						var chk = opener.document.querySelector('#userNameChk');
-						var mbck = opener.document.querySelector('#userMobileChk');
-						chk.style.display = "none";
-						mbck.style.display = "none";
+						// 미성년 가입은 회원가입이 불가하므로 여기에만 미성년 로직 넣기  tyrus-k added
+						var isAdult="<c:out value="${search.getAdult()}"/>";
 
-						opener.document.formJoin.isAdult.value = isAdult;
-					}
+						if(isAdult=="" || isAdult =="false") {
+							var chk = opener.document.querySelector('#userNameChk');
+							var mbck = opener.document.querySelector('#userMobileChk');
+							chk.style.display = "block";
+							mbck.style.display = "block";
 
-					var phonenumber="<c:out value="${search.phone}"/>";
+							chk.innerHTML = "미성년자(만 19세미만)는 가입이 불가능합니다.";
+							mbck.innerHTML = "미성년자(만 19세미만)는 가입이 불가능합니다.";
 
-					if(phonenumber){
-						opener.document.formJoin.phone1.value = phonenumber.substring(0, 3);
-						opener.document.formJoin.phone2.value = phonenumber.substring(3, 7);
-						opener.document.formJoin.phone3.value = phonenumber.substring(7, 11);
-					}
+							opener.document.formJoin.isAdult.value = isAdult;
+						}else{
+							var chk = opener.document.querySelector('#userNameChk');
+							var mbck = opener.document.querySelector('#userMobileChk');
+							chk.style.display = "none";
+							mbck.style.display = "none";
+
+							opener.document.formJoin.isAdult.value = isAdult;
+						}
+
+						if(phonenumber){
+							opener.document.formJoin.phone1.value = phonenumber.substring(0, 3);
+							opener.document.formJoin.phone2.value = phonenumber.substring(3, 7);
+							opener.document.formJoin.phone3.value = phonenumber.substring(7, 11);
+						}
+					}else if(opener.document.formJoin.mode.value == "modify"){
+						if("1" != "<c:out value="${checkIpinDi}"/>"){
+						    alert("입력된 정보와 가입자 정보가 다릅니다.\n다시 시도해주세요.");
+						    console.log(opener.document.formJoin.ipinEncdata.value);
+						    console.log("<c:out value="${search.ipinEncdata}"/>");
+						    self.close();
+
+						    return;
+                        }
+
+                        opener.document.formJoin.userName.value = "<c:out value="${search.userName}"/>";
+                        opener.document.formJoin.accountOwner.value = "<c:out value="${search.userName}"/>";
+                        opener.document.formJoin.certType.value = "<c:out value="${search.certType}"/>";
+                        opener.document.formJoin.phone.value = "<c:out value="${search.phone}"/>";
+
+                        if(phonenumber){
+                            opener.document.formJoin.phone1.value = phonenumber.substring(0, 3) + "-" + phonenumber.substring(3, 7) + "-" + phonenumber.substring(7, 11);
+                        }
+                    }
 
 					// 생년월일
 					var birthDate="<c:out value="${search.birthDate}"/>";

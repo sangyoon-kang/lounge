@@ -101,9 +101,12 @@ public class MyPageController extends BaseController{
 		String oldUserId = super.getUserSession().getUserID();
 
 		try {
-			_memberService.insertMemberInfo(search, vo);
-			
-			am.setMessage("처리 되었습니다.");
+			if(StringUtil.isEmpty(vo.getPhone())) {
+				am.setMessage("본인인증 시 핸드폰번호가 누락되었습니다.\\다시한번 본인인증 해주세요.");
+			}else{
+				_memberService.insertMemberInfo(search, vo);
+				am.setMessage("처리 되었습니다.");
+			}
 		} catch (Exception e) {
 			logger.debug(e.getMessage(), e);
 			am.setMessage("처리 중 오류가 발생하였습니다. \\n" + e.getMessage());
@@ -113,7 +116,11 @@ public class MyPageController extends BaseController{
 		if (search.getMseq() > 0 && vo.getUserId().equals(oldUserId)) {
 			super.getUserSession().setBirthDt(vo.getBirthDt());
 
-			am.setScript("$.Nav('go', '/');");
+			if(StringUtil.isEmpty(vo.getPhone())) {
+				am.setScript("history.back();");
+			}else{
+				am.setScript("$.Nav('go', '/');");
+			}
 
 		//회원가입시	
 		} else if (search.getMseq() > 0 && !vo.getUserId().equals(oldUserId)){

@@ -62,6 +62,7 @@
             <input type="hidden" name="birthDate" value="">
             <input type="hidden" name="gender" value="">
             <input type="hidden" name="isAccountCheck" value="">
+            <input type="hidden" name="mode" value="join">
             <div class="join_con">
 
 

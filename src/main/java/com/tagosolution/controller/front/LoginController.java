@@ -391,7 +391,13 @@ public class LoginController extends BaseController{
 		MemberSearchVO search = getAgreePagePrivate(ipin.getsResponseData());
 		Integer myAccountCount =  (Integer) _gDao.selectOne("memberInfo.selectByPhone", search.getPhone());
 		model.addAttribute("myAccountCount", myAccountCount);
-				 
+
+		// 회원정보 수정 시 IPIN DI 가 다시 인증하는 사람과 일치하는지 확인하여 다른 사람으로 못바꾸도록 방지
+		MemberInfoVO memVo = (MemberInfoVO) _gDao.selectByKey("memberInfo.selectById", super.getUserSession().getUserId());
+		if(memVo != null && memVo.getIpinDi().equals(ipinDi)){
+			model.addAttribute("checkIpinDi", 1);
+		}
+
 	    if (ipin.getsResponseData() != null && !"".equals(ipin.getsResponseData()) && myAccountCount>0){
 	    	model.addAttribute("resultFlag", "dupl");
 	    	logger.debug("dupl");
@@ -555,13 +561,18 @@ public class LoginController extends BaseController{
 			}
 			
 			if (hasAccount || search.getPageType().equals("bank")) {
-				
 				//MemberInfoVO vo = (MemberInfoVO) _gDao.selectByKey("memberInfo.selectById", search.getId());
 				Byte bt = 1;
 				MemberSettingVO configVO = (MemberSettingVO) _gDao.selectByKey("memberSetting.selectByKey", (super.getSiteSession() != null ) ? super.getSiteSession().getSiteSeq() : bt);
 
+				// 유효성 안맞는게 있으면 step1으로 리다이렉트
+				Ipin checkplus = new Ipin();
+				checkplus = _ipinService.getDatas2();
+				model.addAttribute("checkplus", checkplus);
+
 				List<FixedCodeVO> bankList =(List<FixedCodeVO>)_gDao.selectList("fixedCode.selectByBank", null);
 				List<StringPair> emaildomains = configBean.getEmails();
+
 				model.addAttribute("emaildomains", emaildomains);
 				model.addAttribute("vo", memVo);
 		 		model.addAttribute("configVO", configVO);
