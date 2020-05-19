@@ -382,9 +382,9 @@ public class MyPageController extends BaseController{
 		
 		search.setUserId(super.getUserSession().getUserId());
 		
-		if(super.getUserSession().getGradeLevel() >= 6 || _memberService.selectBelongUsers(search) == 0){
+		/*if(super.getUserSession().getGradeLevel() >= 6 || _memberService.selectBelongUsers(search) == 0){
 			return "redirect:" + super.getConfig().getFrontMain();
-		}
+		}*/
 		CashVO vo = (CashVO) _cashService.selectForUser(search);
 		
 		if(search.getStartDate() == null || (search.getStartDate() != null && search.getStartDate().isEmpty())) search.setStartDate(StringUtil.getDateToString("yyyy-MM-dd"));
@@ -417,9 +417,9 @@ public class MyPageController extends BaseController{
 		if(search.getStartDate() == null || (search.getStartDate() != null && search.getStartDate().isEmpty())) search.setStartDate(StringUtil.getDateToString("yyyy-MM-dd"));
 		if(search.getEndDate() == null || (search.getEndDate() != null && search.getEndDate().isEmpty())) search.setEndDate(StringUtil.getDateToString("yyyy-MM-dd"));
 		search.setUserId(super.getUserSession().getUserId());
-		if(super.getUserSession().getGradeLevel() >= 6 || _memberService.selectBelongUsers(search) == 0){
+		/*if(super.getUserSession().getGradeLevel() >= 6 || _memberService.selectBelongUsers(search) == 0){
 			return "redirect:" + super.getConfig().getFrontMain();
-		}
+		}*/
 		List<CashVO> list = _cashService.selectMemPopList(search);
 				
 		model.addAttribute("list", list);

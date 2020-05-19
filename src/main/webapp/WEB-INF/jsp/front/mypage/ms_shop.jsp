@@ -93,6 +93,7 @@
 						<col></col>
 						<col></col>
 						<col></col>
+						<col></col>
 					</colgroup>
 					<thead>
 					<tr>
@@ -103,6 +104,7 @@
 						<th>잔액</th>
 						<th>가맹점수수료</th>
 						<th>정산금액</th>
+						<th>가입일</th>
 						<th>내역조회</th>
 					</tr>
 					</thead>
@@ -137,6 +139,7 @@
 								<%-- <td>${l.phone }</td> --%>
 							<td><fmt:formatNumber pattern="#,##0" value="${l.commission }"/> 원</td>
 							<td><fmt:formatNumber pattern="#,##0" value="${l.taxCommission }"/> 원</td>
+							<td><fmt:formatDate value="${l.regDate }" pattern="yyyy-MM-dd" /></td>
 							<td>
 								<a onclick="javascript:openPop('?userId=${l.userId }','myShopMemberhistory');" class="btn bt_bwhite" style="width: 90px">거래내역</a>
 								<a onclick="javascript:openPop('?userId=${l.userId }','myShoopMemberDepositHistory');" class="btn bt_blist" style="width: 90px">입출금내역</a>
