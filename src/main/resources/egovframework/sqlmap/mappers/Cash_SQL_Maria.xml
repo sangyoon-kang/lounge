@@ -189,7 +189,7 @@
 	</select>
 	
 	<select id="selectCash16List" parameterType="search" resultMap="BaseResultMap">
-		SELECT	A.USER_NAME, A.NICKNAME, A.USER_ID, A.PHONE, A.CASH, A.GRADE_LEVEL
+		SELECT	A.USER_NAME, A.NICKNAME, A.USER_ID, A.PHONE, A.CASH, A.GRADE_LEVEL , A.REG_DATE
 		FROM	ts_member_info A
 			INNER JOIN fx_line TML
 				ON TML.USER_ID = A.USER_ID
