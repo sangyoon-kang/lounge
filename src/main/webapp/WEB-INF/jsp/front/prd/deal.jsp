@@ -636,6 +636,10 @@
 			$.cookie("contractFormAggre",true,{ expires: 1});
 		}
 
+		var cnt = 0;
+        validateAjaxMaxCount(false).then(function(data){cnt = data.count});
+        if(cnt > 0){alert('투자는 1회차마다 한 번만 가능합니다.'); return;}
+
 		$('#printview .pop_cons').waitMe({
 			effect: 'ios',
 			text: '처리증입니다',
@@ -646,6 +650,7 @@
 			url : "./contract_proc.do",
 			method : "POST",
 			dataType: 'json',
+            async: true,
 			data: $("#contractForm").serializeArray(),
 			success: function(data){
 				if(data.hasOwnProperty("totalPrice")){
