@@ -56,7 +56,7 @@
 							
 								
 								
-								<a style="color:#d92222" onclick="javascript:viewApi (this,'${resultDate}','${search.type1}');" >
+								<a style="color:#d92222" onclick="javascript:viewApi ('${resultDate}','${search.type1}');" >
 									${m.goodsResult}
 								</a>
 							</c:if>
@@ -65,7 +65,7 @@
 								<%-- <a class="badge blue" onclick="window.open('/fxresult/listResult.do?resultDate=${resultDate}&runTime=${search.type1}', 'listresult', 'width=1000,height=660,top=200, left=400,location=no,status=no,scrollbars=yes');">
 									${m.goodsResult}
 								</a> --%>
-								<a style="color:#4c84ff" onclick="javascript:viewApi (this,'${resultDate}','${search.type1}');" >
+								<a style="color:#4c84ff" onclick="javascript:viewApi ('${resultDate}','${search.type1}');" >
 									${m.goodsResult}
 								</a>
 							</c:if>
@@ -82,9 +82,9 @@
 		</div>
 			<%@ include file="/WEB-INF/jsp/common/tp_new_paging/inc-paging-front.jsp"%>
 			<div id="dim" style="display:none"></div>
-			<!-- <div class="pop_con pop_result" id="viewdata">
+			<div class="pop_con pop_result" id="viewdata" style="display:none">
 				
-			</div> -->
+			</div>
 	</div>
 </section>
 
@@ -101,29 +101,31 @@ function closeView(){
 	 $(".pop_con.pop_result")[0].style.display="none";
 	}
 	
-function viewApi (obj,resultDate, runTime) {
- 	$(obj).colorbox({
-		href: encodeURI('/fxresult/listResult.do?resultDate='+resultDate+'&runTime='+runTime)
-		, overlayClose: false
-		, width: '80%'
-		, height: '100%'
-		, iframe: true
-		, onComplete: function() {}
-		, onClosed: function() {}
-	});
+function viewApi (resultDate, runTime) {
+	 $.ajax({
+		type : 'post',
+		url : '/fxresult/listResult.do',
+		data : {
+			
+			resultDate:resultDate,
+			runTime:runTime
+			
+		},
+		
+		success : function(data) {
+			$('#viewdata').html(data);
+		
+		$('#dim').show();
+		
+		 $(".pop_con.pop_result")[0].style.display="block";	
+				
+		}
+				 
+		
+	}); 
+	
 }
-var cboxOptions = {
-  width: '95%',
-  height: '95%',
-  maxWidth: '960px',
-  maxHeight: '960px',
-}
-$(window).resize(function(){
-    $.colorbox.resize({
-      width: window.innerWidth > parseInt(cboxOptions.maxWidth) ? cboxOptions.maxWidth : cboxOptions.width,
-      height: window.innerHeight > parseInt(cboxOptions.maxHeight) ? cboxOptions.maxHeight : cboxOptions.height
-    });
-});
+	
 	
 function doSearch() {
   $('#form1').submit(); 
