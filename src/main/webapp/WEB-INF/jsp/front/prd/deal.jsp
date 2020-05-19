@@ -648,18 +648,22 @@
 			dataType: 'json',
 			data: $("#contractForm").serializeArray(),
 			success: function(data){
-				alert("정상 처리되었습니다.");
-				closeView();
-				resetAll();
-				var currentCash;
-				$('.userCash').each(function(){
-					currentCash = $(this).text().replace(/,/g, "");
-					$(this).text(addComma(parseInt(currentCash)-parseInt(data)))
-				});
+				if(data.hasOwnProperty("totalPrice")){
+                    var currentCash;
+                    $('.userCash').each(function(){
+                        currentCash = $(this).text().replace(/,/g, "");
+                        $(this).text(addComma(parseInt(currentCash)-parseInt(data)))
+                    });
+                }
+                alert(data.message);
+                closeView();
+                resetAll();
 				$('#printview .pop_cons').waitMe("hide");
 
 			}
-		});
+		}).fail(function() {
+            alert( "error" );
+        });
 
 	}
 

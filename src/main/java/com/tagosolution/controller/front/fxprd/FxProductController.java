@@ -231,45 +231,56 @@ public class FxProductController extends BaseController {
     @RequestMapping(value = "/contract_proc.do")
     @ResponseBody
     public String goodsProc(OrderVO vo, PaymentSearchVO search, BindingResult result, Model model, HttpServletRequest request) throws Exception {
-
         if (result.hasErrors())
             return super.setBindingResult(result, model);
 
+        Map rtnObj = new HashMap();
+        Map objCount = (Map)ajaxCheckMaxCount(search, vo.getRunTime(), result, model);
         int totalPrice = search.getBuyLot1() + search.getBuyLot2() + search.getBuyLot10() + search.getBuyLot20() + search.getSellLot1() + search.getSellLot2() + search.getSellLot10() + search.getSellLot20();
-        AlertModel am = new AlertModel();
 
         try {
-            vo.setUserId(super.getUserSession().getUserId());
+            //AlertModel am = new AlertModel();
 
-            search.setBuyLot1(search.getBuyLot1() / 5000);
-            search.setBuyLot2(search.getBuyLot2() / 10000);
-            search.setBuyLot10(search.getBuyLot10() / 50000);
-            search.setBuyLot20(search.getBuyLot20() / 100000);
-            search.setBuyLot40(search.getBuyLot40() / 200000);
-            search.setSellLot1(search.getSellLot1() / 5000);
-            search.setSellLot2(search.getSellLot2() / 10000);
-            search.setSellLot10(search.getSellLot10() / 50000);
-            search.setSellLot20(search.getSellLot20() / 100000);
-            search.setSellLot40(search.getSellLot40() / 200000);
+            if((int)objCount.get("count") > 0){
+                logger.error("투자는 1회차마다 한 번만 가능합니다.");
+                rtnObj.put("message", "투자는 1회차마다 한 번만 가능합니다.");
+            }else{
+
+                vo.setUserId(super.getUserSession().getUserId());
+
+                search.setBuyLot1(search.getBuyLot1() / 5000);
+                search.setBuyLot2(search.getBuyLot2() / 10000);
+                search.setBuyLot10(search.getBuyLot10() / 50000);
+                search.setBuyLot20(search.getBuyLot20() / 100000);
+                search.setBuyLot40(search.getBuyLot40() / 200000);
+                search.setSellLot1(search.getSellLot1() / 5000);
+                search.setSellLot2(search.getSellLot2() / 10000);
+                search.setSellLot10(search.getSellLot10() / 50000);
+                search.setSellLot20(search.getSellLot20() / 100000);
+                search.setSellLot40(search.getSellLot40() / 200000);
 
 
-            String res = _paymentService.saveTransaction(vo, search);
+                String res = _paymentService.saveTransaction(vo, search);
 
-            if (res.isEmpty()) {
-                logger.error("[계약체결성공] 주문자:" + super.getUserSession().getUserName() + "(" + super.getUserSession().getUserID() + ")");
+                if (res.isEmpty()) {
+                    logger.error("[계약체결성공] 주문자:" + super.getUserSession().getUserName() + "(" + super.getUserSession().getUserID() + ")");
 
-                am.setMessage("정상 처리되었습니다.");
-                if (super.getUserSession().getTransEmailYn().toLowerCase().equals("y"))
-                    _paymentService.sendMail(vo, search, request);
-            } else {
-                logger.error("[계약체결실패] 주문자:" + super.getUserSession().getUserName() + "(" + super.getUserSession().getUserID() + ")");
-                am.setMessage(res);
+                    //am.setMessage("정상 처리되었습니다.");
+                    rtnObj.put("message", "정상 처리되었습니다.");
+                    rtnObj.put("totalPrice", totalPrice);
+                    if (super.getUserSession().getTransEmailYn().toLowerCase().equals("y"))
+                        _paymentService.sendMail(vo, search, request);
+                } else {
+                    logger.error("[계약체결실패] 주문자:" + super.getUserSession().getUserName() + "(" + super.getUserSession().getUserID() + ")");
+                    rtnObj.put("message", "주문이 정상적으로 처리되지 않았습니다.\n관리자에게 문의 바랍니다.");
+                }
             }
         } catch (Exception e) {
-            am.setMessage(e.getMessage() + ": " + e);
+            //am.setMessage(e.getMessage() + ": " + e);
+            rtnObj.put("message", e.getMessage() + ": " + e.toString());
             logger.error(e.getMessage(), e);
         }
-        return totalPrice + "";
+        return new Gson().toJson(rtnObj);
     }
 
     /**
