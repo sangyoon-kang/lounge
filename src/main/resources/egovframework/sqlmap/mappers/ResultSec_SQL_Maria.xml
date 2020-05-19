@@ -46,19 +46,6 @@
   SELECT	*
   FROM	(
 		  SELECT	@rownum := @rownum + 1 AS row_number,TIMESTAMP,SSS,RESULT_TIME, S_VAL, H_VAL, L_VAL, E_VAL from (
-		    	SELECT	*
-		    	FROM   	(
-			    		SELECT	TIMESTAMP, from_unixtime(floor(TIMESTAMP/1000), '%Y-%m-%d %H:%i:%s') AS RESULT_TIME,SUBSTR(TIMESTAMP,LENGTH(TIMESTAMP) - 2,4) as SSS, S_VAL, H_VAL, L_VAL, E_VAL
-			         	FROM   	fx_result_sec
-			         	WHERE   	TIMESTAMP &lt; UNIX_TIMESTAMP(CONCAT(#{resultDate}, ':00')) * 1000
-			          AND   	(SELECT   COUNT(RT)
-			                  		FROM   	fx_result
-			                  		WHERE   	RT = CONCAT(#{resultDate}, ':00')
-			                     	AND   	RIGHT(S_TIME, 2) != '00') > 0
-			         			ORDER BY TIMESTAMP DESC
-			         		LIMIT 1
-		      		) TEMP
-			UNION
 			SELECT   	TIMESTAMP, from_unixtime(floor(TIMESTAMP/1000), '%Y-%m-%d %H:%i:%s') AS RESULT_TIME,SUBSTR(TIMESTAMP,LENGTH(TIMESTAMP) - 2,4) as SSS, S_VAL, H_VAL, L_VAL, E_VAL
 			FROM		fx_result_sec
 			WHERE   TIMESTAMP >= UNIX_TIMESTAMP(CONCAT(#{resultDate}, ':00')) * 1000
@@ -66,7 +53,6 @@
 			ORDER BY 	TIMESTAMP) as AAA
 			cross join (select @rownum := 0) r
 	) TEMP
-  	<include refid="paging.limit"/>
   </select>
   
 </mapper>

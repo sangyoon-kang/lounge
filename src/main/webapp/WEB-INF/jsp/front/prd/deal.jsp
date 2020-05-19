@@ -674,6 +674,9 @@
 
 	//Confirmation
 	function doSubmit(tab){
+		/*alert("현재 결과값이 정상적으로 반영되지 않아 긴급 점검중입니다.\n불편을 드려 죄송합니다.");
+		return;*/
+
 		var type = tab == 'B' ? 'up': 'down';
 		$("#vLoss > strong").text($("#"+type+"Total").text());
 		var runTime = ${search.runTime};
