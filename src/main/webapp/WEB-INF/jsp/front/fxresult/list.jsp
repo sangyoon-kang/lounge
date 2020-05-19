@@ -82,7 +82,7 @@
 		</div>
 			<%@ include file="/WEB-INF/jsp/common/tp_new_paging/inc-paging-front.jsp"%>
 			<div id="dim" style="display:none"></div>
-			<div class="pop_con pop_result" id="viewdata" style="display:none">
+			<div class="pop_con pop_result" id="viewdata" style="display:none;">
 				
 			</div>
 	</div>
@@ -114,11 +114,9 @@ function viewApi (resultDate, runTime) {
 		
 		success : function(data) {
 			$('#viewdata').html(data);
-		
-		$('#dim').show();
-		
-		 $(".pop_con.pop_result")[0].style.display="block";	
-				
+			$('#dim').show();
+			$(".pop_con.pop_result")[0].style.display="block";
+			$("#viewdata").scrollTop(0);
 		}
 				 
 		

@@ -82,8 +82,7 @@ public class FxResultController extends BaseController{
 		if(result.hasErrors())
 			return super.setBindingResult(result, model);
 		
-		search.setRecordCount(50);
-		List<ResultSecVO> list = (List<ResultSecVO>) _gDao.selectBySearch("resultsecfx.selectResultSecByTime", search,"totalCountRsec");
+		List<ResultSecVO> list = (List<ResultSecVO>) _gDao.selectList("resultsecfx.selectResultSecByTime", search);
 		model.addAttribute("list", list);
 		model.addAttribute("search", search);
 		return "/front/fxresult/listResult";
