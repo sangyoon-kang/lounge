@@ -708,7 +708,7 @@ board_tab01
 */
 #dim {position:fixed; top:0; left:0; right:0; bottom:0; background:rgba(0,0,0,0.6); z-index:999;}
 
-.pop_con {position:fixed; background:#fff; top:50%; left:50%; max-height:80%; overflow: hidden;transform:translate(-50%,-50%); z-index:9999;min-height: 50%;width:50%;    height: 80%;}
+.pop_con {position:fixed; background:#fff; top:50%; left:50%; max-height:80%; overflow: hidden;transform:translate(-50%,-50%); z-index:9999;min-height: 50%;width:30%;    height: 80%;}
 .pop_con h2 {width:100%; font-size:25px; color:#00358e; font-weight:500; padding:20px 30px; box-sizing:Border-box; border-bottom:1px solid #dddddd;}
 .pop_close {display:block; position:Absolute; right:25px; top:25px; width:30px; height:30px; cursor:pointer; font-size:0; line-height:0; text-indent:-999999px;}
 .pop_close::after {position:absolute; content:''; top:11px; left:0; width:35px; height:2px; background:#ccc; transform:rotate(45deg);}
