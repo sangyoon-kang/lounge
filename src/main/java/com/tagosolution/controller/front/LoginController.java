@@ -393,10 +393,12 @@ public class LoginController extends BaseController{
 		model.addAttribute("myAccountCount", myAccountCount);
 
 		// 회원정보 수정 시 IPIN DI 가 다시 인증하는 사람과 일치하는지 확인하여 다른 사람으로 못바꾸도록 방지
-		MemberInfoVO memVo = (MemberInfoVO) _gDao.selectByKey("memberInfo.selectById", super.getUserSession().getUserId());
-		if(memVo != null && memVo.getIpinDi().equals(ipinDi)){
-			model.addAttribute("checkIpinDi", 1);
-		}
+        if(super.getUserSession() != null) {
+            MemberInfoVO memVo = (MemberInfoVO) _gDao.selectByKey("memberInfo.selectById", super.getUserSession().getUserId());
+            if (memVo != null && memVo.getIpinDi().equals(ipinDi)) {
+                model.addAttribute("checkIpinDi", 1);
+            }
+        }
 
 	    if (ipin.getsResponseData() != null && !"".equals(ipin.getsResponseData()) && myAccountCount>0){
 	    	model.addAttribute("resultFlag", "dupl");
