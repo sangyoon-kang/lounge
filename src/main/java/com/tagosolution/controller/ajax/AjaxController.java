@@ -188,6 +188,16 @@ public class AjaxController extends BaseController {
         // 꽁머니 출금제한 로직 tyrus-k added
         List<Map> freeIncomeLimitList = (List<Map>) _gDao.selectList("money.selectLimitFreeIncome", search);
 
+        // 입금액보다 거래량이 큰지 체크 하여 출금신청 제한
+        if(super.getUserSession().getGradeLevel() == 5 || super.getUserSession().getGradeLevel() == 6){
+            Map<String ,Object> limitOutcomeResult = (Map<String, Object>) _gDao.selectOne("money.selectLimitOutcome", search);
+
+            int limitOutcome = (int)limitOutcomeResult.get("result");
+            map.put("limitOutcome", limitOutcome);
+        }else{
+            map.put("limitOutcome", 1);
+        }
+
         // 꽁머니
         //int freeIncomeCnt = (int)freeIncomeLimitList.get(0).get("cnt");
         // 실제 입금 내역

@@ -109,6 +109,13 @@
 			url : '/ajax/limitToday.do',
 			dataType : 'json',
 			success : function(data) {
+				// 출금제한 결과 -1: 불가, 1: 가능
+				if(data.limitOutcome < 0){
+					alert('2020년 5월 1일 이후부터 입금금액 합계가\n거래금액 합계보다 큰 경우 출금이 제한됩니다.');
+					$(event.target).show();
+					return;
+				}
+
 				if(data.freeIncomeCount < 0){
 					alert('이벤트로 지급된 보유금은 거래 4회 미만 시 출금이 불가능합니다.');
                     $(event.target).show();

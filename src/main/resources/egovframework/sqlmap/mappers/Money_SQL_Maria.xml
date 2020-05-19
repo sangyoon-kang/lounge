@@ -378,10 +378,24 @@
 		WHERE
 			USER_ID = #{userId}
 	 ) Z1
- </select>
+ 	</select>
 
-
-
+	<select id="selectLimitOutcome" parameterType="search" resultType="java.util.Map">
+		select case when sum(zzz.money) > 0 then -1 else 1 end as result
+		from (
+			select sum(cash) as money from ts_cash
+			where USER_ID = #{userId}
+			 and CASH_TYPE = 'M'
+			 and cash > 0
+			 and DATE_FORMAT(REG_DATE, '%Y-%m-%d') > '2020-05-01'
+			union all
+			select sum(cash) as money from ts_cash
+			where USER_ID = #{userId}
+			 and MAIN_SEQ is not null
+			 and CASH_TYPE = 'O'
+			 and DATE_FORMAT(REG_DATE, '%Y-%m-%d') > '2020-05-01'
+		) zzz
+ 	</select>
 
 	<select id="selectAdminDepositList" parameterType="search" resultMap="BaseResultMap">
 		SELECT
