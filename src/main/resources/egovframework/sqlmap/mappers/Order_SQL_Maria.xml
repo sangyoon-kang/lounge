@@ -378,7 +378,6 @@
    <update id="updateStatusN" parameterType="search">
    		UPDATE	fx_order
 			SET	ORDER_RESULT = 'N'
-					, RESULT_TIME = DATE_ADD(CONCAT(#{goodsDate,jdbcType=VARCHAR}, ' ', #{goodsTime,jdbcType=VARCHAR}), INTERVAL RUN_TIME MINUTE)
 		WHERE	GOODS_DATE = #{goodsDate,jdbcType=VARCHAR} AND GOODS_TIME = #{goodsTime,jdbcType=VARCHAR}
 			AND	RUN_TIME = #{runTime,jdbcType=INTEGER};
    </update>
