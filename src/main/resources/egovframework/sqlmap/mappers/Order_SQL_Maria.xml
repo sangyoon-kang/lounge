@@ -67,6 +67,7 @@
   <select id="selectYears" resultMap="BaseResultMap">
 	SELECT 	YEAR(GOODS_DATE) AS YEARS, CONCAT(YEAR(GOODS_DATE), '년') AS YEARS_TEXT
 	FROM 	fx_order
+	WHERE GOODS_DATE is not null
 	GROUP BY	YEAR(GOODS_DATE)
 	ORDER BY	YEARS DESC;
   </select>
@@ -106,6 +107,34 @@
 		) TEMP2
 		ON	TEMP2.GOODS_DATE = TEMP.GOODS_DATE
 	ORDER BY TEMP.GOODS_DATE;
+  </select>
+
+
+    <select id="selectDayUserBalanceStatList" parameterType="search" resultType="com.tagosolution.service.model.DayBalanceVO">
+        SELECT
+           SUM_CASH,
+           YYMMDD as date,
+           BALANCE
+        from
+        (
+            select
+                   * ,
+                   SUM(SUM_CASH) OVER (ORDER BY YYMMDD) as BALANCE
+            from (
+                      select SUM(CASH) SUM_CASH,
+                             YYMMDD
+                      from (
+                               select CASH,
+                                      date_format(REG_DATE, '%Y-%m-%d') as YYMMDD
+                               from ts_cash
+                               WHERE CASH_TYPE != 'C'
+                                 AND CASH_TYPE != 'T'
+                               order by YYMMDD DESC
+                           ) as a
+                      GROUP BY YYMMDD
+                  ) as b
+        ) as c
+        WHERE date_format(YYMMDD, '%Y-%m') = CONCAT(#{sYear}, '-',  #{sMonth});
   </select>
   
   <select id="checkMemberOrder" parameterType="search" resultType="int">
