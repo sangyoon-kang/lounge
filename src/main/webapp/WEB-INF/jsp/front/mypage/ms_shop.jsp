@@ -155,7 +155,8 @@
 						<td colspan="5">정산금액</td>
 						<td><fmt:formatNumber pattern="#,##0" value="${totalCommission}" /></td>
 						<td><fmt:formatNumber pattern="#,##0" value="${totalTaxCommission}" /></td>
-						<td>
+						<td ></td>
+						<td >
 							<a onclick="javascript:showHistory('${l.userId }');" class="btn bt_bwhite" style="display:none;width: 120px">수수료출금</a>
 						</td>
 					</tr>
