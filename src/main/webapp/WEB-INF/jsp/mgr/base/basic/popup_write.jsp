@@ -84,6 +84,23 @@
 						</td> -->
 					</tr>
 					<tr>
+						<th><strong>지점 이상만 공지</strong></th>
+						<td colspan="3">
+							<label><input type="radio" name="limitGradeYn"  class="input" value="Y"/> 사용함</label>
+							<label class="ml20"><input type="radio" name="limitGradeYn" class="input" value="N"/> 사용안함</label>
+							<script>
+								$(function() {
+									checkRadio('limitGradeYn', '${vo.limitGradeYn}', 'N');
+								});
+							</script>
+						</td>
+						<!-- <th><strong>스크롤여부</strong></th>
+						<td>
+							<label><input type="radio" name=""  class="input"/>허용함</label>
+							<label class="ml20"><input type="radio" name="" class="input"/>허용안함</label>
+						</td> -->
+					</tr>
+					<tr>
 						<th><strong>위치</strong></th>
 						<td>
 							<span class="ml15">X :<input name="positionX" class="input onlyNumber ml5 w20" value="${!empty vo.positionX ? vo.positionX : 0 }" maxlength="" type="number"/></span>
