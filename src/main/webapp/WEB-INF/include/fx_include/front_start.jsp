@@ -25,7 +25,7 @@
 	<link href="/common/css/fx_css/datepicker/datepicker.min.css" rel="stylesheet" type="text/css" /> 
 	<link href="/common/css/global.css" rel="stylesheet" type="text/css" />
 	<link href="/common/css/layout.css" rel="stylesheet" type="text/css" />
-	<link href="/common/css/content.css?version=1.4" rel="stylesheet" type="text/css" />
+	<link href="/common/css/content.css?version=1.6" rel="stylesheet" type="text/css" />
 	<link href="/common/css/fonts.css" rel="stylesheet" type="text/css" />
 	<link href="/common/css/popup.css" rel="stylesheet" type="text/css" />
 	<link href="/common/css/board.css" rel="stylesheet" type="text/css" />

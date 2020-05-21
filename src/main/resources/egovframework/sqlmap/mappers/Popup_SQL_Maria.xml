@@ -19,12 +19,13 @@
 		<result column="MOD_USER" jdbcType="VARCHAR" property="modUser" />
 		<result column="USE_FLAG" jdbcType="VARCHAR" property="useYn" />
 		<result column="BODY" jdbcType="LONGVARCHAR" property="body" />
-		
+		<result column="LIMIT_GRADE_YN" jdbcType="VARCHAR" property="limitGradeYn" />
+
 	</resultMap>
 
 	<sql id="select">
 		POPUP_SEQ, SUBJECT, LINK_URL, POSITION_X, POSITION_Y, HORIZONTAL_SIZE, VERTICAL_SIZE,
-		START_DT, END_DT, POPUP_TYPE, REG_DATE, MOD_DATE, REG_USER, MOD_USER, USE_FLAG, BODY
+		START_DT, END_DT, POPUP_TYPE, REG_DATE, MOD_DATE, REG_USER, MOD_USER, USE_FLAG, BODY , LIMIT_GRADE_YN
 	</sql>
 
 	<select id="selectByKey" parameterType="java.lang.Short" resultMap="BaseResultMap">
@@ -46,12 +47,30 @@
 		<![CDATA[
 		FROM TS_POPUP
 		WHERE USE_FLAG = 'Y'
-			AND (STR_TO_DATE(DATE_FORMAT(NOW(), '%Y-%m-%d'), '%Y-%m-%d') >= STR_TO_DATE(START_DT, '%Y-%m-%d') 
-			AND STR_TO_DATE(DATE_FORMAT(NOW(), '%Y-%m-%d'), '%Y-%m-%d') <= STR_TO_DATE(END_DT, '%Y-%m-%d') 
-		)
+			AND STR_TO_DATE(DATE_FORMAT(NOW(), '%Y-%m-%d'), '%Y-%m-%d') >= STR_TO_DATE(START_DT, '%Y-%m-%d')
+			AND STR_TO_DATE(DATE_FORMAT(NOW(), '%Y-%m-%d'), '%Y-%m-%d') <= STR_TO_DATE(END_DT, '%Y-%m-%d')
+			AND (LIMIT_GRADE_YN IS NULL OR LIMIT_GRADE_YN = 'N')
+			ORDER BY POPUP_SEQ DESC
 		]]>
 		<!-- AND (STR_TO_DATE(DATE_FORMAT(NOW(), '%Y-%m-%d'), '%Y-%m-%d') >= STR_TO_DATE(START_DT, '%Y-%m-%d') 
 			AND DATE_ADD(STR_TO_DATE(DATE_FORMAT(NOW(), '%Y-%m-%d'), '%Y-%m-%d'), INTERVAL 1 DAY) < STR_TO_DATE(END_DT, '%Y-%m-%d') 
+		) -->
+	</select>
+
+	<!-- 메인 페이지 팝업 -->
+	<select id="selectForMainGrade" parameterType="search" resultMap="BaseResultMap">
+		SELECT
+		<include refid="select" />
+		<![CDATA[
+		FROM TS_POPUP
+		WHERE USE_FLAG = 'Y'
+			AND STR_TO_DATE(DATE_FORMAT(NOW(), '%Y-%m-%d'), '%Y-%m-%d') >= STR_TO_DATE(START_DT, '%Y-%m-%d')
+			AND STR_TO_DATE(DATE_FORMAT(NOW(), '%Y-%m-%d'), '%Y-%m-%d') <= STR_TO_DATE(END_DT, '%Y-%m-%d')
+			AND LIMIT_GRADE_YN = 'Y'
+			ORDER BY POPUP_SEQ DESC
+		]]>
+		<!-- AND (STR_TO_DATE(DATE_FORMAT(NOW(), '%Y-%m-%d'), '%Y-%m-%d') >= STR_TO_DATE(START_DT, '%Y-%m-%d')
+			AND DATE_ADD(STR_TO_DATE(DATE_FORMAT(NOW(), '%Y-%m-%d'), '%Y-%m-%d'), INTERVAL 1 DAY) < STR_TO_DATE(END_DT, '%Y-%m-%d')
 		) -->
 	</select>
 
@@ -65,7 +84,7 @@
 				ORDER BY ${orderBy }
 			</when>
 			<otherwise>
-				ORDER BY POPUP_SEQ
+				ORDER BY POPUP_SEQ DESC
 			</otherwise>
 		</choose>
 		<include refid="paging.limit" />
@@ -83,14 +102,14 @@
 		POSITION_X, POSITION_Y, HORIZONTAL_SIZE,
 		VERTICAL_SIZE, START_DT, END_DT,
 		POPUP_TYPE, MOD_DATE, REG_USER,
-		USE_FLAG, BODY
+		USE_FLAG, BODY , LIMIT_GRADE_YN
 		)
 		VALUES (
 		#{popupSeq,jdbcType=SMALLINT}, #{subject,jdbcType=VARCHAR}, #{linkUrl,jdbcType=VARCHAR},
 		#{positionX,jdbcType=SMALLINT}, #{positionY,jdbcType=SMALLINT}, #{horizontalSize,jdbcType=SMALLINT},
 		#{verticalSize,jdbcType=SMALLINT}, #{startDt,jdbcType=VARCHAR}, #{endDt,jdbcType=VARCHAR},
 		#{popupType,jdbcType=VARCHAR}, #{modDate,jdbcType=TIMESTAMP}, #{regUser,jdbcType=VARCHAR},
-		#{useYn,jdbcType=VARCHAR}, #{body,jdbcType=LONGVARCHAR}
+		#{useYn,jdbcType=VARCHAR}, #{body,jdbcType=LONGVARCHAR} , #{limitGradeYn,jdbcType=VARCHAR}
 		)
 		ON DUPLICATE KEY UPDATE
 		<trim suffix="" suffixOverrides=",">
@@ -130,6 +149,9 @@
 			</if>
 			<if test="body != null">
 				BODY = #{body,jdbcType=LONGVARCHAR},
+			</if>
+			<if test="limitGradeYn != null">
+				LIMIT_GRADE_YN = #{limitGradeYn,jdbcType=VARCHAR},
 			</if>
 		</trim>
 	</insert>

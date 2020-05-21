@@ -256,7 +256,17 @@ public class AjaxController extends BaseController {
 
         Map<String, Object> map = new HashMap<String, Object>();
         //PopupSearchVO search = new PopupSearchVO();
-        List<PopupVO> list = (List<PopupVO>) _gDao.selectList("popup.selectForMain", null);
+
+        MemberInfoVO memberInfoVO = super.getUserSession();
+        List<PopupVO> list = null;
+
+        if(memberInfoVO == null){
+            list = (List<PopupVO>) _gDao.selectList("popup.selectForMain", null);
+        }else{
+            if(memberInfoVO.getGradeLevel() < 5) {
+                list = (List<PopupVO>) _gDao.selectList("popup.selectForMainGrade", null);
+            }
+        }
 
         map.put("list", list);
 

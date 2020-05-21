@@ -415,7 +415,7 @@ $(function() {
         $(".comments").toggle();
     });
 });
-	feather.replace();
+	//feather.replace();
 	const ajaxUrl = '/module/comment/proc.do';
 	
 	const loginUser = '${tagoplusSolution1_session_user.userId}';

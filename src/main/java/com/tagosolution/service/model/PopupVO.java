@@ -42,6 +42,16 @@ public class PopupVO implements GeneralModel {
 
     private String body;
 
+    public String getLimitGradeYn() {
+        return limitGradeYn;
+    }
+
+    public void setLimitGradeYn(String limitGradeYn) {
+        this.limitGradeYn = limitGradeYn;
+    }
+
+    private String limitGradeYn;
+
     public Short getPopupSeq() {
         return popupSeq;
     }
