@@ -75,8 +75,8 @@
 	<tr>
 		<td>\${order}</td>
 		<td>\${regDate}</td>
-		<td>\${ioTypeName}</td>
-		<td>\${addComma(balance)}</td>
+		<td><span class="\${ioTypeName == '입금' ? 'txt_blue' : 'txt_red'}">\${ioTypeName}</span></td>
+		<td>\${addComma(cash)}</td>
 		<td><span class="\${state == 'A' ? 'inout_now_done':'' } \${state == 'C' ? 'inout_now_cancel':''}\${state == 'R' ? 'inout_now_wait':'' }">
           \${state == 'A' ? '승인':'' } \${state == 'C' ? '취소':''}\${state == 'R' ? '요청':'' }
           </span></td>
