@@ -127,7 +127,7 @@
 					<fmt:formatNumber pattern="#,##0" value="${vo.cash }" /> 원
 					(
 					캐쉬입금 : <fmt:formatNumber pattern="#,##0" value="${userMoney.cashR }" /> 원,
-					꽁머니 : <fmt:formatNumber pattern="#,##0" value="${userMoney.cashA }" /> 원,
+					투자지원금 : <fmt:formatNumber pattern="#,##0" value="${userMoney.cashA }" /> 원,
 					거래수익 : <fmt:formatNumber pattern="#,##0" value="${userMoney.cashC }" /> 원
 					)
 				</span>
