@@ -50,7 +50,6 @@
 			AND STR_TO_DATE(DATE_FORMAT(NOW(), '%Y-%m-%d'), '%Y-%m-%d') >= STR_TO_DATE(START_DT, '%Y-%m-%d')
 			AND STR_TO_DATE(DATE_FORMAT(NOW(), '%Y-%m-%d'), '%Y-%m-%d') <= STR_TO_DATE(END_DT, '%Y-%m-%d')
 			AND (LIMIT_GRADE_YN IS NULL OR LIMIT_GRADE_YN = 'N')
-			ORDER BY POPUP_SEQ DESC
 		]]>
 		<!-- AND (STR_TO_DATE(DATE_FORMAT(NOW(), '%Y-%m-%d'), '%Y-%m-%d') >= STR_TO_DATE(START_DT, '%Y-%m-%d') 
 			AND DATE_ADD(STR_TO_DATE(DATE_FORMAT(NOW(), '%Y-%m-%d'), '%Y-%m-%d'), INTERVAL 1 DAY) < STR_TO_DATE(END_DT, '%Y-%m-%d') 
@@ -67,7 +66,6 @@
 			AND STR_TO_DATE(DATE_FORMAT(NOW(), '%Y-%m-%d'), '%Y-%m-%d') >= STR_TO_DATE(START_DT, '%Y-%m-%d')
 			AND STR_TO_DATE(DATE_FORMAT(NOW(), '%Y-%m-%d'), '%Y-%m-%d') <= STR_TO_DATE(END_DT, '%Y-%m-%d')
 			AND LIMIT_GRADE_YN = 'Y'
-			ORDER BY POPUP_SEQ DESC
 		]]>
 		<!-- AND (STR_TO_DATE(DATE_FORMAT(NOW(), '%Y-%m-%d'), '%Y-%m-%d') >= STR_TO_DATE(START_DT, '%Y-%m-%d')
 			AND DATE_ADD(STR_TO_DATE(DATE_FORMAT(NOW(), '%Y-%m-%d'), '%Y-%m-%d'), INTERVAL 1 DAY) < STR_TO_DATE(END_DT, '%Y-%m-%d')
@@ -84,7 +82,7 @@
 				ORDER BY ${orderBy }
 			</when>
 			<otherwise>
-				ORDER BY POPUP_SEQ DESC
+				ORDER BY POPUP_SEQ
 			</otherwise>
 		</choose>
 		<include refid="paging.limit" />

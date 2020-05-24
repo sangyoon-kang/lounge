@@ -665,9 +665,9 @@
         }
 
         if (isNull($('input[name=recommUserId]').val())) {
-            $('input[name=recommUserId]').focus();
-            alert('추천지점을 입력하세요.');
-            return;
+            alert('추천지점이 없으면 본사가 추천지점으로 선택됩니다.');
+
+            $('input[name=recommUserId]').val("FXLOUNGE");
         }
 
         if (!$('#selectAll').prop('checked')) {

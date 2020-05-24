@@ -492,6 +492,7 @@ public class MyPageController extends BaseController{
 		model.addAttribute("list", list);
 		model.addAttribute("search", search);
 		model.addAttribute("user", vo);
+		model.addAttribute("callUser", super.getUserSession().getUserId());
 		model.addAttribute("userMoney",  moneyVO);
 
 		return "/front/mypage/ms_support_cash_history_view_popup";
@@ -594,17 +595,27 @@ public class MyPageController extends BaseController{
 		CashVO mCashVO = new CashVO();
 		mCashVO.setUserId(mmb.getUserId());
 		mCashVO.setCash(mmb.getCash());
-		mCashVO.setMemo1(memo);
+
+		// 회원 메세지 셋팅
+		if(type){
+			mCashVO.setMemo1(admb.getUserId() + "가 지원");
+		}else{
+			mCashVO.setMemo1(admb.getUserId() + "가 회수");
+		}
+
 		mCashVO.setRegUser(loginVO.getUserId());
 
 		CashVO aCashVO = new CashVO();
 		aCashVO.setUserId(admb.getUserId());
 		aCashVO.setCash(admb.getCash());
+
+		// 관리자 메세지 셋팅
 		if(type){
-			aCashVO.setMemo1("회원 지원");
+			aCashVO.setMemo1(mmb.getUserId() +" 회원 지원");
 		}else{
-			aCashVO.setMemo1("회원 회수");
+			aCashVO.setMemo1(mmb.getUserId() +" 회원 회수");
 		}
+
 		aCashVO.setRegUser(loginVO.getUserId());
 
 		try {

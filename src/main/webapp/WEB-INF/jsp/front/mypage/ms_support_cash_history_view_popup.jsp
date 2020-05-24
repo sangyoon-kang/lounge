@@ -47,18 +47,19 @@
 				</span>
 			</td>
 		</tr>
-		<tr>
-
-			<th>캐쉬지원</th>
-			<td colspan="4">
-				<span>&nbsp;&nbsp;&nbsp;금액</span>
-				<input type="text" name="cash" numberOnly class="w20">
-				<span>&nbsp;&nbsp;&nbsp;지급사유</span>
-				<input type="text" name="memo" class="w30" placeholder="지급 사유를 입력하세요(기본 : 관리자 지급)">
-				<button type="button" class="btn btn_round bg_blue ml5" onclick="rechargeCash(true)">CASH추가</button>
-<%--				<button type="button" class="btn btn_round bg_red ml5" onclick="rechargeCash(false)">CASH회수</button>--%>
-			</td>
-		</tr>
+		<c:if test="${ user.userId ne callUser}">
+			<tr>
+				<th>캐쉬지원</th>
+				<td colspan="4">
+					<span>&nbsp;&nbsp;&nbsp;금액</span>
+					<input type="text" name="cash" numberOnly class="w20">
+<%--					<span>&nbsp;&nbsp;&nbsp;지급사유</span>--%>
+<%--					<input type="text" name="memo" class="w30" placeholder="지급 사유를 입력하세요(기본 : 회원 지원)">--%>
+					<button type="button" class="btn btn_round bg_blue ml5" onclick="rechargeCash(true)">CASH추가</button>
+						<%--				<button type="button" class="btn btn_round bg_red ml5" onclick="rechargeCash(false)">CASH회수</button>--%>
+				</td>
+			</tr>
+		</c:if>
 		</tbody>
 	</table>
 
@@ -106,7 +107,8 @@
 
 		var cash = $('input[name=cash]').val();
 		var userid = '${user.userId}';
-		var memo = $('input[name=memo]').val();
+		//var memo = $('input[name=memo]').val();
+
 
 		if(!cash){
 			alert('CASH 입력하세요');
@@ -116,16 +118,11 @@
 			if(!confirm("지원금을 추가 하시겠습니가?")){
 				return;
 			};
-			if(!memo){
-				memo = "관리자 지급";
-			}
+
 		}else{
 			if(!confirm("지원금을 회수 하시겠습니가?")){
 				return;
 			};
-			if(!memo){
-				memo = "관리자 회수";
-			}
 		}
 
 		$.ajax({
@@ -134,7 +131,6 @@
 			data : {
 				'uid': userid,
 				'cash': cash,
-				'memo': memo,
 				'type' : isAdd
 			},
 			dataType : 'json',

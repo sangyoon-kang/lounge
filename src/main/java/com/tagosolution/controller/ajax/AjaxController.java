@@ -193,6 +193,7 @@ public class AjaxController extends BaseController {
             Map<String ,Object> limitOutcomeResult = (Map<String, Object>) _gDao.selectOne("money.selectLimitOutcome", search);
 
             int limitOutcome = (int)limitOutcomeResult.get("result");
+
             map.put("limitOutcome", limitOutcome);
         }else{
             map.put("limitOutcome", 1);
