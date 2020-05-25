@@ -450,9 +450,12 @@
 				  and fm3.STATE = 'A'
 				  and tmi.USER_ID = fm3.USER_ID
 				group by
-					fm3.USER_ID ),0) as o_cash
+					fm3.USER_ID ),0) as o_cash,
+			tmg.GRADE_NAME as gradeName
 		from
 			ts_member_info tmi
+		left join ts_member_grade tmg
+		on tmi.GRADE_LEVEL = tmg.GRADE_LEVEL
 		<where>
 			<if test="searchWord != null and searchWord != ''">
 				tmi.user_name like CONCAT('%', #{searchWord}, '%')
@@ -488,9 +491,12 @@
 				  and fm3.STATE = 'A'
 				  and tmi.USER_ID = fm3.USER_ID
 				group by
-					fm3.USER_ID ),0) as o_cash
+					fm3.USER_ID ),0) as o_cash,
+			tmg.GRADE_NAME as gradeName
 		from
 			ts_member_info tmi
+		left join ts_member_grade tmg
+		on tmi.GRADE_LEVEL = tmg.GRADE_LEVEL
 	</select>
 
 

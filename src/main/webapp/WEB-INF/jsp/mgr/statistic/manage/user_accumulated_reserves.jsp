@@ -58,6 +58,7 @@
 				<th>보유금</th>
 				<th>누적 입금</th>
 				<th>누적 출금</th>
+				<th>회원등급</th>
 			</tr>
 			</thead>
 			<tbody>
@@ -67,10 +68,9 @@
 						<td>${l.userId}</td>
 						<td>${l.userName}</td>
 						<td><fmt:formatNumber pattern="#,##0" value="${l.cash}" /></td>
-
-
 						<td><fmt:formatNumber pattern="#,##0" value="${l.iCash}" /></td>
 						<td><fmt:formatNumber pattern="#,##0" value="${l.oCash}" /></td>
+						<td>${l.gradeName}</td>
 					</tr>
 				</c:forEach>
 			</c:if>
