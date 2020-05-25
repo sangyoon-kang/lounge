@@ -2,6 +2,7 @@ package com.tagosolution.controller.front;
 
 import java.net.URLDecoder;
 import java.net.URLEncoder;
+import java.security.InvalidKeyException;
 import java.security.PrivateKey;
 import java.util.Calendar;
 import java.util.HashMap;
@@ -9,6 +10,7 @@ import java.util.List;
 import java.util.Map;
 
 import javax.annotation.Resource;
+import javax.crypto.BadPaddingException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -194,8 +196,15 @@ public class LoginController extends BaseController{
 
 			}
 
-		}
-		catch (Exception e) {
+		}catch (BadPaddingException e) {
+			AlertModel am = new AlertModel("사용자 세션 키 값이 초기화 되었습니다.\n지속적인 문제 발생시 새창을 띄워서 로그인 하시기 바랍니다.", super.getConfig().getFrontLoginURL(), null);
+			model.addAttribute("alert", am);
+			return super.getConfig().getViewAlert();
+		}catch (InvalidKeyException e) {
+			AlertModel am = new AlertModel("사용자 세션 키 값이 일치하지 않습니다.\n지속적인 문제 발생시 새창을 띄워서 로그인 하시기 바랍니다.", super.getConfig().getFrontLoginURL(), null);
+			model.addAttribute("alert", am);
+			return super.getConfig().getViewAlert();
+		} catch (Exception e) {
 			logger.error(e.getMessage(), e);
 			AlertModel am = new AlertModel(e.getMessage(), super.getConfig().getFrontLoginURL(), null);
 			model.addAttribute("alert", am);
