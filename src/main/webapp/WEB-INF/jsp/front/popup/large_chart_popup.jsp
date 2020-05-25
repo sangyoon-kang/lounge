@@ -63,7 +63,9 @@
 </script>
 <style>
 	#tv_chart_container {
-		height: 800px;
+		position: absolute;
+        left: 0px; right: 0px;
+        top: 0px; bottom: 0px;
 	}
 
 	@media ( max-width :576px) {
