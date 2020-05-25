@@ -92,6 +92,9 @@ function openPop(param, gubun, formObj) {
 		case "myShopMemberDetailInfo":
 			popUpWin('/mypage/member_detail_info_popup' + param, gubun, 1076, 800, 0, 0, "yes", "yes", true);
 			break;
+		case "largeChartPopup":
+			popUpWin('/prd/largeChart' + param, gubun, 1300, 800, 0, 0, "yes", "yes", true);
+			break;
 
 		// 상관관계 매트릭스 팝업 - 공분산 매트릭스
 		// case "correlation2":

@@ -125,7 +125,9 @@ public class RSAUtil {
 	
 	public String decryptRsa(PrivateKey privateKey, String securedValue) throws Exception {
 		//System.out.println("will decrypt : " + securedValue);
-		Cipher cipher = Cipher.getInstance("RSA");
+		//Cipher cipher = Cipher.getInstance("RSA");
+		Cipher cipher = Cipher.getInstance("RSA/ECB/PKCS1Padding");
+
 		byte[] encryptedBytes = StringUtil.hexToByteArray(securedValue);
 		cipher.init(Cipher.DECRYPT_MODE, privateKey);
 		byte[] decryptedBytes = cipher.doFinal(encryptedBytes);

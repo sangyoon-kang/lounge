@@ -183,7 +183,7 @@
                                    placeholder="추천지점" value="" ${!empty recommUserId ? 'readonly' : ''}
                                    autocomplete="off"/>
                         </div>
-                        <span class="join_txt_red" id="recUserIdCheck">(추천지점은 대리점에 문의하세요.)</span>
+                        <span class="join_txt_red" id="recUserIdCheck"></span>
                     </li>
                 </ul>
             </div>
@@ -495,9 +495,9 @@
 
             // 추천지점에 값이 없을경우 초기화 시킴
             if($(this).val().trim() == ""){
-                $('#recUserIdCheck').show();
-                $('#recUserIdCheck').attr('class', 'join_txt_blue bold');
-                $('#recUserIdCheck').text('(추천지점은 대리점에 문의하세요.)');
+                 $('#recUserIdCheck').hide();
+                 // $('#recUserIdCheck').attr('class', 'join_txt_blue bold');
+                 // $('#recUserIdCheck').text('(추천지점은 대리점에 문의하세요.)');
 
                 $('input[name=recommUserId]').val('');
                 return;

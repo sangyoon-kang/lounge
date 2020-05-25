@@ -225,7 +225,36 @@ public class ListUtil {
 		
 		Calendar cal1 = Calendar.getInstance();
 		cal1.setTime(thisdate);
-		Integer hour = cal1.get(Calendar.HOUR_OF_DAY);  
-		return start <= hour && hour < end;
+
+		Integer dayWeek = cal1.get(Calendar.DAY_OF_WEEK);
+
+		if(dayWeek == 1){
+			// 일요일은 무조건 쉼
+			return true;
+		}
+
+		Integer hour = cal1.get(Calendar.HOUR_OF_DAY);
+
+		if(dayWeek == 2 || dayWeek == 7){
+			// 월요일이나 토요일은 시간 체크
+			if(dayWeek == 2){
+				// 월요일인 경우
+				if(hour < end){
+					return true;
+				}else{
+					return false;
+				}
+			}else{
+				// 토요일인 경우
+				if(hour > start){
+					return true;
+				}else{
+					return false;
+				}
+			}
+		}else{
+			return false;
+		}
+		//return start <= hour && hour < end;
 	}
 }

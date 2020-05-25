@@ -7,6 +7,7 @@ import com.tagosolution.controller.BaseController;
 import com.tagosolution.service.dao.GeneralDAOImpl;
 import com.tagosolution.service.impl.PaymentServiceImpl;
 import com.tagosolution.service.model.*;
+import com.tagosolution.service.model.search.MemberSearchVO;
 import com.tagosolution.service.model.search.PaymentSearchVO;
 import com.tagosolution.service.util.ListUtil;
 import org.slf4j.Logger;
@@ -411,6 +412,24 @@ public class FxProductController extends BaseController {
         @SuppressWarnings("unchecked")
         List<ResultVO> list = (List<ResultVO>) _gDao.selectList("resultfx.getRecentResult", search.getRunTime());
         return list;
+    }
+
+    /**
+     * @param search
+     * @param result
+     * @param model
+     * @return
+     * @throws Exception
+     */
+    @RequestMapping(value="/largeChart")
+    public String MemberHistory(PaymentSearchVO search, BindingResult result, Model model) throws Exception {
+        super.setPageSubTitle("차트크게보기", model);
+        if(result.hasErrors())
+            return super.setBindingResult(result, model);
+
+        model.addAttribute("search", search);
+
+        return "/front/popup/large_chart_popup";
     }
 
 }

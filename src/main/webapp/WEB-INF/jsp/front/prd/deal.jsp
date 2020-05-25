@@ -43,11 +43,10 @@
 			container_id: "tv_chart_container",
 			timezone: "Asia/Seoul",
 			//	BEWARE: no trailing slash is expected in feed URL
-			datafeed: new Datafeeds.UDFCompatibleDatafeed("http://chart.fxlounge.co.kr/",1000),
+			datafeed: new Datafeeds.UDFCompatibleDatafeed("http://chart.fxlounge.co.kr",1000),
 			library_path: "/common/js/charting_library/charting_library/",
 			locale: getParameterByName('lang') || "ko",
-			disabled_features: ["left_toolbar","timeframes_toolbar"],
-			enabled_features: [""],
+			disabled_features: ["use_localstorage_for_settings"],
 			client_id: '${URL_HOST_OP}',
 			user_id: 'public_user_id',
 			theme: 'light',
@@ -66,11 +65,15 @@
 		}
 		widget.onChartReady(function() {
 			widget.chart().setVisibleRange(range,options);
-			/* var button = widget.createButton();
-			button.setAttribute('title', 'My custom button tooltip');
-		    button.addEventListener('click', function() { alert("My custom button pressed!"); });
-		    button.textContent = 'CSBUTTON'; */
+			var button = widget.createButton();
+			button.setAttribute('title', '툴바와 함께 차트 크게 보기');
+		    button.addEventListener('click', function() {
+				openPop('?runTime=${search.runTime}','largeChartPopup');
+		    });
+		    button.textContent = '차트 크게보기';
 		});
+
+
 
 	};
 
@@ -256,9 +259,13 @@
 					</thead>
 					<tbody class="table_body">
 					<c:if test="${isWorkingHour }">
+<%--						<tr>--%>
+<%--							<td colspan="5"><h3>${SITE_NAME_U}의운영시간은--%>
+<%--									${runTimeList.breakEnd}시-${runTimeList.breakStart}시까지 입니다</h3></td>--%>
+<%--						</tr>--%>
 						<tr>
-							<td colspan="5"><h3>${SITE_NAME_U}의운영시간은
-									${runTimeList.breakEnd}시-${runTimeList.breakStart}시까지 입니다</h3></td>
+							<td colspan="5"><h3>${SITE_NAME_U}의 운영시간은
+									월요일 ${runTimeList.breakEnd}시 ~ 토요일 ${runTimeList.breakStart}시까지 입니다</h3></td>
 						</tr>
 					</c:if>
 
