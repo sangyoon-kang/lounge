@@ -38,7 +38,7 @@
 	<script type="text/javascript" src="/common/js/jquery/fakeLoader.js"></script>
 	<script type="text/javascript" src="/common/js/lib.js"></script> 
     <script type="text/javascript" src="/common/js/common.jquery.util.js"></script>
-    <script type="text/javascript" src="/common/js/common.js?v1.3"></script>
+    <script type="text/javascript" src="/common/js/common.js?v1.4"></script>
     
     <!-- Global site tag (gtag.js) - Google Analytics -->
     <jsp:include page="/module/connect" flush="true" />
