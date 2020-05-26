@@ -387,13 +387,13 @@
 			where USER_ID = #{userId}
 			 and CASH_TYPE = 'M'
 			 and cash > 0
-			 and DATE_FORMAT(REG_DATE, '%Y-%m-%d') &lt;= '2020-05-25'
+			 and DATE_FORMAT(REG_DATE, '%Y-%m-%d') >= '2020-05-25'
 			union all
 			select IFNULL(sum(cash),0) as money from ts_cash
 			where USER_ID = #{userId}
 			 and MAIN_SEQ is not null
 			 and CASH_TYPE = 'O'
-			 and DATE_FORMAT(REG_DATE, '%Y-%m-%d') &lt;= '2020-05-25'
+			 and DATE_FORMAT(REG_DATE, '%Y-%m-%d') >= '2020-05-25'
 		) zzz
  	</select>
 
