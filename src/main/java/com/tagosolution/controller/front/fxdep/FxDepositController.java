@@ -5,6 +5,7 @@ import java.util.List;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 
+import com.tagosolution.service.impl.PaymentServiceImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
@@ -48,6 +49,11 @@ public class FxDepositController extends BaseController{
 	
 	@Resource
 	MemberServiceImpl _memberService;
+
+	@Resource
+	PaymentServiceImpl _paymentService;
+
+
 	
 	/**
 	 * deposit
@@ -175,4 +181,42 @@ public class FxDepositController extends BaseController{
 		model.addAttribute("alert", am);
 		return super.getConfig().getViewAlert();
 	}
+
+
+	@RequestMapping(value= "/deposit_cencel.do")
+	public String depCencel (DepositSearchVO search, MoneyVO vo, BindingResult result, Model model) throws Exception {
+		if (result.hasErrors())
+			return super.setBindingResult(result, model);
+
+		AlertModel am = new AlertModel();
+
+		if(vo.getMoneySeq() == null){
+			am.setMessage("잘못된 요청입니다.");
+		}else{
+			try {
+				MoneyVO mvo = (MoneyVO) _gDao.selectOne("money.selectByKey", vo.getMoneySeq());
+				if(mvo != null){
+					if(!mvo.getState().equals("C")){
+						vo.setUserId(super.getUserSession().getUserId());
+						_paymentService.updateDepositCancel(vo);
+						_memberService.updateByDepositCancel(vo.getMoneySeq());
+						am.setMessage("처리 되었습니다.");
+					}else{
+						am.setMessage("취소 할 수 없는 상태입니다.");
+					}
+				}
+
+			} catch (Exception e) {
+				logger.debug(e.getMessage(), e);
+				am.setMessage("처리 중 오류가 발생하였습니다. \\n" + e.getMessage());
+			}
+		}
+
+
+		am.setScript("$.Nav('go', './list.do', {});");
+		model.addAttribute("alert", am);
+		return super.getConfig().getViewAlert();
+	}
+
+
 }

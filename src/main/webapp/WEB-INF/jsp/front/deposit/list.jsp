@@ -19,12 +19,13 @@
 				
 				<table>
 					<colgroup>
-						<col>
-						<col>
-						<col>
-						<col>
-						<col>
-						<col>
+						<col width="15%">
+						<col width="15%">
+						<col width="15%">
+						<col width="15%">
+						<col width="15%">
+						<col width="15%">
+						<col width="10%">
 					</colgroup>
 					<thead>
 						<tr>
@@ -34,6 +35,7 @@
 							<th>금액</th>
 							<th>상태</th>
 							<th>잔액</th>
+							<th></th>
 						</tr>
 					</thead>
 					<tbody class="deposit_list">
@@ -51,7 +53,14 @@
                               </span>
                               </td>
                               <td><fmt:formatNumber pattern="#,##0" value="${m.balance }" /></td>
-                              
+                              <td>
+								  <c:if test="${m.state ne 'C'}">
+									  <p class="inout_bt">
+										  <a style="background: gray;" onclick="javascript:depositCancel(${m.moneySeq})" class="cancel-button">취소</a>
+									  </p>
+								  </c:if>
+							  </td>
+
                          </tr>
                          </c:forEach>
                          
@@ -108,7 +117,14 @@
                  }
              }
          });
-         
  	}
+
+ 	function depositCancel(seq){
+     	if(confirm("취소 하시겠습니까?")){
+			$.Nav('go', './deposit_cencel.do', {moneySeq:seq});
+		}
+	}
+
+
 </script>
 <%@ include file="/WEB-INF/include/fx_include/front_footer.jsp"%>
