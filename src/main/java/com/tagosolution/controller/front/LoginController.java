@@ -197,11 +197,11 @@ public class LoginController extends BaseController{
 			}
 
 		}catch (BadPaddingException e) {
-			AlertModel am = new AlertModel("사용자 세션 키 값이 초기화 되었습니다.\n지속적인 문제 발생시 새창을 띄워서 로그인 하시기 바랍니다.", super.getConfig().getFrontLoginURL(), null);
+			AlertModel am = new AlertModel("사용자 세션 키 값이 초기화 되었습니다. 지속적인 문제 발생시 새창을 띄워서 로그인 하시기 바랍니다.", super.getConfig().getFrontLoginURL(), null);
 			model.addAttribute("alert", am);
 			return super.getConfig().getViewAlert();
 		}catch (InvalidKeyException e) {
-			AlertModel am = new AlertModel("사용자 세션 키 값이 일치하지 않습니다.\n지속적인 문제 발생시 새창을 띄워서 로그인 하시기 바랍니다.", super.getConfig().getFrontLoginURL(), null);
+			AlertModel am = new AlertModel("사용자 세션 키 값이 일치하지 않습니다. 지속적인 문제 발생시 새창을 띄워서 로그인 하시기 바랍니다.", super.getConfig().getFrontLoginURL(), null);
 			model.addAttribute("alert", am);
 			return super.getConfig().getViewAlert();
 		} catch (Exception e) {

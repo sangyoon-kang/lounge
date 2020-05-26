@@ -232,4 +232,11 @@
 		where SITE_SEQ = #{siteSeq,jdbcType=TINYINT}
 	</update>
 
+	<select id="selectEmergencyCloseByKey"  resultType="java.util.Map">
+		SELECT
+			SITE_CLOSE_YN as siteCloseYn,
+            MESSAGE as message
+		FROM fx_emergency_close
+	</select>
+
 </mapper>

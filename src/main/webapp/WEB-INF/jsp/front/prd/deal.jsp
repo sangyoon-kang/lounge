@@ -46,7 +46,6 @@
 			datafeed: new Datafeeds.UDFCompatibleDatafeed("http://chart.fxlounge.co.kr",1000),
 			library_path: "/common/js/charting_library/charting_library/",
 			locale: getParameterByName('lang') || "ko",
-			disabled_features: ["use_localstorage_for_settings"],
 			client_id: '${URL_HOST_OP}',
 			user_id: 'public_user_id',
 			theme: 'light',
@@ -681,73 +680,87 @@
 
 	//Confirmation
 	function doSubmit(tab){
-		/*alert("현재 결과값이 정상적으로 반영되지 않아 긴급 점검중입니다.\n불편을 드려 죄송합니다.");
+		/*alert("차트 정보에 지연건이 발생하여 약 10여분간 긴급 점검을 진행합니다.\n불편을 드려 죄송합니다.");
 		return;*/
+		$.ajax({
+			type: 'post',
+			url: '/ajax/checkSiteClose.do',
+			data: {},
+			dataType: 'json',
+			success: function(data){
+				if(data){
+					if(data.siteCloseYn == "Y"){
+						alert(data.message.replace(/\\n/g,"\n"));
+						return;
+					}
+				}
 
-		var type = tab == 'B' ? 'up': 'down';
-		$("#vLoss > strong").text($("#"+type+"Total").text());
-		var runTime = ${search.runTime};
-		msg = validateForm(type, true, false);
-		if(!isNull(msg)){alert(msg);return;}
-		var cnt = 0;
-		validateAjaxMaxCount(false).then(function(data){cnt = data.count});
-		if(cnt > 0){alert('투자는 1회차마다 한 번만 가능합니다.'); return;}
+				var type = tab == 'B' ? 'up': 'down';
+				$("#vLoss > strong").text($("#"+type+"Total").text());
+				var runTime = ${search.runTime};
+				msg = validateForm(type, true, false);
+				if(!isNull(msg)){alert(msg);return;}
+				var cnt = 0;
+				validateAjaxMaxCount(false).then(function(data){cnt = data.count});
+				if(cnt > 0){alert('투자는 1회차마다 한 번만 가능합니다.'); return;}
 
 
-		var thisForm = document.contractForm;
-		$(thisForm).children(':input').val(0);
+				var thisForm = document.contractForm;
+				$(thisForm).children(':input').val(0);
 
-		thisForm.elements["bsType"].value = tab;
-		thisForm.elements["runTime"].value = runTime;
+				thisForm.elements["bsType"].value = tab;
+				thisForm.elements["runTime"].value = runTime;
 
 
-		$('.inputLot[name*='+type+'Lot]').each(function(i,e){
-			var $data = $(this).data('val');
-			thisForm.elements[$data].value = e.value*${LOT_01};
-		});
+				$('.inputLot[name*='+type+'Lot]').each(function(i,e){
+					var $data = $(this).data('val');
+					thisForm.elements[$data].value = e.value*${LOT_01};
+				});
 
-		var bsType = tab;
-		var txtCtbox= "";
-		var valueHidden = 0;
-		var $inputs = $('input[name^='+type+'Lot]');
+				var bsType = tab;
+				var txtCtbox= "";
+				var valueHidden = 0;
+				var $inputs = $('input[name^='+type+'Lot]');
 
-		for (i = 0; i < $inputs.length; i++) {
-			if($inputs.eq(i).val() !="" && $inputs.eq(i).val() > 0){
-				var lotCnt = parseInt($inputs.eq(i).val()) / $inputs.eq(i).data('amount');
-				txtCtbox+="<li>₩"+addComma($inputs.eq(i).data('price'))+"*"+lotCnt+"</li>";
+				for (i = 0; i < $inputs.length; i++) {
+					if($inputs.eq(i).val() !="" && $inputs.eq(i).val() > 0){
+						var lotCnt = parseInt($inputs.eq(i).val()) / $inputs.eq(i).data('amount');
+						txtCtbox+="<li>₩"+addComma($inputs.eq(i).data('price'))+"*"+lotCnt+"</li>";
+					}
+					valueHidden = valueHidden + parseInt($inputs.eq(i).val())/10;
+				}
+				$("#ctbox").html(txtCtbox);
+				if (tab == 'B'){
+					$("#buyOrSell").text("매수");
+					$('#buyOrSell').removeClass('pop_agreement_tag_blue').addClass('pop_agreement_tag_red');
+					$('#submitContrBtn').text('매수신청');
+					$('#submitBtnP').addClass('red');
+				} else {
+					$("#buyOrSell").text("매도");
+					$('#buyOrSell').removeClass('pop_agreement_tag_red').addClass('pop_agreement_tag_blue');
+					$('#submitContrBtn').text('매도신청');
+					$('#submitBtnP').removeClass('red');
+				}
+
+				$("#vDate").html(moment(Math.floor(time/(1000*$runtime*60))*(1000*$runtime*60)).add($runtime, 'minutes').format('YYYY년 MM월 DD일 HH시 mm분'));
+				// if(valueHidden!= null && valueHidden!=0)
+				// 	$(".pop_agreement").show();
+
+				thisForm.elements["totalLot"].value= valueHidden;
+				thisForm.elements["goodsDate"].value = moment(Math.floor(time/(1000*$runtime*60))*(1000*$runtime*60)).format('YYYY-MM-DD');
+				thisForm.elements["goodsTime"].value = moment(Math.floor(time/(1000*$runtime*60))*(1000*$runtime*60)).format('HH:mm');
+
+				var aggre = $.cookie("contractFormAggre");
+				if(aggre){
+					submit_contract();
+				}else{
+					if(valueHidden!= null && valueHidden!=0)
+						$(".pop_agreement").show();
+				}
 			}
-			valueHidden = valueHidden + parseInt($inputs.eq(i).val())/10;
-		}
-		$("#ctbox").html(txtCtbox);
-		if (tab == 'B'){
-			$("#buyOrSell").text("매수");
-			$('#buyOrSell').removeClass('pop_agreement_tag_blue').addClass('pop_agreement_tag_red');
-			$('#submitContrBtn').text('매수신청');
-			$('#submitBtnP').addClass('red');
-		} else {
-			$("#buyOrSell").text("매도");
-			$('#buyOrSell').removeClass('pop_agreement_tag_red').addClass('pop_agreement_tag_blue');
-			$('#submitContrBtn').text('매도신청');
-			$('#submitBtnP').removeClass('red');
-		}
-
-		$("#vDate").html(moment(Math.floor(time/(1000*$runtime*60))*(1000*$runtime*60)).add($runtime, 'minutes').format('YYYY년 MM월 DD일 HH시 mm분'));
-		// if(valueHidden!= null && valueHidden!=0)
-		// 	$(".pop_agreement").show();
-
-		thisForm.elements["totalLot"].value= valueHidden;
-		thisForm.elements["goodsDate"].value = moment(Math.floor(time/(1000*$runtime*60))*(1000*$runtime*60)).format('YYYY-MM-DD');
-		thisForm.elements["goodsTime"].value = moment(Math.floor(time/(1000*$runtime*60))*(1000*$runtime*60)).format('HH:mm');
-
-		var aggre = $.cookie("contractFormAggre");
-		if(aggre){
-			submit_contract();
-		}else{
-			if(valueHidden!= null && valueHidden!=0)
-				$(".pop_agreement").show();
-		}
-
-
+		}).fail(function(data) {
+			alert( "사이트 오픈여부 Ajax 호출 에러, 관리자에게 문의 하세요" );
+		});
 	}
 	//Validate Function
 

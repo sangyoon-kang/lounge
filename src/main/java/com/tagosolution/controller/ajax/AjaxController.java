@@ -189,13 +189,13 @@ public class AjaxController extends BaseController {
         List<Map> freeIncomeLimitList = (List<Map>) _gDao.selectList("money.selectLimitFreeIncome", search);
 
         // 입금액보다 거래량이 큰지 체크 하여 출금신청 제한
-        if(super.getUserSession().getGradeLevel() == 5 || super.getUserSession().getGradeLevel() == 6){
-            Map<String ,Object> limitOutcomeResult = (Map<String, Object>) _gDao.selectOne("money.selectLimitOutcome", search);
+        if (super.getUserSession().getGradeLevel() == 5 || super.getUserSession().getGradeLevel() == 6) {
+            Map<String, Object> limitOutcomeResult = (Map<String, Object>) _gDao.selectOne("money.selectLimitOutcome", search);
 
-            int limitOutcome = (int)limitOutcomeResult.get("result");
+            int limitOutcome = (int) limitOutcomeResult.get("result");
 
             map.put("limitOutcome", limitOutcome);
-        }else{
+        } else {
             map.put("limitOutcome", 1);
         }
 
@@ -261,10 +261,10 @@ public class AjaxController extends BaseController {
         MemberInfoVO memberInfoVO = super.getUserSession();
         List<PopupVO> list = null;
 
-        if(memberInfoVO == null){
+        if (memberInfoVO == null) {
             list = (List<PopupVO>) _gDao.selectList("popup.selectForMain", null);
-        }else{
-            if(memberInfoVO.getGradeLevel() < 5) {
+        } else {
+            if (memberInfoVO.getGradeLevel() < 5) {
                 list = (List<PopupVO>) _gDao.selectList("popup.selectForMainGrade", null);
             }
         }
@@ -733,5 +733,17 @@ public class AjaxController extends BaseController {
 
         return map;
     }
+
+    @RequestMapping(value = "/ajax/checkSiteClose")
+    @ResponseBody
+    public Object ajaxSiteClose(@RequestBody(required = false) String body, BindingResult result, Model model) throws Exception {
+        if (result.hasErrors())
+            return super.setBindingResult(result, model);
+
+        Map<String, Object> siteCloseResult = (Map<String, Object>) _gDao.getSqlSession().selectOne("siteApi.selectEmergencyCloseByKey");
+
+        return new Gson().toJson(siteCloseResult);
+    }
+
 }
 

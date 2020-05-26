@@ -37,7 +37,6 @@
 			datafeed: new Datafeeds.UDFCompatibleDatafeed("http://chart.fxlounge.co.kr",1000),
 			library_path: "/common/js/charting_library/charting_library/",
 			locale: getParameterByName('lang') || "ko",
-			disabled_features: ["use_localstorage_for_settings"],
 			client_id: '${URL_HOST_OP}',
 			user_id: 'public_user_id',
 			theme: 'light',
