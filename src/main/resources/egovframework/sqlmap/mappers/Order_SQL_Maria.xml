@@ -90,7 +90,7 @@
 						, SUM(CASE WHEN FO.ORDER_RESULT = 'L' THEN FO.LOSS ELSE 0 END) LOSS_S
 			FROM	fx_order FO
 			WHERE	LEFT(FO.GOODS_DATE, 7) = CONCAT(#{sYear}, '-', #{sMonth})
-			AND user_id not in ('issac0322','sing5706','sing5707','sing5708','test0000','test000010','test00006','test0001','test00010','test00011','test00012','test00014','test00015','test00016','test00017','test00018','test00019','test0002','test00020','test0001','test00022','test00023','test0003','test0004','test0005','test0008','test0009','test1234','issac1992','jspark226','bigmiddle','000013')
+			AND user_id not in ('issac0322','sing5706','sing5707','sing5708','test0000','test000010','test00006','test0001','test00010','test00011','test00012','test00014','test00015','test00016','test00017','test00018','test00019','test0002','test00020','test0001','test00022','test00023','test0003','test0004','test0005','test0008','test0009','test1234','issac1992','jspark226','bigmiddle','ongsiru','000013')
 			GROUP BY FO.GOODS_DATE
 		) TEMP
 		LEFT OUTER JOIN (
@@ -102,7 +102,7 @@
 					ON TC.MAIN_SEQ = FO.ORDER_SEQ
 						AND TC.CASH_TYPE = 'C'
 			WHERE	LEFT(FO.GOODS_DATE, 7) = CONCAT(#{sYear}, '-', #{sMonth})
-			AND FO.user_id not in ('issac0322','sing5706','sing5707','sing5708','test0000','test000010','test00006','test0001','test00010','test00011','test00012','test00014','test00015','test00016','test00017','test00018','test00019','test0002','test00020','test0001','test00022','test00023','test0003','test0004','test0005','test0008','test0009','test1234','issac1992','jspark226','bigmiddle','000013')
+			AND FO.user_id not in ('issac0322','sing5706','sing5707','sing5708','test0000','test000010','test00006','test0001','test00010','test00011','test00012','test00014','test00015','test00016','test00017','test00018','test00019','test0002','test00020','test0001','test00022','test00023','test0003','test0004','test0005','test0008','test0009','test1234','issac1992','jspark226','bigmiddle','ongsiru','000013')
 			GROUP BY FO.GOODS_DATE
 		) TEMP2
 		ON	TEMP2.GOODS_DATE = TEMP.GOODS_DATE
@@ -111,31 +111,10 @@
 
 
     <select id="selectDayUserBalanceStatList" parameterType="search" resultType="com.tagosolution.service.model.DayBalanceVO">
-        SELECT
-           SUM_CASH,
-           YYMMDD as date,
-           BALANCE
-        from
-        (
-            select
-                   * ,
-                   SUM(SUM_CASH) OVER (ORDER BY YYMMDD) as BALANCE
-            from (
-                      select SUM(CASH) SUM_CASH,
-                             YYMMDD
-                      from (
-                               select CASH,
-                                      date_format(REG_DATE, '%Y-%m-%d') as YYMMDD
-                               from ts_cash
-                               WHERE CASH_TYPE != 'C'
-                                 AND CASH_TYPE != 'T'
-                                 AND USER_ID not in ('issac0322','sing5706','sing5707','sing5708','test0000','test000010','test00006','test0001','test00010','test00011','test00012','test00014','test00015','test00016','test00017','test00018','test00019','test0002','test00020','test0001','test00022','test00023','test0003','test0004','test0005','test0008','test0009','test1234','issac1992','jspark226','bigmiddle','000013')
-                               order by YYMMDD DESC
-                           ) as a
-                      GROUP BY YYMMDD
-                  ) as b
-        ) as c
-        WHERE date_format(YYMMDD, '%Y-%m') = CONCAT(#{sYear}, '-',  #{sMonth});
+        SELECT *
+        FROM st_daily_cash
+        WHERE date_format(st_date, '%Y-%m') = CONCAT(#{sYear}, '-',  #{sMonth})
+        ORDER BY st_date DESC;
   </select>
   
   <select id="checkMemberOrder" parameterType="search" resultType="int">
