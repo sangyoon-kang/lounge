@@ -6,7 +6,24 @@
 <%@ include file="/WEB-INF/include/admin_start_html.jsp"%>
 
 <jsp:include page="${URL_ADMIN_ROOT }/common/gnb.do" flush="true"></jsp:include>
-
+<style>
+	thead th {
+		background-repeat: no-repeat !important;
+		background-position: right center !important;
+		outline: none;
+	}
+	.tablesorter-default .header, .tablesorter-default .tablesorter-header {
+		background-image: url(data:image/gif;base64,R0lGODlhFQAJAIAAACMtMP///yH5BAEAAAEALAAAAAAVAAkAAAIXjI+AywnaYnhUMoqt3gZXPmVg94yJVQAAOw==);
+		cursor: pointer;
+		white-space: normal;
+	}
+	thead th.up {
+		background-image: url(data:image/gif;base64,R0lGODlhFQAEAIAAACMtMP///yH5BAEAAAEALAAAAAAVAAQAAAINjI8Bya2wnINUMopZAQA7)!important;
+	}
+	thead th.down {
+		background-image: url(data:image/gif;base64,R0lGODlhFQAEAIAAACMtMP///yH5BAEAAAEALAAAAAAVAAQAAAINjB+gC+jP2ptn0WskLQA7)!important;;
+	}
+</style>
 <!--wrap_scon S-->
 <div id="wrap_scon">
 
@@ -24,7 +41,7 @@
 			</ul>
 		</div>
 		<form id="form1">
-		<table class="board_st1 mb10">
+		<table class="board_st1 mb10 tablesorter">
 			<colgroup>
 				<col width="*" />
 			</colgroup>
@@ -51,21 +68,18 @@
 			<colgroup>
 				<col />
 				<col />
-				<col />
 			</colgroup>
 			<thead>
 				<tr>
 					<th>일자</th>
-					<th>변동 총액</th>
 					<th>유저 총 보유액</th>
 				</tr>
 			</thead>
 			<tbody>	
 			<c:forEach items="${list }" var="l" varStatus="a">
 				<tr>
-					<td>${l.date }</td>
+					<td>${l.stDate }</td>
 					<td><fmt:formatNumber pattern="#,##0" value="${l.sumCash}" /></td>
-					<td><fmt:formatNumber pattern="#,##0" value="${l.balance}" /></td>
 				</tr>
 			</c:forEach>
 			<c:if test="${empty list}">
@@ -76,7 +90,8 @@
 			</tbody>
 		</table>
 	</div>
-</div>	
+</div>
+
 <script type="text/javascript">	
 	function doSearch() {
 		$('#form1').attr('action', './day_user_balance_list');
@@ -87,6 +102,16 @@
 	$(".all_io_exec a.bg_green").click(function() {
 		$.Nav('go', './api/day_user_balance_list_excel.do', {sYear:"2020", sMonth:"05"});
 	});
+
+
+	// $(window).load(function(){
+	// 	$(".board_st1").tablesorter({
+	// 		cssAsc: 'up',
+	// 		cssDesc: 'down',
+	// 		// cssNone: 'none'
+	// 	});
+	// });
+
 </script>
 
 <%@ include file="/WEB-INF/include/admin_footer_html.jsp"%>

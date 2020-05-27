@@ -20,7 +20,7 @@ public class DayBalanceVO implements GeneralModel {
 
     private Long balance;
 
-    private String date;
+    private String stDate;
 
 	public Long getOrderSeq() {
 		return orderSeq;
@@ -54,11 +54,11 @@ public class DayBalanceVO implements GeneralModel {
 		this.balance = balance;
 	}
 
-	public String getDate() {
-		return date;
+	public String getStDate() {
+		return stDate;
 	}
 
-	public void setDate(String date) {
-		this.date = date;
+	public void setStDate(String stDate) {
+		this.stDate = stDate;
 	}
 }
