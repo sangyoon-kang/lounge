@@ -5,6 +5,7 @@
 #wrap_pop {float:left; width:950px !important; margin:20px; height: auto;}
 </style>
 <div class="scroll-x w-100">
+    <div style="padding-bottom: 10px"><label>${search.userId} 님의 ${pageTitle}</label></div>
 <table class="table board_st1" >
 	<colgroup>
 		<col width="5%" />

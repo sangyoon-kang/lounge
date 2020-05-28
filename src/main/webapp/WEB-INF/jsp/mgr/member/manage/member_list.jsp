@@ -14,6 +14,14 @@
 	<style>
 		.board_st1 th {padding:5px 10px;}
 		a.bt_modify {padding: 2px 6px 6px 6px}
+		td.func{
+			padding: 0 !important;
+		}
+		td.func > a {
+			cursor: pointer;
+			width: 50px;
+			margin: 2px;
+		}
 	</style>
 	<div class="scon_title">
 		<h2>회원 관리</h2>
@@ -73,9 +81,7 @@
 					<col width="12%" />
 					<col width="6%" />
 					<col width="8%" />
-					<col width="7%" />
-					<col width="8%" />
-					<col width="8%" />
+					<col width="*" />
 				</colgroup>
 				<thead>
 				<tr>
@@ -89,9 +95,7 @@
 					<th>이메일</th>
 					<th>방문수</th>
 					<th>가입일</th>
-					<th>거래조회</th>
-					<th>입출금내역</th>
-					<th>지원금내역</th>
+					<th>조회</th>
 				</tr>
 				</thead>
 				<tbody>
@@ -108,9 +112,12 @@
 							<td>${m.email}</td>
 							<td>${m.loginCount}</td>
 							<td><fmt:formatDate value="${m.regDate }" pattern="${DATE_FORMAT }"/></td>
-							<td><a onclick="javascript:showHistory('${m.userId }');" class="bt_modify">거래조회</a></td>
-							<td><a onclick="javascript:showDepositHistory('${m.userId }');" class="bt_modify">입출금내역</a></td>
-							<td><a onclick="javascript:showSupportCashHistory('${m.userId }');" class="bt_modify">지원금내역</a></td>
+							<td class="func">
+								<a onclick="javascript:showHistory('${m.userId }');" class="bt_modify">거래내역</a>
+								<a onclick="javascript:showDepositHistory('${m.userId }');" class="bt_modify">입출금</a>
+								<a onclick="javascript:showSupportCashHistory('${m.userId }');" class="bt_modify">지원금</a>
+								<a onclick="javascript:showPropertyHistory('${m.userId }');" class="bt_modify">자산변동</a>
+							</td>
 						</tr>
 					</c:forEach>
 				</c:if>
@@ -156,6 +163,10 @@
 
 	function showSupportCashHistory(userId) {
 		openPop('?userId=' + userId, 'memberSupportCashHistory');
+	}
+
+	function showPropertyHistory(userId) {
+		openPop('?userId=' + userId, 'memberPropertyHistoryPopup');
 	}
 
 	function doSendPopup() {

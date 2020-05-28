@@ -79,6 +79,9 @@ function openPop(param, gubun, formObj) {
 		case "memberSupportCashHistory":
 			popUpWin('/mgr/member/manage/member_support_cash_history_pop' + param, gubun, 1000, 600, 0, 0, "yes", "yes", true);
 			break;
+		case "memberPropertyHistoryPopup"://자산변동 내역 히스토리 팝업
+			popUpWin('/mgr/member/manage/member_property_history_popup' + param, gubun, 1000, 600, 0, 0, "yes", "yes", true);
+			break;
 
 		case "myShopMemberhistory":
 			popUpWin('/mypage/member_history_popup' + param, gubun, 1000, 600, 0, 0, "yes", "yes", true);
@@ -95,6 +98,7 @@ function openPop(param, gubun, formObj) {
 		case "largeChartPopup":
 			popUpWin('/prd/largeChart' + param, gubun, 1300, 800, 0, 0, "yes", "yes", true);
 			break;
+
 
 		// 상관관계 매트릭스 팝업 - 공분산 매트릭스
 		// case "correlation2":

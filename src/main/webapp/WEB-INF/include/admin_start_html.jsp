@@ -25,7 +25,7 @@
 	<link href="/common/css/jquery/datetimepicker/jquery.datetimepicker.min.css" rel="stylesheet" type="text/css" />
 	<link href="/common/js/jquery/waitMe/waitMe.min.css" rel="stylesheet" type="text/css" />
 	<link href="/common/js/highlight/styles/github.css" rel="stylesheet" type="text/css" />
-	
+	<link href="/common/css/jquery/tablesorter/theme.blue.min.css" rel="stylesheet" type="text/css" />
 	
 	<script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
 	<script type="text/javascript" src="/common/js/jquery/jquery-migrate-1.4.1.min.js"></script>
@@ -51,6 +51,8 @@
     <script type="text/javascript" src="/common/js/jquery/datetimepicker/jquery.datetimepicker.full.min.js"></script>
     <script type="text/javascript" src="/common/js/custom/datetimepicker.js"></script>
     <script type="text/javascript" src="/common/js/moment/moment.js"></script>
+	<script type="text/javascript" src="/common/js/jquery/tablesorter/jquery.tablesorter.min.js"></script>
+	<script type="text/javascript" src="/common/js/jquery/tablesorter/jquery.tablesorter.widgets.min.js"></script>
 </head>
 <body>
 <div id="wrap"/>
