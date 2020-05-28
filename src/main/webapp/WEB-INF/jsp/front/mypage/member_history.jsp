@@ -322,7 +322,7 @@ function viewAgreement (orderSeq) {
 			txtCtbox+="<tr><td>2Lot</td><td>₩ <fmt:formatNumber pattern='#,##0' value='${LOT_2}' /></td></tr>";
 			txtCtbox+="<tr><td>4Lot</td><td>₩ <fmt:formatNumber pattern='#,##0' value='${LOT_4}' /></td></tr>";
 			$("#lotperunit").html(txtCtbox);
-			var loss=Math.ceil(vo.lot * 50000);
+			var loss=(vo.lot * 50000).toFixed(0);
 			if (vo.bsType == 'B'){
 	            $("#buyOrSell").text("매수");
 	            $('#buyOrSell').removeClass('pop_agreement_tag_blue').addClass('pop_agreement_tag_red');
