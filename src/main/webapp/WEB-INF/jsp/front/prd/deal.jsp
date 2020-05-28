@@ -47,6 +47,7 @@
 			library_path: "/common/js/charting_library/charting_library/",
 			locale: getParameterByName('lang') || "ko",
 			client_id: '${URL_HOST_OP}',
+			enabled_features: [""],
 			user_id: 'public_user_id',
 			theme: 'light',
 			preset:device,
@@ -582,6 +583,7 @@
 	var next = moment(${search.nextTime});
 	var runT = ${search.runTime} * 60000;
 	var time;
+	var actionBtnEnable = true;
 
 	$("#aggreCk").change(function(e){
 		if($(e.target).is(":checked")){
@@ -652,11 +654,14 @@
 			bg : 'rgba(255,255,255,0.7)',
 			color : '#000',
 		})
+
+		actionBtnEnable = false;
+
 		$.ajax({
 			url : "./contract_proc.do",
 			method : "POST",
 			dataType: 'json',
-            async: true,
+            async: false,
 			data: $("#contractForm").serializeArray(),
 			success: function(data){
 				if(data.hasOwnProperty("totalPrice")){
@@ -670,9 +675,10 @@
                 closeView();
                 resetAll();
 				$('#printview .pop_cons').waitMe("hide");
-
+				actionBtnEnable = true;
 			}
 		}).fail(function() {
+			actionBtnEnable = true;
             alert( "error" );
         });
 
@@ -682,6 +688,11 @@
 	function doSubmit(tab){
 		/*alert("차트 정보에 지연건이 발생하여 약 10여분간 긴급 점검을 진행합니다.\n불편을 드려 죄송합니다.");
 		return;*/
+		if(actionBtnEnable == false){
+			alert("거래가 처리 중입니다.\n잠시후 다시 시도하시기 바랍니다.");
+			return;
+		}
+
 		$.ajax({
 			type: 'post',
 			url: '/ajax/checkSiteClose.do',
@@ -772,7 +783,7 @@
 		return $.ajax({
 			url : "./check_count_max.do",
 			type : "get",
-			async : sync,
+			async : false,
 			data: {runtime : ${search.runTime}},
 			cache: false
 		});

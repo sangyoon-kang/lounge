@@ -791,7 +791,7 @@ WHERE	FG.RUN_TIME = #{runTime, jdbcType=INTEGER}
         ,ft.RUN_TYPE FROM fx_goods FG, fx_time_set FT
         WHERE FG.run_time =    #{runTime}
 	     AND GOODS_DATE = date_format(now(), '%Y-%m-%d' )
-	     AND GOODS_TIME = concat(date_format(now(), '%H' ),':',floor(minute(now())/#{runTime})*#{runTime})
+	     AND GOODS_TIME = concat(date_format(now(), '%H' ),':',lpad(floor(minute(now())/#{runTime})*#{runTime}, '2', '0'))
          AND fg.RUN_TIME = ft.RUN_TIME) AS remainders;
         <!--  WHERE    GOODS_DATE = CURDATE()
         AND     run_time =    1
