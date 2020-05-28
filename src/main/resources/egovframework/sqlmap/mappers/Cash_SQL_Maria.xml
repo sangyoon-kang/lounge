@@ -38,7 +38,7 @@
 		<result column="TRANS_TOTAL" jdbcType="INTEGER" property="transTotal" />
 		<result column="SETTLE_TOTAL" jdbcType="INTEGER" property="settleTotal" />
 		<result column="FEE_FOR" jdbcType="INTEGER" property="feeFor" />
-		
+		<result column="ROWNUM" jdbcType="INTEGER" property="rowNo" />
 	</resultMap>
 
 	<sql id="Base_Column_List">
@@ -189,10 +189,10 @@
 	</select>
 	
 	<select id="selectCash16List" parameterType="search" resultMap="BaseResultMap">
-		SELECT	A.USER_NAME, A.NICKNAME, A.USER_ID, A.PHONE, A.CASH, A.GRADE_LEVEL , A.REG_DATE
+		SELECT	A.USER_NAME, A.NICKNAME, A.USER_ID, A.PHONE, A.CASH, A.GRADE_LEVEL, A.REG_DATE, @ROWNUM := @ROWNUM + 1 AS ROWNO
 		FROM	ts_member_info A
-			INNER JOIN fx_line TML
-				ON TML.USER_ID = A.USER_ID
+		INNER JOIN fx_line TML ON TML.USER_ID = A.USER_ID
+		INNER JOIN (SELECT @ROWNUM := 0) TMP
 		WHERE	A.USE_FLAG = 'Y'
 		<if test="glevel == 1 and sellUserId != null and sellUserId != ''">
 			AND	TML.LINE_ID1 = #{sellUserId}
@@ -213,7 +213,7 @@
 		<if test="glevel == 5 and sellUserId != null and sellUserId != ''">
 			AND	TML.LINE_ID5 = #{sellUserId}
 		</if>
-		ORDER BY A.GRADE_LEVEL;
+		ORDER BY A.GRADE_LEVEL,A.REG_DATE ASC
 	</select>
 	
 	<select id="selectCash16Sub" parameterType="search" resultType="java.lang.Long">

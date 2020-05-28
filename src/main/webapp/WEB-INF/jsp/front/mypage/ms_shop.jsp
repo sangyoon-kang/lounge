@@ -1,10 +1,11 @@
 <%@ page language="java" contentType="text/html;charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ include file="/WEB-INF/jsp/common/tags.jsp" %>
 <link href="/common/css/myshop.css" rel="stylesheet" type="text/css" />
+<link rel="stylesheet" href="/common/css/jquery/tablesorter/theme.default.min.css"/>
 <%@ include file="/WEB-INF/include/fx_include/front_start.jsp"%>
 <%@ include file="/WEB-INF/include/fx_include/front_header.jsp"%>
 <script type="text/javascript" src="/common/js/clipboard.min.js"></script>
-
+<script type="text/javascript" src="/common/js/jquery/tablesorter/jquery.tablesorter.js"></script>
 <script type="text/javascript">
 
 
@@ -19,8 +20,32 @@
 	clipboard.on('error', function(e) {
 		alert('링크 복사에 실패 하였습니다.');
 	});
-
 </script>
+<style>
+	.tablesorter-default .header, .tablesorter-default .tablesorter-header {
+		padding: 15px 20px !important;
+	}
+	.tablesorter-default {
+		text-align: center !important;
+	}
+	.wrap_tsty03 table td {
+		padding: 15px 5px !important;
+	}
+	.tablesorter-default thead .headerSortDown, .tablesorter-default thead .tablesorter-headerDesc, .tablesorter-default thead .tablesorter-headerSortDown {
+		border-bottom:0px !important;
+		outline: none;
+	}
+	.tablesorter-default thead .headerSortUp, .tablesorter-default thead .tablesorter-headerAsc, .tablesorter-default thead .tablesorter-headerSortUp {
+		border-bottom:0px !important;
+		outline: none;
+	}
+	.tablesorter-default th, .tablesorter-default thead td {
+		border-bottom: 0px !important;
+	}
+	.tablesorter-default tfoot .tablesorter-headerAsc, .tablesorter-default tfoot .tablesorter-headerDesc, .tablesorter-default tfoot .tablesorter-headerSortDown, .tablesorter-default tfoot .tablesorter-headerSortUp {
+		border-top:  0px !important;
+	}
+</style>
 <nav id="wrap_lnb">
 	<div>
 		<a href="/" class="lnb_home"><img src="/images/common/lnb_home.png" alt="home" /></a>
@@ -83,8 +108,9 @@
 
 
 			<div class="wrap_tsty03">
-				<table>
+				<table id="myTable" class="tablesorter">
 					<colgroup>
+						<col></col>
 						<col></col>
 						<col></col>
 						<col></col>
@@ -97,15 +123,16 @@
 					</colgroup>
 					<thead>
 					<tr>
+						<th>순번</th>
 						<th>아이디</th>
 						<th>이름</th>
-						<th>휴대폰</th>
-						<th>대리점명</th>
+						<th class="sorter-false">휴대폰</th>
+						<th class="sorter-false">대리점명</th>
 						<th>잔액</th>
 						<th>가맹점수수료</th>
 						<th>정산금액</th>
 						<th>가입일</th>
-						<th>내역조회</th>
+						<th class="sorter-false">내역조회</th>
 					</tr>
 					</thead>
 					<tbody>
@@ -113,6 +140,7 @@
 					<fmt:formatNumber var="totalTaxCommission" pattern="#,##0" value="0" />
 					<c:forEach items="${list }" var="l" varStatus="u">
 						<tr>
+							<td>${l.rowNo}</td>
 							<td>
 								<c:if test="${!empty l.nickName and l.userId ne search.userId and (!empty search.sellUserId and l.userId ne search.sellUserId)}"><a onclick="doSearch('${l.userId}')">${ l.userId}</a></c:if>
 								<c:if test="${empty l.nickName or l.userId eq search.userId or l.userId eq search.sellUserId}">
@@ -152,7 +180,7 @@
 					</tbody>
 					<tfoot class="bg-red-80">
 					<tr>
-						<td colspan="5">정산금액</td>
+						<td colspan="6">정산금액</td>
 						<td><fmt:formatNumber pattern="#,##0" value="${totalCommission}" /></td>
 						<td><fmt:formatNumber pattern="#,##0" value="${totalTaxCommission}" /></td>
 						<td ></td>
@@ -185,6 +213,8 @@
 	function myShopMemberDetailInfo(userId) {
 		openPop('?userId=' + userId, 'myShopMemberDetailInfo');
 	}
+
+	$("#myTable").tablesorter();
 
 </script>
 <%@ include file="/WEB-INF/include/fx_include/front_footer.jsp"%>

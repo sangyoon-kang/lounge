@@ -77,6 +77,16 @@ public class CashVO implements GeneralModel {
     
     private Integer feeFor;
 
+	private int rowNo;
+
+	public Integer getRowNo() {
+		return rowNo;
+	}
+
+	public void setRowNo(Integer rowNo) {
+		this.rowNo = rowNo;
+	}
+
 	public short getGradeLevel() {
 		return gradeLevel;
 	}
