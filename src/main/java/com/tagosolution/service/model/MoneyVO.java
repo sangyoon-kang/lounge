@@ -86,6 +86,9 @@ public class MoneyVO implements GeneralModel {
 
 	private String regUser;
 
+	private String cashSeq;
+
+
 	public String getRegUser() {
 		return regUser;
 	}
@@ -390,4 +393,13 @@ public class MoneyVO implements GeneralModel {
     public void setMemo(String memo) {
         this.memo = memo;
     }
+
+	public String getCashSeq() {
+		return cashSeq;
+	}
+
+	public void setCashSeq(String cashSeq) {
+		this.cashSeq = cashSeq;
+	}
+
 }

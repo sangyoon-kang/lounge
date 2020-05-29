@@ -1,4 +1,5 @@
 <%@ page language="java" contentType="text/html;charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <%@ include file="/WEB-INF/jsp/common/tags.jsp"%>
 
 <%--
@@ -72,6 +73,7 @@
 		<table class="board_st1">
 			<colgroup>
 				<col width="7%" />
+				<col width="7%" />
 				<col width="6%" />
 				<col width="6%" />
 				<col width="6%" />
@@ -91,6 +93,7 @@
 			<thead>
 				<tr>
 					<th rowspan="2">시작시간</th>
+					<th rowspan="2">계약시간</th>
 					<th colspan="6">매수</th>
 					<th colspan="6">매도</th>
 					<th rowspan="2">결과</th>
@@ -129,9 +132,12 @@
 				<fmt:parseNumber var="goodMin2" integerOnly="true" type="number" value="${fn:split(search.currentHourMinute, ':')[1]}" />
 				<jsp:useBean id="now" class="java.util.Date" />
 				<fmt:formatDate var="currDate" value="${now}" pattern="${DATE_FORMAT}" />
+				<fmt:formatNumber var="conHour" value="${goodMin1 + search.runTime eq 60 ? 0 : goodTime1}" pattern="00"/>
+				<fmt:formatNumber var="conMin"  value="${goodMin1 + search.runTime eq 60 ? 0 : goodMin1 + search.runTime}" pattern="00"/>
 				<c:if test="${goodTime1 eq search.searchTime and ((search.searchDate eq currDate and ((goodTime1 eq goodTime2 and goodMin1 le goodMin2) or goodTime1 lt goodTime2)) or search.searchDate lt currDate)}">
 					<tr id="${vo.goodsTime eq m.goodsTime ? 'currentRow' : ''}" class="${empty m.goodsResult and (search.searchDate ne vo.goodsDate or vo.goodsTime ne m.goodsTime) ? 'bg-yellow' : ''} ${search.searchDate eq vo.goodsDate and vo.goodsTime eq m.goodsTime ? 'bg-orange' : ''}">
 						<td height="28">${m.goodsTime}</td>
+						<td height="28">${conHour}:${conMin}</td>
 						<td class="bLot1"><span>${m.buyLot1}/${m.buyLot1Total}</span>
 							<c:if test="${search.searchDate eq vo.goodsDate and vo.goodsTime eq m.goodsTime and m.goodsResult ne 'N' and m.buyLot1State eq 'U'}">
 								<a onclick="javascript:changeStatus('L', '${m.goodsTime}', '${search.searchDate }', 'buyLot1State')" class="btn bg_gray txt_center">마감</a>
@@ -212,6 +218,7 @@
 				<c:if test="${isCurrent and (search.searchDate eq currDate and (((goodTime1 eq goodTime2 and goodMin1 gt goodMin2) or goodTime1 gt goodTime2) and goodTime2 le search.searchTime)) or search.searchDate gt currDate}">
 					<tr class="bg-gray">
 						<td height="28">${m.goodsTime}</td>
+						<td height="28">${conHour}:${conMin}</td>
 						<td>${m.buyLot1Total }</td>
 						<td>${m.buyLot2Total }</td>
 						<td>${m.buyLot10Total }</td>

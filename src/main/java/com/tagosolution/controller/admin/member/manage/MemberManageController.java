@@ -289,6 +289,30 @@ public class MemberManageController extends BaseController {
 		return super.getConfig().getAdminRoot() + "/member/manage/deposit_history_view_popup";
 	}
 
+
+	/**
+	 * 자산변동 내역 히스토리 팝업
+	 * @param search
+	 * @param result
+	 * @param model
+	 * @return
+	 * @throws Exception
+	 */
+	@RequestMapping(value="/member_property_history_popup")
+	public String memberPropertyHistoryPopup(DepositSearchVO search, BindingResult result, Model model) throws Exception {
+		super.setPageSubTitle("자산변동내역", model);
+		if(result.hasErrors())
+			return super.setBindingResult(result, model);
+
+		List<MoneyVO> list = (List<MoneyVO>)_gDao.selectBySearch("order.selectPropertyHistoryList", search,"selectPropertyHistoryCount");
+
+		model.addAttribute("list", list);
+		model.addAttribute("search", search);
+
+		return super.getConfig().getAdminRoot() + "/member/manage/member_property_history_popup";
+	}
+
+
 	/**
 	 * @param search
 	 * @param result

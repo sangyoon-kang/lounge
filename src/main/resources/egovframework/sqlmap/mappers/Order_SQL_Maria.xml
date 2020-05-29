@@ -405,6 +405,52 @@
         <include refid="paging.limit"/>
     </select>
 
+
+
+    <select id="selectPropertyHistoryList" parameterType="search" resultMap="money.BaseResultMap">
+        select
+            CASH_SEQ,
+            REG_DATE,
+            CASH,
+            MEMO1 as MEMO,
+            SUM(CASH) OVER (ORDER BY REG_DATE) as BALANCE,
+            (CASE CASH_TYPE
+                WHEN 'M' THEN
+                (
+                    CASE WHEN MAIN_SEQ IS NULL THEN
+                    (
+                        CASE WHEN CASH > 0 THEN '캐시 지원' ELSE '캐시 회수' END
+                    ) ELSE (
+                        CASE WHEN CASH > 0 THEN '입금' ELSE '출금' END
+                    ) END
+                )#'입출금'
+                WHEN 'O' THEN '상품 구매'
+                WHEN 'W' THEN '수익 실현'
+                WHEN 'C' THEN '수수료'
+                WHEN 'T' THEN '틱차트 반환'
+                END
+            ) as IO_TYPE_NAME
+        from
+            ts_cash
+        where
+            USER_ID = #{userId}
+            and (CASH_TYPE = 'M'
+            or CASH_TYPE = 'O'
+            or CASH_TYPE = 'W')
+        order by REG_DATE DESC
+        <include refid="paging.limit"/>
+    </select>
+
+    <select id="selectPropertyHistoryCount" parameterType="search" resultType="int">
+        select
+            count(*)
+        from
+            ts_cash
+        where
+          (CASH_TYPE = 'M' or CASH_TYPE = 'O' or CASH_TYPE = 'W') and
+          USER_ID = #{userId}
+    </select>
+
     <select id="totalDepositHistoryList" parameterType="search" resultType="int">
         select
             count(*)
@@ -443,6 +489,8 @@
                 TC.MAIN_SEQ IS NULL
             AND TC.USER_ID = #{userId}
     </select>
+
+
 
 
 
