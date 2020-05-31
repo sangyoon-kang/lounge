@@ -406,14 +406,16 @@
 							</td>
 						</tr>
 						<tr>
-							<td colspan="3"><strong class="trade_btxt">신청금액</strong></td>
+							<td></td>
+							<td colspan="2"><strong class="trade_btxt">신청금액</strong></td>
 							<td><strong class="trade_brtxt" id="upTotal">0<input
 									type="hidden" name="upTotal"></strong></td>
 							<td><strong class="trade_bbtxt" id="downTotal">0<input
 									type="hidden" name="downTotal"></strong></td>
 						</tr>
 						<tr>
-							<td colspan="3"><strong class="trade_btxt" id="rateTxt">총액(+수수료 ${rateVo.lineRateT}%)</strong></td>
+							<td></td>
+							<td colspan="2"><strong class="trade_btxt" id="rateTxt">총액(+수수료 ${rateVo.lineRateT}%)</strong></td>
 							<td><strong class="trade_brtxt" id="upPriceTotal">0</strong></td>
 							<td><strong class="trade_bbtxt" id="downPriceTotal">0</strong></td>
 						</tr>
@@ -982,7 +984,7 @@
 					}else if(data[i].goodsResult == "D"){
 						color = "#4c84ff";
 					}
-					$.tmpl( $('#resultTable'), {"Date": Date,"eVal": data[i].eVal.toFixed(2) , "color": color, "rTime": data[i].rTime}).appendTo("#resultbody");
+					$.tmpl( $('#resultTable'), {"Date": Date,"eVal": data[i].eVal.toFixed(5) , "color": color, "rTime": data[i].rTime}).appendTo("#resultbody");
 					if(data[i].modTime == last){
 						var alertColor = data[i].rTime == "매도" ? 'blue': 'red';
 						showResult(alertColor,data[i].rTime);
