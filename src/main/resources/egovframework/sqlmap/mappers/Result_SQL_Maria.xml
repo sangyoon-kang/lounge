@@ -76,27 +76,26 @@
   </select>
   
   <select id="getRecentResult" parameterType="search" resultType="com.tagosolution.service.model.ResultVO">
-  		SELECT   DATE_ADD(STR_TO_DATE(CONCAT(FG.GOODS_DATE, ' ', FG.GOODS_TIME), '%Y-%m-%d %H:%i'), INTERVAL #{runTime} MINUTE) MOD_TIME
-               , FRS2.E_VAL AS E_VAL
-                 , FG.GOODS_RESULT AS GOODS_RESULT
-                 , CASE FG.GOODS_RESULT WHEN 'U' THEN '매수' WHEN 'D' THEN '매도' WHEN 'T' THEN '무효' ELSE '대기중' END RTIME
-      FROM   fx_goods FG
-         INNER JOIN   (
-            SELECT   RESULT_DATE, RESULT_TIME, MIN(DB_TIMESTAMP) AS TIMESTAMP_F
-            FROM   fx_result_sec
-            where fx_result_sec.RESULT_DATE = date_format(now(), '%y-%m-%d')
-               and fx_result_sec.RESULT_TIME
-               between date_format( date_sub(now(), interval 10 minute ), '%H:%i') and date_format(now(), '%H:%i')
-            GROUP BY RESULT_DATE, RESULT_TIME
-            ORDER BY RESULT_DATE DESC, RESULT_TIME DESC
-            LIMIT 0, 50
-         ) FRS1
-            ON DATE_ADD(STR_TO_DATE(CONCAT(FG.GOODS_DATE, ' ', FG.GOODS_TIME), '%Y-%m-%d %H:%i:%s'), INTERVAL #{runTime} MINUTE) = STR_TO_DATE(CONCAT(FRS1.RESULT_DATE, ' ', REPLACE(FRS1.RESULT_TIME, '.', ':')), '%Y-%m-%d %H:%i:%s')
-         INNER JOIN fx_result_sec FRS2
-            ON FRS2.DB_TIMESTAMP = FRS1.TIMESTAMP_F
-      WHERE     DATE_ADD(STR_TO_DATE(CONCAT(FG.GOODS_DATE, ' ', FG.GOODS_TIME), '%Y-%m-%d %H:%i'), INTERVAL 1 MINUTE) &lt;= DATE_FORMAT(now(), '%Y-%m-%d %H:%i:00')
-       AND     FG.RUN_TIME = #{runTime}
-      ORDER BY CONCAT(FG.GOODS_DATE, ' ', FG.GOODS_TIME) DESC
-      LIMIT 0, 10;
+	  SELECT   DATE_ADD(STR_TO_DATE(CONCAT(FG.GOODS_DATE, ' ', FG.GOODS_TIME), '%Y-%m-%d %H:%i'), INTERVAL #{runTime} MINUTE) MOD_TIME
+			  , FRS2.E_VAL AS E_VAL
+			  , FG.GOODS_RESULT AS GOODS_RESULT
+			  , CASE FG.GOODS_RESULT WHEN 'U' THEN '매수' WHEN 'D' THEN '매도' WHEN 'T' THEN '무효' ELSE '대기중' END RTIME
+	  FROM   fx_goods FG
+		  INNER JOIN   (
+			  SELECT   RESULT_DATE, RESULT_TIME, MIN(date_format(STREAM_DATE, '%Y-%m-%d %H:%i:%s.%f') ) AS TIMESTAMP_F
+			  FROM   fx_result_sec
+			  where fx_result_sec.STREAM_DATE &gt;= concat( date_format( date_sub(now(), interval 10 * #{runTime} minute ), '%Y-%m-%d %H:%i'), ':00.000000')
+			  and fx_result_sec.STREAM_DATE &lt;= concat( date_format( now(), '%Y-%m-%d %H:%i'), ':59.999999')
+			  GROUP BY date_format(fx_result_sec.STREAM_DATE, '%Y-%m-%d %H:%i')
+			  ORDER BY RESULT_DATE DESC, RESULT_TIME DESC
+			  LIMIT 0, 50
+		  ) FRS1
+		  ON DATE_ADD(STR_TO_DATE(CONCAT(FG.GOODS_DATE, ' ', FG.GOODS_TIME), '%Y-%m-%d %H:%i:%s'), INTERVAL #{runTime} MINUTE) = STR_TO_DATE(CONCAT(FRS1.RESULT_DATE, ' ', REPLACE(FRS1.RESULT_TIME, '.', ':')), '%Y-%m-%d %H:%i:%s')
+		  INNER JOIN fx_result_sec FRS2
+		  ON FRS2.STREAM_DATE = FRS1.TIMESTAMP_F
+	  WHERE  DATE_ADD(STR_TO_DATE(CONCAT(FG.GOODS_DATE, ' ', FG.GOODS_TIME), '%Y-%m-%d %H:%i'), INTERVAL 1 MINUTE) &lt;= DATE_FORMAT(now(), '%Y-%m-%d %H:%i:00')
+	  AND FG.RUN_TIME = #{runTime}
+	  ORDER BY CONCAT(FG.GOODS_DATE, ' ', FG.GOODS_TIME) DESC
+	  LIMIT 0, 10
   	</select>
 </mapper>
