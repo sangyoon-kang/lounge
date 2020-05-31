@@ -130,7 +130,8 @@ public class FxProductController extends BaseController {
         model.addAttribute("classlist", classlist);
         model.addAttribute("diff", StringUtil.getDateToString(difference, "mm:ss"));
         model.addAttribute("next", StringUtil.getDateToString(next, "HH시 mm분"));
-        model.addAttribute("isWorkingHour", ListUtil.isWorkingHour(runTimeVO.getBreakStart(), runTimeVO.getBreakEnd()));
+        model.addAttribute("isWorkingHour", true);
+        //model.addAttribute("isWorkingHour", ListUtil.isWorkingHour(runTimeVO.getBreakStart(), runTimeVO.getBreakEnd()));
 
         return "/front/prd/deal";
     }
