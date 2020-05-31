@@ -230,7 +230,7 @@ public class ListUtil {
 
 		if(dayWeek == 1){
 			// 일요일은 무조건 쉼
-			return true;
+			return false;
 		}
 
 		// hour 는 0 ~ 23
@@ -241,20 +241,20 @@ public class ListUtil {
 			if(dayWeek == 2){
 				// 월요일인 경우
 				if(hour < end){
-					return true;
-				}else{
 					return false;
+				}else{
+					return true;
 				}
 			}else{
 				// 토요일인 경우
 				if(hour > start){
-					return true;
-				}else{
 					return false;
+				}else{
+					return true;
 				}
 			}
 		}else{
-			return false;
+			return true;
 		}
 		//return start <= hour && hour < end;
 	}

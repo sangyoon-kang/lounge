@@ -259,7 +259,7 @@
 					</tr>
 					</thead>
 					<tbody class="table_body">
-					<c:if test="${isWorkingHour }">
+					<c:if test="${!isWorkingHour }">
 <%--						<tr>--%>
 <%--							<td colspan="5"><h3>${SITE_NAME_U}의운영시간은--%>
 <%--									${runTimeList.breakEnd}시-${runTimeList.breakStart}시까지 입니다</h3></td>--%>
@@ -271,7 +271,7 @@
 					</c:if>
 
 
-					<c:if test="${!isWorkingHour }">
+					<c:if test="${isWorkingHour }">
 						<tr>
 							<td class="d-m-none next-time next-time">${next}</td>
 							<td>0.1Lot</td>
