@@ -709,12 +709,12 @@
 			data: {},
 			dataType: 'json',
 			success: function(data){
-				if(data){
+				/*if(data){
 					if(data.siteCloseYn == "Y"){
 						alert(data.message.replace(/\\n/g,"\n"));
 						return;
 					}
-				}
+				}*/
 
 				var type = tab == 'B' ? 'up': 'down';
 				$("#vLoss > strong").text($("#"+type+"Total").text());
@@ -904,7 +904,7 @@
 	function validateForm(tab, type, close){
 		var msg = '';
 		var isWork = ${isWorkingHour};
-		if(isWork){
+		if(!isWork){
 			msg = '운영 시간이 아닙니다.';
 			return msg;
 		}
