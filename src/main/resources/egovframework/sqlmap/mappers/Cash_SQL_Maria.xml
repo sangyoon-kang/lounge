@@ -445,7 +445,7 @@
 					, now()
 					, CONCAT(DATE_FORMAT(now(), '%Y-%m-%d'), ' ', #{goodsTime}, ' ', CASE #{bsType} WHEN 'B' THEN '매수' ELSE '매도' END)
 					, #{orderSeq,jdbcType=BIGINT}
-					, FLOOR(-1 * #{totalLot} * 50000 * (SELECT 1 + (FLR.LINE_RATET / 100) FROM fx_line_rate FLR WHERE FLR.RUN_TIME = #{runTime,jdbcType=INTEGER} AND FLR.LR_VER = 0))
+					, (-1 * #{totalLot} * 50000)
 					, (select cash from ts_member_info where user_id = #{userId,jdbcType=VARCHAR})
 				)
 	</insert>
