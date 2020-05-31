@@ -1003,13 +1003,18 @@
 			async: true,
 			data: {},
 			success: function (data) {
-				if (data.result == "S"){
-					$('.table_body tr').hide();
-					$('#CL').show();
-				} else {
 
-					$('.table_body tr').show();
-					$('#CL').hide();
+				var isWorkingHour = ${isWorkingHour};
+
+				if(isWorkingHour){
+					if (data.result == "S"){
+						$('.table_body tr').hide();
+						$('#CL').show();
+					} else {
+
+						$('.table_body tr').show();
+						$('#CL').hide();
+					}
 				}
 			}
 		});
