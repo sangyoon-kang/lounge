@@ -47,7 +47,8 @@
 			library_path: "/common/js/charting_library/charting_library/",
 			locale: getParameterByName('lang') || "ko",
 			client_id: '${URL_HOST_OP}',
-			enabled_features: [""],
+			disabled_features: ['use_localstorage_for_settings'],
+			enabled_features: [],
 			user_id: 'public_user_id',
 			theme: 'light',
 			preset:device,
@@ -405,13 +406,16 @@
 							</td>
 						</tr>
 						<tr>
-							<td></td>
-							<td></td>
-							<td><strong class="trade_btxt">신청금액</strong></td>
+							<td colspan="3"><strong class="trade_btxt">신청금액</strong></td>
 							<td><strong class="trade_brtxt" id="upTotal">0<input
 									type="hidden" name="upTotal"></strong></td>
 							<td><strong class="trade_bbtxt" id="downTotal">0<input
 									type="hidden" name="downTotal"></strong></td>
+						</tr>
+						<tr>
+							<td colspan="3"><strong class="trade_btxt" id="rateTxt">총액(+수수료 ${rateVo.lineRateT}%)</strong></td>
+							<td><strong class="trade_brtxt" id="upPriceTotal">0</strong></td>
+							<td><strong class="trade_bbtxt" id="downPriceTotal">0</strong></td>
 						</tr>
 					</c:if>
 					<tr id="CL" style="display: none">
@@ -495,17 +499,16 @@
 								<span>보증금</span>
 								<strong></strong>
 							</p>
-
 							<p id="ctbox" class="aside_con"></p>
+							<p id="feebox" class="aside_con"></p>
 						</div>
 						<p class="pop_agree_time ">
 							<span>거래가능시간 </span><span class="remain-time">${diff}</span>
 						</p>
 						<p class="pop_agree_bt" id="submitBtnP">
-
 							<a id="submitContrBtn" class="bg-blue"
 							   onclick="submit_contract(this)"></a>
-						</p>
+						</p><br>
 						<ul class="pop_agree_list">
 							<li>FX마진거래 손익분배 계약 보증금은 차손발생시 귀속되는 계약입니다.</li>
 							<li>FX마진거래 렌트 계약을 취득하기 전에 ${URL_HOST_OP}에서 반드시 이용약관 및 설명서를
@@ -531,7 +534,7 @@
 
 					</div>
 
-					<div class="pop_agree_down">
+					<%--<div class="pop_agree_down">
 						<p>공동투자 및 MOU금융투자상품 FX마진거래 (GBP/AUD) 포지션에서 실시간 발생되는 ± ${runTimeList.stopLimit}pip 실현시
 							(손 익분배율 ${rateVo.lineRateT }%) 차익지급종료 실격시 차손소멸종료 되는 약정입니다.</p>
 						<!--list_basic_type01-->
@@ -554,7 +557,7 @@
 								</tbody>
 							</table>
 						</div>
-					</div>
+					</div>--%>
 				</div>
 				<div class="bo_area">
 					<label><input id="aggreCk" type="checkbox"/>하루 동안 거래약정 계약서 동의하고 팝업 안띄우기</label>
@@ -584,6 +587,7 @@
 	var runT = ${search.runTime} * 60000;
 	var time;
 	var actionBtnEnable = true;
+	var feeRate = ${rateVo.lineRateT};	//총 수수료율 실시간으로
 
 	$("#aggreCk").change(function(e){
 		if($(e.target).is(":checked")){
@@ -603,6 +607,12 @@
 
 		validateAjaxMaxCount(true).then(function(data){
 			if(!isNull(data)){
+			    if(feeRate != data["feeRate"]){
+                    feeRate = data["feeRate"];
+
+                    $("#rateTxt").text("총액(+수수료 "+ feeRate +"%)");
+				}
+
 				$('.inputLot').each(function(){
 					limit = $(this).data('autoclose');
 					if(next - time <= stop*1000){
@@ -708,6 +718,7 @@
 
 				var type = tab == 'B' ? 'up': 'down';
 				$("#vLoss > strong").text($("#"+type+"Total").text());
+
 				var runTime = ${search.runTime};
 				msg = validateForm(type, true, false);
 				if(!isNull(msg)){alert(msg);return;}
@@ -730,17 +741,27 @@
 
 				var bsType = tab;
 				var txtCtbox= "";
+				var txtFeebox= "";
 				var valueHidden = 0;
 				var $inputs = $('input[name^='+type+'Lot]');
 
 				for (i = 0; i < $inputs.length; i++) {
 					if($inputs.eq(i).val() !="" && $inputs.eq(i).val() > 0){
 						var lotCnt = parseInt($inputs.eq(i).val()) / $inputs.eq(i).data('amount');
-						txtCtbox+="<li>₩"+addComma($inputs.eq(i).data('price'))+"*"+lotCnt+"</li>";
+						txtCtbox+="<li>₩"+addComma($inputs.eq(i).data('price'))+" × "+lotCnt+"</li>";
+
 					}
 					valueHidden = valueHidden + parseInt($inputs.eq(i).val())/10;
 				}
+
+				var lineLate = feeRate;
+
+				//수수료 포함 금액 계산
+				txtFeebox+="<li>수수료 "+ lineLate +"% = ₩"+ addComma(Math.floor((valueHidden*50000).toFixed(0) * lineLate/100)) + "</li>";
+
 				$("#ctbox").html(txtCtbox);
+				$("#feebox").html(txtFeebox);
+
 				if (tab == 'B'){
 					$("#buyOrSell").text("매수");
 					$('#buyOrSell').removeClass('pop_agreement_tag_blue').addClass('pop_agreement_tag_red');
@@ -801,7 +822,10 @@
 		console.log(direction,$inputs.length)
 		$("input.inputLot[name^="+direction+"Lot]").closest('td').find('.price span').text('(0)');
 		$("input[name="+direction+"Total]").val(0);
+		$("input[name="+direction+"PriceTotal]").val(0);
+
 		$("#"+direction+"Total").text('0');
+		$("#"+direction+"PriceTotal").text('0');
 	}
 	function maxAll(){
 		var tableRows = $('.trade_con03 td').not('.disabled');
@@ -819,8 +843,13 @@
 	function setAll(value){
 		$("input[name=upTotal]").val(value);
 		$("input[name=downTotal]").val(value);
+		$("input[name=upPriceTotal]").val(value);
+		$("input[name=downPriceTotal]").val(value);
+
 		$("#upTotal").text(addComma(value*${LOT_01}));
 		$("#downTotal").text(addComma(value*${LOT_01}));
+		$("#upPriceTotal").text(addComma(value*${LOT_01}));
+		$("#downPriceTotal").text(addComma(value*${LOT_01}));
 	}
 
 	function addLot(direction,lot,amount){
@@ -862,8 +891,11 @@
 
 
 		totalInpt.val(totalLot);
-		var priceText = addComma(totalLot*${LOT_01});
-		$("#"+direction+"Total").text(priceText);
+		var totalRate = feeRate;
+		var totalPrice = Math.floor(totalLot*${LOT_01} * (1+(totalRate/100)));
+		var priceText = addComma(totalPrice);
+        $("#"+direction+"PriceTotal").text(priceText);
+		$("#"+direction+"Total").text(addComma(totalLot*${LOT_01}));
 
 
 		inpt.closest('td').find('.price span').text('('+inpt.val()/lot+')')
@@ -950,7 +982,7 @@
 					}else if(data[i].goodsResult == "D"){
 						color = "#4c84ff";
 					}
-					$.tmpl( $('#resultTable'), {"Date": Date,"eVal": data[i].eVal.toFixed(5) , "color": color, "rTime": data[i].rTime}).appendTo("#resultbody");
+					$.tmpl( $('#resultTable'), {"Date": Date,"eVal": data[i].eVal.toFixed(2) , "color": color, "rTime": data[i].rTime}).appendTo("#resultbody");
 					if(data[i].modTime == last){
 						var alertColor = data[i].rTime == "매도" ? 'blue': 'red';
 						showResult(alertColor,data[i].rTime);
