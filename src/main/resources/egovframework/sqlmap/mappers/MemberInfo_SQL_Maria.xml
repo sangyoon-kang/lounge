@@ -718,18 +718,19 @@
 		WHERE	USER_ID = (SELECT USER_ID FROM fx_money WHERE MONEY_SEQ = #{moneySeq})
 	</update>
 	
-	<update id="updateFront" parameterType="com.tagosolution.service.model.MemberInfoVO">
+	<update id="updateFront" parameterType="com.tagosolution.service.model.search.PaymentSearchVO">
 		UPDATE	ts_member_info
-			SET	CASH = CASH - (#{totalLot} * 50000)
+			SET	CASH = CASH - FLOOR(#{totalLot} * 50000 * (SELECT 1 + (FLR.LINE_RATET / 100) FROM fx_line_rate FLR WHERE FLR.RUN_TIME = #{runTime,jdbcType=INTEGER} AND FLR.LR_VER = 0))
 		WHERE	USER_ID = #{userId,jdbcType=VARCHAR}
 	</update>
-	
+
+	<!--SET	CASH = CASH + (FO.LOT * 50000 * (SELECT 1 + ((100 - FLR.LINE_RATET) / 100) FROM fx_line_rate FLR WHERE FLR.RUN_TIME = #{runTime,jdbcType=INTEGER} AND FLR.LR_VER = 0))-->
 	<update id="updateAdminUD" parameterType="search">
 		UPDATE	ts_member_info
 			INNER JOIN	fx_order FO
 				ON 	ts_member_info.USER_ID = FO.USER_ID
 					AND FO.BS_TYPE = #{profitType,jdbcType=VARCHAR}
-			SET	CASH = CASH + (FO.LOT * 50000 * (SELECT 1 + ((100 - FLR.LINE_RATET) / 100) FROM fx_line_rate FLR WHERE FLR.RUN_TIME = #{runTime,jdbcType=INTEGER} AND FLR.LR_VER = 0))
+			SET	CASH = CASH + (FO.LOT * 50000 * 2)
 		WHERE	RESULT_TIME = CONCAT(#{goodsDate,jdbcType=VARCHAR}, ' ', #{goodsTime,jdbcType=VARCHAR})
 			AND	RUN_TIME = #{runTime,jdbcType=INTEGER};
 	</update>
@@ -738,7 +739,7 @@
 		UPDATE	ts_member_info
 			INNER JOIN	fx_order
 				ON ts_member_info.USER_ID = fx_order.USER_ID
-			SET	CASH = CASH + (fx_order.LOT * 50000)
+			SET	CASH = CASH + FLOOR(fx_order.LOT * 50000 * (SELECT 1 + (FLR.LINE_RATET / 100) FROM fx_line_rate FLR WHERE FLR.RUN_TIME = #{runTime,jdbcType=INTEGER} AND FLR.LR_VER = 0))
 		WHERE RESULT_TIME = CONCAT(#{goodsDate,jdbcType=VARCHAR}, ' ', #{goodsTime,jdbcType=VARCHAR})
 			AND	RUN_TIME = #{runTime,jdbcType=INTEGER};
 	</update>
@@ -764,7 +765,7 @@
 		UPDATE	ts_member_info
 			INNER JOIN fx_order
 				ON ts_member_info.USER_ID = fx_order.USER_ID
-			SET CASH = CASH - (fx_order.LOT * 50000)
+			SET CASH = CASH - FLOOR(fx_order.LOT * 50000 * (SELECT 1 + (FLR.LINE_RATET / 100) FROM fx_line_rate FLR WHERE FLR.RUN_TIME = #{runTime,jdbcType=INTEGER} AND FLR.LR_VER = 0))
 		WHERE	RESULT_TIME = CONCAT(#{goodsDate,jdbcType=VARCHAR}, ' ', #{goodsTime,jdbcType=VARCHAR})
 			AND	RUN_TIME = #{runTime,jdbcType=INTEGER};
 	</update>	

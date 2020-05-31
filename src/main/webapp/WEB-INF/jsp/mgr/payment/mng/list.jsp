@@ -206,7 +206,7 @@
 							<c:if test="${search.searchDate eq vo.goodsDate and vo.goodsTime eq m.goodsTime}">
 								<span class="remain-time red bold"></span>
 							</c:if>
-							<c:if test="${(search.searchDate ne vo.goodsDate or vo.goodsTime ne m.goodsTime) and empty m.goodsResult}">
+							<c:if test="${(search.searchDate ne vo.goodsDate or vo.goodsTime ne m.goodsTime) and (empty m.goodsResult or m.goodsResult eq 'C')}">
 								<a onclick="javascript:doPopup('${search.searchDate}', '${m.goodsTime}');" class="btn bg_red">결과</a>
 							</c:if>
 							<c:if test="${!empty m.goodsResult}">

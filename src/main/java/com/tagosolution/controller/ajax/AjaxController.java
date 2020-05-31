@@ -593,9 +593,8 @@ public class AjaxController extends BaseController {
         MemberInfoVO mmb = new MemberInfoVO();
         mmb.setUserId(uid);
         mmb.setCash(Integer.parseInt(cash));
-        CashVO cashVO = new CashVO();
-        _gDao.update("memberInfo.updateCashByUserId", mmb);
 
+        CashVO cashVO = new CashVO();
         cashVO.setUserId(mmb.getUserId());
         cashVO.setCash(mmb.getCash());
         cashVO.setMemo1(memo);
@@ -603,6 +602,7 @@ public class AjaxController extends BaseController {
 
         try {
             _gDao.insert("cash.insertCashByUser", cashVO);
+            _gDao.update("memberInfo.updateCashByUserId", mmb);
         } catch (Exception e) {
             logger.error(e.getMessage(), e);
         }

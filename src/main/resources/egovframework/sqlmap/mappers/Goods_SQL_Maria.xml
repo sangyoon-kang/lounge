@@ -744,7 +744,7 @@ WHERE	FG.RUN_TIME = #{runTime, jdbcType=INTEGER}
 
    <update id="updateGoodsCancle" parameterType="com.tagosolution.service.model.GoodsVO">
 		UPDATE	fx_goods
-			SET	GOODS_RESULT = null
+			SET	GOODS_RESULT = 'C'
 		WHERE	RUN_TIME = #{runTime,jdbcType=INTEGER}
 			AND	GOODS_DATE = #{goodsDate,jdbcType=VARCHAR}
 			AND	GOODS_TIME = #{goodsTime,jdbcType=VARCHAR};

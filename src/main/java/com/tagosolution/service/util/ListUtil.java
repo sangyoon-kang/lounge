@@ -233,6 +233,7 @@ public class ListUtil {
 			return true;
 		}
 
+		// hour 는 0 ~ 23
 		Integer hour = cal1.get(Calendar.HOUR_OF_DAY);
 
 		if(dayWeek == 2 || dayWeek == 7){

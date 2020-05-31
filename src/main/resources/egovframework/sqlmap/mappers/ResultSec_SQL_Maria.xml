@@ -9,34 +9,7 @@
   	<result column="E_VAL" jdbcType="DECIMAL" property="eVal" />
   	<result column="ROW_NUMBER" jdbcType="INTEGER" property="rowNumber" />
   </resultMap>
-  
-  <!-- <select id="selectResultSecByTime" parameterType="search" resultType="com.tagosolution.service.model.ResultSecVO">
-    SELECT @rownum := @rownum + 1 AS row_number,FROM_UNIXTIME(TIMESTAMP / 1000) RUN_TIME, S_VAL, H_VAL, L_VAL,E_VAL FROM fx_result_sec
-    cross join (select @rownum := 0) r
-    WHERE result_date = #{startDate} and result_time = #{type3}
-  <include refid="paging.limit"/>
-  </select> -->
-  
-  <select id="totalCountRsec" parameterType="search" resultType="int">
-  select count(*) from (SELECT	*
-    	FROM   	(
-	    		SELECT	TIMESTAMP, from_unixtime(floor(TIMESTAMP/1000)) AS RESULT_TIME, S_VAL, H_VAL, L_VAL, E_VAL
-	         	FROM   	fx_result_sec
-	         	WHERE   		TIMESTAMP &lt; UNIX_TIMESTAMP(CONCAT(#{resultDate}, ':00')) * 1000
-	          AND   	(SELECT   COUNT(RT)
-	                  		FROM   	fx_result
-	                  		WHERE   	RT = CONCAT(#{resultDate}, ':00')
-	                     	AND   	RIGHT(S_TIME, 2) != '00') > 0
-	         			ORDER BY TIMESTAMP DESC
-	         		LIMIT 1
-      		) TEMP
-	UNION
-	SELECT   	TIMESTAMP, from_unixtime(floor(TIMESTAMP/1000)) AS RESULT_TIME, S_VAL, H_VAL, L_VAL, E_VAL
-	FROM		fx_result_sec
-	WHERE   TIMESTAMP >= UNIX_TIMESTAMP(CONCAT(#{resultDate}, ':00')) * 1000
-		   	AND   	TIMESTAMP &lt; UNIX_TIMESTAMP(DATE_ADD(CONCAT(#{resultDate}, ':00'), INTERVAL #{runTime} MINUTE)) * 1000
-	ORDER BY 	TIMESTAMP) as CNTR
-  </select>
+
   
   <select id="resultState" parameterType="search" resultType="String">
     SELECT API_STATE FROM fx_time_set LIMIT 1

@@ -11,6 +11,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.StringWriter;
@@ -228,6 +229,8 @@ public class PaymentServiceImpl extends BaseServiceImpl {
         logger.info("cash.insertFront end");
         super.getDAO().update("memberInfo.updateFront", search);
         logger.info("memberInfo.updateFront end");
+        super.getDAO().insert("cash.insertRecommCash", search);
+        logger.info("cash.insertRecommCash end");
         logger.info("insert end");
         return dataCheck;
     }
@@ -331,6 +334,7 @@ public class PaymentServiceImpl extends BaseServiceImpl {
                     if (existVO.getGoodsResult().equalsIgnoreCase("U") || existVO.getGoodsResult().equalsIgnoreCase("D")) {
                         super.getDAO().update("memberInfo.updateCancleUD", search);
                     } else {
+                        super.getDAO().insert("cash.insertRecommCash", search);      // 선취수수료 반영 - 틱차트 반환상태에서 취소시 수수료 다시 정산
                         super.getDAO().update("memberInfo.updateCancleT", search);
                     }
 
@@ -342,7 +346,7 @@ public class PaymentServiceImpl extends BaseServiceImpl {
                 super.getDAO().update("goods.updateGoodsCancle", search);
             }
         } else {
-            if (existVO != null && existVO.getGoodsResult() != null)
+            if (existVO != null && existVO.getGoodsResult() != null && !existVO.getGoodsResult().equals("C"))
                 return false;
 
             switch (search.getStatus()) {
@@ -355,7 +359,7 @@ public class PaymentServiceImpl extends BaseServiceImpl {
                     super.getDAO().update("order.updateStatusUD", search);
                     super.getDAO().insert("cash.insertAdminUD", search);
                     super.getDAO().update("memberInfo.updateAdminUD", search);
-                    super.getDAO().insert("cash.insertRecommCash", search);
+                    //super.getDAO().insert("cash.insertRecommCash", search);
                     //super.getDAO().update("memberInfo.updateRecommUser", search);
                     break;
                 case "D":
@@ -367,7 +371,7 @@ public class PaymentServiceImpl extends BaseServiceImpl {
                     super.getDAO().update("order.updateStatusUD", search);
                     super.getDAO().insert("cash.insertAdminUD", search);
                     super.getDAO().update("memberInfo.updateAdminUD", search);
-                    super.getDAO().insert("cash.insertRecommCash", search);
+                    //super.getDAO().insert("cash.insertRecommCash", search);
                     //super.getDAO().update("memberInfo.updateRecommUser", search);
                     break;
                 case "T":
@@ -375,6 +379,7 @@ public class PaymentServiceImpl extends BaseServiceImpl {
                     super.getDAO().update("goods.updateGoodsStatus", vo);
                     super.getDAO().update("order.updateStatusT", search);
                     super.getDAO().insert("cash.insertAdminT", search);
+                    super.getDAO().delete("cash.deleteCashFee", search);       // 선취수수료 반영 - 틱차트 반환 시 수수료 정보를 삭제
                     super.getDAO().update("memberInfo.updateAdminT", search);
                     break;
                 case "N":

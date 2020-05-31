@@ -131,6 +131,7 @@ public class FxProductController extends BaseController {
         model.addAttribute("diff", StringUtil.getDateToString(difference, "mm:ss"));
         model.addAttribute("next", StringUtil.getDateToString(next, "HH시 mm분"));
         model.addAttribute("isWorkingHour", ListUtil.isWorkingHour(runTimeVO.getBreakStart(), runTimeVO.getBreakEnd()));
+
         return "/front/prd/deal";
     }
 
@@ -315,6 +316,7 @@ public class FxProductController extends BaseController {
             int count = (int) _gDao.getCountBySearch("order.checkMemberOrder", search);
             GoodsVO maxBuyMdl = (GoodsVO) _gDao.selectOne("goods.checkRemainingLots", search);
             RunTimeVO runTimeVO = (RunTimeVO) _gDao.selectOne("runTime.selectRuntime", search);
+            RateVO rateVo = (RateVO) _gDao.selectOne("rate.selectByKey", search);
             map.put("GS", maxBuyMdl);
             map.put("runTimeVO", runTimeVO);
             map.put("BLot1", (!vo.getBuyLot1State().equalsIgnoreCase("N") && vo.getAutoClose1() < remainingTime && runTimeVO.getAutoCloseAll() < remainingTime ? vo.getBuyLot1Total() - vo.getBuyLot1() : 0));
@@ -329,6 +331,7 @@ public class FxProductController extends BaseController {
             map.put("SLot5", (!vo.getSellLot40State().equalsIgnoreCase("N") && vo.getAutoClose40() < remainingTime && runTimeVO.getAutoCloseAll() < remainingTime ? vo.getSellLot40Total() - vo.getSellLot40() : 0));
             map.put("autoClose", (runTimeVO.getAutoCloseAll() < remainingTime));
             map.put("count", count);
+            map.put("feeRate", rateVo.getLineRateT());
         }
         return map;
     }

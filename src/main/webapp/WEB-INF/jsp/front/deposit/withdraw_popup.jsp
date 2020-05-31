@@ -111,9 +111,12 @@
 			success : function(data) {
 				// 출금제한 결과 -1: 불가, 1: 가능
 				if(data.limitOutcome < 0){
-					alert('본사의 보이스피싱 방지정책에 따라 2020년 5월 25일 이후부터\n입금된 금액의 합계가 거래금액 합계보다 큰 경우 출금이 제한됩니다.');
-					$(event.target).show();
-					return;
+					// 예외 id 출금처리
+					if($('input[name=userId]').val() != "hamddae"){
+						alert('본사의 보이스피싱 방지정책에 따라 2020년 5월 25일 이후부터\n입금된 금액의 합계가 거래금액 합계보다 큰 경우 출금이 제한됩니다.');
+						$(event.target).show();
+						return;
+					}
 				}
 
 				if(data.freeIncomeCount < 0){

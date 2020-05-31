@@ -369,10 +369,10 @@
 	<insert id="merge" useGeneratedKeys="true" keyProperty="cashSeq"
 		parameterType="com.tagosolution.service.model.CashVO">
 		insert into ts_cash (CASH_SEQ, USER_ID, CASH, REG_USER,
-		MEMO1, MAIN_SEQ, ORI_PRICE)
+		MEMO1, MAIN_SEQ, ORI_PRICE, BEFORE_CASH)
 		values (#{cashSeq,jdbcType=INTEGER}, #{userId,jdbcType=VARCHAR},
 		#{cash,jdbcType=INTEGER}, #{regUser,jdbcType=VARCHAR},
-		#{memo1,jdbcType=VARCHAR}, #{mainSeq,jdbcType=BIGINT}, #{cash,jdbcType=INTEGER})
+		#{memo1,jdbcType=VARCHAR}, #{mainSeq,jdbcType=BIGINT}, #{cash,jdbcType=INTEGER}, (SELECT cash FROM ts_member_info where user_id = #{userId,jdbcType=VARCHAR}))
 		ON DUPLICATE KEY UPDATE
 		<trim suffix=" " suffixOverrides=",">
 			<if test="cashSeq != null">
@@ -413,17 +413,21 @@
 
 	<insert id="insertByDeposit" useGeneratedKeys="true"
 		keyProperty="cashSeq" parameterType="com.tagosolution.service.model.MoneyVO">
-		INSERT INTO ts_cash (CASH_TYPE, USER_ID, CASH, REG_USER, REG_DATE, MEMO1, MAIN_SEQ, ORI_PRICE)
+		INSERT INTO ts_cash (CASH_TYPE, USER_ID, CASH, REG_USER, REG_DATE, MEMO1, MAIN_SEQ, ORI_PRICE , BEFORE_CASH)
 		SELECT	'M'
-					,USER_ID
-					, CASE WHEN IO_TYPE = 'I' THEN CASH ELSE -1 * CASH END
-					, #{userId}
-					, now()
-					, CONCAT(CASH, CASE WHEN IO_TYPE = 'I' THEN '원 입금' ELSE '원 출금' END)
-					, MONEY_SEQ
-					, CASE WHEN IO_TYPE = 'I' THEN CASH ELSE -1 * CASH END
-		FROM 	fx_money
-		WHERE 	MONEY_SEQ = #{moneySeq,jdbcType=INTEGER};
+				, z1.USER_ID
+				, CASE WHEN z1.IO_TYPE = 'I' THEN z1.CASH ELSE -1 * CASH END
+				, #{userId}
+				, now()
+				, CONCAT(CASH, CASE WHEN z1.IO_TYPE = 'I' THEN '원 입금' ELSE '원 출금' END)
+				, z1.MONEY_SEQ
+				, CASE WHEN z1.IO_TYPE = 'I' THEN CASH ELSE -1 * CASH END
+				, CASE WHEN z1.IO_TYPE = 'I'
+				       	THEN (SELECT cash FROM ts_member_info where user_id = z1.USER_ID)
+				       ELSE (SELECT cash FROM ts_member_info where user_id = z1.USER_ID) + z1.CASH
+				  END
+		FROM 	fx_money z1
+		WHERE 	z1.MONEY_SEQ = #{moneySeq,jdbcType=INTEGER};
 	</insert>
 
 	<delete id="deleteByDeposit" parameterType="com.tagosolution.service.model.MoneyVO">
@@ -433,27 +437,30 @@
 	</delete>
 	<insert id="insertFront" useGeneratedKeys="true" keyProperty="cashSeq"
 		parameterType="search">
-		INSERT INTO 	ts_cash (CASH_TYPE, USER_ID, CASH, REG_USER, REG_DATE, MEMO1, MAIN_SEQ, ORI_PRICE)
+		INSERT INTO 	ts_cash (CASH_TYPE, USER_ID, CASH, REG_USER, REG_DATE, MEMO1, MAIN_SEQ, ORI_PRICE, BEFORE_CASH)
 		VALUES	('O'
 					, #{userId,jdbcType=VARCHAR}
-					, (-1 * #{totalLot} * 50000)
+					, FLOOR(-1 * #{totalLot} * 50000 * (SELECT 1 + (FLR.LINE_RATET / 100) FROM fx_line_rate FLR WHERE FLR.RUN_TIME = #{runTime,jdbcType=INTEGER} AND FLR.LR_VER = 0))
 					, #{userId,jdbcType=VARCHAR}
 					, now()
 					, CONCAT(DATE_FORMAT(now(), '%Y-%m-%d'), ' ', #{goodsTime}, ' ', CASE #{bsType} WHEN 'B' THEN '매수' ELSE '매도' END)
 					, #{orderSeq,jdbcType=BIGINT}
-					, (-1 * #{totalLot} * 50000))
+					, FLOOR(-1 * #{totalLot} * 50000 * (SELECT 1 + (FLR.LINE_RATET / 100) FROM fx_line_rate FLR WHERE FLR.RUN_TIME = #{runTime,jdbcType=INTEGER} AND FLR.LR_VER = 0))
+					, (select cash from ts_member_info where user_id = #{userId,jdbcType=VARCHAR})
+				)
 	</insert>
-	
+	<!--(LOT * 50000 * (SELECT 1 + ((100 - FLR.LINE_RATET) / 100) FROM fx_line_rate FLR WHERE FLR.RUN_TIME = #{runTime,jdbcType=INTEGER} AND FLR.LR_VER = 0)),-->
 	<insert id="insertAdminUD" useGeneratedKeys="true" keyProperty="cashSeq" parameterType="search">		
-		INSERT INTO		ts_cash (CASH_TYPE, USER_ID, CASH, REG_USER, REG_DATE, MEMO1, MAIN_SEQ, ORI_PRICE)
+		INSERT INTO		ts_cash (CASH_TYPE, USER_ID, CASH, REG_USER, REG_DATE, MEMO1, MAIN_SEQ, ORI_PRICE, BEFORE_CASH)
 		SELECT	'W',
-					USER_ID,
-					(LOT * 50000 * (SELECT 1 + ((100 - FLR.LINE_RATET) / 100) FROM fx_line_rate FLR WHERE FLR.RUN_TIME = #{runTime,jdbcType=INTEGER} AND FLR.LR_VER = 0)),
-					#{userId,jdbcType=VARCHAR},
-					now(),
-					CONCAT(GOODS_DATE, ' ', GOODS_TIME, ' ', CASE BS_TYPE WHEN 'B' THEN '매수' ELSE '매도' END, ' 실현'),
-					ORDER_SEQ,
-					LOT * 50000
+				USER_ID,
+				(LOT * 50000 * 2),
+				#{userId,jdbcType=VARCHAR},
+				now(),
+				CONCAT(GOODS_DATE, ' ', GOODS_TIME, ' ', CASE BS_TYPE WHEN 'B' THEN '매수' ELSE '매도' END, ' 실현'),
+				ORDER_SEQ,
+				LOT * 50000,
+				(select cash from ts_member_info where user_id = FO.USER_ID)
 		FROM		fx_order FO
 		WHERE	RESULT_TIME = CONCAT(#{goodsDate,jdbcType=VARCHAR}, ' ', #{goodsTime,jdbcType=VARCHAR})
 			AND	FO.RUN_TIME = #{runTime,jdbcType=INTEGER}
@@ -461,62 +468,63 @@
 	</insert>
 
 	<insert id="insertRecommCash" useGeneratedKeys="true" keyProperty="cashSeq" parameterType="search">
-		INSERT INTO ts_cash (CASH_TYPE, USER_ID, CASH, REG_USER, REG_DATE, MEMO1, MAIN_SEQ, ORI_PRICE)
+		INSERT INTO ts_cash (CASH_TYPE, USER_ID, CASH, REG_USER, REG_DATE, MEMO1, MAIN_SEQ, ORI_PRICE, ETC_INCOME)
 		SELECT	'C', LINE_ID
-					, CASE WHEN TMI.ADDITIONAL_ITEM1 = 'Y' THEN CONVERT(LOT * 50000 * LINE_RATE * 0.01, INT) ELSE CONVERT(LOT * 50000 * LINE_RATE * 0.01 * 0.967, INT) END PRICE
-					, #{userId,jdbcType=VARCHAR}, now()
-					, CONCAT(GOODS_DATE, ' ', GOODS_TIME, ' ', CL.USER_ID, ' 실현 수수료')
-					, ORDER_SEQ
-					, CONVERT(LOT * 50000 * LINE_RATE * 0.01, INT) AS ORI_PRICE
+                , CASE WHEN TMI.ADDITIONAL_ITEM1 = 'Y' THEN FLOOR(LOT * 50000 * LINE_RATE * 0.01) ELSE FLOOR(LOT * 50000 * LINE_RATE * 0.01 * 0.967) END PRICE
+                , #{userId,jdbcType=VARCHAR}, now()
+                , CONCAT(GOODS_DATE, ' ', GOODS_TIME, ' ', CL.USER_ID, ' 약정 수수료')
+                , ORDER_SEQ
+                , FLOOR(LOT * 50000 * LINE_RATE * 0.01) AS ORI_PRICE
+                , FLOOR(LOT * 50000 * LINE_RATET * 0.01) - TOTAL_FEE as ETC_INCOME
 		FROM	(
-				SELECT	FO.ORDER_SEQ, FO.GOODS_DATE, FO.GOODS_TIME, FO.USER_ID, FO.LOT, ML.LINE_ID1 AS LINE_ID, LINE_RATE1 AS LINE_RATE, 1 AS LINE_LEVEL
+		SELECT	FO.ORDER_SEQ, FO.GOODS_DATE, FO.GOODS_TIME, FO.USER_ID, FO.LOT, ML.LINE_ID1 AS LINE_ID, LINE_RATE1 AS LINE_RATE, 1 AS LINE_LEVEL,
+                    FLOOR(FO.LOT * 50000 * LINE_RATE1 * 0.01) +
+                    FLOOR(FO.LOT * 50000 * LINE_RATE2 * 0.01) +
+                    FLOOR(FO.LOT * 50000 * LINE_RATE3 * 0.01) +
+					FLOOR(FO.LOT * 50000 * LINE_RATE4 * 0.01) +
+					FLOOR(FO.LOT * 50000 * LINE_RATE5 * 0.01) as TOTAL_FEE, LINE_RATET
 				FROM	fx_order FO
 					INNER JOIN v_member_line_rate ML
 						ON ML.USER_ID = FO.USER_ID
 							AND	ML.RUN_TIME = FO.RUN_TIME
 				WHERE	FO.RESULT_TIME = CONCAT(#{goodsDate,jdbcType=VARCHAR}, ' ', #{goodsTime,jdbcType=VARCHAR})
 					AND	FO.RUN_TIME = #{runTime,jdbcType=INTEGER}
-					AND	FO.ORDER_RESULT = 'W'
 					AND	ML.LINE_ID1 IS NOT NULL
 				UNION ALL
-				SELECT	FO.ORDER_SEQ, FO.GOODS_DATE, FO.GOODS_TIME, FO.USER_ID, FO.LOT, ML.LINE_ID2 AS LINE_ID, LINE_RATE2 AS LINE_RATE, 2 AS LINE_LEVEL
+				SELECT	FO.ORDER_SEQ, FO.GOODS_DATE, FO.GOODS_TIME, FO.USER_ID, FO.LOT, ML.LINE_ID2 AS LINE_ID, LINE_RATE2 AS LINE_RATE, 2 AS LINE_LEVEL, null, LINE_RATET
 				FROM	fx_order FO
 					INNER JOIN v_member_line_rate ML
 						ON ML.USER_ID = FO.USER_ID
 							AND	ML.RUN_TIME = FO.RUN_TIME
 				WHERE	FO.RESULT_TIME = CONCAT(#{goodsDate,jdbcType=VARCHAR}, ' ', #{goodsTime,jdbcType=VARCHAR})
 					AND	FO.RUN_TIME = #{runTime,jdbcType=INTEGER}
-					AND	FO.ORDER_RESULT = 'W'
 					AND	ML.LINE_ID2 IS NOT NULL
 				UNION ALL
-				SELECT	FO.ORDER_SEQ, FO.GOODS_DATE, FO.GOODS_TIME, FO.USER_ID, FO.LOT, ML.LINE_ID3 AS LINE_ID, LINE_RATE3 AS LINE_RATE, 3 AS LINE_LEVEL
+				SELECT	FO.ORDER_SEQ, FO.GOODS_DATE, FO.GOODS_TIME, FO.USER_ID, FO.LOT, ML.LINE_ID3 AS LINE_ID, LINE_RATE3 AS LINE_RATE, 3 AS LINE_LEVEL, null, LINE_RATET
 				FROM	fx_order FO
 					INNER JOIN v_member_line_rate ML
 						ON ML.USER_ID = FO.USER_ID
 							AND	ML.RUN_TIME = FO.RUN_TIME
 				WHERE	FO.RESULT_TIME = CONCAT(#{goodsDate,jdbcType=VARCHAR}, ' ', #{goodsTime,jdbcType=VARCHAR})
 					AND	FO.RUN_TIME = #{runTime,jdbcType=INTEGER}
-					AND	FO.ORDER_RESULT = 'W'
 					AND	ML.LINE_ID3 IS NOT NULL
 				UNION ALL
-				SELECT	FO.ORDER_SEQ, FO.GOODS_DATE, FO.GOODS_TIME, FO.USER_ID, FO.LOT, ML.LINE_ID4 AS LINE_ID, LINE_RATE4 AS LINE_RATE, 4 AS LINE_LEVEL
+				SELECT	FO.ORDER_SEQ, FO.GOODS_DATE, FO.GOODS_TIME, FO.USER_ID, FO.LOT, ML.LINE_ID4 AS LINE_ID, LINE_RATE4 AS LINE_RATE, 4 AS LINE_LEVEL, null, LINE_RATET
 				FROM	fx_order FO
 					INNER JOIN v_member_line_rate ML
 						ON ML.USER_ID = FO.USER_ID
 							AND	ML.RUN_TIME = FO.RUN_TIME
 				WHERE	FO.RESULT_TIME = CONCAT(#{goodsDate,jdbcType=VARCHAR}, ' ', #{goodsTime,jdbcType=VARCHAR})
 					AND	FO.RUN_TIME = #{runTime,jdbcType=INTEGER}
-					AND	FO.ORDER_RESULT = 'W'
 					AND	ML.LINE_ID4 IS NOT NULL
 				UNION ALL
-				SELECT	FO.ORDER_SEQ, FO.GOODS_DATE, FO.GOODS_TIME, FO.USER_ID, FO.LOT, ML.LINE_ID5 AS LINE_ID, LINE_RATE5 AS LINE_RATE, 5 AS LINE_LEVEL
+				SELECT	FO.ORDER_SEQ, FO.GOODS_DATE, FO.GOODS_TIME, FO.USER_ID, FO.LOT, ML.LINE_ID5 AS LINE_ID, LINE_RATE5 AS LINE_RATE, 5 AS LINE_LEVEL, null, LINE_RATET
 				FROM	fx_order FO
 					INNER JOIN v_member_line_rate ML
 						ON ML.USER_ID = FO.USER_ID
 							AND	ML.RUN_TIME = FO.RUN_TIME
 				WHERE	FO.RESULT_TIME = CONCAT(#{goodsDate,jdbcType=VARCHAR}, ' ', #{goodsTime,jdbcType=VARCHAR})
 					AND	FO.RUN_TIME = #{runTime,jdbcType=INTEGER}
-					AND	FO.ORDER_RESULT = 'W'
 					AND	ML.LINE_ID5 IS NOT NULL
 			) CL
 			INNER JOIN ts_member_info TMI
@@ -524,40 +532,54 @@
 	</insert>
 	
 	<insert id="insertAdminT" useGeneratedKeys="true" keyProperty="cashSeq" parameterType="search">
-		INSERT INTO ts_cash	(CASH_TYPE, USER_ID, CASH, REG_USER, REG_DATE, MEMO1, MAIN_SEQ, ORI_PRICE)
+		INSERT INTO ts_cash	(CASH_TYPE, USER_ID, CASH, REG_USER, REG_DATE, MEMO1, MAIN_SEQ, ORI_PRICE, BEFORE_CASH)
 		SELECT	'T',
-					USER_ID, 
-					LOT * 50000, 
-					#{userId,jdbcType=VARCHAR},
-					now(),
-					CONCAT(#{goodsDate,jdbcType=VARCHAR}, ' ', #{goodsTime,jdbcType=VARCHAR}, ' ', CASE WHEN BS_TYPE = 'B' THEN '매수' ELSE '매도' END, ' 틱차트 반환'), 
-					ORDER_SEQ,
-					LOT * 50000
-		FROM		fx_order
-		WHERE	RESULT_TIME = CONCAT(#{goodsDate,jdbcType=VARCHAR}, ' ', #{goodsTime,jdbcType=VARCHAR})
-			AND	RUN_TIME = #{runTime,jdbcType=INTEGER};
+				z1.USER_ID,
+				FLOOR(z1.LOT * 50000 * (SELECT 1 + (FLR.LINE_RATET / 100) FROM fx_line_rate FLR WHERE FLR.RUN_TIME = #{runTime,jdbcType=INTEGER} AND FLR.LR_VER = 0)),
+				#{userId,jdbcType=VARCHAR},
+				now(),
+				CONCAT(#{goodsDate,jdbcType=VARCHAR}, ' ', #{goodsTime,jdbcType=VARCHAR}, ' ', CASE WHEN z1.BS_TYPE = 'B' THEN '매수' ELSE '매도' END, ' 틱차트 반환'),
+				z1.ORDER_SEQ,
+				FLOOR(z1.LOT * 50000 * (SELECT 1 + (FLR.LINE_RATET / 100) FROM fx_line_rate FLR WHERE FLR.RUN_TIME = #{runTime,jdbcType=INTEGER} AND FLR.LR_VER = 0)),
+				(select cash from ts_member_info where user_id = z1.USER_ID)
+		FROM	fx_order z1
+		WHERE	z1.RESULT_TIME = CONCAT(#{goodsDate,jdbcType=VARCHAR}, ' ', #{goodsTime,jdbcType=VARCHAR})
+		  AND	z1.RUN_TIME = #{runTime,jdbcType=INTEGER};
 	</insert>
 
 	<delete id="deleteCashCancle" parameterType="search">
 		DELETE
 		FROM	ts_cash
-		WHERE	CASH_TYPE IN ('T', 'W', 'C')
+		WHERE	CASH_TYPE IN ('T', 'W')
 			AND	MAIN_SEQ IN (	SELECT	ORDER_SEQ
 										FROM		fx_order
 										WHERE	RESULT_TIME = CONCAT(#{goodsDate,jdbcType=VARCHAR}, ' ', #{goodsTime,jdbcType=VARCHAR})
 											AND	RUN_TIME = #{runTime,jdbcType=INTEGER}
 								);
 	</delete>
+
+	<delete id="deleteCashFee" parameterType="search">
+		DELETE
+		FROM	ts_cash
+		WHERE	CASH_TYPE = 'C'
+		AND	MAIN_SEQ IN (	SELECT	ORDER_SEQ
+		FROM		fx_order
+		WHERE	RESULT_TIME = CONCAT(#{goodsDate,jdbcType=VARCHAR}, ' ', #{goodsTime,jdbcType=VARCHAR})
+		AND	RUN_TIME = #{runTime,jdbcType=INTEGER}
+		);
+	</delete>
 	
 	<insert id="insertCashByUser" useGeneratedKeys="true" parameterType="search">
-		INSERT INTO 	ts_cash (CASH_TYPE, USER_ID, CASH, REG_USER, REG_DATE, MEMO1, MAIN_SEQ)
+		INSERT INTO 	ts_cash (CASH_TYPE, USER_ID, CASH, REG_USER, REG_DATE, MEMO1, MAIN_SEQ, BEFORE_CASH)
 		VALUES	('M'
 					, #{userId,jdbcType=VARCHAR}
 					, (#{cash})
 					, #{regUser,jdbcType=VARCHAR}
 					, now()
 					, #{memo1,jdbcType=VARCHAR}
-					, null)
+					, null
+					, (select cash from ts_member_info where user_id = #{userId,jdbcType=VARCHAR})
+				)
 	</insert>
 	
 </mapper>

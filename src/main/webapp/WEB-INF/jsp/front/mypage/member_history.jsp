@@ -96,7 +96,7 @@
 							<th>수량</th>
 							<th>보증금</th>
 							<th>결과</th>
-							<th>약정서</th>
+							<!--th>약정서</th-->
 						</tr>
 					</thead>
 					<tbody id="binddata">
@@ -140,13 +140,9 @@
 					               			<span class="badge dark">대기</span>
 					               		</c:if>
 					               </td>
-					               <td>
-					              
-					              
-					               
-					               <a  onclick="javascript:viewAgreement (${m.orderSeq})" class="bt_trade_paper">보기</a>
-					                   
-					               </td>
+					               <!--td>
+									   <a  onclick="javascript:viewAgreement (${m.orderSeq})" class="bt_trade_paper">보기</a>
+					               </td-->
 					          </tr>
 					          
           				</c:forEach>
@@ -175,9 +171,8 @@
 							<div class="pop_agree_con">
 								<p id="vDate" class="txt"></p>
 								<p id="vLoss" class="price"><span>보증금</span> </p>
-								
 								<p  id="ctbox"class="aside_con">
-								
+								<p  id="feebox"class="aside_con">
 								</p>
 							</div>
 							<ul class="pop_agree_list">
@@ -202,7 +197,7 @@
 							
 						</div>
 		
-						<div class="pop_agree_down">
+						<%--<div class="pop_agree_down">
 							<p>공동투자 및 MOU금융투자상품 FX마진거래 (GBP/AUD) 포지션에서 실시간 발생되는 ± <span id="stopLimit"></span>pip 실현시 (손 익분배율 14%) 차익지급종료 실격시 차손소멸종료 되는 약정입니다.</p>
 							<!--list_basic_type01-->
 							<div class="board_basic_type01">
@@ -221,7 +216,7 @@
 									</tbody>
 								</table>
 							</div>
-						</div>
+						</div>--%>
 					</div>
 					<div class="bo_area">
 						<a class="fright" href="javascript:closeView();">닫기</a>
@@ -286,43 +281,59 @@ function viewAgreement (orderSeq) {
 			var runTimeVO= data.runTimeVO;
 			var od=data.od;
 			var rateVo=data.rateVo;
+			var txtCtbox="";
 			
-			
-			var  txtCtbox="";
-			
-			if(vo.bsType == 'B' &&  od.buyLot1!="" && od.buyLot1 > 0)
+			if(vo.bsType == 'B' &&  od.buyLot1!="" && od.buyLot1 > 0){
 				txtCtbox+="<li>₩ <fmt:formatNumber pattern='#,##0' value='${LOT_01}' /> * "+od.buyLot1+"</li>";
-		   	if(vo.bsType == 'B' &&  od.buyLot2!="" && od.buyLot2 > 0)
+			}
+		   	if(vo.bsType == 'B' &&  od.buyLot2!="" && od.buyLot2 > 0){
 				txtCtbox+="<li>₩ <fmt:formatNumber pattern='#,##0' value='${LOT_02}' /> * "+od.buyLot2+"</li>";
-			if(vo.bsType == 'B' &&  od.buyLot10!="" && od.buyLot10 > 0)
-				txtCtbox+="<li>₩ <fmt:formatNumber pattern='#,##0' value='${LOT_1}' /> * "+od.buyLot10+"</li>";
-			if(vo.bsType == 'B' &&  od.buyLot20!="" && od.buyLot20 > 0)
+			}
+			if(vo.bsType == 'B' &&  od.buyLot10!="" && od.buyLot10 > 0){
+				txtCtbox+="<li>₩ <fmt:formatNumber pattern='#,##0' value='${LOT_1}' /> * "+od.buyLot2+"</li>";
+			}
+			if(vo.bsType == 'B' &&  od.buyLot20!="" && od.buyLot20 > 0){
 				txtCtbox+="<li>₩ <fmt:formatNumber pattern='#,##0' value='${LOT_2}' /> * "+od.buyLot20+"</li>";
-			if(vo.bsType == 'B' &&  od.buyLot40!="" && od.buyLot40 > 0)
-				txtCtbox+="<li>₩ <fmt:formatNumber pattern='#,##0' value='${LOT_4}' /> * "+od.buyLot40+"</li>";
+			}
+			if(vo.bsType == 'B' &&  od.buyLot40!="" && od.buyLot40 > 0){
+				txtCtbox+="<li>₩ <fmt:formatNumber pattern='#,##0' value='${LOT_4}' /> * "+od.buyLot20+"</li>";
+			}
 				
-			if(vo.bsType == 'S' &&  od.sellLot1!="" && od.sellLot1 > 0)
+			if(vo.bsType == 'S' &&  od.sellLot1!="" && od.sellLot1 > 0){
 				txtCtbox+="<li>₩ <fmt:formatNumber pattern='#,##0' value='${LOT_01}' /> * "+od.sellLot1+"</li>";
-		   	if(vo.bsType == 'S' &&  od.sellLot2!="" && od.sellLot2 > 0)
+			}
+		   	if(vo.bsType == 'S' &&  od.sellLot2!="" && od.sellLot2 > 0){
 				txtCtbox+="<li>₩ <fmt:formatNumber pattern='#,##0' value='${LOT_02}' /> * "+od.sellLot2+"</li>";
-			if(vo.bsType == 'S' &&  od.sellLot10!="" && od.sellLot10 > 0)
+			}
+			if(vo.bsType == 'S' &&  od.sellLot10!="" && od.sellLot10 > 0){
 				txtCtbox+="<li>₩ <fmt:formatNumber pattern='#,##0' value='${LOT_1}' /> * "+od.sellLot10+"</li>";
-			if(vo.bsType == 'S' &&  od.sellLot20!="" && od.sellLot20 > 0)
+			}
+			if(vo.bsType == 'S' &&  od.sellLot20!="" && od.sellLot20 > 0){
 				txtCtbox+="<li>₩ <fmt:formatNumber pattern='#,##0' value='${LOT_2}' /> * "+od.sellLot20+"</li>";
-			if(vo.bsType == 'S' &&  od.sellLot40!="" && od.sellLot40 > 0)
-				txtCtbox+="<li>₩ <fmt:formatNumber pattern='#,##0' value='${LOT_4}' /> * "+od.sellLot40+"</li>";
-				
+			}
+			if(vo.bsType == 'S' &&  od.sellLot40!="" && od.sellLot40 > 0){
+				txtCtbox+="<li>₩ <fmt:formatNumber pattern='#,##0' value='${LOT_4}' /> * "+od.sellLot20+"</li>";
+			}
 				
 			$("#ctbox").html(txtCtbox);
-				
-			txtCtbox="";
-			txtCtbox+="<tr><td>0.1Lot</td><td>₩ <fmt:formatNumber pattern='#,##0' value='${LOT_01}' /></td></tr>";
-			txtCtbox+="<tr><td>0.2Lot</td><td>₩ <fmt:formatNumber pattern='#,##0' value='${LOT_02}' /></td></tr>";
-			txtCtbox+="<tr><td>1Lot</td><td>₩ <fmt:formatNumber pattern='#,##0' value='${LOT_1}' /></td></tr>";
-			txtCtbox+="<tr><td>2Lot</td><td>₩ <fmt:formatNumber pattern='#,##0' value='${LOT_2}' /></td></tr>";
-			txtCtbox+="<tr><td>4Lot</td><td>₩ <fmt:formatNumber pattern='#,##0' value='${LOT_4}' /></td></tr>";
-			$("#lotperunit").html(txtCtbox);
+
 			var loss=(vo.lot * 50000).toFixed(0);
+			var txtFeebox = "";
+			//수수료 포함 금액 계산
+			txtFeebox+="<li>수수료 " + rateVo.lineRateT +"% = ₩"+ addComma(Math.floor(loss * (rateVo.lineRateT/100))) +"</li>";
+			$("#feebox").html(txtFeebox);
+				
+			<%--txtCtbox="";--%>
+			<%--txtCtbox+="<tr><td>0.1Lot</td><td>₩ <fmt:formatNumber pattern='#,##0' value='${LOT_01}' /></td></tr>";--%>
+			<%--txtCtbox+="<tr><td>0.2Lot</td><td>₩ <fmt:formatNumber pattern='#,##0' value='${LOT_02}' /></td></tr>";--%>
+			<%--txtCtbox+="<tr><td>1Lot</td><td>₩ <fmt:formatNumber pattern='#,##0' value='${LOT_1}' /></td></tr>";--%>
+			<%--txtCtbox+="<tr><td>2Lot</td><td>₩ <fmt:formatNumber pattern='#,##0' value='${LOT_2}' /></td></tr>";--%>
+			<%--txtCtbox+="<tr><td>4Lot</td><td>₩ <fmt:formatNumber pattern='#,##0' value='${LOT_4}' /></td></tr>";--%>
+			<%--$("#lotperunit").html(txtCtbox);--%>
+
+
+
+
 			if (vo.bsType == 'B'){
 	            $("#buyOrSell").text("매수");
 	            $('#buyOrSell').removeClass('pop_agreement_tag_blue').addClass('pop_agreement_tag_red');
