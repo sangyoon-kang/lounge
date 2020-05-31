@@ -711,12 +711,12 @@
 			data: {},
 			dataType: 'json',
 			success: function(data){
-				/*if(data){
+				if(data){
 					if(data.siteCloseYn == "Y"){
 						alert(data.message.replace(/\\n/g,"\n"));
 						return;
 					}
-				}*/
+				}
 
 				var type = tab == 'B' ? 'up': 'down';
 				$("#vLoss > strong").text($("#"+type+"Total").text());
@@ -874,15 +874,17 @@
 
 		var totalInpt = $("input[name="+direction+"Total]");
 		var totalLot = 0;
+        var totalRate = feeRate;
 
 		$("input[name*="+direction+"Lot]").each(function(){
 			totalLot += parseInt($(this).val());
 		});
 
-		if(totalLot*${LOT_01} > cash){
+		if(totalLot*${LOT_01} * (1+(totalRate/100)) > cash){
 			var curr = parseInt(inpt.val());
 			var negative = curr*1 >= totalLot ? 0 : totalLot - curr*1;
-			var availableLot = Math.floor((cash - negative*${LOT_01})/(${LOT_01}*lot));
+            var feePrice = totalLot*${LOT_01} * (totalRate/100);
+			var availableLot = Math.floor((cash - negative*${LOT_01})/(${LOT_01}*lot + feePrice));
 			//alert('렌트보증금이 부족합니다.');
 			inpt.val(availableLot*lot)
 			totalLot = 0;
@@ -891,9 +893,7 @@
 			});
 		}
 
-
 		totalInpt.val(totalLot);
-		var totalRate = feeRate;
 		var totalPrice = Math.floor(totalLot*${LOT_01} * (1+(totalRate/100)));
 		var priceText = addComma(totalPrice);
         $("#"+direction+"PriceTotal").text(priceText);
