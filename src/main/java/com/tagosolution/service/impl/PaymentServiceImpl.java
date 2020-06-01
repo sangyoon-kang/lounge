@@ -167,7 +167,7 @@ public class PaymentServiceImpl extends BaseServiceImpl {
             return "주문이 실패하였습니다. 주문수량이 없습니다.";
         } else if (totalBuyOrSellLot != search.getTotalLot().multiply(fth).intValue()) {
             return "주문이 실패하였습니다. 개별 구매수량과 합계구매 수량이 다릅니다.";
-        } else if (search.getTotalLot().multiply(fth).intValue() > cash) {
+        } else if (search.getTotalLot().multiply(fth).multiply(new BigDecimal(1+(vo.getFeeRate()/100))).intValue() > cash) {
             return "주문이 실패하였습니다. 보유한 캐쉬보다 구매하려는 금액이 큽니다.";
         } else if (cash < 5000) {
             return "주문이 실패하였습니다. 보유한 캐쉬가 상품을 구매할 수 있는 최소캐쉬보다 작습니다.";

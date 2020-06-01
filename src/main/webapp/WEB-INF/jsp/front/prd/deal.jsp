@@ -164,6 +164,7 @@
 																									value="" /> <input type="hidden" name="sellLot10" value="" /> <input
 				type="hidden" name="sellLot20" value="" /> <input type="hidden"
 																  name="sellLot40" value="" />
+			<input type="hidden" name="feeRate" value="${rateVo.lineRateT}"/>
 		</form>
 		<div class="trade_con01">
 			<!--PC 에서 나오는 곳-->
@@ -611,6 +612,7 @@
 			if(!isNull(data)){
 			    if(feeRate != data["feeRate"]){
                     feeRate = data["feeRate"];
+                    $("input[name='feeRate']").val(feeRate);
 
                     $("#rateTxt").text("총액(+수수료 "+ feeRate +"%)");
 				}
@@ -783,6 +785,7 @@
 				thisForm.elements["totalLot"].value= valueHidden;
 				thisForm.elements["goodsDate"].value = moment(Math.floor(time/(1000*$runtime*60))*(1000*$runtime*60)).format('YYYY-MM-DD');
 				thisForm.elements["goodsTime"].value = moment(Math.floor(time/(1000*$runtime*60))*(1000*$runtime*60)).format('HH:mm');
+				thisForm.elements["feeRate"].value = lineLate;
 
 				var aggre = $.cookie("contractFormAggre");
 				if(aggre){

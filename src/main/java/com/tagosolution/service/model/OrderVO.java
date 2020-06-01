@@ -65,6 +65,8 @@ public class OrderVO implements GeneralModel {
     
     private String yearsText;
 
+    private Float feeRate;
+
 	public Integer getStopLimit() {
 		return stopLimit;
 	}
@@ -279,4 +281,12 @@ public class OrderVO implements GeneralModel {
     public void setLoss(Integer loss) {
         this.loss = loss;
     }
+
+	public Float getFeeRate() {
+		return feeRate;
+	}
+
+	public void setFeeRate(Float feeRate) {
+		this.feeRate = feeRate;
+	}
 }
