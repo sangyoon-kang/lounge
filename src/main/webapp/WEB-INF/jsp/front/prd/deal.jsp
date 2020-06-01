@@ -884,8 +884,8 @@
 			var curr = parseInt(inpt.val());
 			var negative = curr*1 >= totalLot ? 0 : totalLot - curr*1;
             var feePrice = totalLot*${LOT_01} * (totalRate/100);
-			var availableLot = Math.floor((cash - negative*${LOT_01})/(${LOT_01}*lot + feePrice));
-			//alert('렌트보증금이 부족합니다.');
+			var availableLot = Math.ceil(((cash - feePrice) - negative*${LOT_01})/(${LOT_01}*lot));
+			alert('렌트보증금이 부족합니다.');
 			inpt.val(availableLot*lot)
 			totalLot = 0;
 			$("input[name*="+direction+"Lot]").each(function(){
