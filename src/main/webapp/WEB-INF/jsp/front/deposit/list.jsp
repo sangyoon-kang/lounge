@@ -54,7 +54,7 @@
                               </td>
                               <td><fmt:formatNumber pattern="#,##0" value="${m.balance }" /></td>
                               <td>
-								  <c:if test="${m.state ne 'C' and m.state ne 'A'}">
+								  <c:if test="${m.ioTypeName eq '입금' and m.state ne 'C' and m.state ne 'A'}">
 									  <p class="inout_bt">
 										  <a style="background: gray;" onclick="javascript:depositCancel(${m.moneySeq})" class="cancel-button">취소</a>
 									  </p>
