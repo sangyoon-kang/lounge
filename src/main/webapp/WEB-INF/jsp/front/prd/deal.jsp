@@ -679,7 +679,7 @@
 			url : "./contract_proc.do",
 			method : "POST",
 			dataType: 'json',
-            async: true,
+            async: false,
 			data: $("#contractForm").serializeArray(),
 			success: function(data){
 				if(data.hasOwnProperty("totalPrice")){
