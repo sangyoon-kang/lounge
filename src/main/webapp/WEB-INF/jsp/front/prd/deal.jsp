@@ -675,7 +675,7 @@
 			url : "./contract_proc.do",
 			method : "POST",
 			dataType: 'json',
-            async: false,
+            async: true,
 			data: $("#contractForm").serializeArray(),
 			success: function(data){
 				if(data.hasOwnProperty("totalPrice")){
