@@ -614,7 +614,11 @@
                     feeRate = data["feeRate"];
                     $("input[name='feeRate']").val(feeRate);
 
-                    $("#rateTxt").text("총액(+수수료 "+ feeRate +"%)");
+					if(typeof(feeRate) == "undefined"){
+						$("#rateTxt").text("총액(+수수료 " + ${rateVo.lineRateT} +"%)");
+					}else{
+						$("#rateTxt").text("총액(+수수료 "+ feeRate +"%)");
+					}
 				}
 
 				$('.inputLot').each(function(){
