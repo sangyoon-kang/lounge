@@ -132,12 +132,12 @@
                          <!-- li class="sub-item">
                               <a href="/pages/fx_pages/tickchart.jsp" class="sub-link">틱차트공지</a>
                          </li -->
-                         <li class="sub-item">
+                         <!--li class="sub-item">
                               <a href="/pages/fx_pages/consulting.jsp" class="sub-link">1:1문의</a>
                          </li>
                          <li class="sub-item">
                               <a href="/pages/fx_pages/bugreport.jsp" class="sub-link">버그바운티</a>
-                         </li>
+                         </li-->
                     </ul>
                     </div>
 
