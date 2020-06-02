@@ -484,7 +484,7 @@
 					FLOOR(FO.LOT * 50000 * LINE_RATE4 * 0.01) +
 					FLOOR(FO.LOT * 50000 * LINE_RATE5 * 0.01) as TOTAL_FEE, LINE_RATET
 				FROM	fx_order FO
-					INNER JOIN v_member_line_rate ML
+					INNER JOIN (select * from v_member_line_rate where user_id = #{userId,jdbcType=VARCHAR}) ML
 						ON ML.USER_ID = FO.USER_ID
 							AND	ML.RUN_TIME = FO.RUN_TIME
 				WHERE	FO.RESULT_TIME = CONCAT(#{goodsDate,jdbcType=VARCHAR}, ' ', #{goodsTime,jdbcType=VARCHAR})
@@ -493,7 +493,7 @@
 				UNION ALL
 				SELECT	FO.ORDER_SEQ, FO.GOODS_DATE, FO.GOODS_TIME, FO.USER_ID, FO.LOT, ML.LINE_ID2 AS LINE_ID, LINE_RATE2 AS LINE_RATE, 2 AS LINE_LEVEL, null, LINE_RATET
 				FROM	fx_order FO
-					INNER JOIN v_member_line_rate ML
+					INNER JOIN (select * from v_member_line_rate where user_id = #{userId,jdbcType=VARCHAR}) ML
 						ON ML.USER_ID = FO.USER_ID
 							AND	ML.RUN_TIME = FO.RUN_TIME
 				WHERE	FO.RESULT_TIME = CONCAT(#{goodsDate,jdbcType=VARCHAR}, ' ', #{goodsTime,jdbcType=VARCHAR})
@@ -502,7 +502,7 @@
 				UNION ALL
 				SELECT	FO.ORDER_SEQ, FO.GOODS_DATE, FO.GOODS_TIME, FO.USER_ID, FO.LOT, ML.LINE_ID3 AS LINE_ID, LINE_RATE3 AS LINE_RATE, 3 AS LINE_LEVEL, null, LINE_RATET
 				FROM	fx_order FO
-					INNER JOIN v_member_line_rate ML
+					INNER JOIN (select * from v_member_line_rate where user_id = #{userId,jdbcType=VARCHAR}) ML
 						ON ML.USER_ID = FO.USER_ID
 							AND	ML.RUN_TIME = FO.RUN_TIME
 				WHERE	FO.RESULT_TIME = CONCAT(#{goodsDate,jdbcType=VARCHAR}, ' ', #{goodsTime,jdbcType=VARCHAR})
@@ -511,7 +511,7 @@
 				UNION ALL
 				SELECT	FO.ORDER_SEQ, FO.GOODS_DATE, FO.GOODS_TIME, FO.USER_ID, FO.LOT, ML.LINE_ID4 AS LINE_ID, LINE_RATE4 AS LINE_RATE, 4 AS LINE_LEVEL, null, LINE_RATET
 				FROM	fx_order FO
-					INNER JOIN v_member_line_rate ML
+					INNER JOIN (select * from v_member_line_rate where user_id = #{userId,jdbcType=VARCHAR}) ML
 						ON ML.USER_ID = FO.USER_ID
 							AND	ML.RUN_TIME = FO.RUN_TIME
 				WHERE	FO.RESULT_TIME = CONCAT(#{goodsDate,jdbcType=VARCHAR}, ' ', #{goodsTime,jdbcType=VARCHAR})
@@ -520,7 +520,7 @@
 				UNION ALL
 				SELECT	FO.ORDER_SEQ, FO.GOODS_DATE, FO.GOODS_TIME, FO.USER_ID, FO.LOT, ML.LINE_ID5 AS LINE_ID, LINE_RATE5 AS LINE_RATE, 5 AS LINE_LEVEL, null, LINE_RATET
 				FROM	fx_order FO
-					INNER JOIN v_member_line_rate ML
+					INNER JOIN (select * from v_member_line_rate where user_id = #{userId,jdbcType=VARCHAR}) ML
 						ON ML.USER_ID = FO.USER_ID
 							AND	ML.RUN_TIME = FO.RUN_TIME
 				WHERE	FO.RESULT_TIME = CONCAT(#{goodsDate,jdbcType=VARCHAR}, ' ', #{goodsTime,jdbcType=VARCHAR})
