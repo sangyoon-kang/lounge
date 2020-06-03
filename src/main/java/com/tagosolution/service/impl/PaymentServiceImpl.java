@@ -229,8 +229,8 @@ public class PaymentServiceImpl extends BaseServiceImpl {
         logger.info("cash.insertFront end");
         super.getDAO().update("memberInfo.updateFront", search);
         logger.info("memberInfo.updateFront end");
-        super.getDAO().insert("cash.insertRecommCash", search);
-        logger.info("cash.insertRecommCash end");
+        //super.getDAO().insert("cash.insertRecommCash", search);
+        //logger.info("cash.insertRecommCash end");
         logger.info("insert end");
         return dataCheck;
     }

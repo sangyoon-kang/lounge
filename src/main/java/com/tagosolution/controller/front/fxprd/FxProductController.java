@@ -273,7 +273,7 @@ public class FxProductController extends BaseController {
                     if (super.getUserSession().getTransEmailYn().toLowerCase().equals("y"))
                         _paymentService.sendMail(vo, search, request);
                 } else {
-                    logger.error("[계약체결실패] 주문자:" + super.getUserSession().getUserName() + "(" + super.getUserSession().getUserID() + ")");
+                    logger.error("[계약체결실패] 주문자:" + super.getUserSession().getUserName() + "(" + super.getUserSession().getUserID() + ", " + res + ")");
                     rtnObj.put("message", "주문이 정상적으로 처리되지 않았습니다.\n관리자에게 문의 바랍니다.");
                 }
             }
