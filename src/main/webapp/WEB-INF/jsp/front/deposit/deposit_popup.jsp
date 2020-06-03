@@ -62,6 +62,7 @@
 					<li><span class="alert">입금자명(입금통장명의자) / 입금신청금액 / 실제입금금액이 일치</span>해야만 입금이 처리됩니다.</li>
 					<li><span class="alert">입금신청금액과 입금액이 다르지 않도록 주의를 기울이시기 바랍니다.</span></li>
 					<li><span class="alert">고의적이며 반복적인 입금신청, 금액 상이 입금시도 행위</span> 등은 악의적인 시스템 악용시도로 판단하여 계좌동결 및 회원탈퇴 등 제재를 받을 수 있습니다.</li>
+					<li><span class="alert">롤링규정을 확인 바랍니다. </span>입금액 대비 100% 거래 이용 후 출금 가능 합니다.</li>
 				</ul>
 			</div>
 			<ul class="inout_list_form inout_list_form_fir">
