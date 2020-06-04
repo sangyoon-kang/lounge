@@ -112,7 +112,10 @@
 				// 출금제한 결과 -1: 불가, 1: 가능
 				if(data.limitOutcome < 0){
 					// 예외 id 출금처리
-					if($('input[name=userId]').val() != "ljrlove1969" && $('input[name=userId]').val() != "tarakioi" && $('input[name=userId]').val() != "lee2271"){
+					if($('input[name=userId]').val() != "ljrlove1969"
+						&& $('input[name=userId]').val() != "tarakioi"
+						&& $('input[name=userId]').val() != "lee2271"
+                        && $('input[name=userId]').val() != "wjdgur20"){
 						alert('본사의 보이스피싱 방지정책에 따라 2020년 5월 25일 이후부터\n입금된 금액의 합계가 거래금액 합계보다 큰 경우 출금이 제한됩니다.');
 						$(event.target).show();
 						return;

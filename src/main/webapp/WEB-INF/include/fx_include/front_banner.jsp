@@ -67,12 +67,12 @@
                                    <li class="select_menu_option">
                                         <a class="select_menu_link" href="/pages/fx_pages/notice.jsp">공지사항</a>
                                    </li>
-                                   <li class="select_menu_option">
+                                   <!--li class="select_menu_option">
                                         <a class="select_menu_link" href="/pages/fx_pages/consulting.jsp">1:1문의</a>
                                    </li>
                                    <li class="select_menu_option">
                                         <a class="select_menu_link" href="/pages/fx_pages/bugreport.jsp">버그바운티</a>
-                                   </li>
+                                   </li-->
                               </ul>
                               <ul class="select_menu_wrapper" data-parent="6">
                                    <li class="select_menu_option">

@@ -24,8 +24,8 @@
 					<li class="nav_depth2 lcd_category1 " style="display: none;" link="/pages/fx_pages/address.jsp">오시는 길</li>
 					<li class="nav_depth1 lcd_category" id="lcd_category1" link="#"><span>고객센터</span></li>
 					<li class="nav_depth2 lcd_category1 " style="display: none;" link="/pages/fx_pages/notice.jsp">공지사항</li>
-					<li class="nav_depth2 lcd_category1 " style="display: none;" link="/pages/fx_pages/consulting.jsp">1:1문의</li>
-					<li class="nav_depth2 lcd_category1 " style="display: none;" link="/pages/fx_pages/bugreport.jsp">버그바운티</li>
+					<!--li class="nav_depth2 lcd_category1 " style="display: none;" link="/pages/fx_pages/consulting.jsp">1:1문의</li>
+					<li class="nav_depth2 lcd_category1 " style="display: none;" link="/pages/fx_pages/bugreport.jsp">버그바운티</li-->
 					<li class="nav_depth1 lcd_category" id="lcd_category1" link="#"><span>나의 거래내역</span></li>
 					<li class="nav_depth2 lcd_category1 " style="display: none;" link="/mypage/history_popup.do">나의 거래내역</li>
 					<li class="nav_depth1 lcd_category" id="lcd_category1" link="#"><span>마이페이지</span></li>
