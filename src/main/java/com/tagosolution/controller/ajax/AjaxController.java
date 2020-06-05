@@ -745,5 +745,30 @@ public class AjaxController extends BaseController {
         return new Gson().toJson(siteCloseResult);
     }
 
+    /**
+     *
+     * @param body
+     * @param result
+     * @param model
+     * @return
+     * @throws Exception
+     */
+    @RequestMapping(value = "/ajax/init_member_grade")
+    @ResponseBody
+    public String initMemberGrade(@RequestBody(required = false) String body, MemberSearchVO search, BindingResult result, Model model) throws Exception {
+        if (result.hasErrors())
+            return super.setBindingResult(result, model);
+
+        try {
+            _gDao.getSqlSession().update("memberInfo.initMemberInfo", search);
+            _gDao.getSqlSession().update("memberInfo.initMemberLine", search);
+        }catch(Exception e){
+            logger.debug(e.getMessage(), e);
+            return "error";
+        }
+
+        return "success";
+    }
+
 }
 

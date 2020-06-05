@@ -775,4 +775,28 @@
 		set ts_member_info.cash = ts_member_info.cash + #{cash}
 		WHERE USER_ID = #{userId}
 	</update>
+
+	<update id="initMemberInfo" parameterType="search">
+        UPDATE ts_member_info
+        SET
+            GRADE_LEVEL = 6,
+            NICKNAME = null
+        WHERE user_id = #{userId};
+	</update>
+
+	<update id="initMemberLine" parameterType="search">
+        UPDATE fx_line
+        <if test="gradeLevel == 3">
+            SET	LINE_ID3 = null
+            WHERE LINE_ID3 = #{userId};
+        </if>
+        <if test="gradeLevel == 4">
+            SET	LINE_ID4 = null
+            WHERE LINE_ID4 = #{userId};
+        </if>
+        <if test="gradeLevel == 5">
+            SET	LINE_ID5 = null
+            WHERE LINE_ID5 = #{userId};
+        </if>
+	</update>
 </mapper>

@@ -120,7 +120,10 @@
 								<td colspan="3" id="user_level">
 									<span id="changeG">${g.gradeName }</span>
 									<a id="change_grade_btn"></a>
-								</td>	
+									<c:if test="${vo.gradeLevel gt 2 and vo.gradeLevel lt 6}">
+										<a id="init_grade_btn" class='btn btn_round bg_darkgray ml20' onclick="initMemberGrade('${vo.userId}', '${vo.gradeLevel}');">등급초기화</a>
+									</c:if>
+								</td>
 							</c:if>
 						</c:forEach>
 					</c:if>
@@ -130,7 +133,7 @@
 								<th>회원등급 </th>
 								<td colspan="3">
 									${g.gradeName }
-								</td>	
+								</td>
 							</c:if>
 						</c:forEach>
 					</c:if>
@@ -1148,6 +1151,32 @@ function rechargeCash(){
 			//$('#cash').html('data')
 		}
 		});
+}
+
+function initMemberGrade(userId, gradeLevel){
+    if(!confirm("회원으로 초기화 하시겠습니까?")){
+        return;
+    };
+
+	$.ajax({
+		type : 'post',
+		url : '/ajax/init_member_grade',
+		data : {
+			'userId': userId,
+			'gradeLevel':gradeLevel
+		},
+		dataType : 'text',
+		success : function(data) {
+		    if(data == "success"){
+                alert('회원으로 초기화가 완료되었습니다.');
+                location.reload();
+			}else if(data == "error"){
+                alert('에러가 발생했습니다.');
+            }
+		}
+	}).fail(function(data){
+        alert('서비스 호출에 실패했습니다.');
+	});
 }
 
 function showCashLog(userId){
