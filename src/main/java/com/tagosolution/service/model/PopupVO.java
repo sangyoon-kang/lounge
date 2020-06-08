@@ -42,6 +42,8 @@ public class PopupVO implements GeneralModel {
 
     private String body;
 
+    private Short priority;
+
     public String getLimitGradeYn() {
         return limitGradeYn;
     }
@@ -179,4 +181,13 @@ public class PopupVO implements GeneralModel {
     public void setBody(String body) {
         this.body = body;
     }
+
+    public Short getPriority() {
+        return priority;
+    }
+
+    public void setPriority(Short priority) {
+        this.priority = priority;
+    }
+
 }

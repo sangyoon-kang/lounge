@@ -34,7 +34,8 @@
 					},
 				dataType : 'json',
 				success : function(data) {
-					$(data).each(function(i, el) {
+					var reverse = data.reverse();
+					$(reverse).each(function(i, el) {
 						if (GetCookie('${COOKIE_POPUP_PREFIX}' + el.popupSeq) == 'Y')
 							return true;
 

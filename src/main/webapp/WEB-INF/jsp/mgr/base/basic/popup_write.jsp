@@ -28,6 +28,7 @@
 				<ul>
 					<li>- 팝업형태에서 레이어팝업을 이용하여 창이아닌 레이어로 공지할 수 있습니다.</li>
 					<li>- 팝업을 생성하였으나 뜨지않을 경우 세가지를 체크해보세요. 게시기간, 사용여부, 브라우저>도구>인터넷옵션>쿠키삭제</li>
+					<li>- 우선순위는 1에 가까울수록 앞면에 표출 / 같은등급 끼리는 등록일자가 최근일수록 앞면에 표출</li>
 				</ul>
 			</div>
 			<h3 class="scon_tit2">팝업등록</h3>
@@ -68,7 +69,7 @@
 					</tr>
 					<tr>
 						<th><strong>사용여부</strong></th>
-						<td colspan="3">
+						<td>
 							<label><input type="radio" name="useYn"  class="input" value="Y"/> 사용함</label>
 							<label class="ml20"><input type="radio" name="useYn" class="input" value="N"/> 사용안함</label>
 							<script>
@@ -76,6 +77,23 @@
 									checkRadio('useYn', '${vo.useYn}', 'Y');
 								});
 							</script>
+						</td>
+						<th><strong>팝업 우선순위</strong></th>
+						<td>
+							<select name="priority" class="ml5 w20">
+								<c:forEach var="index" begin="1" end="9">
+									<c:choose>
+										<c:when test="${not empty vo.priority}">
+											<option value="${index}" <c:if test="${vo.priority eq index}">selected</c:if> >
+										</c:when>
+										<c:otherwise>
+											<option value="${index}" <c:if test="${index eq 9}">selected</c:if> >
+										</c:otherwise>
+									</c:choose>
+										${index}
+									</option>
+								</c:forEach>
+							</select>
 						</td>
 						<!-- <th><strong>스크롤여부</strong></th>
 						<td>
