@@ -79,6 +79,16 @@ public class CashVO implements GeneralModel {
 
 	private int rowNo;
 
+	private int memCnt;
+
+	public int getMemCnt() {
+		return memCnt;
+	}
+
+	public void setMemCnt(int memCnt) {
+		this.memCnt = memCnt;
+	}
+
 	public Integer getRowNo() {
 		return rowNo;
 	}
