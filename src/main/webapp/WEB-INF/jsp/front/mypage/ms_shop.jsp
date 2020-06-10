@@ -138,7 +138,9 @@
 					<tbody>
 					<fmt:formatNumber var="totalCommission" pattern="#,##0" value="0" />
 					<fmt:formatNumber var="totalTaxCommission" pattern="#,##0" value="0" />
+<%--					<c:set var="totalMember"/>--%>
 					<c:forEach items="${list }" var="l" varStatus="u">
+						<c:if test="${l.rowNo eq 1}"><c:set var="totalMember" value="${l.memCnt}"/></c:if>
 						<tr>
 							<td>${l.rowNo}</td>
 							<td>
@@ -180,7 +182,9 @@
 					</tbody>
 					<tfoot class="bg-red-80">
 					<tr>
-						<td colspan="6">정산금액</td>
+						<td colspan="3">관리회원수 : ${totalMember} 명</td>
+						<td colspan="2"></td>
+						<td colspan="1">정산금액</td>
 						<td><fmt:formatNumber pattern="#,##0" value="${totalCommission}" /></td>
 						<td><fmt:formatNumber pattern="#,##0" value="${totalTaxCommission}" /></td>
 						<td ></td>
